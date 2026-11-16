@@ -25,6 +25,21 @@ Add a row here before using a new call.
 | `UKismetSystemLibrary::MakeSoftObjectPath` | Kismet/KismetSystemLibrary.h:336 | yes | `FSoftObjectPath MakeSoftObjectPath(const FString& PathString)` |
 | `UKismetSystemLibrary::Conv_SoftObjPathToSoftObjRef` | KismetSystemLibrary.h:344 | yes | `TSoftObjectPtr<UObject> Conv_SoftObjPathToSoftObjRef(const FSoftObjectPath&)` |
 | `UKismetSystemLibrary::LoadAsset_Blocking` | KismetSystemLibrary.h:395 | yes | `UObject* LoadAsset_Blocking(TSoftObjectPtr<UObject> Asset)` |
+| `USceneComponent::K2_AttachToComponent` | Components/SceneComponent.h:747 | BlueprintCallable | `(Parent, FName SocketName, EAttachmentRule Location, Rotation, Scale, bool bWeldSimulatedBodies)`; `EAttachmentRule` KeepRelative=0, KeepWorld=1, **SnapToTarget=2** |
+| `USceneComponent::K2_GetComponentLocation` / `K2_GetComponentRotation` | SceneComponent.h:644 / 648 | BlueprintCallable | used in `ABP_VRArms` |
+| `USkinnedMeshComponent::HideBoneByName` | Components/SkinnedMeshComponent.h:2034 | BlueprintCallable | `(FName BoneName, EPhysBodyOp)`; **PBO_None=0** (:85) |
+| `USkinnedMeshComponent::UnHideBoneByName` | SkinnedMeshComponent.h:2043 | BlueprintCallable | `(FName BoneName)` |
+| `AActor::SetActorHiddenInGame` | Actor.h:1912 | BlueprintCallable | `(bool bNewHidden)` |
+| `AActor::K2_DestroyActor` | Actor.h:1924 | BlueprintCallable | `()` |
+| `AActor::GetActorRightVector` | Actor.h:1591 | BlueprintCallable | used in `ABP_VRArms` |
+| `UAnimInstance::GetOwningActor` / `BlueprintUpdateAnimation` | Animation/AnimInstance.h:533 / 551 | BlueprintCallable / event | used in `ABP_VRArms` |
+| `UKismetMathLibrary::Add_VectorVector` / `Multiply_VectorFloat` | Kismet/KismetMathLibrary.h:1378 / 1406 | BlueprintPure | elbow hints |
+| `FAnimNode_TwoBoneIK` fields | AnimGraphRuntime/.../AnimNode_TwoBoneIK.h:26/80/84 | node props | `IKBone`, `EffectorLocationSpace`, `JointTargetLocationSpace` = **BCS_WorldSpace** (AnimTypes.h:62) |
+| `FAnimNode_ModifyBone` fields | AnimNode_ModifyBone.h:37/57/69 | node props | `BoneToModify`, `RotationMode`=**BMM_Replace**, `RotationSpace`=BCS_WorldSpace |
+| `FAnimNode_CopyPoseFromMesh::bUseAttachedParent` | AnimNode_CopyPoseFromMesh.h:28 | node prop | true, so `Body` must be attached to the game mesh |
+| `USkeletalMeshComponent::AnimClass` | Components/SkeletalMeshComponent.h:368 | property | `ABP_VRArms_C` |
+| UEVR `uevr.uobject_hook.get_or_add_motion_controller_state(obj)`, `:set_hand(0 left, 1 right)`, `:set_permanent(bool)` | lua-api ScriptContext.cpp:1028, 984, 985 (UEVR 4ee5c6b) | Lua API | hand index from UObjectHook.cpp |
+| Cook setting `[CookSettings] CookContentMissingSeverity=Warning` | Editor/UnrealEd/Private/Cooker/CookImportsChecker.cpp:683 | DefaultEditor.ini | stand-in references are external on purpose |
 
 **Enum values** (Engine/EngineTypes.h):
 - `ESpawnActorCollisionHandlingMethod`: Undefined=0, **AlwaysSpawn=1** (we pass 1),
