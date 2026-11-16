@@ -227,3 +227,27 @@ it. Bob chose nightly 01143 plus a native Frame binding:
   No live switch today was confirmed by input. Next test: restart the game, re-inject the
   nightly, and check that vrserver loads the file binding as current. That also tests
   persistence across restarts.
+
+## Baseline restore test (13:22): input still dead
+
+The profile was restored to the morning's working state:
+- nightly 01143
+- UEVR's own Touch binding, loaded 13:23:02
+- only the read-only probe running
+- `DPadShifting=true`, game aim, HUD not following the view
+- fork leftovers and `main.lua` moved to `_hold_1317`
+
+Bob pressed every button and got no input. The probe saw only the Start spoof (`0x0010`).
+
+**So the cause is outside the UEVR profile, the bindings and our scripts.**
+
+UEVR's gate (`VR.hpp:306`, commit 4ee5c6b) is:
+`is_using_controllers = controllers_allowed && is_hmd_active() && controllers found &&
+now - m_last_controller_update <= inactivity timer`. `m_last_controller_update` is set only
+when `is_any_action_down()` sees VR action data.
+
+The Start spoof runs before this gate, and everything else after it. So either SteamVR is
+delivering no action data to the app, or `is_hmd_active()` is false.
+
+Both are SteamVR or headset state. The session made many Binding-API calls (save, delete,
+select) against a live vrserver, so the next step is a full SteamVR restart, then one test.
