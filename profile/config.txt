@@ -1,6 +1,6 @@
 Frontend_RequestedRuntime=openxr_loader.dll
 LuaLoader_LogToDisk=true
-VR_SnapTurn=true
+VR_SnapTurn=false
 VR_SnapturnJoystickDeadzone=0.200000
 VR_SnapturnTurnAngle=45
 VR_RenderingMethod=0
