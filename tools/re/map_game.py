@@ -30,7 +30,7 @@ import zen  # noqa: E402
 
 OLLAMA = os.environ.get("DELEGATE_BASE_URL", "http://127.0.0.1:11434")
 MODEL = "qwen3:30b-a3b-instruct-2507-q4_K_M"
-MAX_CHARS = 60000          # per model call; bigger dumps are split and merged
+MAX_CHARS = 40000          # per model call; bigger dumps are split and merged
 NAME_RE = re.compile(r"/(BP|GA|ABP|WBP|STT|STE|GE|AC|BPI|BTT|BTS|BTD|GAS|CR|AM|BFL|BPC)_[^/]*\.uasset$")
 
 # Only Blueprints that matter to the VR mod: hands and held tools, fishing, the bench, hook
@@ -84,7 +84,7 @@ state, vr_notes). Deduplicate; keep at most 15 functions. JSON only.
 """
 
 
-def ollama(prompt, timeout=900):
+def ollama(prompt, timeout=2700):
     body = json.dumps({
         "model": MODEL, "prompt": prompt, "stream": False, "format": "json",
         "options": {"temperature": 0, "num_ctx": 32768},
