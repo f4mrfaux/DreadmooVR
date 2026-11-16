@@ -36,6 +36,10 @@ foreach ($f in Get-ChildItem (Join-Path $Repo 'src\scripts') -Filter *.lua) {
 foreach ($f in Get-ChildItem (Join-Path $Repo 'src\scripts\lib') -Filter *.lua) {
     $plan[(Join-Path $UevrDir "scripts\lib\$($f.Name)")] = $f.FullName
 }
+# Native Steam Frame binding. SteamVR is pointed at this file once (selectconfig, see
+# docs/research/2026-11-16-steam-frame-input.md); UEVR does not rewrite files it doesn't own.
+$frameBinding = Join-Path $Repo 'profile\steamvr\dreadmoorvr_bindings_frame_controller.json'
+$plan[(Join-Path $UevrDir 'dreadmoorvr_bindings_frame_controller.json')] = $frameBinding
 $dataDir = Join-Path $Repo 'src\data'
 if (Test-Path $dataDir) {
     foreach ($f in Get-ChildItem $dataDir -File | Where-Object Name -ne '.gitkeep') {

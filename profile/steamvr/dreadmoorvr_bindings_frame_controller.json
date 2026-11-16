@@ -235,5 +235,8 @@
         }
       ]
     }
-  }
+  },
+  "action_manifest_version": 0,
+  "category": "steamvr_input",
+  "app_key": "steam.app.3629430"
 }
