@@ -42,7 +42,6 @@ end
 local gameapi = load_module("gameapi")
 local modes = load_module("modes")
 local armsloader = load_module("armsloader")
-local pad = load_module("pad")
 
 log("main.lua loaded; modules via " .. tostring(load_method) .. " from " .. LIB_DIR)
 
@@ -50,6 +49,7 @@ log("main.lua loaded; modules via " .. tostring(load_method) .. " from " .. LIB_
 -- while the game runs are lost. The bridge applies the settings it depends on at every load.
 local UEVR_SETTINGS = {
     UI_FollowView = "true", -- HUD follows the head
+    VR_DPadShifting = "false", -- Bob: left X acted as D-pad (M1 run)
 }
 local AIM_HEAD = 1 -- VR_AimMethod: 0 game, 1 head, 2 right hand, 3 left hand
 
@@ -103,37 +103,3 @@ uevr.sdk.callbacks.on_pre_engine_tick(function(_, delta)
     end
 end)
 
--- Face buttons: pressing left X reached the game as A+X (M1 run, btn=0x5000), so jump fired
--- with interact. Rebuild A/B/X/Y from the physical buttons: right A/B -> A/B, left X/Y -> X/Y.
-local FACE_ACTIONS = { a = "AButtonRight", b = "BButtonRight", x = "AButtonLeft", y = "BButtonLeft" }
-local face_handles
-local face_fixes, face_failed = 0, false
-
-local function face_state()
-    local vr = uevr.params.vr
-    if face_handles == nil then
-        local h = {}
-        for k, name in pairs(FACE_ACTIONS) do h[k] = vr.get_action_handle("/actions/default/in/" .. name) end
-        face_handles = h
-    end
-    local left, right = vr.get_left_joystick_source(), vr.get_right_joystick_source()
-    local function on(k, src) return vr.is_action_active(face_handles[k], src) == true end
-    return on("a", right), on("b", right), on("x", left), on("y", left)
-end
-
-uevr.sdk.callbacks.on_xinput_get_state(function(retval, user_index, state)
-    local ok, a, b, x, y = pcall(face_state)
-    if not ok then
-        if not face_failed then face_failed = true; log("face-button fix disabled: " .. tostring(a)) end
-        return
-    end
-    local before = state.Gamepad.wButtons
-    local after = pad.replace_face(before, a, b, x, y)
-    if after ~= before then
-        state.Gamepad.wButtons = after
-        if face_fixes < 20 then
-            face_fixes = face_fixes + 1
-            log(string.format("face-button fix: 0x%04X -> 0x%04X", before, after))
-        end
-    end
-end)
