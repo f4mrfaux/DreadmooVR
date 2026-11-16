@@ -213,3 +213,17 @@ it. Bob chose nightly 01143 plus a native Frame binding:
   selected again for nightly 01143.
 - **Better source:** a build of nightly 01143 plus only the fork's Frame input commits
   (1be3ffe, 01aa042), from joeyhodge or anyone with UESDK access.
+
+## Nightly 01143 with our Frame binding (12:48 to 12:54)
+
+- The workshop personal save (`vr-input-workshop://3841006354`) loads as `…_legacy.bin`.
+  After it loaded at 12:49:53, **no input** reached UEVR: no buttons and no sticks.
+- The same binding was then selected as a plain file,
+  `file:///…/UnrealVRMod/Dreadmoor-Win64-Shipping/dreadmoorvr_bindings_frame_controller.json`.
+  It loaded at 12:52:42 with no errors, every output action exists in nightly's
+  `actions.json`, and the format matches Valve's own Frame bindings (for example Half-Life:
+  Alyx). Still **no input** came through when Bob pressed every button live.
+- **Not yet known:** whether a binding switched while the game is running ever takes effect.
+  No live switch today was confirmed by input. Next test: restart the game, re-inject the
+  nightly, and check that vrserver loads the file binding as current. That also tests
+  persistence across restarts.
