@@ -40,7 +40,7 @@ Write-Host "Cooking (log: $Log) ..."
 if ($LASTEXITCODE -ne 0) { throw "BuildCookRun failed (exit $LASTEXITCODE). See $Log" }
 
 $chunk = Get-ChildItem $Stage -Recurse -Filter 'pakchunk1-Windows.utoc' | Select-Object -First 1
-if (-not $chunk) { throw "No pakchunk1-Windows.utoc under ${Stage}: chunk 1 was not generated. Check the AssetManagerSettings rule." }
+if (-not $chunk) { throw "No pakchunk1-Windows.utoc under ${Stage}: chunk 1 was not generated. Check that PAL_DreadmoorVR exists and that DefaultGame.ini scans PrimaryAssetLabel." }
 foreach ($ext in 'utoc', 'ucas', 'pak') {
     Copy-Item (Join-Path $chunk.DirectoryName "pakchunk1-Windows.$ext") (Join-Path $Out "DreadmoorVR_P.$ext")
 }
