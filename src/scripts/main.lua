@@ -76,7 +76,7 @@ local function m1_spawn(pawn)
     log("M1 class loaded via " .. method .. " (" .. tostring(notes) .. ")")
 
     local ok, err = pcall(function()
-        local xf = pawn:K2_GetActorTransform()
+        local xf = pawn:GetTransform()
         local actor = armsloader.spawn(cls, xf)
         if actor == nil then error("spawn returned nil") end
         local yaw = pawn.Controller:GetControlRotation().Yaw
