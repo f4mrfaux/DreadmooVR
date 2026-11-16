@@ -94,3 +94,14 @@ which drives both facing and movement. `VR_MovementOrientation` stays 0 so the s
 rotated twice. Location is covered by `VR_RoomscaleMovement=true`.
 
 Both fixes are written after the game exits, because UEVR saves its config on exit.
+
+## Benchmark 15:29: head-driven orientation works (Bob: "yes, that works")
+
+Settings:
+- `VR_AimModifyPlayerControlRotation=true`
+- `VR_DPadShifting=false`
+- `VR_MovementOrientation=0`
+- plus the 15:18 settings
+
+Report: Frame X → 0x4000 ×6, A → 0x1000 ×4, RB → 0x0200; digital 0 dropped. Logs are in
+`build/benchmark_1529/`.
