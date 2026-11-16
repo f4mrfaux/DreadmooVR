@@ -251,3 +251,22 @@ delivering no action data to the app, or `is_hmd_active()` is false.
 
 Both are SteamVR or headset state. The session made many Binding-API calls (save, delete,
 select) against a live vrserver, so the next step is a full SteamVR restart, then one test.
+
+## Root cause of the dead input: Frame passthrough (13:25)
+
+Input returned at 13:25:42, when Bob turned off Steam Frame passthrough. UEVR's gate needs
+`is_hmd_active()`; with passthrough on, the headset reads as inactive, so only the Start
+spoof gets through, which explains the lone `0x0010` in the logs.
+
+Some of the "no input" verdicts between 12:30 and 13:25 were therefore probably wrong:
+- our Frame binding (file and workshop save)
+- the 100926 fork's input
+
+Those need a retest with passthrough off.
+
+With the Touch binding (baseline), the probe again shows merged presses: `0x5000` (A+X) ×9,
+`0x3000`, `0x7000`. That's the known Touch-to-Frame remap problem.
+
+Also noted: the game's user `Engine.ini` (the FSR3/XeSS swapchain overrides from this
+morning) is no longer in `%LOCALAPPDATA%\Dreadmoor\Saved\Config\Windows`. It wasn't deleted
+by the mod scripts. Rendering is currently fine without it.
