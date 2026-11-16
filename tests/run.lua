@@ -2,7 +2,7 @@
 -- Usage (from the repo root): lua tests/run.lua [pattern]
 -- Each tests/test_*.lua returns { name = function() ... end }. Plain asserts.
 
-package.path = "src/scripts/?.lua;tests/?.lua;" .. package.path
+package.path = "src/scripts/lib/?.lua;src/scripts/?.lua;tests/?.lua;" .. package.path
 
 local function list_tests()
     local files = {}
@@ -23,7 +23,7 @@ for _, file in ipairs(list_tests()) do
         package.loaded[mod] = nil
         local ok, suite = pcall(require, mod)
         if not ok then
-            print("FAIL " .. file .. ": could not load: " .. tostring(suite))
+            print("FAIL " .. file .. ": could not load: " .. tostring(suite):match("[^\n]*"))
             failed = failed + 1
         else
             local names = {}
