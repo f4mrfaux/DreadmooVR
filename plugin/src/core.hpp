@@ -1,6 +1,8 @@
 // Pure, UEVR-free logic for DreadmoorVR.dll. Desk-tested by tests/test_core.cpp.
 #pragma once
 #include <cstddef>
+#include <cstdint>
+#include <cstdio>
 #include <optional>
 #include <string>
 #include <string_view>
@@ -94,6 +96,94 @@ private:
     size_t m_count{0};
     size_t m_dropped{0};
     std::unordered_map<std::string, std::string> m_last;
+};
+
+// Phase 2 telemetry settings, read from <profile>\dreadmoorvr_telemetry.txt (optional).
+struct TelemetryConfig {
+    float analog_step = 0.25f;   // analog values are quantised to this step
+    int analog_min_ms = 250;     // min time between logged changes of one analog key
+    size_t digital_cap = 3000;   // log budget for digital edges
+    size_t analog_cap = 600;     // separate budget for analog changes
+    int report_s = 30;           // report file rewrite interval
+};
+
+// "key=value" lines; '#' comments, unknown keys and unparsable values are ignored.
+inline TelemetryConfig parse_config(std::string_view text) {
+    TelemetryConfig c;
+    size_t pos = 0;
+    while (pos < text.size()) {
+        size_t end = text.find('\n', pos);
+        if (end == std::string_view::npos) end = text.size();
+        std::string line(text.substr(pos, end - pos));
+        pos = end + 1;
+        while (!line.empty() && (line.back() == '\r' || line.back() == ' ')) line.pop_back();
+        size_t eq = line.find('=');
+        if (line.empty() || line[0] == '#' || eq == std::string::npos || eq == 0 || eq + 1 >= line.size()) continue;
+        std::string k = line.substr(0, eq), v = line.substr(eq + 1);
+        try {
+            size_t used = 0;
+            if (k == "analog_step") { float f = std::stof(v, &used); if (used == v.size() && f > 0) c.analog_step = f; }
+            else if (k == "analog_min_ms") { int i = std::stoi(v, &used); if (used == v.size() && i >= 0) c.analog_min_ms = i; }
+            else if (k == "digital_cap") { long long i = std::stoll(v, &used); if (used == v.size() && i > 0) c.digital_cap = (size_t)i; }
+            else if (k == "analog_cap") { long long i = std::stoll(v, &used); if (used == v.size() && i > 0) c.analog_cap = (size_t)i; }
+            else if (k == "report_s") { int i = std::stoi(v, &used); if (used == v.size() && i > 0) c.report_s = i; }
+        } catch (...) {
+        }
+    }
+    return c;
+}
+
+// Quantises analog values and rate-limits per key. Emits on the first sight of a key, on any
+// change to or from zero, and on other bucket changes at least min_ms after the key's last emit.
+class AnalogFilter {
+public:
+    AnalogFilter(float step, int min_ms) : m_step(step), m_min_ms(min_ms) {}
+
+    std::optional<float> feed(const std::string& key, float v, int64_t now_ms) {
+        float q = (float)((long long)(v / m_step + (v >= 0 ? 0.5f : -0.5f))) * m_step;
+        auto it = m_state.find(key);
+        if (it == m_state.end()) { m_state[key] = {q, now_ms}; return q; }
+        auto& s = it->second;
+        if (q == s.value) return std::nullopt;
+        bool zero_edge = (q == 0.0f) || (s.value == 0.0f);
+        if (!zero_edge && now_ms - s.last_ms < m_min_ms) return std::nullopt;
+        s = {q, now_ms};
+        return q;
+    }
+
+private:
+    struct State { float value; int64_t last_ms; };
+    float m_step;
+    int m_min_ms;
+    std::unordered_map<std::string, State> m_state;
+};
+
+// Counts "action -> gamepad buttons" when exactly one digital action is down and the pad the
+// game received has buttons set. Summary in first-seen order: "X@R->0x4000 x2; ...".
+class MapAggregator {
+public:
+    void observe(const std::vector<std::string>& down, uint16_t pad) {
+        if (down.size() != 1 || pad == 0) return;
+        char buf[16];
+        snprintf(buf, sizeof(buf), "0x%04X", pad);
+        std::string key = down[0] + "->" + buf;
+        auto it = m_counts.find(key);
+        if (it == m_counts.end()) { m_order.push_back(key); m_counts[key] = 1; }
+        else ++it->second;
+    }
+
+    std::string summary() const {
+        std::string out;
+        for (auto& k : m_order) {
+            if (!out.empty()) out += "; ";
+            out += k + " x" + std::to_string(m_counts.at(k));
+        }
+        return out;
+    }
+
+private:
+    std::vector<std::string> m_order;
+    std::unordered_map<std::string, size_t> m_counts;
 };
 
 // The plugin only touches IVRInput when UEVR runs OpenVR and its runtime is ready.
