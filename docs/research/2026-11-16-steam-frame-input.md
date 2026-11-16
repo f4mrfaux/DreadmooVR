@@ -98,8 +98,19 @@ Frame support in both the OpenVR and OpenXR paths:
 - separate start, back, bumper and trigger-axis actions
 
 Its releases (for example `111426XRAsyncXRWaitFrameOptions`, 2026-11-13) ship `uevr.zip`.
-It's an unofficial fork, so it needs Bob's approval to download, and it would replace
-nightly 01143 as the foundation.
+It's an unofficial fork, and it would replace nightly 01143 as the foundation.
+
+**Downloaded with Bob's approval (2026-11-16):**
+- Location: `Downloads\UEVR-joeyhodge-111426\x\`.
+- `uevr.zip` SHA-256 `9d4159b5…0242b4` matches GitHub's digest.
+- Its backend embeds a `frame_controller` binding, written at start as
+  `bindings_frame_controller.json`.
+- It adds the actions `StartButton`, `BackButton`, `Bumper` and `TriggerAxis`, plus touch
+  states.
+- Our personal binding (Route 1) is SteamVR's current pick and would override the fork's
+  default. After the fork's first start, select the fork's file with
+  `POST /input/selectconfig.action {app_key, controller_type, url}`. The personal binding
+  stays saved as a fallback.
 
 ## Next
 
