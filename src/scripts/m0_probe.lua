@@ -196,6 +196,16 @@ uevr.sdk.callbacks.on_xinput_get_state(function(retval, user_index, state)
     end
 end)
 
+-- DreadmoorVR.dll listener (read-only): log every plugin event; answer the ping so the plugin can
+-- log that Lua really received it (round-trip proof, not just a successful dispatch call).
+uevr.sdk.callbacks.on_lua_event(function(name, data)
+    if type(name) ~= "string" or name:sub(1, 11) ~= "dreadmoorvr" then return end
+    log("plugin", name .. ":" .. tostring(data))
+    if name == "dreadmoorvr_ping" then
+        pcall(function() uevr.api:dispatch_custom_event("dreadmoorvr_ack", "ping " .. tostring(data)) end)
+    end
+end)
+
 uevr.sdk.callbacks.on_script_reset(function()
     if log_file then log_file:close() end
 end)
