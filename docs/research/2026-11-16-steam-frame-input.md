@@ -136,3 +136,17 @@ It's an unofficial fork, and it would replace nightly 01143 as the foundation.
    - each Frame button gives the expected Xbox button (probe `pad=` lines)
    - no doubled presses
 2. If Route 1 fails or loses Inventory and Pause, evaluate Route 2.
+
+## Runtime log, 2026-11-16
+
+- **12:28:** the fork was injected into Rainmeter by mistake. Rainmeter's UEVR log shows
+  commit 76e67fc.
+- **12:30:** the fork was injected into Dreadmoor. Its log shows commit 76e67fc, and it wrote
+  `bindings_frame_controller.json`. The bridge loaded and applied its settings.
+- Controls were dead. vrserver still loaded the deleted personal binding from Steam's local
+  cache (`steamapps\workshop\content\250820\3840998860\…_legacy.bin`), because a deleted
+  workshop binding stays "current" until something else is selected.
+- **Fix (12:32:08):** `POST /input/selectconfig.action {app_key: steam.app.3629430,
+  controller_type: frame_controller, url: file:///…/bindings_frame_controller.json}`. The
+  vrserver log shows the fork's Frame binding loaded live, with no restart.
+- **Lesson:** after deleting a personal binding, select its replacement explicitly.
