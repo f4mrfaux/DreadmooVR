@@ -37,6 +37,7 @@ load_module("m1flow")
 local flow = load_module("armsflow").new(loaded)
 local armstats = load_module("armstats")
 local tuning = load_module("tuning")
+local wristfit = load_module("wristfit")
 local stats = armstats.new()
 log("loaded")
 
@@ -85,6 +86,14 @@ local function sample_arms(pawn, now)
         }
         local m = armstats.sample(s)
         stats:add(side, m)
+        -- Wrist fit: finger bones in the controller frame -> suggested hand rotation offset.
+        local pre = side == "L" and "Left" or "Right"
+        local okw, sug = pcall(wristfit.suggest, {
+            F = target:GetForwardVector(), R = target:GetRightVector(), U = target:GetUpVector(),
+            hand = s.hand, middle = actor.Body:GetSocketLocation("middle_01" .. sfx),
+            index = actor.Body:GetSocketLocation("index_01" .. sfx), pinky = actor.Body:GetSocketLocation("pinky_01" .. sfx),
+            current = { p = applied[pre .. "RotP"] or 0, y = applied[pre .. "RotY"] or 0, r = applied[pre .. "RotR"] or 0 } })
+        if okw then log(string.format("wrist %s suggest p=%.0f y=%.0f r=%.0f", side, sug.p, sug.y, sug.r)) end
         log(string.format("arm %s target=%s hand=%s elbow=%s shoulder=%s head=%s reach_err=%.1f to_target=%.1f arm_len=%.1f d_rot=%.0f,%.0f,%.0f target_rot=%s hand_rot=%s",
             side, f3(s.target), f3(s.hand), f3(s.elbow), f3(s.shoulder), f3(head), m.reach_err, m.shoulder_to_target, m.arm_len,
             m.d_pitch, m.d_yaw, m.d_roll, r3(s.target_rot), r3(s.hand_rot)))
