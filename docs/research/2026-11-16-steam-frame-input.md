@@ -195,3 +195,21 @@ it. Bob chose nightly 01143 plus a native Frame binding:
   - The fork still carried other render changes before October, so it's a better bet but not
     a sure one.
 - **Downloaded 100926TownFallp2 (12:40):** `Downloads\UEVR-joeyhodge-100926\x\`. Its SHA-256 `520bd3d9…` matches GitHub's, and it contains `XR_VALVE_frame_controller_interaction` and `bindings_frame_controller.json`. The profile's Frame binding file was selected in SteamVR.
+
+## Fork 100926TownFallp2 runtime (12:45)
+
+- The log shows commit a5d0e2a (tag 100826steamframep2), and it loaded over OpenVR.
+- It logged "Keeping customized Steam Frame binding file", because the file was the 13 Nov
+  build's copy. That file is compatible: every action it uses exists in this build's
+  `actions.json`. vrserver loaded it at 12:45:12.
+- **No input:** there's no "Successfully spoofed gamepad connection" line, and the probe saw
+  zero pad events. Bob reported that the Frame controller doesn't navigate the menu. The
+  nightly logs "spoofed gamepad connection @ 0" right away (build/m0/0733).
+- It also logged the same D3D12 back-buffer and Slate errors as the nightly; rendering was not
+  reported.
+- **Result:** neither fork build works with Dreadmoor. 111426 renders only the HUD, and
+  100926 delivers no gamepad input.
+- **Fallback in place:** our native Frame binding `vr-input-workshop://3841006354` was
+  selected again for nightly 01143.
+- **Better source:** a build of nightly 01143 plus only the fork's Frame input commits
+  (1be3ffe, 01aa042), from joeyhodge or anyone with UESDK access.
