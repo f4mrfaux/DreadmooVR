@@ -10,23 +10,42 @@ local function static(class_path)
     return cls and cls:get_class_default_object() or nil
 end
 
--- Returns class, method. method is "find_uobject", "LoadClassAsset_Blocking" or "none".
+-- Returns class, method, notes. method is "find_uobject", "LoadClassAsset_Blocking",
+-- "LoadAsset_Blocking" or "none". notes says why each method that ran came up empty.
 -- path is the full object path, e.g. "/Game/DreadmoorVR/BP_PakProbe.BP_PakProbe_C".
 function armsloader.load_class(path)
-    local ok, cls = pcall(function()
+    local notes = {}
+    local function try(name, fn)
+        local ok, res = pcall(fn)
+        if ok and res then return res end
+        notes[#notes + 1] = name .. ": " .. (ok and "nil" or tostring(res))
+        return nil
+    end
+
+    local cls = try("find_uobject", function()
         return uevr.api:find_uobject("BlueprintGeneratedClass " .. path)
     end)
-    if ok and cls then return cls, "find_uobject" end
+    if cls then return cls, "find_uobject", "" end
 
-    ok, cls = pcall(function()
+    cls = try("LoadClassAsset_Blocking", function()
         local ksl = static("/Script/Engine.KismetSystemLibrary")
         local soft_path = ksl:MakeSoftClassPath(path)
         local soft_ref = ksl:Conv_SoftClassPathToSoftClassRef(soft_path)
         return ksl:LoadClassAsset_Blocking(soft_ref)
     end)
-    if ok and cls then return cls, "LoadClassAsset_Blocking" end
+    if cls then return cls, "LoadClassAsset_Blocking", table.concat(notes, "; ") end
 
-    return nil, "none"
+    cls = try("LoadAsset_Blocking", function()
+        local ksl = static("/Script/Engine.KismetSystemLibrary")
+        local soft_path = ksl:MakeSoftObjectPath(path)
+        local soft_ref = ksl:Conv_SoftObjPathToSoftObjRef(soft_path)
+        ksl:LoadAsset_Blocking(soft_ref)
+        -- Loading the package puts the class in memory; look it up again.
+        return uevr.api:find_uobject("BlueprintGeneratedClass " .. path)
+    end)
+    if cls then return cls, "LoadAsset_Blocking", table.concat(notes, "; ") end
+
+    return nil, "none", table.concat(notes, "; ")
 end
 
 local function current_world()

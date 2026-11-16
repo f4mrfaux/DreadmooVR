@@ -5,3 +5,5 @@ VR_SnapturnJoystickDeadzone=0.200000
 VR_SnapturnTurnAngle=45
 VR_RenderingMethod=0
 VR_SyncedSequentialMethod=1
+UI_FollowView=true
+VR_AimMethod=1

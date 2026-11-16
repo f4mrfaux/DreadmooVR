@@ -51,12 +51,12 @@ local M1_CLASS = "/Game/DreadmoorVR/BP_PakProbe.BP_PakProbe_C"
 local m1 = { done = false, walking_for = 0 }
 
 local function m1_spawn(pawn)
-    local cls, method = armsloader.load_class(M1_CLASS)
+    local cls, method, notes = armsloader.load_class(M1_CLASS)
     if cls == nil then
-        log("M1 load FAILED for " .. M1_CLASS .. " (find_uobject and LoadClassAsset_Blocking both nil)")
+        log("M1 load FAILED for " .. M1_CLASS .. " :: " .. tostring(notes))
         return
     end
-    log("M1 class loaded via " .. method)
+    log("M1 class loaded via " .. method .. " (" .. tostring(notes) .. ")")
 
     local ok, err = pcall(function()
         local xf = pawn:K2_GetActorTransform()
