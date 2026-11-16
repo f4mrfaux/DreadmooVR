@@ -122,6 +122,50 @@ uevr.sdk.callbacks.on_post_engine_tick(function(engine, delta)
     log_changed("hook.DragForceMulMax", prop(inst, "DragForceMulMax"))
 end)
 
+-- Input map: SteamVR action states (read before UEVR's controller gate) paired with the pad the
+-- game gets, plus UEVR's hmd-active / controllers-in-use flags. Normal play fills the
+-- physical -> action -> Xbox table; no scripted button test needed.
+local function lib_dir()
+    if package and package.path then
+        for entry in package.path:gmatch("[^;]+") do
+            local base = entry:match("^(.-[/\\]scripts)[/\\]%?%.lua$")
+            if base then return base .. "\\lib\\" end
+        end
+    end
+    return nil
+end
+local inputmap
+do
+    local dir = lib_dir()
+    local chunk = dir and loadfile(dir .. "inputmap.lua")
+    if chunk then inputmap = chunk().new() else log("inputmap", "not loaded") end
+end
+
+local VR_ACTIONS = { "AButtonRight", "AButtonLeft", "BButtonRight", "BButtonLeft",
+    "DPad_Up", "DPad_Right", "DPad_Down", "DPad_Left",
+    "Grip", "Trigger", "JoystickClick", "SystemButton" }
+local handles, sources
+local function read_actions()
+    local vr = uevr.params.vr
+    if handles == nil then
+        handles = {}
+        for _, n in ipairs(VR_ACTIONS) do handles[n] = vr.get_action_handle("/actions/default/in/" .. n) end
+        sources = { L = vr.get_left_joystick_source(), R = vr.get_right_joystick_source() }
+    end
+    local down = {}
+    for _, n in ipairs(VR_ACTIONS) do
+        for side, src in pairs(sources) do
+            local ok, on = pcall(vr.is_action_active, handles[n], src)
+            if ok and on then down[#down + 1] = n .. "@" .. side end
+        end
+    end
+    local okh, hmd = pcall(vr.is_hmd_active)
+    local okc, ctl = pcall(vr.is_using_controllers)
+    return down, okh and hmd, okc and ctl
+end
+
+local last_summary, last_summary_t = "", 0
+
 -- Every gamepad change, so prompt buttons can be matched by time stamp.
 local last_pad = ""
 uevr.sdk.callbacks.on_xinput_get_state(function(retval, user_index, state)
@@ -132,6 +176,23 @@ uevr.sdk.callbacks.on_xinput_get_state(function(retval, user_index, state)
     if s ~= last_pad then
         last_pad = s
         log("pad", s)
+    end
+
+    if inputmap then
+        local ok, down, hmd, ctl = pcall(read_actions)
+        if ok then
+            local line = inputmap:observe(down, g.wButtons, hmd, ctl)
+            if line then log("input", line) end
+            local now = os.clock()
+            if now - last_summary_t > 30 then
+                last_summary_t = now
+                local sum = inputmap:summary()
+                if sum ~= last_summary then last_summary = sum; log("inputmap", sum) end
+            end
+        elseif not handles then
+            log("input", "read failed: " .. tostring(down))
+            inputmap = nil
+        end
     end
 end)
 
