@@ -18,11 +18,20 @@ from iostore import IoStore  # noqa: E402
 ASSET_EXTS = (".uasset", ".umap", ".uexp", ".ubulk", ".uptnl")
 
 
+def full_path(mount, rel):
+    """Container entries are relative to its mount point; make them project-relative."""
+    prefix = mount
+    while prefix.startswith("../"):
+        prefix = prefix[3:]
+    return prefix + rel
+
+
 def list_files(utoc_path):
     # Reading the directory index needs no decompression, so no Oodle decoder is required.
     store = IoStore(utoc_path, None)
     try:
-        return sorted(store.files)
+        mount = getattr(store, "mount", "../../../")
+        return sorted(full_path(mount, p) for p in store.files)
     finally:
         store._ucas.close()
 
