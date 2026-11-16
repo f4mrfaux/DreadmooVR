@@ -36,11 +36,34 @@ local armsloader = load_module("armsloader")
 load_module("m1flow")
 local flow = load_module("armsflow").new(loaded)
 local armstats = load_module("armstats")
+local tuning = load_module("tuning")
 local stats = armstats.new()
 log("loaded")
 
 local actor = nil
 local sample_err_logged = false
+
+-- Live tuning: <profile>\dreadmoorvr_arms_tuning.lua, reloaded every second, pushed into BP_VRArms
+-- float variables (names from tuning.flatten). Bad values fall back to defaults (tuning.merge).
+local TUNING_FILE = (lib_dir():gsub("scripts[/\\]lib[/\\]$", "")) .. "dreadmoorvr_arms_tuning.lua"
+local last_tuning_check, applied = -1, {}
+local function apply_tuning(now)
+    if now - last_tuning_check < 1.0 then return end
+    last_tuning_check = now
+    local chunk = loadfile(TUNING_FILE, "t", {})
+    local ok, user = false, nil
+    if chunk then ok, user = pcall(chunk) end
+    local flat = tuning.flatten(tuning.merge(ok and user or nil))
+    local changed = {}
+    for k, v in pairs(flat) do
+        if applied[k] ~= v then
+            actor[k] = v
+            applied[k] = v
+            changed[#changed + 1] = k .. "=" .. v
+        end
+    end
+    if #changed > 0 then table.sort(changed); log("tuning applied: " .. table.concat(changed, " ")) end
+end
 
 -- Refinement harness: 1 Hz sample per hand (controller target vs the arms' actual bones), 10 s
 -- summary. Read-only. GetSocketLocation/GetSocketRotation: SceneComponent.h:791/799.
@@ -138,6 +161,10 @@ uevr.sdk.callbacks.on_pre_engine_tick(function(_, delta)
     elseif action == "reattach" then
         local ok, err = pcall(function() attach_and_hide(pawn); actor:SetActorHiddenInGame(false) end)
         log("reattached to new walking pawn" .. (ok and "" or (" FAILED: " .. tostring(err))))
+    end
+    if flow.status == "active" and actor ~= nil then
+        local okt, errt = pcall(apply_tuning, clock)
+        if not okt and not sample_err_logged then sample_err_logged = true; log("tuning FAILED: " .. tostring(errt)) end
     end
     if flow.status == "active" and actor ~= nil and mode == "walking" then
         local ok, err = pcall(sample_arms, pawn, clock)
