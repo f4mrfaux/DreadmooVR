@@ -52,7 +52,10 @@ if (-not $NoPak) {
 # Remove files we shipped before but no longer ship.
 $previous = @()
 if (Test-Path $Manifest) { $previous = Get-Content $Manifest | Where-Object { $_ } }
+$keep = @()
 foreach ($old in $previous) {
+    # -NoPak leaves the deployed pak alone (it is locked while the game runs).
+    if ($NoPak -and $old.StartsWith($Mods)) { $keep += $old; continue }
     if (-not $plan.Contains($old) -and (Test-Path $old)) {
         if ($PSCmdlet.ShouldProcess($old, 'Remove (no longer shipped)')) { Remove-Item $old }
     }
@@ -83,6 +86,6 @@ if ($PSCmdlet.ShouldProcess($cfgDst, 'Merge settings')) {
 
 if ($PSCmdlet.ShouldProcess($Manifest, 'Write manifest')) {
     New-Item -ItemType Directory -Force $UevrDir | Out-Null
-    Set-Content $Manifest @($plan.Keys)
+    Set-Content $Manifest (@($plan.Keys) + $keep)
 }
 Write-Host "Deployed $($plan.Count) files."
