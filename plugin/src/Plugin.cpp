@@ -75,6 +75,13 @@ public:
         }
         if (m_input == nullptr) return;
         std::lock_guard lock{m_mtx};
+        if (!m_pending_class.empty()) {
+            std::string path = m_pending_class;
+            m_pending_class.clear();
+            std::string result = load_class(path);
+            log("M1 class load %s -> %s", path.c_str(), result.c_str());
+            API::get()->dispatch_lua_event("dreadmoorvr_class_loaded", result);
+        }
         capture();
         if (now_ms() - m_last_report_ms >= (int64_t)m_cfg.report_s * 1000) {
             m_last_report_ms = now_ms();
@@ -96,6 +103,11 @@ public:
     }
 
     void on_custom_event(const char* name, const char* data) override {
+        if (std::string_view{name} == "dreadmoorvr_request_class" && data != nullptr) {
+            std::lock_guard lock{m_mtx};
+            m_pending_class = data;
+            return;
+        }
         if (std::string_view{name} == "dreadmoorvr_ack" && !m_acked) {
             m_acked = true;
             log("Lua -> C++ ack received: '%s' (round trip verified after %d ping(s))", data, m_pings);
@@ -126,6 +138,73 @@ private:
         ++m_pings;
         API::get()->dispatch_lua_event("dreadmoorvr_ping", std::to_string(m_pings));
         if (m_pings == 60) log("no Lua ack after 60 pings; is m0_probe.lua deployed?");
+    }
+
+    // M1: load a Blueprint class from the mod pak. UEVR's Lua cannot marshal soft references, so this
+    // calls KismetSystemLibrary's MakeSoftObjectPath -> Conv_SoftObjPathToSoftObjRef ->
+    // LoadAsset_Blocking with parameter blocks laid out from the engine's own reflection.
+    // Returns "ok|<path>" or "fail|<reason>". Game thread only.
+    std::string load_class(const std::string& path) {
+        auto& api = API::get();
+        auto ksl_class = api->find_uobject<API::UClass>(L"Class /Script/Engine.KismetSystemLibrary");
+        if (ksl_class == nullptr) return "fail|KismetSystemLibrary class not found";
+        auto ksl = ksl_class->get_class_default_object();
+        if (ksl == nullptr) return "fail|KismetSystemLibrary CDO not found";
+
+        struct Call {
+            API::UFunction* fn{nullptr};
+            std::vector<uint8_t> buf;
+            int32_t off(const wchar_t* prop) const {
+                auto p = fn->find_property(prop);
+                return p ? p->get_offset() : -1;
+            }
+        };
+        auto make_call = [&](const wchar_t* name, Call& c) -> bool {
+            c.fn = ksl_class->find_function(name);
+            if (c.fn == nullptr) return false;
+            c.buf.assign((size_t)c.fn->get_properties_size() + 16, 0);
+            return true;
+        };
+        Call mk, conv, load;
+        if (!make_call(L"MakeSoftObjectPath", mk)) return "fail|MakeSoftObjectPath not found";
+        if (!make_call(L"Conv_SoftObjPathToSoftObjRef", conv)) return "fail|Conv_SoftObjPathToSoftObjRef not found";
+        if (!make_call(L"LoadAsset_Blocking", load)) return "fail|LoadAsset_Blocking not found";
+
+        const int32_t mk_in = mk.off(L"PathString"), mk_ret = mk.off(L"ReturnValue");
+        const int32_t cv_in = conv.off(L"SoftObjectPath"), cv_ret = conv.off(L"ReturnValue");
+        const int32_t ld_in = load.off(L"Asset"), ld_ret = load.off(L"ReturnValue");
+        log("M1 param offsets: Make(PathString=%d, Ret=%d size=%d) Conv(In=%d, Ret=%d size=%d) Load(Asset=%d, Ret=%d size=%d)",
+            mk_in, mk_ret, mk.fn->get_properties_size(), cv_in, cv_ret, conv.fn->get_properties_size(),
+            ld_in, ld_ret, load.fn->get_properties_size());
+        if (mk_in < 0 || mk_ret < 0 || cv_in < 0 || cv_ret < 0 || ld_in < 0 || ld_ret < 0) return "fail|parameter not found by name";
+
+        // FString { TCHAR* Data; int32 Num (incl. terminator); int32 Max; } pointing at our buffer.
+        std::wstring wpath(path.begin(), path.end());
+        struct FStr { const wchar_t* data; int32_t num; int32_t max; } fs{wpath.c_str(), (int32_t)wpath.size() + 1, (int32_t)wpath.size() + 1};
+        memcpy(mk.buf.data() + mk_in, &fs, sizeof(fs));
+        ksl->process_event(mk.fn, mk.buf.data());
+
+        // FSoftObjectPath: copy Make's return into Conv's input (size = gap to Conv's return).
+        const int32_t path_size = cv_ret - cv_in;
+        if (path_size <= 0 || mk_ret + path_size > (int32_t)mk.buf.size()) return "fail|unexpected FSoftObjectPath layout";
+        memcpy(conv.buf.data() + cv_in, mk.buf.data() + mk_ret, (size_t)path_size);
+        ksl->process_event(conv.fn, conv.buf.data());
+
+        // TSoftObjectPtr: copy Conv's return into Load's input (size = gap to Load's return).
+        const int32_t ptr_size = ld_ret - ld_in;
+        if (ptr_size <= 0 || cv_ret + ptr_size > (int32_t)conv.buf.size()) return "fail|unexpected TSoftObjectPtr layout";
+        memcpy(load.buf.data() + ld_in, conv.buf.data() + cv_ret, (size_t)ptr_size);
+        ksl->process_event(load.fn, load.buf.data());
+
+        API::UObject* loaded = nullptr;
+        memcpy(&loaded, load.buf.data() + ld_ret, sizeof(loaded));
+        std::wstring lookup = L"BlueprintGeneratedClass " + wpath;
+        auto found = api->find_uobject<API::UClass>(lookup);
+        char b[160];
+        snprintf(b, sizeof(b), "LoadAsset_Blocking returned %p; find_uobject after load %p", (void*)loaded, (void*)found);
+        log("M1 %s", b);
+        if (loaded == nullptr && found == nullptr) return "fail|not loaded (" + std::string(b) + ")";
+        return "ok|" + path;
     }
 
     void inventory() {
@@ -292,6 +371,7 @@ private:
     }
 
     std::mutex m_mtx;  // guards telemetry state shared with on_xinput_get_state
+    std::string m_pending_class;  // M1: class path requested by Lua, loaded on the game thread
     dvr::TelemetryConfig m_cfg{};
     vr::IVRInput* m_input{nullptr};
     vr::IVRSystem* m_system{nullptr};
