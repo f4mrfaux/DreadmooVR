@@ -37,7 +37,7 @@ local function spawn(pawn)
     local cls = uevr.api:find_uobject("BlueprintGeneratedClass " .. PATH)
     if cls == nil then log("spawn FAILED: class not in memory after plugin load"); return false end
     local ok, err = pcall(function()
-        local actor = armsloader.spawn(cls, pawn:K2_GetActorTransform())
+        local actor = armsloader.spawn(cls, pawn:GetTransform())
         if actor == nil then error("spawn returned nil") end
         local yaw = pawn.Controller:GetControlRotation().Yaw
         local loc = pawn:K2_GetActorLocation()
