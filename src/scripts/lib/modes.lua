@@ -1,6 +1,8 @@
 -- Which activity the player is in, from the possessed pawn's class chain, and the enter/exit
 -- bookkeeping when it changes.
-local gameapi = require("gameapi")
+-- main.lua passes already-loaded modules when UEVR has no require; tests use require.
+local deps = ...
+local gameapi = type(deps) == "table" and deps.gameapi or require("gameapi")
 
 local modes = {}
 

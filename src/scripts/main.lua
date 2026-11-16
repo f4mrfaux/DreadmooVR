@@ -1,26 +1,38 @@
 -- DreadmoorVR bridge entry point. UEVR autoloads every scripts\*.lua; the modules sit in
 -- scripts\lib so they are only loaded through require from here.
 
-local function script_dir()
-    local src = debug.getinfo(1, "S").source or ""
-    local dir = src:match("^@(.*)[/\\][^/\\]*$")
-    if dir then return dir end
-    local ok, p = pcall(function() return uevr.params.functions.get_persistent_dir() end)
-    return ok and p and (p .. "\\scripts") or "."
-end
-
-local LIB = script_dir() .. "\\lib\\?.lua"
-if not package.path:find(LIB, 1, true) then package.path = LIB .. ";" .. package.path end
-
-local gameapi = require("gameapi")
-local modes = require("modes")
-local armsloader = require("armsloader")
-
+-- UEVR's Lua has no `debug` library, so the profile folder comes from UEVR itself.
 local function log(msg)
     pcall(function() uevr.params.functions.log_info("[DreadmoorVR] " .. msg) end)
 end
 
-log("main.lua loaded; lib path " .. LIB)
+local ok_dir, PROFILE = pcall(function() return uevr.params.functions.get_persistent_dir() end)
+if not ok_dir or type(PROFILE) ~= "string" then PROFILE = "." end
+local LIB_DIR = PROFILE .. "\\scripts\\lib\\"
+
+-- require when the package library is there; loadfile otherwise. Logs which one worked.
+local load_method
+local loaded = {}
+local function load_module(name)
+    if package and package.path and require then
+        local pat = LIB_DIR .. "?.lua"
+        if not package.path:find(pat, 1, true) then package.path = pat .. ";" .. package.path end
+        local ok, mod = pcall(require, name)
+        if ok then load_method = "require"; loaded[name] = mod; return mod end
+        log("require(" .. name .. ") failed: " .. tostring(mod))
+    end
+    local chunk, err = loadfile(LIB_DIR .. name .. ".lua")
+    if not chunk then error("cannot load " .. name .. ": " .. tostring(err)) end
+    load_method = "loadfile"
+    loaded[name] = chunk(loaded)
+    return loaded[name]
+end
+
+local gameapi = load_module("gameapi")
+local modes = load_module("modes")
+local armsloader = load_module("armsloader")
+
+log("main.lua loaded; modules via " .. tostring(load_method) .. " from " .. LIB_DIR)
 
 -- M1: prove the pak loads. Two seconds after the first walking pawn, spawn the probe
 -- cube 150 cm in front of the view. Runs once per script load.
