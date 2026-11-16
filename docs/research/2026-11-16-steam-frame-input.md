@@ -150,3 +150,29 @@ It's an unofficial fork, and it would replace nightly 01143 as the foundation.
   controller_type: frame_controller, url: file:///…/bindings_frame_controller.json}`. The
   vrserver log shows the fork's Frame binding loaded live, with no restart.
 - **Lesson:** after deleting a personal binding, select its replacement explicitly.
+
+## Back to nightly 01143 with a native Frame binding (12:35)
+
+The fork rendered only the HUD in Dreadmoor. Its log reads "Failing closed for FSceneViewport
+render target … native-resource discovery failed", and the probe saw no pad changes under
+it. Bob chose nightly 01143 plus a native Frame binding:
+
+- Route 1's binding was saved again: `vr-input-workshop://3841006354`.
+- It was selected explicitly with `selectconfig.action`, and vrserver loaded it at 12:35:16.
+
+## Porting the fork's Frame input into the nightly: assessment
+
+- The fork is exactly nightly 01143 (praydog 4ee5c6b) plus 456 commits. GitHub compare
+  reports it "ahead 456, behind 0", with merge base 4ee5c6b. So the nightly is its base.
+- The Frame work is three commits, about +2,200 lines with a third of that in tests:
+  - 1be3ffe: capability-gated Frame input
+  - 01aa042: controller identity, grip axes and touch input in the Lua API
+  - 0a4dd9d: Touch default repairs
+- Those commits sit on top of other fork changes (`VR.cpp` is about 10k lines in the fork
+  against 3.3k in mainline), so a cherry-pick onto 4ee5c6b will conflict.
+- The OpenVR-only core is small: the Frame binding (`SteamFrameBindings.hpp`), the new
+  actions (`StartButton`, `BackButton`, `Bumper`, `TriggerAxis`), and their gamepad mapping
+  in `VR.cpp`.
+- Build tools are present (VS 2022 Community and its CMake).
+- Over our binding, a port would add dedicated Start and Back buttons, bumpers separate from
+  the grips, and the Lua grip-axis API.
