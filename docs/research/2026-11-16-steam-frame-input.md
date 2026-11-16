@@ -194,3 +194,4 @@ it. Bob chose nightly 01143 plus a native Frame binding:
   - The fork's UE 5.6 Slate/Native Fix render reworks are dated 23 Oct onward.
   - The fork still carried other render changes before October, so it's a better bet but not
     a sure one.
+- **Downloaded 100926TownFallp2 (12:40):** `Downloads\UEVR-joeyhodge-100926\x\`. Its SHA-256 `520bd3d9…` matches GitHub's, and it contains `XR_VALVE_frame_controller_interaction` and `bindings_frame_controller.json`. The profile's Frame binding file was selected in SteamVR.
