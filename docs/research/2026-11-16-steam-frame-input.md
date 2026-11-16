@@ -107,10 +107,27 @@ It's an unofficial fork, and it would replace nightly 01143 as the foundation.
   `bindings_frame_controller.json`.
 - It adds the actions `StartButton`, `BackButton`, `Bumper` and `TriggerAxis`, plus touch
   states.
-- Our personal binding (Route 1) is SteamVR's current pick and would override the fork's
-  default. After the fork's first start, select the fork's file with
-  `POST /input/selectconfig.action {app_key, controller_type, url}`. The personal binding
-  stays saved as a fallback.
+- **Route 1 removed for the fork test (Bob: "we want steam frame native").** The personal
+  binding was deleted with `POST /input/deleteconfig.action {"url":
+  "vr-input-workshop://3840998860"}`, and vrserver logged "Marking published file ID
+  3840998860 as deleted". So SteamVR falls back to the app's default, which under the fork
+  is its native `bindings_frame_controller.json`. Our binding's source stays in
+  `profile/steamvr/` and can be saved again in one call.
+- The fork's own doc (`docs/steam-frame-input.md` in the fork) confirms the same face-button
+  routing Route 1 used:
+  - Frame A → `AButtonRight`
+  - Frame B → `AButtonLeft`
+  - Frame X → `BButtonRight`
+  - Frame Y → `BButtonLeft`
+  - Right menu → `StartButton`; left view → `BackButton`
+  - Bumpers → `Bumper`; grips → `Grip` and `Squeeze`
+- It also states: "The native defaults send standard A/B/X/Y gamepad bits."
+- It adds Lua calls the bridge can use for grab gestures:
+  `vr.get_controller_type(source)` (returns "frame"), `vr.get_controller_profile(source)`,
+  `vr.get_action_axis(handle, source)` for the analogue squeeze and trigger, and
+  `vr.get_action_state(handle, source)`.
+- It never overwrites a customised `bindings_frame_controller.json`; it only upgrades stock
+  copies.
 
 ## Next
 
