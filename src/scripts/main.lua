@@ -6,9 +6,20 @@ local function log(msg)
     pcall(function() uevr.params.functions.log_info("[DreadmoorVR] " .. msg) end)
 end
 
-local ok_dir, PROFILE = pcall(function() return uevr.params.functions.get_persistent_dir() end)
-if not ok_dir or type(PROFILE) ~= "string" then PROFILE = "." end
-local LIB_DIR = PROFILE .. "\\scripts\\lib\\"
+-- UEVR puts "<profile>\scripts/?.lua" on package.path (seen in M1 logs); get_persistent_dir()
+-- failed there. Derive scripts\lib from that entry, then fall back to get_persistent_dir.
+local function find_lib_dir()
+    if package and package.path then
+        for entry in package.path:gmatch("[^;]+") do
+            local base = entry:match("^(.-[/\\]scripts)[/\\]%?%.lua$")
+            if base then return base .. "\\lib\\" end
+        end
+    end
+    local ok, p = pcall(function() return uevr.params.functions.get_persistent_dir() end)
+    if ok and type(p) == "string" then return p .. "\\scripts\\lib\\" end
+    return ".\\scripts\\lib\\"
+end
+local LIB_DIR = find_lib_dir()
 
 -- require when the package library is there; loadfile otherwise. Logs which one worked.
 local load_method
