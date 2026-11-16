@@ -38,11 +38,13 @@ local flow = load_module("armsflow").new(loaded)
 local armstats = load_module("armstats")
 local tuning = load_module("tuning")
 local wristfit = load_module("wristfit")
+local ubik = load_module("ubik")
 local stats = armstats.new()
 log("loaded")
 
 local actor = nil
 local sample_err_logged = false
+local solve_err_logged = false
 
 -- Live tuning: <profile>\dreadmoorvr_arms_tuning.lua, reloaded every second, pushed into BP_VRArms
 -- float variables (names from tuning.flatten). Bad values fall back to defaults (tuning.merge).
@@ -72,6 +74,52 @@ local SAMPLE_S, SUMMARY_S = 1.0, 10.0
 local last_sample, last_summary = 0, 0
 local function f3(v) return string.format("%.0f,%.0f,%.0f", v.X, v.Y, v.Z) end
 local function r3(r) return string.format("%.0f,%.0f,%.0f", r.Pitch, r.Yaw, r.Roll) end
+
+-- UBIK solver, every frame: elbow joint targets and clavicle offsets (world) -> BP_VRArms floats
+-- read by ABP_VRArms. The shift we applied last frame is subtracted to get rest positions.
+local calib = ubik.calibration.new()
+local shift = { L = { X = 0, Y = 0, Z = 0 }, R = { X = 0, Y = 0, Z = 0 } }
+local last_calib_logged = nil
+local function vsub(a, b) return { X = a.X - b.X, Y = a.Y - b.Y, Z = a.Z - b.Z } end
+local function vadd(a, b) return { X = a.X + b.X, Y = a.Y + b.Y, Z = a.Z + b.Z } end
+local function vlen(a) return math.sqrt(a.X * a.X + a.Y * a.Y + a.Z * a.Z) end
+local function vdot(a, b) return a.X * b.X + a.Y * b.Y + a.Z * b.Z end
+
+local function solve_arms(pawn)
+    local yaw = math.rad(pawn:K2_GetActorRotation().Yaw)
+    local F = { X = math.cos(yaw), Y = math.sin(yaw), Z = 0 }
+    local Rv = { X = -math.sin(yaw), Y = math.cos(yaw), Z = 0 }
+    local UP = { X = 0, Y = 0, Z = 1 }
+    local body = actor.Body
+    local rest, clav, hands = {}, {}, {}
+    for _, h in ipairs({ { "L", "_l", actor.LeftHandTarget }, { "R", "_r", actor.RightHandTarget } }) do
+        local side, sfx, target = h[1], h[2], h[3]
+        rest[side] = vsub(body:GetSocketLocation("upperarm" .. sfx), shift[side])
+        clav[side] = vsub(body:GetSocketLocation("clavicle" .. sfx), shift[side])
+        hands[side] = target:K2_GetComponentLocation()
+    end
+    calib:add(hands.L, hands.R, vlen(vsub(rest.L, rest.R)))
+    local upper = vlen(vsub(body:GetSocketLocation("upperarm_l"), body:GetSocketLocation("lowerarm_l")))
+    local lower = vlen(vsub(body:GetSocketLocation("lowerarm_l"), body:GetSocketLocation("hand_l")))
+    local arm_len = math.max(calib:arm_length() or 0, upper + lower)  -- calibration only lengthens
+    for _, side in ipairs({ "L", "R" }) do
+        local outward = side == "L" and { X = -Rv.X, Y = -Rv.Y, Z = 0 } or Rv
+        local rel = vsub(hands[side], rest[side])
+        local cyaw, croll = ubik.clavicle_angles(vdot(rel, F), vdot(rel, UP), arm_len)
+        shift[side] = ubik.shoulder_shift({ clavicle = clav[side], rest = rest[side], yaw = cyaw, roll = croll, forward = F, up = UP })
+        local shoulder = vadd(rest[side], shift[side])
+        local swivel = ubik.base_swivel(vdot(vsub(hands[side], shoulder), outward), arm_len)
+        local e = ubik.elbow({ shoulder = shoulder, hand = hands[side], upper = upper, lower = lower, swivel = swivel, outward = outward })
+        actor[side .. "ElbowX"], actor[side .. "ElbowY"], actor[side .. "ElbowZ"] = e.X, e.Y, e.Z
+        local sh = shift[side]
+        actor[side .. "ShoulderX"], actor[side .. "ShoulderY"], actor[side .. "ShoulderZ"] = sh.X, sh.Y, sh.Z
+    end
+    local a = calib:arm_length()
+    if a and a > upper + lower and (last_calib_logged == nil or math.abs(a - last_calib_logged) >= 1) then
+        last_calib_logged = a
+        log(string.format("calibration: player arm %.1f cm (character %.1f)", a, upper + lower))
+    end
+end
 
 local function sample_arms(pawn, now)
     if now - last_sample < SAMPLE_S then return end
@@ -176,6 +224,8 @@ uevr.sdk.callbacks.on_pre_engine_tick(function(_, delta)
         if not okt and not sample_err_logged then sample_err_logged = true; log("tuning FAILED: " .. tostring(errt)) end
     end
     if flow.status == "active" and actor ~= nil and mode == "walking" then
+        local oks, errs = pcall(solve_arms, pawn)
+        if not oks and not solve_err_logged then solve_err_logged = true; log("solver FAILED: " .. tostring(errs)) end
         local ok, err = pcall(sample_arms, pawn, clock)
         if not ok and not sample_err_logged then sample_err_logged = true; log("harness FAILED: " .. tostring(err)) end
     end
