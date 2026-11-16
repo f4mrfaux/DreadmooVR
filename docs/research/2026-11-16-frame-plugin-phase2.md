@@ -85,7 +85,12 @@ artifacting (deferred).
 while no D-pad action was down. That's UEVR D-pad shifting (thumbrest plus stick), which
 breaks spec item 4. Fix: `VR_DPadShifting=false`.
 
-**Still wrong:** left-stick movement follows the character's facing, not the head. Fix:
-`VR_MovementOrientation=1` (head).
+**Still wrong:** left-stick movement follows the character's facing, not the head.
+
+Bob's goal (15:20) is RE2-VR style: "our head should be adjusting the character's orientation,
+and location if possible". Fix: `VR_AimModifyPlayerControlRotation=true` (with
+`VR_AimMethod=1`). UEVR then writes the head's direction into the player's control rotation,
+which drives both facing and movement. `VR_MovementOrientation` stays 0 so the stick isn't
+rotated twice. Location is covered by `VR_RoomscaleMovement=true`.
 
 Both fixes are written after the game exits, because UEVR saves its config on exit.
