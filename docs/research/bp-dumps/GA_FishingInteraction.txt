@@ -1,0 +1,140 @@
+# /Game/Dreadmoor/Core/Features/Fishing/GAS/GA_FishingInteraction
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/Fishing/GAS/GA_FishingInteraction.uasset
+
+## imported packages (2)
+  /Game/Dreadmoor/Core/Features/Fishing/BP_GroundFishingSpot_Proxy
+  /Game/Dreadmoor/Core/Libraries/BPFL_MIscFunctions
+
+## exports (10)
+  [0] GA_FishingInteraction_C : BlueprintGeneratedClass (outer None) super=DrdGameplayAbility size=538
+  [9] Default__GA_FishingInteraction_C : GA_FishingInteraction_C (outer None) size=60
+        refs: name:Actor, name:BP_FishingController_C, name:spine_04, name:GAS.Character.IsInteracting
+
+## function AttachToFloor  flags=0x0C820000
+  L0000: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(Actor)
+  L001D: if not (CallFunc_IsValid_ReturnValue) goto L022D
+  L002B: CallFunc_K2_GetActorLocation_ReturnValue = Actor.Actor.K2_GetActorLocation()
+  L005D: CallFunc_Subtract_VectorVector_ReturnValue = Subtract_VectorVector(CallFunc_K2_GetActorLocation_ReturnValue, Vec(0,0,1000))
+  L009B: CallFunc_LineTraceSingle_ReturnValue = KismetSystemLibrary.LineTraceSingle(self, CallFunc_K2_GetActorLocation_ReturnValue, CallFunc_Subtract_VectorVector_ReturnValue, 0, false, Temp_object_Variable, 0, CallFunc_LineTraceSingle_OutHit, true, LinearColor{1, 0, 0, 1}, LinearColor{0, 1, 0, 1}, 5)
+  L0123: if not (CallFunc_LineTraceSingle_ReturnValue) goto L022D
+  L0131: GameplayStatics.BreakHitResult(CallFunc_LineTraceSingle_OutHit, CallFunc_BreakHitResult_bBlockingHit, CallFunc_BreakHitResult_bInitialOverlap, CallFunc_BreakHitResult_Time, CallFunc_BreakHitResult_Distance, CallFunc_BreakHitResult_Location, CallFunc_BreakHitResult_ImpactPoint, CallFunc_BreakHitResult_Normal, CallFunc_BreakHitResult_ImpactNormal, CallFunc_BreakHitResult_PhysMat, CallFunc_BreakHitResult_HitActor, CallFunc_BreakHitResult_HitComponent, CallFunc_BreakHitResult_HitBoneName, CallFunc_BreakHitResult_BoneName, CallFunc_BreakHitResult_HitItem, CallFunc_BreakHitResult_ElementIndex, CallFunc_BreakHitResult_FaceIndex, CallFunc_BreakHitResult_TraceStart, CallFunc_BreakHitResult_TraceEnd)
+  L01E6: CallFunc_K2_AttachToComponent_ReturnValue = Actor.Actor.K2_AttachToComponent(CallFunc_BreakHitResult_HitComponent, 'None', 1, 1, 1, true)
+  L022D: return
+
+## function EventReceived_6AF0C4684627BE55A4A70381852DF48A  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Payload = Payload
+  L0012: GA_FishingInteraction_C.ExecuteUbergraph_GA_FishingInteraction(2773)
+  L0021: return
+
+## function ExecuteUbergraph_GA_FishingInteraction  flags=0x00808001
+  L0000: push L0AF5
+  L0005: goto computed(EntryPoint)
+  L000F: Temp_class_Variable = K2Node_CustomEvent_Loaded
+  L0022: CallFunc_GetActorInfo_ReturnValue_2 = GameplayAbility.GetActorInfo()
+  L003E: CallFunc_GetActorInfo_ReturnValue_2.OwnerActor.EnableInput(self.PlayerController)
+  L0074: CallFunc_Conv_SoftClassReferenceToClass_ReturnValue = KismetSystemLibrary.Conv_SoftClassReferenceToClass(self.FishingControllerClass)
+  L0091: K2Node_ClassDynamicCast_AsDrd_Fishing_Controller_Base = classcast<DrdFishingControllerBase>(CallFunc_Conv_SoftClassReferenceToClass_ReturnValue)
+  L00B5: K2Node_ClassDynamicCast_bSuccess = K2Node_ClassDynamicCast_AsDrd_Fishing_Controller_Base
+  L00D2: CallFunc_GetTransform_ReturnValue = K2Node_Event_EventData.Target.Actor.GetTransform()
+  L010D: CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue = GameplayStatics.BeginDeferredActorSpawnFromClass(self, K2Node_ClassDynamicCast_AsDrd_Fishing_Controller_Base, CallFunc_GetTransform_ReturnValue, 1, null, 1)
+  L0139: GetPlaceGuid(K2Node_Event_EventData.Target, CallFunc_GetPlaceGuid_Place)
+  L0162: Default__KismetSystemLibrary.KismetSystemLibrary.SetStructurePropertyByName(CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue, 'RequestedPlaceGuid', CallFunc_GetPlaceGuid_Place)
+  L01A1: CallFunc_K2_GetPawn_ReturnValue = self.PlayerController.Controller.K2_GetPawn()
+  L01CB: KismetSystemLibrary.SetObjectPropertyByName(CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue, 'Instigator', CallFunc_K2_GetPawn_ReturnValue)
+  L01F4: CallFunc_GetTransform_ReturnValue = K2Node_Event_EventData.Target.Actor.GetTransform()
+  L022F: CallFunc_FinishSpawningActor_ReturnValue = GameplayStatics.FinishSpawningActor(CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue, CallFunc_GetTransform_ReturnValue, 1)
+  L0257: CallFunc_K2_GetPawn_ReturnValue = self.PlayerController.Controller.K2_GetPawn()
+  L0281: CallFunc_GetControlRotation_ReturnValue = CallFunc_K2_GetPawn_ReturnValue.Pawn.GetControlRotation()
+  L02B3: self.PreInteractRotation = CallFunc_GetControlRotation_ReturnValue
+  L02CE: AttachToFloor(CallFunc_FinishSpawningActor_ReturnValue)
+  L02E5: SetBlendBonesHidden(true)
+  L02F4: Default__BPFL_MIscFunctions_C.UpdateAllCamerasFOVToSettingsValue(CallFunc_FinishSpawningActor_ReturnValue, self)
+  L0322: self.PlayerController.SetViewTargetWithBlend(CallFunc_FinishSpawningActor_ReturnValue, 0.5, 1, 0, false)
+  L035C: KismetSystemLibrary.Delay(self, 0.5, LatentActionInfo{L0393, 1132625693, 'ExecuteUbergraph_GA_FishingInteraction', self})
+  L0392: pop-flow
+  L0393: self.PlayerController.Controller.Possess(CallFunc_FinishSpawningActor_ReturnValue)
+  L03BC: CallFunc_GetActorInfo_ReturnValue = GameplayAbility.GetActorInfo()
+  L03D8: AttachToFloor(CallFunc_GetActorInfo_ReturnValue.AvatarActor)
+  L03F8: CallFunc_WaitGameplayEvent_ReturnValue = AbilityTask_WaitGameplayEvent.WaitGameplayEvent(self, GameplayTag{'GAS.Event.Unpossess'}, null, false, true)
+  L042B: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(CallFunc_WaitGameplayEvent_ReturnValue)
+  L0448: if not (CallFunc_IsValid_ReturnValue) pop-flow
+  L0452: bind(K2Node_CreateDelegate_OutputDelegate_1, self, 'EventReceived_6AF0C4684627BE55A4A70381852DF48A')
+  L0469: CallFunc_WaitGameplayEvent_ReturnValue.self.EventReceived += K2Node_CreateDelegate_OutputDelegate_1
+  L0492: CallFunc_WaitGameplayEvent_ReturnValue.GameplayTask.ReadyForActivation()
+  L04B2: pop-flow
+  L04B3: CallFunc_GetActorInfo_ReturnValue_2 = GameplayAbility.GetActorInfo()
+  L04CF: CallFunc_GetComponentByClass_ReturnValue = K2Node_Event_EventData.Target.Actor.GetComponentByClass(CapsuleComponent)
+  L050B: CallFunc_K2_GetComponentToWorld_ReturnValue = CallFunc_GetComponentByClass_ReturnValue.SceneComponent.K2_GetComponentToWorld()
+  L053D: BreakTransform(CallFunc_K2_GetComponentToWorld_ReturnValue, CallFunc_BreakTransform_Location, CallFunc_BreakTransform_Rotation, CallFunc_BreakTransform_Scale)
+  L056B: BreakRotator(CallFunc_BreakTransform_Rotation, CallFunc_BreakRotator_Roll, CallFunc_BreakRotator_Pitch, CallFunc_BreakRotator_Yaw)
+  L0599: CallFunc_MakeRotator_ReturnValue_1 = MakeRotator(0, 0, CallFunc_BreakRotator_Yaw)
+  L05C8: CallFunc_Add_VectorVector_ReturnValue = Add_VectorVector(CallFunc_BreakTransform_Location, Vec(0,0,5))
+  L0606: CallFunc_K2_SetActorLocationAndRotation_ReturnValue = CallFunc_GetActorInfo_ReturnValue_2.OwnerActor.Actor.K2_SetActorLocationAndRotation(CallFunc_Add_VectorVector_ReturnValue, CallFunc_MakeRotator_ReturnValue_1, false, CallFunc_K2_SetActorLocationAndRotation_SweepHitResult, false)
+  L0656: CallFunc_GetActorInfo_ReturnValue_2 = GameplayAbility.GetActorInfo()
+  L0672: K2Node_DynamicCast_AsPawn = cast<Pawn>(CallFunc_GetActorInfo_ReturnValue_2.OwnerActor)
+  L069F: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsPawn
+  L06BC: if not (K2Node_DynamicCast_bSuccess) pop-flow
+  L06C6: self.PlayerController.Controller.Possess(K2Node_DynamicCast_AsPawn)
+  L06EF: self.PlayerController.SetControlRotation(self.PreInteractRotation)
+  L071C: CallFunc_GetActorInfo_ReturnValue_1 = GameplayAbility.GetActorInfo()
+  L0738: CallFunc_GetActorInfo_ReturnValue_1.AvatarActor.Actor.K2_DetachFromActor(1, 1, 1)
+  L0767: K2_EndAbility()
+  L0775: pop-flow
+  L0776: bind(K2Node_CreateDelegate_OutputDelegate, self, 'OnLoaded_CE2135C44F6DFF975FC9DAA0B7247167')
+  L078D: KismetSystemLibrary.LoadAssetClass(self, self.FishingControllerClass, K2Node_CreateDelegate_OutputDelegate, LatentActionInfo{-1, -416656360, 'ExecuteUbergraph_GA_FishingInteraction', self})
+  L07D0: pop-flow
+  L07D1: CallFunc_K2_CommitAbility_ReturnValue = K2_CommitAbility()
+  L07E9: if not (CallFunc_K2_CommitAbility_ReturnValue) pop-flow
+  L07F3: CallFunc_GetActorInfo_ReturnValue_2 = GameplayAbility.GetActorInfo()
+  L080F: self.PlayerController = CallFunc_GetActorInfo_ReturnValue_2.PlayerController
+  L082B: CallFunc_GetActorInfo_ReturnValue_2 = GameplayAbility.GetActorInfo()
+  L0847: CallFunc_GetActorInfo_ReturnValue_2.OwnerActor.DisableInput(self.PlayerController)
+  L087D: goto L0776
+  L0882: KismetSystemLibrary.Delay(self, 0.5, LatentActionInfo{L04B3, -1123445417, 'ExecuteUbergraph_GA_FishingInteraction', self})
+  L08B8: pop-flow
+  L08B9: SetBlendBonesHidden(false)
+  L08C8: pop-flow
+  L08C9: goto L07D1
+  L08CE: CallFunc_GetActorInfo_ReturnValue_2 = GameplayAbility.GetActorInfo()
+  L08EA: CallFunc_GetComponentByClass_ReturnValue = K2Node_Event_EventData.Target.Actor.GetComponentByClass(CapsuleComponent)
+  L0926: CallFunc_K2_GetComponentToWorld_ReturnValue = CallFunc_GetComponentByClass_ReturnValue.SceneComponent.K2_GetComponentToWorld()
+  L0958: BreakTransform(CallFunc_K2_GetComponentToWorld_ReturnValue, CallFunc_BreakTransform_Location, CallFunc_BreakTransform_Rotation, CallFunc_BreakTransform_Scale)
+  L0986: BreakRotator(CallFunc_BreakTransform_Rotation, CallFunc_BreakRotator_Roll, CallFunc_BreakRotator_Pitch, CallFunc_BreakRotator_Yaw)
+  L09B4: CallFunc_MakeRotator_ReturnValue = MakeRotator(0, 0, CallFunc_BreakRotator_Yaw)
+  L09E3: CallFunc_Add_VectorVector_ReturnValue = Add_VectorVector(CallFunc_BreakTransform_Location, Vec(0,0,5))
+  L0A21: CallFunc_K2_SetActorLocationAndRotation_ReturnValue_1 = CallFunc_GetActorInfo_ReturnValue_2.OwnerActor.Actor.K2_SetActorLocationAndRotation(CallFunc_Add_VectorVector_ReturnValue, CallFunc_MakeRotator_ReturnValue, false, CallFunc_K2_SetActorLocationAndRotation_SweepHitResult_1, false)
+  L0A71: CallFunc_GetActorInfo_ReturnValue_2 = GameplayAbility.GetActorInfo()
+  L0A8D: self.PlayerController.SetViewTargetWithBlend(CallFunc_GetActorInfo_ReturnValue_2.OwnerActor, 0.5, 1, 0, true)
+  L0AD0: goto L0882
+  L0AD5: Temp_struct_Variable = K2Node_CustomEvent_Payload
+  L0AF0: goto L08CE
+  L0AF5: return
+
+## function GetPlaceGuid  flags=0x1C420000
+  L0000: K2Node_DynamicCast_AsBP_Ground_Fishing_Spot_Proxy = cast<BP_GroundFishingSpot_Proxy_C>(Spot)
+  L0024: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsBP_Ground_Fishing_Spot_Proxy
+  L0041: if not (K2Node_DynamicCast_bSuccess) goto L0085
+  L004F: Place = K2Node_DynamicCast_AsBP_Ground_Fishing_Spot_Proxy.self.PlaceGuid
+  L0080: goto L00B9
+  L0085: Place = Guid{0, 0, 0, 0}
+  L00B9: return
+
+## function K2_ActivateAbilityFromEvent  flags=0x08480800
+  L0000: frame.K2Node_Event_EventData = EventData
+  L0012: GA_FishingInteraction_C.ExecuteUbergraph_GA_FishingInteraction(2249)
+  L0021: return
+
+## function K2_OnEndAbility  flags=0x08080800
+  L0000: frame.K2Node_Event_bWasCancelled = bWasCancelled
+  L0012: GA_FishingInteraction_C.ExecuteUbergraph_GA_FishingInteraction(2233)
+  L0021: return
+
+## function OnLoaded_CE2135C44F6DFF975FC9DAA0B7247167  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Loaded = Loaded
+  L0012: GA_FishingInteraction_C.ExecuteUbergraph_GA_FishingInteraction(15)
+  L0021: return
+
+## function SetBlendBonesHidden  flags=0x0C820000
+  L0000: CallFunc_GetActorInfo_ReturnValue = GameplayAbility.GetActorInfo()
+  L001C: DrdCommonFunctionLibrary.SetBonesGeometryHidden(CallFunc_GetActorInfo_ReturnValue.SkeletalMeshComponent, self.BonesHiddenDuringBlend, bHidden)
+  L004A: return

@@ -1,0 +1,143 @@
+# /Game/Dreadmoor/InventoryFramework/Items/FishingRods/BP_FishingRodWithReel
+# file: Dreadmoor/Content/Dreadmoor/InventoryFramework/Items/FishingRods/BP_FishingRodWithReel.uasset
+
+## imported packages (9)
+  /Game/Dreadmoor/Animations/Rods/Reel_Simple/Rig_FishingReel_Textures
+  /Game/Dreadmoor/Animations/Rods/Rod_Simple/Rig_FishingRod_Textures
+  /Game/Dreadmoor/Animations/Rods/Rod_Simple/Rig_FishingThread_Textures
+  /Game/Dreadmoor/InventoryFramework/Items/BP_DrdItemActor
+  /Game/Dreadmoor/InventoryFramework/TraitsAndComponents/IT_MeshData
+  /Game/Dreadmoor/UI/UI_Utils/BP_UI_Utils
+  /Game/Dreadmoor/UI/UI_Utils/BP_UiCallbacks
+  /InventoryFrameworkPlugin/Core/ActorParents/BP_ItemActor
+  /InventoryFrameworkPlugin/Core/Components/BP_AC_Inventory
+
+## exports (22)
+  [0] BP_FishingRodWithReel_C : BlueprintGeneratedClass (outer None) super=BP_DrdItemActor_C size=521
+  [1] Box_GEN_VARIABLE : BoxComponent (outer BP_FishingRodWithReel_C) size=60
+        refs: name:OnUpgradeClicked
+  [2] Inventory Component : BP_AC_Inventory_C (outer Default__BP_FishingRodWithReel_C) size=128
+        refs: exp:Default__BP_FishingRodWithReel_C, name:IDA_FishingRodWithReel, exp:Inventory Component
+  [3] Default__BP_FishingRodWithReel_C : BP_FishingRodWithReel_C (outer None) size=24
+        refs: exp:Inventory Component
+  [4] DrdInteractable_GEN_VARIABLE : DrdInteractableComponent (outer BP_FishingRodWithReel_C) size=40
+  [11] InheritableComponentHandler : InheritableComponentHandler (outer BP_FishingRodWithReel_C) size=162
+        refs: obj:/Script/Dreadmoor.DrdInteractableComponent, exp:DrdInteractable_GEN_VARIABLE, name:DrdInteractable, exp:InitWithExistingItem, name:InteractDistance, name:InteractPriority, name:InteractAbility, name:InteractionIcon, name:InteractionWidgetClass, name:InteractionWidgetRelativeTranslation, obj:/Script/CoreUObject.Vector
+  [12] DefaultSceneRoot_GEN_VARIABLE : SceneComponent (outer BP_FishingRodWithReel_C) size=10
+  [13] SCS_Node_0 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SceneComponent, exp:DefaultSceneRoot_GEN_VARIABLE, name:DefaultSceneRoot
+  [14] SCS_Node_1 : SCS_Node (outer SimpleConstructionScript_0) size=206
+        refs: obj:/Script/Engine.SkeletalMeshComponent, exp:SkeletalMesh_GEN_VARIABLE, exp:OnUpgradeClicked_Event, name:SkeletalMesh, name:SkinnedAsset, name:BoundsScale, name:RelativeRotation, name:Pitch, obj:/Script/CoreUObject.Rotator, name:Yaw, name:Roll, name:ComponentTags, name:Scene, name:BP_ItemActor_C, exp:SCS_Node_7, exp:SCS_Node_8
+  [15] SCS_Node_2 : SCS_Node (outer SimpleConstructionScript_0) size=140
+        refs: obj:/Script/Engine.BoxComponent, exp:DrdInteractable_GEN_VARIABLE, name:RelativeLocation, obj:/Script/CoreUObject.Vector, name:RelativeScale3D, name:Scene, name:BP_ItemActor_C, name:Box
+  [16] SCS_Node_7 : SCS_Node (outer SimpleConstructionScript_0) size=114
+        refs: obj:/Script/Engine.SkeletalMeshComponent, exp:Line_GEN_VARIABLE, exp:DrdInteractable_GEN_VARIABLE, name:SkeletalMesh, name:SkinnedAsset, name:BoundsScale, name:ComponentTags, name:Line
+  [17] SCS_Node_8 : SCS_Node (outer SimpleConstructionScript_0) size=114
+        refs: obj:/Script/Engine.SkeletalMeshComponent, exp:Reel_GEN_VARIABLE, exp:DrdInteractable_GEN_VARIABLE, name:SkeletalMesh, name:SkinnedAsset, name:BoundsScale, name:ComponentTags, name:Reel
+  [18] SimpleConstructionScript_0 : SimpleConstructionScript (outer BP_FishingRodWithReel_C) size=42
+        refs: exp:SCS_Node_1, exp:SCS_Node_2, exp:Default__BP_FishingRodWithReel_C, exp:SCS_Node_7, exp:SCS_Node_8, name:CallFunc_Array_Length_ReturnValue
+  [19] Line_GEN_VARIABLE : SkeletalMeshComponent (outer BP_FishingRodWithReel_C) size=40
+        refs: obj:/Game/Dreadmoor/Animations/Rods/Rod_Simple/Rig_FishingThread_Textures.Rig_FishingThread_Textures, name:Line
+  [20] Reel_GEN_VARIABLE : SkeletalMeshComponent (outer BP_FishingRodWithReel_C) size=40
+        refs: obj:/Game/Dreadmoor/Animations/Rods/Reel_Simple/Rig_FishingReel_Textures.Rig_FishingReel_Textures, name:Reel
+  [21] SkeletalMesh_GEN_VARIABLE : SkeletalMeshComponent (outer BP_FishingRodWithReel_C) size=66
+        refs: obj:/Game/Dreadmoor/Animations/Rods/Rod_Simple/Rig_FishingRod_Textures.Rig_FishingRod_Textures, name:Rod
+
+## function ExecuteUbergraph_BP_FishingRodWithReel  flags=0x00808001
+  L0000: push L07EE
+  L0005: goto computed(EntryPoint)
+  L000F: Temp_int_Array_Index_Variable = 0
+  L0026: CallFunc_Array_Length_ReturnValue_1 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(CallFunc_GetItemsChildrenContainers_ReturnValue)
+  L0061: CallFunc_Less_IntInt_ReturnValue_1 = Less_IntInt(Temp_int_Loop_Counter_Variable_1, CallFunc_Array_Length_ReturnValue_1)
+  L0087: if not (CallFunc_Less_IntInt_ReturnValue_1) pop-flow
+  L0091: Temp_int_Array_Index_Variable = Temp_int_Loop_Counter_Variable_1
+  L00AC: push L0245
+  L00B1: Temp_int_Loop_Counter_Variable = 0
+  L00C8: Temp_int_Array_Index_Variable_1 = 0
+  L00DF: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetItemsChildrenContainers_ReturnValue, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L011A: CallFunc_Array_Length_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(CallFunc_Array_Get_Item.Items)
+  L015E: CallFunc_Less_IntInt_ReturnValue = Less_IntInt(Temp_int_Loop_Counter_Variable, CallFunc_Array_Length_ReturnValue)
+  L0184: if not (CallFunc_Less_IntInt_ReturnValue) pop-flow
+  L018E: Temp_int_Array_Index_Variable_1 = Temp_int_Loop_Counter_Variable
+  L01A9: push L028F
+  L01AE: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetItemsChildrenContainers_ReturnValue, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L01E9: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_Array_Get_Item.Items, Temp_int_Array_Index_Variable_1, CallFunc_Array_Get_Item_1)
+  L022D: InitWithModule(CallFunc_Array_Get_Item_1)
+  L0244: pop-flow
+  L0245: CallFunc_Add_IntInt_ReturnValue_1 = Add_IntInt(Temp_int_Loop_Counter_Variable_1, 1)
+  L026F: Temp_int_Loop_Counter_Variable_1 = CallFunc_Add_IntInt_ReturnValue_1
+  L028A: goto L0026
+  L028F: CallFunc_Add_IntInt_ReturnValue = Add_IntInt(Temp_int_Loop_Counter_Variable, 1)
+  L02B9: Temp_int_Loop_Counter_Variable = CallFunc_Add_IntInt_ReturnValue
+  L02D4: goto L00DF
+  L02D9: BP_DrdItemActor_C.ReceiveBeginPlay()
+  L02E3: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L02FD: K2Node_DynamicCast_AsI_Inventory = iface<I_Inventory>(CallFunc_GetPlayerController_ReturnValue)
+  L0321: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsI_Inventory
+  L033E: if not (K2Node_DynamicCast_bSuccess) goto L03FC
+  L034C: K2Node_DynamicCast_AsI_Inventory.GetInventoryComponent(CallFunc_GetInventoryComponent_Component)
+  L037A: self.InventoryComponent = CallFunc_GetInventoryComponent_Component
+  L038D: bind(K2Node_CreateDelegate_OutputDelegate, self, 'OnUpgradeClicked_Event')
+  L03A4: Default__BP_UI_Utils_C.GetUiCallback(self, CallFunc_GetUiCallback_UiCallbackComponent)
+  L03D2: CallFunc_GetUiCallback_UiCallbackComponent.self.OnUpgradeClicked += K2Node_CreateDelegate_OutputDelegate
+  L03FB: pop-flow
+  L03FC: CallFunc_GetInventoryComponent_Component = null
+  L0407: goto L037A
+  L040C: InitWithModule(K2Node_CustomEvent_Item)
+  L0423: pop-flow
+  L0424: BP_DrdItemActor_C.InitWithExistingItem(K2Node_Event_Item)
+  L0437: CallFunc_GetPlayerController_ReturnValue_1 = GameplayStatics.GetPlayerController(self, 0)
+  L0451: K2Node_DynamicCast_AsI_Inventory_1 = iface<I_Inventory>(CallFunc_GetPlayerController_ReturnValue_1)
+  L0475: K2Node_DynamicCast_bSuccess_1 = K2Node_DynamicCast_AsI_Inventory_1
+  L0492: if not (K2Node_DynamicCast_bSuccess_1) goto L0541
+  L04A0: K2Node_DynamicCast_AsI_Inventory_1.GetInventoryComponent(CallFunc_GetInventoryComponent_Component_1)
+  L04CE: CallFunc_GetItemsChildrenContainers_ReturnValue = CallFunc_GetInventoryComponent_Component_1.AC_Inventory.GetItemsChildrenContainers(K2Node_Event_Item, GameplayTagContainer{[]})
+  L0525: Temp_int_Loop_Counter_Variable_1 = 0
+  L053C: goto L000F
+  L0541: CallFunc_GetInventoryComponent_Component_1 = null
+  L054C: goto L04CE
+  L0551: CallFunc_GetTraitByClassForItem_ReturnValue = FL_InventoryFramework.GetTraitByClassForItem(K2Node_CustomEvent_S_InventoryItem.ItemAsset, IT_MeshData_C, false)
+  L0581: CallFunc_LoadAsset_Blocking_ReturnValue = KismetSystemLibrary.LoadAsset_Blocking(CallFunc_GetTraitByClassForItem_ReturnValue.self.SkeletalMesh)
+  L05B4: CallFunc_Conv_SoftObjectReferenceToObject_ReturnValue = KismetSystemLibrary.Conv_SoftObjectReferenceToObject(CallFunc_GetTraitByClassForItem_ReturnValue.self.SkeletalMesh)
+  L05E7: K2Node_DynamicCast_AsSkeletal_Mesh = cast<SkeletalMesh>(CallFunc_Conv_SoftObjectReferenceToObject_ReturnValue)
+  L060B: K2Node_DynamicCast_bSuccess_2 = K2Node_DynamicCast_AsSkeletal_Mesh
+  L0628: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(K2Node_DynamicCast_AsSkeletal_Mesh)
+  L0645: if not (CallFunc_IsValid_ReturnValue) pop-flow
+  L064F: CallFunc_GetComponentsByTag_ReturnValue = Actor.GetComponentsByTag(SkeletalMeshComponent, CallFunc_GetTraitByClassForItem_ReturnValue.self.ComponentTag)
+  L0693: CallFunc_Array_IsEmpty_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_IsEmpty(CallFunc_GetComponentsByTag_ReturnValue)
+  L06C6: if not (CallFunc_Array_IsEmpty_ReturnValue) goto L06D5
+  L06D4: pop-flow
+  L06D5: CallFunc_GetComponentsByTag_ReturnValue = Actor.GetComponentsByTag(SkeletalMeshComponent, CallFunc_GetTraitByClassForItem_ReturnValue.self.ComponentTag)
+  L0719: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetComponentsByTag_ReturnValue, 0, CallFunc_Array_Get_Item_2)
+  L0750: CallFunc_Conv_SoftObjectReferenceToObject_ReturnValue = KismetSystemLibrary.Conv_SoftObjectReferenceToObject(CallFunc_GetTraitByClassForItem_ReturnValue.self.SkeletalMesh)
+  L0783: K2Node_DynamicCast_AsSkeletal_Mesh = cast<SkeletalMesh>(CallFunc_Conv_SoftObjectReferenceToObject_ReturnValue)
+  L07A7: K2Node_DynamicCast_bSuccess_2 = K2Node_DynamicCast_AsSkeletal_Mesh
+  L07C4: CallFunc_Array_Get_Item_2.SkeletalMeshComponent.SetSkeletalMeshAsset(K2Node_DynamicCast_AsSkeletal_Mesh)
+  L07ED: pop-flow
+  L07EE: return
+
+## function InitWithExistingItem  flags=0x0C000000
+  L0000: frame.K2Node_Event_Item = Item
+  L0012: BP_FishingRodWithReel_C.ExecuteUbergraph_BP_FishingRodWithReel(1060)
+  L0021: return
+
+## function InitWithModule  flags=0x0C400000
+  L0000: frame.K2Node_CustomEvent_S_InventoryItem = S_InventoryItem
+  L0012: BP_FishingRodWithReel_C.ExecuteUbergraph_BP_FishingRodWithReel(1361)
+  L0021: return
+
+## function OnUpgradeClicked_Event  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Item = Item
+  L0012: frame.K2Node_CustomEvent_Container = Container
+  L0024: BP_FishingRodWithReel_C.ExecuteUbergraph_BP_FishingRodWithReel(1036)
+  L0033: return
+
+## function ReceiveBeginPlay  flags=0x08080800
+  L0000: BP_FishingRodWithReel_C.ExecuteUbergraph_BP_FishingRodWithReel(729)
+  L000F: return
+
+## function UserConstructionScript  flags=0x0C020800
+  L0000: Actor.UserConstructionScript()
+  L000A: self.Reel.SkinnedMeshComponent.SetLeaderPoseComponent(self.SkeletalMesh, false, false)
+  L0035: self.Line.SkinnedMeshComponent.SetLeaderPoseComponent(self.SkeletalMesh, false, false)
+  L0060: return

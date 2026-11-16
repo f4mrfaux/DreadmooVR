@@ -1,0 +1,85 @@
+# /Game/Dreadmoor/Core/Features/Fishing/GAS/Abilities/GA_Fishing_TensionRestoring
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/Fishing/GAS/Abilities/GA_Fishing_TensionRestoring.uasset
+
+## imported packages (1)
+  /Game/Dreadmoor/Localization/ST_GameplayAbilities
+
+## exports (8)
+  [0] GA_Fishing_TensionRestoring_C : BlueprintGeneratedClass (outer None) super=DrdGameplayAbility size=400
+  [7] Default__GA_Fishing_TensionRestoring_C : GA_Fishing_TensionRestoring_C (outer None) size=157
+        refs: obj:/Script/Dreadmoor.DrdAbilityConfigUI, name:SPR_AbilitySkillFishingLine001, name:GAS.Event.Fishing.Fish.Spawned
+
+## function EventReceived_314D41B949826730CB69EBB3FEB260BA  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Payload_2 = Payload
+  L0012: GA_Fishing_TensionRestoring_C.ExecuteUbergraph_GA_Fishing_TensionRestoring(10)
+  L0021: return
+
+## function EventReceived_AC1EFCD84BC678CE863A7B8E7D71D0EB  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Payload = Payload
+  L0012: GA_Fishing_TensionRestoring_C.ExecuteUbergraph_GA_Fishing_TensionRestoring(892)
+  L0021: return
+
+## function EventReceived_AC69619F4774A0C18ACBCD8365745317  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Payload_1 = Payload
+  L0012: GA_Fishing_TensionRestoring_C.ExecuteUbergraph_GA_Fishing_TensionRestoring(651)
+  L0021: return
+
+## function ExecuteUbergraph_GA_Fishing_TensionRestoring  flags=0x00808001
+  L0000: goto computed(EntryPoint)
+  L000A: Temp_struct_Variable_2 = K2Node_CustomEvent_Payload_2
+  L0025: CallFunc_Add_IntInt_ReturnValue = Add_IntInt(self.Count, 1)
+  L004F: Temp_int_Variable = CallFunc_Add_IntInt_ReturnValue
+  L006A: self.Count = Temp_int_Variable
+  L0085: CallFunc_GetActorInfo_ReturnValue = GameplayAbility.GetActorInfo()
+  L00A1: CallFunc_MakeLiteralGameplayTagContainer_ReturnValue = BlueprintGameplayTagLibrary.MakeLiteralGameplayTagContainer(GameplayTagContainer{[GameplayTag{'GAS.State.Fishing.Tension.Blocked'}, GameplayTag{'GAS.State.Fishing.Tension.Restoring'}]})
+  L010F: CallFunc_AddLooseGameplayTags_ReturnValue = AbilitySystemBlueprintLibrary.AddLooseGameplayTags(CallFunc_GetActorInfo_ReturnValue.OwnerActor, CallFunc_MakeLiteralGameplayTagContainer_ReturnValue, false)
+  L013F: CallFunc_MakeLiteralGameplayTagContainer_ReturnValue = BlueprintGameplayTagLibrary.MakeLiteralGameplayTagContainer(GameplayTagContainer{[GameplayTag{'GAS.State.Fishing.Tension.Blocked'}, GameplayTag{'GAS.State.Fishing.Tension.Restoring'}]})
+  L01AD: self.AddedTags = CallFunc_MakeLiteralGameplayTagContainer_ReturnValue
+  L01C8: CallFunc_WaitGameplayEvent_ReturnValue_1 = AbilityTask_WaitGameplayEvent.WaitGameplayEvent(self, GameplayTag{'GAS.Event.Fishing.Tension.Restored'}, null, true, true)
+  L01FB: CallFunc_IsValid_ReturnValue_1 = KismetSystemLibrary.IsValid(CallFunc_WaitGameplayEvent_ReturnValue_1)
+  L0218: if not (CallFunc_IsValid_ReturnValue_1) goto L0584
+  L0226: bind(K2Node_CreateDelegate_OutputDelegate_1, self, 'EventReceived_AC1EFCD84BC678CE863A7B8E7D71D0EB')
+  L023D: CallFunc_WaitGameplayEvent_ReturnValue_1.self.EventReceived += K2Node_CreateDelegate_OutputDelegate_1
+  L0266: CallFunc_WaitGameplayEvent_ReturnValue_1.GameplayTask.ReadyForActivation()
+  L0286: goto L0584
+  L028B: Temp_struct_Variable = K2Node_CustomEvent_Payload_1
+  L02A6: K2_EndAbility()
+  L02B4: goto L0584
+  L02B9: CallFunc_WaitGameplayEvent_ReturnValue = AbilityTask_WaitGameplayEvent.WaitGameplayEvent(self, GameplayTag{'GAS.Event.Fishing.Fish.Destroyed'}, null, false, true)
+  L02EC: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(CallFunc_WaitGameplayEvent_ReturnValue)
+  L0309: if not (CallFunc_IsValid_ReturnValue) goto L0584
+  L0317: bind(K2Node_CreateDelegate_OutputDelegate, self, 'EventReceived_AC69619F4774A0C18ACBCD8365745317')
+  L032E: CallFunc_WaitGameplayEvent_ReturnValue.self.EventReceived += K2Node_CreateDelegate_OutputDelegate
+  L0357: CallFunc_WaitGameplayEvent_ReturnValue.GameplayTask.ReadyForActivation()
+  L0377: goto L0584
+  L037C: Temp_struct_Variable_1 = K2Node_CustomEvent_Payload
+  L0397: CallFunc_GetActorInfo_ReturnValue_2 = GameplayAbility.GetActorInfo()
+  L03B3: CallFunc_RemoveLooseGameplayTags_ReturnValue_1 = AbilitySystemBlueprintLibrary.RemoveLooseGameplayTags(CallFunc_GetActorInfo_ReturnValue_2.OwnerActor, self.AddedTags, false)
+  L03E3: self.AddedTags = GameplayTagContainer{[]}
+  L0411: CallFunc_GreaterEqual_IntInt_ReturnValue = GreaterEqual_IntInt(self.Count, self.MaxCount)
+  L0437: if not (CallFunc_GreaterEqual_IntInt_ReturnValue) goto L0584
+  L0445: K2_EndAbility()
+  L0453: goto L0584
+  L0458: CallFunc_WaitGameplayEvent_ReturnValue_2 = AbilityTask_WaitGameplayEvent.WaitGameplayEvent(self, GameplayTag{'GAS.Event.Fishing.Line.Snapped'}, null, false, true)
+  L048B: CallFunc_IsValid_ReturnValue_2 = KismetSystemLibrary.IsValid(CallFunc_WaitGameplayEvent_ReturnValue_2)
+  L04A8: if not (CallFunc_IsValid_ReturnValue_2) goto L02B9
+  L04B6: bind(K2Node_CreateDelegate_OutputDelegate_2, self, 'EventReceived_314D41B949826730CB69EBB3FEB260BA')
+  L04CD: CallFunc_WaitGameplayEvent_ReturnValue_2.self.EventReceived += K2Node_CreateDelegate_OutputDelegate_2
+  L04F6: CallFunc_WaitGameplayEvent_ReturnValue_2.GameplayTask.ReadyForActivation()
+  L0516: goto L02B9
+  L051B: CallFunc_GetActorInfo_ReturnValue_1 = GameplayAbility.GetActorInfo()
+  L0537: CallFunc_RemoveLooseGameplayTags_ReturnValue = AbilitySystemBlueprintLibrary.RemoveLooseGameplayTags(CallFunc_GetActorInfo_ReturnValue_1.OwnerActor, self.AddedTags, false)
+  L0567: goto L0584
+  L056C: GameplayAbility.K2_ActivateAbilityFromEvent(K2Node_Event_EventData)
+  L057F: goto L0458
+  L0584: return
+
+## function K2_ActivateAbilityFromEvent  flags=0x08480800
+  L0000: frame.K2Node_Event_EventData = EventData
+  L0012: GA_Fishing_TensionRestoring_C.ExecuteUbergraph_GA_Fishing_TensionRestoring(1388)
+  L0021: return
+
+## function K2_OnEndAbility  flags=0x08080800
+  L0000: frame.K2Node_Event_bWasCancelled = bWasCancelled
+  L0012: GA_Fishing_TensionRestoring_C.ExecuteUbergraph_GA_Fishing_TensionRestoring(1307)
+  L0021: return

@@ -1,0 +1,162 @@
+# /Game/Dreadmoor/Core/Features/QTE/Fishing/WBP_QTE_FishLand
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/QTE/Fishing/WBP_QTE_FishLand.uasset
+
+## imported packages (10)
+  /Game/Dreadmoor/Core/Input/QTE/IA_QTE_Interact
+  /Game/Dreadmoor/Core/Input/QTE/IMC_QTE
+  /Game/Dreadmoor/Localization/ST_UI
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_BgPrbBiteFish001
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_CircularWaveBg002
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_DialogueFullBg001_Glow
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_FishPwrBg001
+  /Game/Dreadmoor/UI/Common/WBP_InputHint
+  /Game/Dreadmoor/UI/Fonts/Font_NotoSans
+  /Game/Dreadmoor/UI/Materials/MI_UI_RadialBar_Bite
+
+## exports (51)
+  [0] CanvasPanel_22 : CanvasPanel (outer WidgetTree) size=18
+        refs: name:BarImage
+  [1] CanvasPanelSlot_0 : CanvasPanelSlot (outer CanvasPanel_22) size=75
+        refs: exp:BP_OnActivated, name:K2Node_Event_InDeltaTime
+  [2] CanvasPanelSlot_1 : CanvasPanelSlot (outer CanvasPanel_22) size=75
+        refs: exp:BP_OnActivated, name:K2Node_EnhancedInputActionEvent_TriggeredTime
+  [3] EnhancedInputActionDelegateBinding_0 : EnhancedInputActionDelegateBinding (outer WBP_QTE_FishLand_C) size=25
+        refs: obj:/Game/Dreadmoor/Core/Input/QTE/IA_QTE_Interact.IA_QTE_Interact, exp:EaseOutFunction
+  [11] BarImage : Image (outer WidgetTree) size=49
+        refs: obj:/Game/Dreadmoor/UI/Materials/MI_UI_RadialBar_Bite.MI_UI_RadialBar_Bite, exp:OverlaySlot_8, exp:CanvasPanelSlot_1
+  [12] Image_1 : Image (outer WidgetTree) size=52
+        refs: obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_BgPrbBiteFish001.SPR_BgPrbBiteFish001, exp:OverlaySlot_7, exp:CanvasPanelSlot_1
+  [13] Image_90 : Image (outer WidgetTree) size=50
+        refs: obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_FishPwrBg001.SPR_FishPwrBg001, name:K2Node_Event_IsDesignTime
+  [14] Image_Bg : Image (outer WidgetTree) size=32
+        refs: obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_DialogueFullBg001_Glow.SPR_DialogueFullBg001_Glow, name:MyGeometry
+  [15] WaveImage1 : Image (outer WidgetTree) size=32
+        refs: obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_CircularWaveBg002.SPR_CircularWaveBg002, name:MaxValue
+  [16] WaveImage2 : Image (outer WidgetTree) size=32
+        refs: obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_CircularWaveBg002.SPR_CircularWaveBg002, name:MulticastInlineDelegateProperty
+  [17] QTEAnim : MovieScene (outer QTEAnim_INST) size=236
+        refs: exp:EnhancedInputActionDelegateBinding_0, exp:Tick, exp:MovieScene2DTransformTrack_1, exp:MovieSceneColorTrack_1, exp:MovieSceneColorTrack_0, exp:MovieScene2DTransformTrack_0, exp:MovieScene2DTransformSection_0
+  [18] MovieScene2DTransformSection_0 : MovieScene2DTransformSection (outer MovieScene2DTransformTrack_0) size=252
+        refs: exp:EnhancedInputActionDelegateBinding_0, exp:EaseOutFunction, name:WaveImage2, name:ActionValue, exp:EaseInFunction
+  [19] MovieScene2DTransformSection_0 : MovieScene2DTransformSection (outer MovieScene2DTransformTrack_1) size=252
+        refs: exp:EnhancedInputActionDelegateBinding_0, name:ActionValue, exp:EaseOutFunction, name:WaveImage2, exp:EaseInFunction
+  [20] MovieScene2DTransformTrack_0 : MovieScene2DTransformTrack (outer QTEAnim) size=102
+        refs: name:RenderTransform, exp:MovieScene2DTransformSection_0
+  [21] MovieScene2DTransformTrack_1 : MovieScene2DTransformTrack (outer QTEAnim) size=102
+        refs: name:RenderTransform, exp:MovieScene2DTransformSection_0
+  [22] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+  [23] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+  [24] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+  [25] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+  [26] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+  [27] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+  [28] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+  [29] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+  [30] MovieSceneColorSection_0 : MovieSceneColorSection (outer MovieSceneColorTrack_0) size=360
+        refs: name:BlueprintType, name:FloatProperty, exp:EnhancedInputActionDelegateBinding_0, exp:EaseOutFunction, name:WaveImage2, name:ActionValue, exp:CanvasPanelSlot_1, exp:EaseInFunction
+  [31] MovieSceneColorSection_0 : MovieSceneColorSection (outer MovieSceneColorTrack_1) size=360
+        refs: name:BlueprintType, name:FloatProperty, exp:EnhancedInputActionDelegateBinding_0, exp:EaseOutFunction, name:WaveImage2, name:ActionValue, name:BarImage, exp:CanvasPanelSlot_1, exp:EaseInFunction, exp:MovieScene2DTransformSection_0
+  [32] MovieSceneColorTrack_0 : MovieSceneColorTrack (outer QTEAnim) size=102
+        refs: name:ColorAndOpacity, exp:MovieSceneColorSection_0, exp:EaseInFunction
+  [33] MovieSceneColorTrack_1 : MovieSceneColorTrack (outer QTEAnim) size=102
+        refs: name:ColorAndOpacity, exp:MovieSceneColorSection_0
+  [34] CompiledData : MovieSceneCompiledData (outer QTEAnim_INST) size=373
+        refs: name:ActionValue, exp:EnhancedInputActionDelegateBinding_0, name:BoolProperty, exp:CanvasPanelSlot_1, exp:MovieScene2DTransformSection_0, exp:MovieSceneColorSection_0, exp:OnQTEFinished__DelegateSignature
+  [35] Overlay_48 : Overlay (outer WidgetTree) size=22
+        refs: exp:OverlaySlot_0, exp:OverlaySlot_1, name:BarImage
+  [36] Overlay_59 : Overlay (outer WidgetTree) size=38
+        refs: exp:ExecuteUbergraph_WBP_QTE_FishLand, exp:OverlaySlot_0, exp:OverlaySlot_1, exp:OverlaySlot_2, exp:OverlaySlot_7, exp:OverlaySlot_3, exp:OverlaySlot_8, name:ActionValue
+  [37] OverlaySlot_0 : OverlaySlot (outer Overlay_48) size=16
+        refs: exp:Overlay_48, name:CallFunc_GreaterEqual_DoubleDouble_ReturnValue
+  [38] OverlaySlot_1 : OverlaySlot (outer Overlay_48) size=16
+        refs: exp:Overlay_48, name:OnQTEFinished__DelegateSignature
+  [39] OverlaySlot_0 : OverlaySlot (outer Overlay_59) size=14
+        refs: exp:Overlay_59, name:CallFunc_Multiply_DoubleDouble_ReturnValue
+  [40] OverlaySlot_1 : OverlaySlot (outer Overlay_59) size=16
+        refs: exp:Overlay_59, name:CallFunc_PlayAnimation_ReturnValue
+  [41] OverlaySlot_2 : OverlaySlot (outer Overlay_59) size=16
+        refs: exp:Overlay_59, name:CallFunc_IsGamePaused_ReturnValue
+  [42] OverlaySlot_3 : OverlaySlot (outer Overlay_59) size=16
+        refs: exp:Overlay_59, name:PreConstruct
+  [43] OverlaySlot_7 : OverlaySlot (outer Overlay_59) size=16
+        refs: exp:Overlay_59, name:CallFunc_GetWorldDeltaSeconds_ReturnValue
+  [44] OverlaySlot_8 : OverlaySlot (outer Overlay_59) size=16
+        refs: exp:Overlay_59, name:CallFunc_GetDynamicMaterial_ReturnValue
+  [45] TextBlock_89 : TextBlock (outer WidgetTree) size=83
+        refs: exp:CanvasPanelSlot_1, exp:PreConstruct, obj:/Game/Dreadmoor/UI/Fonts/Font_NotoSans.Font_NotoSans, name:CondensedBold, name:K2Node_Event_MyGeometry
+  [46] WBP_Input_Fish : WBP_InputHint_C (outer WidgetTree) size=16
+        refs: obj:/Game/Dreadmoor/Core/Input/QTE/IA_QTE_Interact.IA_QTE_Interact, name:None
+  [47] Default__WBP_QTE_FishLand_C : WBP_QTE_FishLand_C (outer None) size=57
+        refs: name:WaveImage2, name:WBP_Input_Fish, obj:/Game/Dreadmoor/Core/Input/QTE/IMC_QTE.IMC_QTE
+  [48] QTEAnim_INST : WidgetAnimation (outer WBP_QTE_FishLand_C) size=126
+        refs: exp:QTEAnim, name:WaveImage1, name:WaveImage2, exp:OnQTEFinished__DelegateSignature, exp:CompiledData
+  [49] WBP_QTE_FishLand_C : WidgetBlueprintGeneratedClass (outer None) super=DrdCommonActivatableWidget size=821
+        refs: exp:WidgetTree, exp:QTEAnim_INST, exp:EnhancedInputActionDelegateBinding_0, name:BoolProperty, exp:InpActEvt_IA_QTE_Interact_K2Node_EnhancedInputActionEvent_0, name:ValuePerSec, name:OnQTEFinished, name:MaxValue, name:CurrentValue, name:QTEAnim, name:BarImage, name:WBP_Input_Fish, obj:/Script/Dreadmoor.DrdCommonActivatableWidget, exp:SetValue, exp:PreConstruct, exp:Tick, exp:BP_OnActivated, exp:ExecuteUbergraph_WBP_QTE_FishLand, exp:OnQTEFinished__DelegateSignature, name:StructProperty, name:UberGraphFrame, exp:WaveImage1, name:IsDesignTime, name:None, obj:/Script/Engine.PointerToUberGraphFrame, name:ObjectProperty, obj:/Game/Dreadmoor/UI/Common/WBP_InputHint.WBP_InputHint_C, obj:/Script/UMG.Image, obj:/Script/UMG.WidgetAnimation, name:DoubleProperty, name:MulticastInlineDelegateProperty, exp:EaseOutFunction, name:OnQTEFinished__DelegateSignature, name:ExecuteUbergraph_WBP_QTE_FishLand, name:BP_OnActivated, name:Tick, name:PreConstruct, name:SetValue, obj:/Script/CoreUObject.Object, name:Engine, exp:Default__WBP_QTE_FishLand_C, name:BlueprintType, exp:Image_90
+  [50] WidgetTree : WidgetTree (outer WBP_QTE_FishLand_C) size=10
+
+## function BP_OnActivated  flags=0x08080800
+  L0000: WBP_QTE_FishLand_C.ExecuteUbergraph_WBP_QTE_FishLand(522)
+  L000F: return
+
+## function ExecuteUbergraph_WBP_QTE_FishLand  flags=0x00808001
+  L0000: goto computed(EntryPoint)
+  L000A: CallFunc_Conv_InputActionValueToBool_ReturnValue = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue)
+  L0027: Temp_bool_Variable = CallFunc_Conv_InputActionValueToBool_ReturnValue
+  L003A: Temp_real_Variable_1 = K2Node_EnhancedInputActionEvent_ElapsedTime
+  L0057: Temp_real_Variable_1 = Temp_real_Variable_1
+  L0072: Temp_real_Variable = K2Node_EnhancedInputActionEvent_TriggeredTime
+  L008F: Temp_real_Variable = Temp_real_Variable
+  L00AA: Temp_object_Variable = K2Node_EnhancedInputActionEvent_SourceAction
+  L00BD: self.OnQTEFinished.Broadcast(true)
+  L00D1: CommonActivatableWidget.DeactivateWidget()
+  L00DB: goto L026B
+  L00E0: UserWidget.PreConstruct(K2Node_Event_IsDesignTime)
+  L00F3: SetValue(self.CurrentValue, CallFunc_SetValue_bMaxed)
+  L0113: goto L026B
+  L0118: CallFunc_IsGamePaused_ReturnValue = GameplayStatics.IsGamePaused(self)
+  L012D: if not (CallFunc_IsGamePaused_ReturnValue) goto L0140
+  L013B: goto L026B
+  L0140: CallFunc_GetWorldDeltaSeconds_ReturnValue = GameplayStatics.GetWorldDeltaSeconds(self)
+  L015D: CallFunc_Multiply_DoubleDouble_ReturnValue = Multiply_DoubleDouble(CallFunc_GetWorldDeltaSeconds_ReturnValue, self.ValuePerSec)
+  L018B: CallFunc_Add_DoubleDouble_ReturnValue = Add_DoubleDouble(self.CurrentValue, CallFunc_Multiply_DoubleDouble_ReturnValue)
+  L01B9: SetValue(CallFunc_Add_DoubleDouble_ReturnValue, CallFunc_SetValue_bMaxed_2)
+  L01D9: if not (CallFunc_SetValue_bMaxed_2) goto L026B
+  L01E7: self.OnQTEFinished.Broadcast(false)
+  L01FB: CommonActivatableWidget.DeactivateWidget()
+  L0205: goto L026B
+  L020A: CommonActivatableWidget.BP_OnActivated()
+  L0214: SetValue(0, CallFunc_SetValue_bMaxed_1)
+  L0234: CallFunc_PlayAnimation_ReturnValue = UserWidget.PlayAnimation(self.QTEAnim, 0, 0, 0, 1, false)
+  L026B: return
+
+## function InpActEvt_IA_QTE_Interact_K2Node_EnhancedInputActionEvent_0  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction = SourceAction
+  L0048: WBP_QTE_FishLand_C.ExecuteUbergraph_WBP_QTE_FishLand(10)
+  L0057: return
+
+## function OnQTEFinished__DelegateSignature  flags=0x0C120000
+  L0000: return
+
+## function PreConstruct  flags=0x08020808
+  L0000: frame.K2Node_Event_IsDesignTime = IsDesignTime
+  L0012: WBP_QTE_FishLand_C.ExecuteUbergraph_WBP_QTE_FishLand(224)
+  L0021: return
+
+## function SetValue  flags=0x0C420000
+  L0000: self.CurrentValue = Value
+  L001B: CallFunc_GetDynamicMaterial_ReturnValue = self.BarImage.Image.GetDynamicMaterial()
+  L0045: CallFunc_Divide_DoubleDouble_ReturnValue = Divide_DoubleDouble(self.CurrentValue, self.MaxValue)
+  L0073: CallFunc_SetScalarParameterValue_Value_ImplicitCast = CallFunc_Divide_DoubleDouble_ReturnValue
+  L0090: CallFunc_GetDynamicMaterial_ReturnValue.MaterialInstanceDynamic.SetScalarParameterValue('Value', CallFunc_SetScalarParameterValue_Value_ImplicitCast)
+  L00C6: CallFunc_GreaterEqual_DoubleDouble_ReturnValue = GreaterEqual_DoubleDouble(self.CurrentValue, self.MaxValue)
+  L00EC: bMaxed = CallFunc_GreaterEqual_DoubleDouble_ReturnValue
+  L00FF: return
+
+## function Tick  flags=0x08020808
+  L0000: frame.K2Node_Event_MyGeometry = MyGeometry
+  L0012: frame.K2Node_Event_InDeltaTime = InDeltaTime
+  L0024: WBP_QTE_FishLand_C.ExecuteUbergraph_WBP_QTE_FishLand(280)
+  L0033: return

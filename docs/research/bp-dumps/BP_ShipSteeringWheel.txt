@@ -1,0 +1,215 @@
+# /Game/Dreadmoor/Core/Features/Ship/Riding/BP_ShipSteeringWheel
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/Ship/Riding/BP_ShipSteeringWheel.uasset
+
+## imported packages (23)
+  /Game/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/Small_Boat_Steerwheel
+  /Game/Dreadmoor/Blueprints/Developers/Sanich/BP_CraftTable_Ship
+  /Game/Dreadmoor/Core/Features/Fishing/BP_BoatDynamicForceMesh
+  /Game/Dreadmoor/Core/Features/Fishing/BP_ShipFishingSpot_Proxy
+  /Game/Dreadmoor/Core/Features/Fishing/BP_ShipFishingSpot_Proxy2
+  /Game/Dreadmoor/Core/Features/QuestFeatures/QuestModularObjects/BP_QuestModularObject_Base
+  /Game/Dreadmoor/Core/Features/QuestFeatures/QuestModularObjects/Boat/BP_BoatModularObject
+  /Game/Dreadmoor/Core/Features/Radio/BP_Radio
+  /Game/Dreadmoor/Core/Features/Ship/BP_SmallBoat_V2
+  /Game/Dreadmoor/Core/Features/Ship/Docking/BP_ShipGangplank
+  /Game/Dreadmoor/Core/Features/Ship/FishScanner/BP_ShipFishScanner
+  /Game/Dreadmoor/Core/Features/Ship/ShipModules/BP_SideModulesInteractButton
+  /Game/Dreadmoor/Core/Features/Ship/StorageBox/BP_Storage
+  /Game/Dreadmoor/Core/Features/UpgradeDock/BP_ShipHoldHatchSlotInteractable
+  /Game/Dreadmoor/Core/Features/UpgradeDock/BP_ShipUpgradeSlotInteractable
+  /Game/Dreadmoor/Core/Features/WaterFeatures/SurfaceSwimming/BP_WaterExit_Boat_Left
+  /Game/Dreadmoor/Core/Features/WaterFeatures/SurfaceSwimming/BP_WaterExit_Boat_Right
+  /Game/Dreadmoor/InventoryFramework/Components/BP_InventoryComponent
+  /Game/Dreadmoor/Localization/ST_GameplayTags
+  /Game/Dreadmoor/Localization/ST_ObjectDispalyNames
+  /Game/Dreadmoor/Localization/ST_UI
+  /Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcCompassShip001
+  /Game/Dreadmoor/UI/Common/WBP_CUI_InteractionInfo
+
+## exports (22)
+  [0] BP_ShipSteeringWheel_C : BlueprintGeneratedClass (outer None) super=Actor size=756
+  [1] Box_GEN_VARIABLE : BoxComponent (outer BP_ShipSteeringWheel_C) size=136
+        refs: name:Custom, exp:OnModuleInSlotChanged_Event, name:WorldStatic, name:WorldDynamic, name:Pawn, name:Camera, name:PhysicsBody, name:Vehicle, name:Destructible, name:K2Node_CustomEvent_bSlotOccupied
+  [2] Default__BP_ShipSteeringWheel_C : BP_ShipSteeringWheel_C (outer None) size=14
+  [3] DrdAscTagListener_GEN_VARIABLE : DrdAscTagListener (outer BP_ShipSteeringWheel_C) size=59
+        refs: exp:Default__BP_ShipSteeringWheel_C, name:GameEntities.Player.MainBoat, name:GameEntityStatuses.Ship.PulledOutOfWater, name:GameEntityStatuses.Ship.ControlsDisabled, name:GameEntityStatuses.Ship.NoFuel
+  [4] DrdInteractable_GEN_VARIABLE : DrdInteractableComponent (outer BP_ShipSteeringWheel_C) size=153
+        refs: name:ShipSteeringDisabled, name:GA_ShipTakeControl_C, exp:DrdAscTagListener_GEN_VARIABLE, exp:ExecuteUbergraph_BP_ShipSteeringWheel, exp:PlayerPawnChanged, obj:/Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcCompassShip001.SPR_IcCompassShip001, obj:/Game/Dreadmoor/UI/Common/WBP_CUI_InteractionInfo.WBP_CUI_InteractionInfo_C, name:K2Node_CustomEvent_GameplayTagCount
+  [14] DefaultSceneRoot_GEN_VARIABLE : SceneComponent (outer BP_ShipSteeringWheel_C) size=10
+  [15] SCS_Node_0 : SCS_Node (outer SimpleConstructionScript_0) size=54
+        refs: obj:/Script/Engine.SceneComponent, exp:DefaultSceneRoot_GEN_VARIABLE, exp:SCS_Node_1, exp:SCS_Node_3, name:DefaultSceneRoot
+  [16] SCS_Node_1 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:Small_Boat_Steerwheel_GEN_VARIABLE, name:Small_Boat_Steerwheel
+  [17] SCS_Node_2 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Dreadmoor.DrdInteractableComponent, exp:DrdInteractable_GEN_VARIABLE, name:DrdInteractable
+  [18] SCS_Node_3 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.BoxComponent, name:Box
+  [19] SCS_Node_4 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Dreadmoor.DrdAscTagListener, exp:DrdAscTagListener_GEN_VARIABLE, name:DrdAscTagListener
+  [20] SimpleConstructionScript_0 : SimpleConstructionScript (outer BP_ShipSteeringWheel_C) size=50
+        refs: exp:Default__BP_ShipSteeringWheel_C, exp:SCS_Node_0, exp:SCS_Node_2, exp:SCS_Node_4, exp:DrdInteractable_GEN_VARIABLE, exp:SCS_Node_1, exp:SCS_Node_3, name:CallFunc_Add_IntInt_ReturnValue
+  [21] Small_Boat_Steerwheel_GEN_VARIABLE : StaticMeshComponent (outer BP_ShipSteeringWheel_C) size=86
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/Small_Boat_Steerwheel.Small_Boat_Steerwheel, name:NoCollision, name:Visibility, name:Camera, name:InteractableOutline
+
+## function ExecuteUbergraph_BP_ShipSteeringWheel  flags=0x00808001
+  L0000: push L0DD3
+  L0005: goto computed(EntryPoint)
+  L000F: self.Box.SetCollisionEnabled(3)
+  L0035: pop-flow
+  L0036: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L0050: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(CallFunc_GetPlayerController_ReturnValue)
+  L006D: if not (CallFunc_IsValid_ReturnValue) goto L00D6
+  L007B: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L0095: bind(K2Node_CreateDelegate_OutputDelegate_2, self, 'PlayerPawnChanged')
+  L00AC: CallFunc_GetPlayerController_ReturnValue.self.OnPossessedPawnChanged += K2Node_CreateDelegate_OutputDelegate_2
+  L00D5: pop-flow
+  L00D6: KismetSystemLibrary.DelayUntilNextTick(self, LatentActionInfo{L0036, 176348624, 'ExecuteUbergraph_BP_ShipSteeringWheel', self})
+  L0107: pop-flow
+  L0108: CallFunc_TryToStartInteraction_ReturnValue = self.DrdInteractable.DrdInteractableComponent.TryToStartInteraction(K2Node_DynamicCast_AsDrd_Base_Character)
+  L013B: pop-flow
+  L013C: K2Node_DynamicCast_AsBP_Boat_Modular_Object_1 = cast<BP_BoatModularObject_C>(K2Node_DynamicCast_AsBP_Small_Boat_V2_1.self.BoatModular.self.ChildActor)
+  L018C: K2Node_DynamicCast_bSuccess_4 = K2Node_DynamicCast_AsBP_Boat_Modular_Object_1
+  L01A9: if not (K2Node_DynamicCast_bSuccess_4) pop-flow
+  L01B3: CallFunc_GetActiveModuleInSlot_ReturnValue = K2Node_DynamicCast_AsBP_Boat_Modular_Object_1.self.DrdGenericModularObjectController.DrdGenericModularObjectController.GetActiveModuleInSlot(GameplayTag{'IFP.Container.Identifier.CosmeticModulars.Ship.Wheel'})
+  L020E: self.CurrentActiveWheelCosmetic = CallFunc_GetActiveModuleInSlot_ReturnValue
+  L0221: pop-flow
+  L0222: self.DrdInteractable.DrdInteractableComponent.SetCurrentInteractAbility(soft(""))
+  L0245: UpdateIcon()
+  L0253: pop-flow
+  L0254: CallFunc_Add_IntInt_ReturnValue = Add_IntInt(self.TagDisabledCount, self.TagPulledOutOfWaterCount)
+  L0282: CallFunc_Greater_IntInt_ReturnValue = Greater_IntInt(CallFunc_Add_IntInt_ReturnValue, 0)
+  L02A4: if not (CallFunc_Greater_IntInt_ReturnValue) goto L02B7
+  L02B2: goto L0222
+  L02B7: CallFunc_Greater_IntInt_ReturnValue_1 = Greater_IntInt(self.TagNoFuelCount, 0)
+  L02D9: if not (CallFunc_Greater_IntInt_ReturnValue_1) goto L045C
+  L02E7: self.DrdInteractable.DrdInteractableComponent.SetCurrentInteractAbility(soft("/Game/Dreadmoor/Core/Features/Ship/Towing/GA_Towing.GA_Towing_C"))
+  L0349: UpdateIcon()
+  L0357: CallFunc_MakeLiteralText_ReturnValue = KismetSystemLibrary.MakeLiteralText(TextTable("/Game/Dreadmoor/Localization/ST_ObjectDispalyNames.ST_ObjectDispalyNames", "Fishboat"))
+  L03D1: CallFunc_MakeLiteralText_ReturnValue_1 = KismetSystemLibrary.MakeLiteralText(TextTable("/Game/Dreadmoor/Localization/ST_UI.ST_UI", "Towing"))
+  L0429: self.DrdInteractable.DrdInteractableComponent.SetInteractionDescription(CallFunc_MakeLiteralText_ReturnValue_1, CallFunc_MakeLiteralText_ReturnValue)
+  L045B: pop-flow
+  L045C: self.DrdInteractable.DrdInteractableComponent.SetCurrentInteractAbility(soft("/Game/Dreadmoor/Core/Features/Ship/Riding/GA_ShipTakeControl.GA_ShipTakeControl_C"))
+  L04D0: UpdateIcon()
+  L04DE: CallFunc_MakeLiteralText_ReturnValue_2 = KismetSystemLibrary.MakeLiteralText(TextTable("/Game/Dreadmoor/Localization/ST_ObjectDispalyNames.ST_ObjectDispalyNames", "Fishboat"))
+  L0558: CallFunc_MakeLiteralText_ReturnValue_3 = KismetSystemLibrary.MakeLiteralText(TextTable("/Game/Dreadmoor/Localization/ST_GameplayTags.ST_GameplayTags", "Interact.Type.ShipRiding"))
+  L05D6: self.DrdInteractable.DrdInteractableComponent.SetInteractionDescription(CallFunc_MakeLiteralText_ReturnValue_3, CallFunc_MakeLiteralText_ReturnValue_2)
+  L0608: pop-flow
+  L0609: UpdateAbility()
+  L0617: goto L0036
+  L061C: UpdateAbility()
+  L062A: pop-flow
+  L062B: GameplayTagsK2Node_SwitchGameplayTag_CmpSuccess = BlueprintGameplayTagLibrary.NotEqual_TagTag(K2Node_CustomEvent_GameplayTag, "GameEntityStatuses.Ship.PulledOutOfWater")
+  L0672: if not (GameplayTagsK2Node_SwitchGameplayTag_CmpSuccess) goto L0721
+  L0680: GameplayTagsK2Node_SwitchGameplayTag_CmpSuccess = BlueprintGameplayTagLibrary.NotEqual_TagTag(K2Node_CustomEvent_GameplayTag, "GameEntityStatuses.Ship.ControlsDisabled")
+  L06C7: if not (GameplayTagsK2Node_SwitchGameplayTag_CmpSuccess) goto L0741
+  L06D5: GameplayTagsK2Node_SwitchGameplayTag_CmpSuccess = BlueprintGameplayTagLibrary.NotEqual_TagTag(K2Node_CustomEvent_GameplayTag, "GameEntityStatuses.Ship.NoFuel")
+  L0712: if not (GameplayTagsK2Node_SwitchGameplayTag_CmpSuccess) goto L0761
+  L0720: pop-flow
+  L0721: self.TagPulledOutOfWaterCount = K2Node_CustomEvent_GameplayTagCount
+  L073C: goto L061C
+  L0741: self.TagDisabledCount = K2Node_CustomEvent_GameplayTagCount
+  L075C: goto L061C
+  L0761: self.TagNoFuelCount = K2Node_CustomEvent_GameplayTagCount
+  L077C: goto L061C
+  L0781: bind(K2Node_CreateDelegate_OutputDelegate, self, 'OnTargetTagChangedDelegate_Event')
+  L0798: self.DrdAscTagListener.self.OnTargetTagChangedDelegate += K2Node_CreateDelegate_OutputDelegate
+  L07C1: CallFunc_GetParentActor_ReturnValue = Actor.GetParentActor()
+  L07D5: CallFunc_GetAbilitySystemComponent_ReturnValue = AbilitySystemBlueprintLibrary.GetAbilitySystemComponent(CallFunc_GetParentActor_ReturnValue)
+  L07F2: CallFunc_GetGameplayTagCount_ReturnValue_2 = CallFunc_GetAbilitySystemComponent_ReturnValue.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GameEntityStatuses.Ship.ControlsDisabled'})
+  L083F: self.TagDisabledCount = CallFunc_GetGameplayTagCount_ReturnValue_2
+  L085A: CallFunc_GetParentActor_ReturnValue = Actor.GetParentActor()
+  L086E: CallFunc_GetAbilitySystemComponent_ReturnValue = AbilitySystemBlueprintLibrary.GetAbilitySystemComponent(CallFunc_GetParentActor_ReturnValue)
+  L088B: CallFunc_GetGameplayTagCount_ReturnValue_1 = CallFunc_GetAbilitySystemComponent_ReturnValue.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GameEntityStatuses.Ship.PulledOutOfWater'})
+  L08D8: self.TagPulledOutOfWaterCount = CallFunc_GetGameplayTagCount_ReturnValue_1
+  L08F3: CallFunc_GetParentActor_ReturnValue = Actor.GetParentActor()
+  L0907: CallFunc_GetAbilitySystemComponent_ReturnValue = AbilitySystemBlueprintLibrary.GetAbilitySystemComponent(CallFunc_GetParentActor_ReturnValue)
+  L0924: CallFunc_GetGameplayTagCount_ReturnValue = CallFunc_GetAbilitySystemComponent_ReturnValue.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GameEntityStatuses.Ship.NoFuel'})
+  L0971: self.TagNoFuelCount = CallFunc_GetGameplayTagCount_ReturnValue
+  L098C: goto L0609
+  L0991: self.Box.SetCollisionEnabled(0)
+  L09B7: KismetSystemLibrary.Delay(self, 0.2, LatentActionInfo{L000F, -797895956, 'ExecuteUbergraph_BP_ShipSteeringWheel', self})
+  L09ED: pop-flow
+  L09EE: CallFunc_Greater_IntInt_ReturnValue_2 = Greater_IntInt(self.TagNoFuelCount, 0)
+  L0A10: if not (CallFunc_Greater_IntInt_ReturnValue_2) pop-flow
+  L0A1A: K2Node_DynamicCast_AsDrd_Base_Character = cast<DrdBaseCharacter>(K2Node_CustomEvent_NewPawn)
+  L0A3E: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsDrd_Base_Character
+  L0A5B: if not (K2Node_DynamicCast_bSuccess) pop-flow
+  L0A65: KismetSystemLibrary.DelayUntilNextTick(self, LatentActionInfo{L0108, 1398804373, 'ExecuteUbergraph_BP_ShipSteeringWheel', self})
+  L0A96: pop-flow
+  L0A97: CallFunc_GetParentActor_ReturnValue_1 = Actor.GetParentActor()
+  L0AAB: K2Node_DynamicCast_AsBP_Small_Boat_V2 = cast<BP_SmallBoat_V2_C>(CallFunc_GetParentActor_ReturnValue_1)
+  L0ACF: K2Node_DynamicCast_bSuccess_1 = K2Node_DynamicCast_AsBP_Small_Boat_V2
+  L0AEC: if not (K2Node_DynamicCast_bSuccess_1) pop-flow
+  L0AF6: K2Node_DynamicCast_AsBP_Boat_Modular_Object = cast<BP_BoatModularObject_C>(K2Node_DynamicCast_AsBP_Small_Boat_V2.self.BoatModular.self.ChildActor)
+  L0B46: K2Node_DynamicCast_bSuccess_2 = K2Node_DynamicCast_AsBP_Boat_Modular_Object
+  L0B63: if not (K2Node_DynamicCast_bSuccess_2) pop-flow
+  L0B6D: bind(K2Node_CreateDelegate_OutputDelegate_1, self, 'OnModuleInSlotChanged_Event')
+  L0B84: K2Node_DynamicCast_AsBP_Boat_Modular_Object.self.OnModuleInSlotChanged += K2Node_CreateDelegate_OutputDelegate_1
+  L0BAD: pop-flow
+  L0BAE: SubscribeForCosmeticWheelChange()
+  L0BBC: goto L0781
+  L0BC1: CallFunc_EqualEqual_GameplayTag_ReturnValue = BlueprintGameplayTagLibrary.EqualEqual_GameplayTag(K2Node_CustomEvent_SlotTag, GameplayTag{'IFP.Container.Identifier.CosmeticModulars.Ship.Wheel'})
+  L0BF9: if not (CallFunc_EqualEqual_GameplayTag_ReturnValue) pop-flow
+  L0C03: if not (K2Node_CustomEvent_bSlotOccupied) goto L0CD8
+  L0C11: self.Small_Boat_Steerwheel.SceneComponent.SetVisibility(false, false)
+  L0C33: SetActorTickEnabled(true)
+  L0C42: CallFunc_GetParentActor_ReturnValue_2 = Actor.GetParentActor()
+  L0C56: K2Node_DynamicCast_AsBP_Small_Boat_V2_1 = cast<BP_SmallBoat_V2_C>(CallFunc_GetParentActor_ReturnValue_2)
+  L0C7A: K2Node_DynamicCast_bSuccess_3 = K2Node_DynamicCast_AsBP_Small_Boat_V2_1
+  L0C97: if not (K2Node_DynamicCast_bSuccess_3) pop-flow
+  L0CA1: KismetSystemLibrary.Delay(self, 0.2, LatentActionInfo{L013C, -1701164582, 'ExecuteUbergraph_BP_ShipSteeringWheel', self})
+  L0CD7: pop-flow
+  L0CD8: self.Small_Boat_Steerwheel.SceneComponent.SetVisibility(true, false)
+  L0CFA: SetActorTickEnabled(false)
+  L0D09: self.CurrentActiveWheelCosmetic = null
+  L0D14: pop-flow
+  L0D15: goto L0BAE
+  L0D1A: Actor.ReceiveTick(K2Node_Event_DeltaSeconds)
+  L0D2D: CallFunc_IsValid_ReturnValue_1 = KismetSystemLibrary.IsValid(self.CurrentActiveWheelCosmetic)
+  L0D4A: if not (CallFunc_IsValid_ReturnValue_1) pop-flow
+  L0D54: CallFunc_GetTransform_ReturnValue = Actor.GetTransform()
+  L0D70: BreakTransform(CallFunc_GetTransform_ReturnValue, CallFunc_BreakTransform_Location, CallFunc_BreakTransform_Rotation, CallFunc_BreakTransform_Scale)
+  L0D9E: CallFunc_K2_SetActorRotation_ReturnValue = self.CurrentActiveWheelCosmetic.Actor.K2_SetActorRotation(CallFunc_BreakTransform_Rotation, false)
+  L0DD2: pop-flow
+  L0DD3: return
+
+## function OnModuleInSlotChanged_Event  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_SlotTag = SlotTag
+  L0012: frame.K2Node_CustomEvent_bSlotOccupied = bSlotOccupied
+  L0024: BP_ShipSteeringWheel_C.ExecuteUbergraph_BP_ShipSteeringWheel(3009)
+  L0033: return
+
+## function OnTargetTagChangedDelegate_Event  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Actor = Actor
+  L0012: frame.K2Node_CustomEvent_ActorId = ActorId
+  L0024: frame.K2Node_CustomEvent_GameplayTag = GameplayTag
+  L0036: frame.K2Node_CustomEvent_GameplayTagCount = GameplayTagCount
+  L0048: BP_ShipSteeringWheel_C.ExecuteUbergraph_BP_ShipSteeringWheel(1579)
+  L0057: return
+
+## function PlayerPawnChanged  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_OldPawn = OldPawn
+  L0012: frame.K2Node_CustomEvent_NewPawn = NewPawn
+  L0024: BP_ShipSteeringWheel_C.ExecuteUbergraph_BP_ShipSteeringWheel(2542)
+  L0033: return
+
+## function ReceiveBeginPlay  flags=0x08080800
+  L0000: BP_ShipSteeringWheel_C.ExecuteUbergraph_BP_ShipSteeringWheel(3349)
+  L000F: return
+
+## function ReceiveTick  flags=0x08020800
+  L0000: frame.K2Node_Event_DeltaSeconds = DeltaSeconds
+  L0012: BP_ShipSteeringWheel_C.ExecuteUbergraph_BP_ShipSteeringWheel(3354)
+  L0021: return
+
+## function SubscribeForCosmeticWheelChange  flags=0x0C000000
+  L0000: BP_ShipSteeringWheel_C.ExecuteUbergraph_BP_ShipSteeringWheel(2711)
+  L000F: return
+
+## function UpdateAbility  flags=0x0C000000
+  L0000: BP_ShipSteeringWheel_C.ExecuteUbergraph_BP_ShipSteeringWheel(596)
+  L000F: return
+
+## function UpdateIcon  flags=0x0C000000
+  L0000: BP_ShipSteeringWheel_C.ExecuteUbergraph_BP_ShipSteeringWheel(2449)
+  L000F: return

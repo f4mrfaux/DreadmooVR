@@ -1,0 +1,1264 @@
+# /Game/Dreadmoor/Core/BP_DrdPlayerController
+# file: Dreadmoor/Content/Dreadmoor/Core/BP_DrdPlayerController.uasset
+
+## imported packages (38)
+  /Game/Dreadmoor/Audio/BP_Audio/BP_AC_MusicDucking
+  /Game/Dreadmoor/Audio/Music/Zones/BP_AC_MusicZones
+  /Game/Dreadmoor/Core/Features/PlayerCharacter/BP_PlayerCameraManager
+  /Game/Dreadmoor/Core/Features/PlayerCharacter/GAS/GA_Reload
+  /Game/Dreadmoor/Core/Features/Ship/Riding/GA_ShipReleaseControl
+  /Game/Dreadmoor/Core/Input/Character/IA_Bilge
+  /Game/Dreadmoor/Core/Input/Character/IA_Interact
+  /Game/Dreadmoor/Core/Input/Character/IA_Inventory
+  /Game/Dreadmoor/Core/Input/Character/IA_Journal
+  /Game/Dreadmoor/Core/Input/Character/IA_Map
+  /Game/Dreadmoor/Core/Input/Character/IA_Pause
+  /Game/Dreadmoor/Core/Input/Character/IA_Recipe
+  /Game/Dreadmoor/Core/Input/Character/IA_Reload
+  /Game/Dreadmoor/Core/Input/Character/IA_TrackQuest
+  /Game/Dreadmoor/Core/Input/Globals/IA_Dev_CheatPanel
+  /Game/Dreadmoor/Core/Input/Globals/IA_Dev_QuickScalability0
+  /Game/Dreadmoor/Core/Input/Globals/IA_Dev_QuickScalability1
+  /Game/Dreadmoor/Core/Input/Globals/IA_Dev_QuickScalability2
+  /Game/Dreadmoor/Core/Input/Globals/IA_Dev_QuickScalability3
+  /Game/Dreadmoor/Core/Input/Globals/IA_Dev_SwitchUI
+  /Game/Dreadmoor/Core/Input/Globals/IA_Dev_TeleportToShip
+  /Game/Dreadmoor/Core/Input/Globals/IA_Dev_TimeDilation
+  /Game/Dreadmoor/Core/Input/Globals/IA_Dev_TimeDilation_Faster
+  /Game/Dreadmoor/Core/Input/Globals/IA_Dev_TimeDilation_Slower
+  /Game/Dreadmoor/Core/Input/Globals/IA_Mastery
+  /Game/Dreadmoor/Core/Input/Globals/IA_QuickLoad
+  /Game/Dreadmoor/Core/Input/Globals/IA_QuickSave
+  /Game/Dreadmoor/Core/Input/Globals/IMC_Globals
+  /Game/Dreadmoor/InventoryFramework/Components/BP_GearTransitionComponent
+  /Game/Dreadmoor/InventoryFramework/Components/BP_HandObjectsVisibilityComponent
+  /Game/Dreadmoor/InventoryFramework/Components/BP_InventoryComponent
+  /Game/Dreadmoor/InventoryFramework/TraitsAndComponents/IT_GrantRecipes
+  /Game/Dreadmoor/InventoryFramework/TraitsAndComponents/IT_LearnNode
+  /Game/Dreadmoor/InventoryFramework/TraitsAndComponents/IT_MasteryResources
+  /Game/Dreadmoor/UI/Notifications/WBP_ImportantItemGained_Notifcation
+  /Game/Dreadmoor/UI/UI_Utils/BP_UI_Utils
+  /Game/Dreadmoor/UI/UI_Utils/BP_UiCallbacks
+  /InventoryFrameworkPlugin/Core/Components/BP_AC_EquipmentHelper
+
+## exports (87)
+  [0] MusicComponent1 : AudioComponent (outer Default__BP_DrdPlayerController_C) size=28
+        refs: exp:TransformComponent0, name:MusicZoneBase
+  [1] MusicComponent2 : AudioComponent (outer Default__BP_DrdPlayerController_C) size=14
+        refs: name:CallFunc_FClamp_ReturnValue
+  [2] MusicComponentEventOverlay : AudioComponent (outer Default__BP_DrdPlayerController_C) size=14
+        refs: name:CallFunc_FClamp_ReturnValue
+  [3] BP_DrdPlayerController_C : BlueprintGeneratedClass (outer None) super=DrdPlayerController size=2410
+  [4] BP_AC_EquipmentHelper_GEN_VARIABLE : BP_AC_EquipmentHelper_C (outer BP_DrdPlayerController_C) size=10
+        refs: name:K2Node_DynamicCast_bSuccess
+  [5] BP_AC_MusicDucking_GEN_VARIABLE : BP_AC_MusicDucking_C (outer BP_DrdPlayerController_C) size=10
+        refs: name:K2Node_Event_Component
+  [6] MusicZones_GEN_VARIABLE : BP_AC_MusicZones_C (outer BP_DrdPlayerController_C) size=10
+        refs: name:NameProperty
+  [7] Default__BP_DrdPlayerController_C : BP_DrdPlayerController_C (outer None) size=218
+        refs: exp:MusicZones_GEN_VARIABLE, name:WBP_CheatPanel_C, exp:BP_UiCallbacks_GEN_VARIABLE, name:WBP_Pause_C, exp:BP_AC_MusicDucking_GEN_VARIABLE, name:WBP_Recipes_C, exp:AddNewItemNotification, name:W_NarrativeMenu_WorldMap_C, exp:Default__BP_DrdPlayerController_C, name:WBP_Mastery_C, exp:BP_GearTransitionComponent_GEN_VARIABLE, name:WBP_CharacterInventory_C, exp:BP_HandObjectsVisibilityComponent_GEN_VARIABLE, name:WBP_Journal_C, exp:BP_AC_EquipmentHelper_GEN_VARIABLE, name:WBP_Bilge_C, obj:/Game/Dreadmoor/Core/Input/Character/IA_Pause.IA_Pause, obj:/Game/Dreadmoor/Core/Input/Character/IA_Map.IA_Map, exp:MusicComponentEventOverlay, obj:/Game/Dreadmoor/Core/Features/PlayerCharacter/BP_PlayerCameraManager.BP_PlayerCameraManager_C, exp:TransformComponent0, name:CallFunc_FClamp_ReturnValue
+  [8] BP_GearTransitionComponent_GEN_VARIABLE : BP_GearTransitionComponent_C (outer BP_DrdPlayerController_C) size=10
+        refs: name:K2Node_GetActorFromRefsSubsystem_1_HasPropertyResult
+  [9] BP_HandObjectsVisibilityComponent_GEN_VARIABLE : BP_HandObjectsVisibilityComponent_C (outer BP_DrdPlayerController_C) size=10
+        refs: name:K2Node_DynamicCast_AsWBP_Important_Item_Gained_Notifcation
+  [10] BP_InventoryComponent_GEN_VARIABLE : BP_InventoryComponent_C (outer BP_DrdPlayerController_C) size=4329
+        refs: exp:BndEvt__BP_DrdPlayerController_BP_GearTransitionComponent_K2Node_ComponentBoundEvent_2_OnSlotChanged__DelegateSignature, obj:None, name:IFP.Container.Identifier.Character.Main, exp:BP_AC_EquipmentHelper_GEN_VARIABLE, exp:Default__BP_DrdPlayerController_C, obj:/Script/InventoryFrameworkPlugin.TagQueryCompatibilitySettings, name:IFP.Items.Type.Chum, obj:/Game/Dreadmoor/Audio/Music/Zones/BP_AC_MusicZones.Default__BP_AC_MusicZones_C, exp:GetInventoryComponent, exp:InpActEvt_IA_Inventory_K2Node_EnhancedInputActionEvent_21, exp:MusicComponentEventOverlay, name:IFP.Container.Identifier.Character.QuickSlotMelee, obj:/Script/Engine.Default__SceneComponent, obj:/Script/InventoryFrameworkPlugin.CompatibilitySettingsFragment, exp:InpActEvt_IA_Dev_CheatPanel_K2Node_EnhancedInputActionEvent_13, exp:BP_InventoryComponent_GEN_VARIABLE, name:IFP.Items.Type.Weapon.Melee, name:IFP.Container.Identifier.Character.QuickSlotGun, name:IFP.Items.Type.Weapon.Gun, name:IFP.Container.Identifier.Character.QuickSlotConsumables, name:IFP.Items.Type.Consumables.Aid_Kit, name:IFP.Container.Identifier.Character.QuickSlotTool, name:IFP.Items.Type.Weapon.Throwing, name:IFP.Container.Identifier.Bilge.Chamber.One, exp:BP_AC_MusicDucking_GEN_VARIABLE, name:IFP.Items.Type.Fish, obj:/Script/InventoryFrameworkPlugin.TileTagsFragment, name:IFP.Tiles.Locked, exp:BP_DrdPlayerController_C, exp:MusicZones_GEN_VARIABLE, exp:BP_GearTransitionComponent_GEN_VARIABLE, exp:BP_HandObjectsVisibilityComponent_GEN_VARIABLE, exp:BP_UiCallbacks_GEN_VARIABLE, exp:ComponentDelegateBinding_0, exp:EnhancedInputActionDelegateBinding_0, exp:AddNewItemNotification, exp:AfterPush_5E492BEB4CD28315B5E4029F9058BF27, exp:AfterPush_DBA62F164CAD84155F45E8A19D7182BF, exp:BeforePush_5E492BEB4CD28315B5E4029F9058BF27, exp:BeforePush_DBA62F164CAD84155F45E8A19D7182BF, exp:BndEvt__BP_DrdPlayerController_BP_InventoryComponent_K2Node_ComponentBoundEvent_0_ItemAdded__DelegateSignature, exp:BndEvt__BP_DrdPlayerController_BP_InventoryComponent_K2Node_ComponentBoundEvent_1_BoughtItem__DelegateSignature, exp:BndEvt__BP_DrdPlayerController_Narrative_K2Node_ComponentBoundEvent_3_OnDialogueBegan__DelegateSignature, exp:BndEvt__BP_DrdPlayerController_Narrative_K2Node_ComponentBoundEvent_4_OnDialogueFinished__DelegateSignature, exp:CheckCanSaveGameAtThisMoment, exp:DrdSetTargetWithBlend, exp:ExecuteUbergraph_BP_DrdPlayerController, exp:InpActEvt_IA_Bilge_K2Node_EnhancedInputActionEvent_3, name:IFP.Container.Identifier.Bilge.Chamber.Two, name:IFP.Container.Identifier.Bilge.Chamber.Three, name:IFP.Container.Identifier.Character.Fishnet, name:IFP.Container.Identifier.Character.Wallet, name:IFP.Items.Type.Currency, name:IFP.Container.Identifier.Character.FishingRod, exp:ReceivePossess, name:IFP.Items.Type.FishingRod, exp:InpActEvt_IA_Dev_QuickScalability3_K2Node_EnhancedInputActionEvent_14, name:IFP.Container.Identifier.Ship.Runduk, name:IFP.Container.Identifier.Character.HandTool, name:IFP.Container.Identifier.BackPack.WeaponsAndTools
+  [11] BP_UiCallbacks_GEN_VARIABLE : BP_UiCallbacks_C (outer BP_DrdPlayerController_C) size=10
+        refs: name:K2Node_Event_PossessedPawn
+  [12] ComponentDelegateBinding_0 : ComponentDelegateBinding (outer BP_DrdPlayerController_C) size=140
+        refs: exp:BP_AC_EquipmentHelper_GEN_VARIABLE, name:Narrative, name:OnDialogueFinished, exp:InpActEvt_IA_Map_K2Node_EnhancedInputActionEvent_20, name:OnDialogueBegan, exp:InpActEvt_IA_Journal_K2Node_EnhancedInputActionEvent_4, name:BP_GearTransitionComponent, name:OnSlotChanged, exp:InpActEvt_IA_Dev_TimeDilation_Slower_K2Node_EnhancedInputActionEvent_2, name:BP_InventoryComponent, name:BoughtItem, exp:InpActEvt_IA_Inventory_K2Node_EnhancedInputActionEvent_21, name:ItemAdded, exp:InpActEvt_IA_Interact_K2Node_EnhancedInputActionEvent_11
+  [13] EnhancedInputActionDelegateBinding_0 : EnhancedInputActionDelegateBinding (outer BP_DrdPlayerController_C) size=340
+        refs: exp:BndEvt__BP_DrdPlayerController_BP_InventoryComponent_K2Node_ComponentBoundEvent_1_BoughtItem__DelegateSignature, obj:/Game/Dreadmoor/Core/Input/Character/IA_Inventory.IA_Inventory, obj:/Game/Dreadmoor/Core/Input/Character/IA_Map.IA_Map, exp:BndEvt__BP_DrdPlayerController_BP_InventoryComponent_K2Node_ComponentBoundEvent_0_ItemAdded__DelegateSignature, obj:/Game/Dreadmoor/Core/Input/Globals/IA_QuickSave.IA_QuickSave, exp:BndEvt__BP_DrdPlayerController_BP_GearTransitionComponent_K2Node_ComponentBoundEvent_2_OnSlotChanged__DelegateSignature, obj:/Game/Dreadmoor/Core/Input/Globals/IA_QuickLoad.IA_QuickLoad, exp:BeforePush_DBA62F164CAD84155F45E8A19D7182BF, obj:/Game/Dreadmoor/Core/Input/Globals/IA_Dev_QuickScalability0.IA_Dev_QuickScalability0, exp:BeforePush_5E492BEB4CD28315B5E4029F9058BF27, obj:/Game/Dreadmoor/Core/Input/Globals/IA_Dev_QuickScalability1.IA_Dev_QuickScalability1, exp:AfterPush_DBA62F164CAD84155F45E8A19D7182BF, obj:/Game/Dreadmoor/Core/Input/Globals/IA_Dev_QuickScalability2.IA_Dev_QuickScalability2, exp:AfterPush_5E492BEB4CD28315B5E4029F9058BF27, obj:/Game/Dreadmoor/Core/Input/Globals/IA_Dev_QuickScalability3.IA_Dev_QuickScalability3, exp:AddNewItemNotification, obj:/Game/Dreadmoor/Core/Input/Character/IA_TrackQuest.IA_TrackQuest, obj:/Game/Dreadmoor/Core/Input/Globals/IA_Dev_TimeDilation_Faster.IA_Dev_TimeDilation_Faster, obj:/Game/Dreadmoor/Core/Input/Globals/IA_Dev_TimeDilation_Slower.IA_Dev_TimeDilation_Slower, exp:MusicComponentEventOverlay, obj:/Game/Dreadmoor/Core/Input/Character/IA_Bilge.IA_Bilge, exp:BP_DrdPlayerController_C, obj:/Game/Dreadmoor/Core/Input/Character/IA_Journal.IA_Journal, exp:BP_AC_EquipmentHelper_GEN_VARIABLE, obj:/Game/Dreadmoor/Core/Input/Globals/IA_Mastery.IA_Mastery, exp:BP_AC_MusicDucking_GEN_VARIABLE, obj:/Game/Dreadmoor/Core/Input/Character/IA_Pause.IA_Pause, exp:MusicZones_GEN_VARIABLE, obj:/Game/Dreadmoor/Core/Input/Globals/IA_Dev_CheatPanel.IA_Dev_CheatPanel, exp:EnhancedInputActionDelegateBinding_0, obj:/Game/Dreadmoor/Core/Input/Character/IA_Reload.IA_Reload, exp:Default__BP_DrdPlayerController_C, obj:/Game/Dreadmoor/Core/Input/Character/IA_Recipe.IA_Recipe, exp:BP_GearTransitionComponent_GEN_VARIABLE, obj:/Game/Dreadmoor/Core/Input/Globals/IA_Dev_SwitchUI.IA_Dev_SwitchUI, exp:BP_HandObjectsVisibilityComponent_GEN_VARIABLE, obj:/Game/Dreadmoor/Core/Input/Globals/IA_Dev_TeleportToShip.IA_Dev_TeleportToShip, exp:BP_InventoryComponent_GEN_VARIABLE, obj:/Game/Dreadmoor/Core/Input/Character/IA_Interact.IA_Interact, exp:BP_UiCallbacks_GEN_VARIABLE, obj:/Game/Dreadmoor/Core/Input/Globals/IA_Dev_TimeDilation.IA_Dev_TimeDilation, exp:ComponentDelegateBinding_0
+  [72] Narrative_GEN_VARIABLE : NarrativeComponent (outer BP_DrdPlayerController_C) size=242
+        refs: exp:Narrative_GEN_VARIABLE, name:NarrativeDataTaskCompleted, name:QuestBranchCompleted, name:QuestNewState, name:QuestTaskProgressMade, name:QuestSucceeded, name:QuestFailed, name:QuestStarted, name:QuestForgotten, name:BeginSave, name:SaveComplete, name:BeginLoad, name:LoadComplete, name:DialogueBegan, name:DialogueFinished
+  [73] NarrativeNavigation_GEN_VARIABLE : NarrativeNavigationComponent (outer BP_DrdPlayerController_C) size=10
+        refs: name:K2Node_Event_DamageAmount
+  [74] DefaultSceneRoot_GEN_VARIABLE : SceneComponent (outer BP_DrdPlayerController_C) size=10
+        refs: name:Loaded
+  [75] TransformComponent0 : SceneComponent (outer Default__BP_DrdPlayerController_C) size=10
+        refs: name:Loaded
+  [76] SCS_Node_0 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SceneComponent, exp:DefaultSceneRoot_GEN_VARIABLE, name:DefaultSceneRoot
+  [77] SCS_Node_1 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Narrative.NarrativeComponent, exp:Narrative_GEN_VARIABLE, name:Narrative
+  [78] SCS_Node_2 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Game/Dreadmoor/InventoryFramework/Components/BP_InventoryComponent.BP_InventoryComponent_C, exp:BP_InventoryComponent_GEN_VARIABLE, name:BP_InventoryComponent
+  [79] SCS_Node_3 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Game/Dreadmoor/UI/UI_Utils/BP_UiCallbacks.BP_UiCallbacks_C, exp:BP_UiCallbacks_GEN_VARIABLE, name:BP_UiCallbacks
+  [80] SCS_Node_4 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/NarrativeNavigator.NarrativeNavigationComponent, exp:NarrativeNavigation_GEN_VARIABLE, name:NarrativeNavigation
+  [81] SCS_Node_5 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/InventoryFrameworkPlugin/Core/Components/BP_AC_EquipmentHelper.BP_AC_EquipmentHelper_C, exp:BP_AC_EquipmentHelper_GEN_VARIABLE, name:BP_AC_EquipmentHelper
+  [82] SCS_Node_6 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Game/Dreadmoor/InventoryFramework/Components/BP_GearTransitionComponent.BP_GearTransitionComponent_C, exp:BP_GearTransitionComponent_GEN_VARIABLE, name:BP_GearTransitionComponent
+  [83] SCS_Node_7 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Game/Dreadmoor/InventoryFramework/Components/BP_HandObjectsVisibilityComponent.BP_HandObjectsVisibilityComponent_C, exp:BP_HandObjectsVisibilityComponent_GEN_VARIABLE, name:BP_HandObjectsVisibilityComponent
+  [84] SCS_Node_8 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Game/Dreadmoor/Audio/BP_Audio/BP_AC_MusicDucking.BP_AC_MusicDucking_C, exp:BP_AC_MusicDucking_GEN_VARIABLE, name:BP_AC_MusicDucking
+  [85] SCS_Node_9 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Game/Dreadmoor/Audio/Music/Zones/BP_AC_MusicZones.BP_AC_MusicZones_C, exp:MusicZones_GEN_VARIABLE, name:MusicZones
+  [86] SimpleConstructionScript_0 : SimpleConstructionScript (outer BP_DrdPlayerController_C) size=90
+        refs: exp:BP_GearTransitionComponent_GEN_VARIABLE, exp:SCS_Node_2, exp:SCS_Node_1, exp:SCS_Node_4, exp:SCS_Node_5, exp:SCS_Node_3, exp:SCS_Node_6, exp:SCS_Node_7, exp:SCS_Node_8, exp:SCS_Node_9, name:CallFunc_FTrunc_ReturnValue
+
+## function AddNewItemNotification  flags=0x0C420000
+  L0000: CallFunc_IsItemValid_ReturnValue = FL_InventoryFramework.IsItemValid(Item)
+  L001D: if not (CallFunc_IsItemValid_ReturnValue) goto L00B9
+  L002B: CallFunc_GetWorldSubsystem_ReturnValue = SubsystemBlueprintLibrary.GetWorldSubsystem(self, DrdJournalSubsystem)
+  L0049: CallFunc_GetTagName_ReturnValue = BlueprintGameplayTagLibrary.GetTagName(Item.ItemAsset.self.ItemType)
+  L008D: CallFunc_GetWorldSubsystem_ReturnValue.DrdJournalSubsystem.SetHaveNewData(1, CallFunc_GetTagName_ReturnValue, true)
+  L00B9: return
+
+## function AfterPush_5E492BEB4CD28315B5E4029F9058BF27  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_UserWidget_1 = UserWidget
+  L0012: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(12679)
+  L0021: return
+
+## function AfterPush_DBA62F164CAD84155F45E8A19D7182BF  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_UserWidget_3 = UserWidget
+  L0012: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(4899)
+  L0021: return
+
+## function BeforePush_5E492BEB4CD28315B5E4029F9058BF27  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_UserWidget = UserWidget
+  L0012: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(12699)
+  L0021: return
+
+## function BeforePush_DBA62F164CAD84155F45E8A19D7182BF  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_UserWidget_2 = UserWidget
+  L0012: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(4919)
+  L0021: return
+
+## function BndEvt__BP_DrdPlayerController_BP_GearTransitionComponent_K2Node_ComponentBoundEvent_2_OnSlotChanged__DelegateSignature  flags=0x08400000
+  L0000: frame.K2Node_ComponentBoundEvent_Identifier = Identifier
+  L0012: frame.K2Node_ComponentBoundEvent_Item = Item
+  L0024: frame.K2Node_ComponentBoundEvent_Slot = Slot
+  L0036: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(21304)
+  L0045: return
+
+## function BndEvt__BP_DrdPlayerController_BP_InventoryComponent_K2Node_ComponentBoundEvent_0_ItemAdded__DelegateSignature  flags=0x08000000
+  L0000: frame.K2Node_ComponentBoundEvent_ItemData = ItemData
+  L0012: frame.K2Node_ComponentBoundEvent_ToIndex = ToIndex
+  L0024: frame.K2Node_ComponentBoundEvent_ToContainer = ToContainer
+  L0036: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(18109)
+  L0045: return
+
+## function BndEvt__BP_DrdPlayerController_BP_InventoryComponent_K2Node_ComponentBoundEvent_1_BoughtItem__DelegateSignature  flags=0x08000000
+  L0000: frame.K2Node_ComponentBoundEvent_Item_1 = Item
+  L0012: frame.K2Node_ComponentBoundEvent_FromComponent = FromComponent
+  L0024: frame.K2Node_ComponentBoundEvent_CurrencyUsed = CurrencyUsed
+  L0036: frame.K2Node_ComponentBoundEvent_CurrencyAmount = CurrencyAmount
+  L0048: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(20518)
+  L0057: return
+
+## function BndEvt__BP_DrdPlayerController_Narrative_K2Node_ComponentBoundEvent_3_OnDialogueBegan__DelegateSignature  flags=0x08000000
+  L0000: frame.K2Node_ComponentBoundEvent_Dialogue_1 = Dialogue
+  L0012: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(22500)
+  L0021: return
+
+## function BndEvt__BP_DrdPlayerController_Narrative_K2Node_ComponentBoundEvent_4_OnDialogueFinished__DelegateSignature  flags=0x08000000
+  L0000: frame.K2Node_ComponentBoundEvent_Dialogue = Dialogue
+  L0012: frame.K2Node_ComponentBoundEvent_bStartingNewDialogue = bStartingNewDialogue
+  L0024: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(22560)
+  L0033: return
+
+## function CheckCanSaveGameAtThisMoment  flags=0x0CC20000
+  L0000: K2Node_MakeStruct_DrdObjectId.Tag = GameplayTag{'GameEntities.Player.MainChar'}
+  L0036: K2Node_MakeStruct_DrdObjectId.Guid = Guid{0, 0, 0, 0}
+  L0073: K2Node_GetActorFromRefsSubsystem_HasPropertyResult = DrdActorRefsSubsystem.IsActorWithIdOfClassRegistered(self, K2Node_MakeStruct_DrdObjectId, DrdPlayerCharacter)
+  L009A: if not (K2Node_GetActorFromRefsSubsystem_HasPropertyResult) goto L040D
+  L00A8: CallFunc_GetGameplayTagCount_ReturnValue = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId, DrdPlayerCharacter).self.AbilitySystemComponent.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GAS.State.CantSave'})
+  L011F: CallFunc_IsSwimming_ReturnValue = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId, DrdPlayerCharacter).self.CharacterMovement.IsSwimming()
+  L0177: CallFunc_EqualEqual_IntInt_ReturnValue = EqualEqual_IntInt(CallFunc_GetGameplayTagCount_ReturnValue, 0)
+  L0199: CallFunc_Not_PreBool_ReturnValue = Not_PreBool(CallFunc_IsSwimming_ReturnValue)
+  L01B6: CallFunc_IsFalling_ReturnValue = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId, DrdPlayerCharacter).self.CharacterMovement.IsFalling()
+  L020E: CallFunc_GetGameplayTagCount_ReturnValue_1 = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId, DrdPlayerCharacter).self.AbilitySystemComponent.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GAS.Character.IsFighting'})
+  L0285: CallFunc_Not_PreBool_ReturnValue_1 = Not_PreBool(CallFunc_IsFalling_ReturnValue)
+  L02A2: CallFunc_EqualEqual_IntInt_ReturnValue_1 = EqualEqual_IntInt(CallFunc_GetGameplayTagCount_ReturnValue_1, 0)
+  L02C4: CallFunc_GetGameplayTagCount_ReturnValue_2 = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId, DrdPlayerCharacter).self.AbilitySystemComponent.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GAS.Character.IsInteracting'})
+  L033B: CallFunc_EqualEqual_IntInt_ReturnValue_2 = EqualEqual_IntInt(CallFunc_GetGameplayTagCount_ReturnValue_2, 0)
+  L035D: CallFunc_BooleanAND_ReturnValue = BooleanAND(CallFunc_EqualEqual_IntInt_ReturnValue_2, CallFunc_EqualEqual_IntInt_ReturnValue_1)
+  L0383: CallFunc_BooleanAND_ReturnValue_1 = BooleanAND(CallFunc_BooleanAND_ReturnValue, CallFunc_EqualEqual_IntInt_ReturnValue)
+  L03A9: CallFunc_BooleanAND_ReturnValue_2 = BooleanAND(CallFunc_BooleanAND_ReturnValue_1, CallFunc_Not_PreBool_ReturnValue_1)
+  L03CF: CallFunc_BooleanAND_ReturnValue_3 = BooleanAND(CallFunc_BooleanAND_ReturnValue_2, CallFunc_Not_PreBool_ReturnValue)
+  L03F5: bCanSave = CallFunc_BooleanAND_ReturnValue_3
+  L0408: goto L0418
+  L040D: bCanSave = true
+  L0418: return
+
+## function DrdSetTargetWithBlend  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_InNewTarget = InNewTarget
+  L0012: frame.K2Node_CustomEvent_InTime = InTime
+  L0024: frame.K2Node_CustomEvent_HiddenChar = HiddenChar
+  L0036: frame.K2Node_CustomEvent_SwitchHiddenAtStart = SwitchHiddenAtStart
+  L0048: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(20809)
+  L0057: return
+
+## function ExecuteUbergraph_BP_DrdPlayerController  flags=0x00808001
+  L0000: push L59A2
+  L0005: goto computed(EntryPoint)
+  L000F: bind(K2Node_CreateDelegate_OutputDelegate_7, self, 'OnLoaded_8D25763A449828E18B9A73A616EDD295')
+  L0026: KismetSystemLibrary.LoadAssetClass(self, self.BilgeePanelClass, K2Node_CreateDelegate_OutputDelegate_7, LatentActionInfo{-1, 1426397453, 'ExecuteUbergraph_BP_DrdPlayerController', self})
+  L0069: pop-flow
+  L006A: CallFunc_K2_GetPawn_ReturnValue = Controller.K2_GetPawn()
+  L007E: CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_1 = BlueprintGameplayTagLibrary.MakeLiteralGameplayTagContainer(GameplayTagContainer{[GameplayTag{'GAS.Character.IsInteracting'}]})
+  L00D1: CallFunc_RemoveLooseGameplayTags_ReturnValue = AbilitySystemBlueprintLibrary.RemoveLooseGameplayTags(CallFunc_K2_GetPawn_ReturnValue, CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_1, false)
+  L00F8: self.bWindowOpening = false
+  L0103: pop-flow
+  L0104: CallFunc_K2_GetPawn_ReturnValue_1 = Controller.K2_GetPawn()
+  L0118: CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_3 = BlueprintGameplayTagLibrary.MakeLiteralGameplayTagContainer(GameplayTagContainer{[GameplayTag{'GAS.Character.IsInteracting'}]})
+  L016B: CallFunc_RemoveLooseGameplayTags_ReturnValue_1 = AbilitySystemBlueprintLibrary.RemoveLooseGameplayTags(CallFunc_K2_GetPawn_ReturnValue_1, CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_3, false)
+  L0192: self.bWindowOpening = false
+  L019D: pop-flow
+  L019E: CallFunc_K2_GetPawn_ReturnValue_2 = Controller.K2_GetPawn()
+  L01B2: CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_5 = BlueprintGameplayTagLibrary.MakeLiteralGameplayTagContainer(GameplayTagContainer{[GameplayTag{'GAS.Character.IsInteracting'}]})
+  L0205: CallFunc_RemoveLooseGameplayTags_ReturnValue_2 = AbilitySystemBlueprintLibrary.RemoveLooseGameplayTags(CallFunc_K2_GetPawn_ReturnValue_2, CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_5, false)
+  L022C: self.bWindowOpening = false
+  L0237: pop-flow
+  L0238: CallFunc_K2_GetPawn_ReturnValue_3 = Controller.K2_GetPawn()
+  L024C: CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_7 = BlueprintGameplayTagLibrary.MakeLiteralGameplayTagContainer(GameplayTagContainer{[GameplayTag{'GAS.Character.IsInteracting'}]})
+  L029F: CallFunc_RemoveLooseGameplayTags_ReturnValue_3 = AbilitySystemBlueprintLibrary.RemoveLooseGameplayTags(CallFunc_K2_GetPawn_ReturnValue_3, CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_7, false)
+  L02C6: self.bWindowOpening = false
+  L02D1: pop-flow
+  L02D2: CallFunc_K2_GetPawn_ReturnValue_4 = Controller.K2_GetPawn()
+  L02E6: CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_9 = BlueprintGameplayTagLibrary.MakeLiteralGameplayTagContainer(GameplayTagContainer{[GameplayTag{'GAS.Character.IsInteracting'}]})
+  L0339: CallFunc_RemoveLooseGameplayTags_ReturnValue_4 = AbilitySystemBlueprintLibrary.RemoveLooseGameplayTags(CallFunc_K2_GetPawn_ReturnValue_4, CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_9, false)
+  L0360: self.bWindowOpening = false
+  L036B: pop-flow
+  L036C: CallFunc_K2_GetPawn_ReturnValue_5 = Controller.K2_GetPawn()
+  L0380: CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_11 = BlueprintGameplayTagLibrary.MakeLiteralGameplayTagContainer(GameplayTagContainer{[GameplayTag{'GAS.Character.IsInteracting'}]})
+  L03D3: CallFunc_RemoveLooseGameplayTags_ReturnValue_5 = AbilitySystemBlueprintLibrary.RemoveLooseGameplayTags(CallFunc_K2_GetPawn_ReturnValue_5, CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_11, false)
+  L03FA: self.bWindowOpening = false
+  L0405: pop-flow
+  L0406: CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_13 = BlueprintGameplayTagLibrary.MakeLiteralGameplayTagContainer(GameplayTagContainer{[GameplayTag{'GAS.Character.IsInteracting'}]})
+  L0459: CallFunc_RemoveLooseGameplayTags_ReturnValue_6 = AbilitySystemBlueprintLibrary.RemoveLooseGameplayTags(DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_5, DrdPlayerCharacter), CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_13, false)
+  L0494: self.bWindowOpening = false
+  L049F: pop-flow
+  L04A0: CallFunc_K2_GetPawn_ReturnValue_9 = Controller.K2_GetPawn()
+  L04B4: CallFunc_K2_GetPawn_ReturnValue_9.SetActorHiddenInGame(K2Node_CustomEvent_HiddenChar)
+  L04E1: pop-flow
+  L04E2: CallFunc_K2_GetPawn_ReturnValue_12 = Controller.K2_GetPawn()
+  L04F6: CallFunc_ObjectIsA_ReturnValue = GameplayStatics.ObjectIsA(CallFunc_K2_GetPawn_ReturnValue_12, Character)
+  L051C: CallFunc_ObjectIsA_ReturnValue_1 = GameplayStatics.ObjectIsA(CallFunc_K2_GetPawn_ReturnValue_12, DrdShipBase)
+  L0542: CallFunc_BooleanOR_ReturnValue = BooleanOR(CallFunc_ObjectIsA_ReturnValue_1, CallFunc_ObjectIsA_ReturnValue)
+  L0568: if not (CallFunc_BooleanOR_ReturnValue) goto L066B
+  L0576: CallFunc_K2_GetPawn_ReturnValue_11 = Controller.K2_GetPawn()
+  L058A: CallFunc_GetComponentByClass_ReturnValue_3 = CallFunc_K2_GetPawn_ReturnValue_11.Actor.GetComponentByClass(DrdPlayerInteractionComponent)
+  L05BD: CallFunc_IsValid_ReturnValue_10 = KismetSystemLibrary.IsValid(CallFunc_GetComponentByClass_ReturnValue_3)
+  L05DA: if not (CallFunc_IsValid_ReturnValue_10) goto L0677
+  L05E8: CallFunc_K2_GetPawn_ReturnValue_10 = Controller.K2_GetPawn()
+  L05FC: CallFunc_GetComponentByClass_ReturnValue_2 = CallFunc_K2_GetPawn_ReturnValue_10.Actor.GetComponentByClass(DrdPlayerInteractionComponent)
+  L062F: CallFunc_GetIsAnyInteractionActive_ReturnValue_5 = CallFunc_GetComponentByClass_ReturnValue_2.GetIsAnyInteractionActive()
+  L065D: if not (CallFunc_GetIsAnyInteractionActive_ReturnValue_5) goto L0677
+  L066B: self.bPauseMenuOpening = false
+  L0676: pop-flow
+  L0677: bind(K2Node_CreateDelegate_OutputDelegate_4, self, 'OnLoaded_C1D4117445B3E2CF373D8B97A28ADA19')
+  L068E: KismetSystemLibrary.LoadAssetClass(self, self.PausePanelClass, K2Node_CreateDelegate_OutputDelegate_4, LatentActionInfo{-1, 255910740, 'ExecuteUbergraph_BP_DrdPlayerController', self})
+  L06D1: pop-flow
+  L06D2: CallFunc_IsInDialogue_ReturnValue = self.Narrative.IsInDialogue()
+  L0700: CallFunc_Not_PreBool_ReturnValue_3 = Not_PreBool(CallFunc_IsInDialogue_ReturnValue)
+  L071D: if not (CallFunc_Not_PreBool_ReturnValue_3) pop-flow
+  L0727: self.BP_HandObjectsVisibilityComponent.ReleaseHideHandObjects(self.Narrative)
+  L0754: pop-flow
+  L0755: CallFunc_Conv_InputActionValueToBool_ReturnValue = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_12)
+  L0772: Temp_bool_Variable_1 = CallFunc_Conv_InputActionValueToBool_ReturnValue
+  L0785: Temp_real_Variable_3 = K2Node_EnhancedInputActionEvent_ElapsedTime_12
+  L07A2: Temp_real_Variable_3 = Temp_real_Variable_3
+  L07BD: Temp_real_Variable_2 = K2Node_EnhancedInputActionEvent_TriggeredTime_12
+  L07DA: Temp_real_Variable_2 = Temp_real_Variable_2
+  L07F5: Temp_object_Variable_1 = K2Node_EnhancedInputActionEvent_SourceAction_12
+  L0808: CallFunc_IsPackagedForDistribution_ReturnValue_5 = KismetSystemLibrary.IsPackagedForDistribution()
+  L081C: if not (CallFunc_IsPackagedForDistribution_ReturnValue_5) goto L082B
+  L082A: pop-flow
+  L082B: CallFunc_Not_PreBool_ReturnValue = Not_PreBool(Temp_bool_Variable_14)
+  L0848: Temp_bool_Variable_14 = CallFunc_Not_PreBool_ReturnValue
+  L085B: if not (Temp_bool_Variable_14) goto L0869
+  L0869: CallFunc_SelectFloat_ReturnValue = SelectFloat(5, 1, Temp_bool_Variable_14)
+  L08A0: CallFunc_SetGlobalTimeDilation_TimeDilation_ImplicitCast = CallFunc_SelectFloat_ReturnValue
+  L08BD: GameplayStatics.SetGlobalTimeDilation(self, CallFunc_SetGlobalTimeDilation_TimeDilation_ImplicitCast)
+  L08D1: pop-flow
+  L08D2: CallFunc_Conv_InputActionValueToBool_ReturnValue_1 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_11)
+  L08EF: Temp_bool_Variable_2 = CallFunc_Conv_InputActionValueToBool_ReturnValue_1
+  L0902: Temp_real_Variable_5 = K2Node_EnhancedInputActionEvent_ElapsedTime_11
+  L091F: Temp_real_Variable_5 = Temp_real_Variable_5
+  L093A: Temp_real_Variable_4 = K2Node_EnhancedInputActionEvent_TriggeredTime_11
+  L0957: Temp_real_Variable_4 = Temp_real_Variable_4
+  L0972: Temp_object_Variable_2 = K2Node_EnhancedInputActionEvent_SourceAction_11
+  L0985: self.BP_GearTransitionComponent.GetHandTool(CallFunc_GetHandTool_DataAsset, CallFunc_GetHandTool_HandToolActor)
+  L09BB: CallFunc_IsValid_ReturnValue_7 = KismetSystemLibrary.IsValid(CallFunc_GetHandTool_DataAsset)
+  L09D8: if not (CallFunc_IsValid_ReturnValue_7) pop-flow
+  L09E2: CallFunc_K2_GetPawn_ReturnValue_6 = Controller.K2_GetPawn()
+  L09F6: CallFunc_GetComponentByClass_ReturnValue = CallFunc_K2_GetPawn_ReturnValue_6.Actor.GetComponentByClass(DrdPlayerInteractionComponent)
+  L0A29: CallFunc_IsValid_ReturnValue_4 = KismetSystemLibrary.IsValid(CallFunc_GetComponentByClass_ReturnValue)
+  L0A46: if not (CallFunc_IsValid_ReturnValue_4) pop-flow
+  L0A50: CallFunc_K2_GetPawn_ReturnValue_6 = Controller.K2_GetPawn()
+  L0A64: CallFunc_GetComponentByClass_ReturnValue = CallFunc_K2_GetPawn_ReturnValue_6.Actor.GetComponentByClass(DrdPlayerInteractionComponent)
+  L0A97: CallFunc_GetCurrentInteractable_ReturnValue = CallFunc_GetComponentByClass_ReturnValue.DrdPlayerInteractionComponent.GetCurrentInteractable()
+  L0AC1: CallFunc_IsValid_ReturnValue_5 = KismetSystemLibrary.IsValid(CallFunc_GetCurrentInteractable_ReturnValue)
+  L0ADE: if not (CallFunc_IsValid_ReturnValue_5) goto L0AED
+  L0AEC: pop-flow
+  L0AED: self.BP_GearTransitionComponent.InteractHandTool()
+  L0B11: pop-flow
+  L0B12: CallFunc_Conv_InputActionValueToBool_ReturnValue_2 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_10)
+  L0B2F: Temp_bool_Variable_3 = CallFunc_Conv_InputActionValueToBool_ReturnValue_2
+  L0B42: Temp_real_Variable_7 = K2Node_EnhancedInputActionEvent_ElapsedTime_10
+  L0B5F: Temp_real_Variable_7 = Temp_real_Variable_7
+  L0B7A: Temp_real_Variable_6 = K2Node_EnhancedInputActionEvent_TriggeredTime_10
+  L0B97: Temp_real_Variable_6 = Temp_real_Variable_6
+  L0BB2: Temp_object_Variable_3 = K2Node_EnhancedInputActionEvent_SourceAction_10
+  L0BC5: K2Node_MakeStruct_DrdObjectId_6.Tag = GameplayTag{'GameEntities.Player.MainBoat'}
+  L0BFB: K2Node_MakeStruct_DrdObjectId_6.Guid = Guid{0, 0, 0, 0}
+  L0C38: K2Node_GetActorFromRefsSubsystem_6_HasPropertyResult = DrdActorRefsSubsystem.IsActorWithIdOfClassRegistered(self, K2Node_MakeStruct_DrdObjectId_6, DrdShipBase)
+  L0C5F: if not (K2Node_GetActorFromRefsSubsystem_6_HasPropertyResult) pop-flow
+  L0C69: CallFunc_K2_GiveAbilityAndActivateOnce_ReturnValue = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_6, DrdShipBase).self.AbilitySystemComponent.AbilitySystemComponent.K2_GiveAbilityAndActivateOnce(GA_ShipReleaseControl_C, 0, -1)
+  L0CD8: pop-flow
+  L0CD9: CallFunc_Conv_InputActionValueToBool_ReturnValue_3 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_9)
+  L0CF6: Temp_bool_Variable_4 = CallFunc_Conv_InputActionValueToBool_ReturnValue_3
+  L0D09: Temp_real_Variable_9 = K2Node_EnhancedInputActionEvent_ElapsedTime_9
+  L0D26: Temp_real_Variable_9 = Temp_real_Variable_9
+  L0D41: Temp_real_Variable_8 = K2Node_EnhancedInputActionEvent_TriggeredTime_9
+  L0D5E: Temp_real_Variable_8 = Temp_real_Variable_8
+  L0D79: Temp_object_Variable_4 = K2Node_EnhancedInputActionEvent_SourceAction_9
+  L0D8C: CallFunc_IsPackagedForDistribution_ReturnValue_6 = KismetSystemLibrary.IsPackagedForDistribution()
+  L0DA0: if not (CallFunc_IsPackagedForDistribution_ReturnValue_6) goto L0DAF
+  L0DAE: pop-flow
+  L0DAF: CallFunc_Not_PreBool_ReturnValue_1 = Not_PreBool(self.bIsHUDHidden)
+  L0DCC: self.bIsHUDHidden = CallFunc_Not_PreBool_ReturnValue_1
+  L0DDF: CallFunc_GetGameInstanceSubsystem_ReturnValue = SubsystemBlueprintLibrary.GetGameInstanceSubsystem(self, DrdUIManagerSubsystem)
+  L0DFD: CallFunc_GetGameInstanceSubsystem_ReturnValue.DrdUIManagerSubsystem.UIFade(self.bIsHUDHidden, false)
+  L0E27: CallFunc_K2_GetPawn_ReturnValue_7 = Controller.K2_GetPawn()
+  L0E3B: K2Node_DynamicCast_AsDrd_Player_Character = cast<DrdPlayerCharacter>(CallFunc_K2_GetPawn_ReturnValue_7)
+  L0E5F: K2Node_DynamicCast_bSuccess_3 = K2Node_DynamicCast_AsDrd_Player_Character
+  L0E7C: if not (K2Node_DynamicCast_bSuccess_3) pop-flow
+  L0E86: CallFunc_GetComponentByClass_ReturnValue_1 = K2Node_DynamicCast_AsDrd_Player_Character.Actor.GetComponentByClass(DrdPlayerInteractionComponent)
+  L0EB9: CallFunc_Not_PreBool_ReturnValue_2 = Not_PreBool(self.bIsHUDHidden)
+  L0ED6: CallFunc_GetComponentByClass_ReturnValue_1.DrdPlayerInteractionComponent.SetEnabled(CallFunc_Not_PreBool_ReturnValue_2)
+  L0EFF: pop-flow
+  L0F00: CallFunc_Conv_InputActionValueToBool_ReturnValue_4 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_8)
+  L0F1D: Temp_bool_Variable_5 = CallFunc_Conv_InputActionValueToBool_ReturnValue_4
+  L0F30: Temp_real_Variable_11 = K2Node_EnhancedInputActionEvent_ElapsedTime_8
+  L0F4D: Temp_real_Variable_11 = Temp_real_Variable_11
+  L0F68: Temp_real_Variable_10 = K2Node_EnhancedInputActionEvent_TriggeredTime_8
+  L0F85: Temp_real_Variable_10 = Temp_real_Variable_10
+  L0FA0: Temp_object_Variable_5 = K2Node_EnhancedInputActionEvent_SourceAction_8
+  L0FB3: K2Node_MakeStruct_DrdObjectId_1.Tag = GameplayTag{'GameEntities.Player.MainChar'}
+  L0FE9: K2Node_MakeStruct_DrdObjectId_1.Guid = Guid{0, 0, 0, 0}
+  L1026: K2Node_GetActorFromRefsSubsystem_1_HasPropertyResult = DrdActorRefsSubsystem.IsActorWithIdOfClassRegistered(self, K2Node_MakeStruct_DrdObjectId_1, DrdPlayerCharacter)
+  L104D: if not (K2Node_GetActorFromRefsSubsystem_1_HasPropertyResult) pop-flow
+  L1057: CallFunc_GetIsAnyInteractionActive_ReturnValue_1 = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_1, DrdPlayerCharacter).self.PlayerInteractComponent.GetIsAnyInteractionActive()
+  L10AF: if not (CallFunc_GetIsAnyInteractionActive_ReturnValue_1) goto L10BE
+  L10BD: pop-flow
+  L10BE: CallFunc_GetGameplayTagCount_ReturnValue_2 = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_1, DrdPlayerCharacter).self.AbilitySystemComponent.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GAS.Character.IsMenusOpeningBlocked'})
+  L1135: CallFunc_GetGameplayTagCount_ReturnValue_3 = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_1, DrdPlayerCharacter).self.AbilitySystemComponent.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GAS.Character.IsInteracting'})
+  L11AC: CallFunc_EqualEqual_IntInt_ReturnValue_2 = EqualEqual_IntInt(CallFunc_GetGameplayTagCount_ReturnValue_2, 0)
+  L11CE: CallFunc_EqualEqual_IntInt_ReturnValue_3 = EqualEqual_IntInt(CallFunc_GetGameplayTagCount_ReturnValue_3, 0)
+  L11F0: CallFunc_BooleanAND_ReturnValue_1 = BooleanAND(CallFunc_EqualEqual_IntInt_ReturnValue_3, CallFunc_EqualEqual_IntInt_ReturnValue_2)
+  L1216: if not (CallFunc_BooleanAND_ReturnValue_1) pop-flow
+  L1220: if not (self.bPauseMenuOpening) goto L122F
+  L122E: pop-flow
+  L122F: self.bWindowOpening = true
+  L123A: CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_2 = BlueprintGameplayTagLibrary.MakeLiteralGameplayTagContainer(GameplayTagContainer{[GameplayTag{'GAS.Character.IsInteracting'}]})
+  L128D: CallFunc_AddLooseGameplayTags_ReturnValue_1 = AbilitySystemBlueprintLibrary.AddLooseGameplayTags(DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_1, DrdPlayerCharacter), CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_2, false)
+  L12C8: bind(K2Node_CreateDelegate_OutputDelegate_11, self, 'OnLoaded_8D25763A449828E18B9A73A6FF8101DB')
+  L12DF: KismetSystemLibrary.LoadAssetClass(self, self.RecipesPanelClass, K2Node_CreateDelegate_OutputDelegate_11, LatentActionInfo{-1, 1426397453, 'ExecuteUbergraph_BP_DrdPlayerController', self})
+  L1322: pop-flow
+  L1323: Temp_object_Variable_6 = K2Node_CustomEvent_UserWidget_3
+  L1336: pop-flow
+  L1337: Temp_object_Variable_6 = K2Node_CustomEvent_UserWidget_2
+  L134A: K2Node_DynamicCast_AsWBP_Important_Item_Gained_Notifcation = cast<WBP_ImportantItemGained_Notifcation_C>(Temp_object_Variable_6)
+  L136E: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsWBP_Important_Item_Gained_Notifcation
+  L138B: if not (K2Node_DynamicCast_bSuccess) pop-flow
+  L1395: K2Node_DynamicCast_AsWBP_Important_Item_Gained_Notifcation.SetItem(K2Node_ComponentBoundEvent_ItemData.ItemAsset)
+  L13CB: pop-flow
+  L13CC: CallFunc_Conv_InputActionValueToBool_ReturnValue_5 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_7)
+  L13E9: Temp_bool_Variable_6 = CallFunc_Conv_InputActionValueToBool_ReturnValue_5
+  L13FC: Temp_real_Variable_13 = K2Node_EnhancedInputActionEvent_ElapsedTime_7
+  L1419: Temp_real_Variable_13 = Temp_real_Variable_13
+  L1434: Temp_real_Variable_12 = K2Node_EnhancedInputActionEvent_TriggeredTime_7
+  L1451: Temp_real_Variable_12 = Temp_real_Variable_12
+  L146C: Temp_object_Variable_7 = K2Node_EnhancedInputActionEvent_SourceAction_7
+  L147F: K2Node_MakeStruct_DrdObjectId_9.Tag = GameplayTag{'GameEntities.Player.MainChar'}
+  L14B5: K2Node_MakeStruct_DrdObjectId_9.Guid = Guid{0, 0, 0, 0}
+  L14F2: K2Node_GetActorFromRefsSubsystem_9_HasPropertyResult = DrdActorRefsSubsystem.IsActorWithIdOfClassRegistered(self, K2Node_MakeStruct_DrdObjectId_9, DrdPlayerCharacter)
+  L1519: if not (K2Node_GetActorFromRefsSubsystem_9_HasPropertyResult) pop-flow
+  L1523: CallFunc_GetIsAnyInteractionActive_ReturnValue_7 = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_9, DrdPlayerCharacter).self.PlayerInteractComponent.GetIsAnyInteractionActive()
+  L157B: if not (CallFunc_GetIsAnyInteractionActive_ReturnValue_7) goto L158A
+  L1589: pop-flow
+  L158A: self.BP_GearTransitionComponent.GetActiveSlot(CallFunc_GetActiveSlot_ActiveSlot)
+  L15B7: CallFunc_Greater_IntInt_ReturnValue_1 = Greater_IntInt(CallFunc_GetActiveSlot_ActiveSlot, 0)
+  L15D9: if not (CallFunc_Greater_IntInt_ReturnValue_1) pop-flow
+  L15E3: CallFunc_GetAbilitySystemComponent_ReturnValue = AbilitySystemBlueprintLibrary.GetAbilitySystemComponent(DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_9, DrdPlayerCharacter))
+  L1614: CallFunc_K2_GiveAbilityAndActivateOnce_ReturnValue_1 = CallFunc_GetAbilitySystemComponent_ReturnValue.AbilitySystemComponent.K2_GiveAbilityAndActivateOnce(GA_Reload_C, 0, -1)
+  L1659: pop-flow
+  L165A: CallFunc_Conv_InputActionValueToBool_ReturnValue_6 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_13)
+  L1677: Temp_bool_Variable = CallFunc_Conv_InputActionValueToBool_ReturnValue_6
+  L168A: Temp_real_Variable_1 = K2Node_EnhancedInputActionEvent_ElapsedTime_13
+  L16A7: Temp_real_Variable_1 = Temp_real_Variable_1
+  L16C2: Temp_real_Variable = K2Node_EnhancedInputActionEvent_TriggeredTime_13
+  L16DF: Temp_real_Variable = Temp_real_Variable
+  L16FA: Temp_object_Variable = K2Node_EnhancedInputActionEvent_SourceAction_13
+  L170D: CallFunc_IsPackagedForDistribution_ReturnValue_4 = KismetSystemLibrary.IsPackagedForDistribution()
+  L1721: if not (CallFunc_IsPackagedForDistribution_ReturnValue_4) goto L1730
+  L172F: pop-flow
+  L1730: bind(K2Node_CreateDelegate_OutputDelegate_5, self, 'OnLoaded_1973507F45F389A3F26B2C9DFBCCA77F')
+  L1747: KismetSystemLibrary.LoadAssetClass(self, self.CheatPanelClass, K2Node_CreateDelegate_OutputDelegate_5, LatentActionInfo{-1, -283485117, 'ExecuteUbergraph_BP_DrdPlayerController', self})
+  L178A: pop-flow
+  L178B: push L1860
+  L1790: CallFunc_GetWorldSubsystem_ReturnValue_1 = SubsystemBlueprintLibrary.GetWorldSubsystem(self, DrdImprovementTreeSubsystem)
+  L17AE: Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_GetKeyValueByIndex(CallFunc_GetTraitByClassForItem_ReturnValue_1.self.Resources, Temp_int_Variable, CallFunc_Map_GetKeyValueByIndex_Key, CallFunc_Map_GetKeyValueByIndex_Value)
+  L1808: CallFunc_FTrunc_ReturnValue = FTrunc(CallFunc_Map_GetKeyValueByIndex_Value)
+  L182D: CallFunc_GetWorldSubsystem_ReturnValue_1.DrdImprovementTreeSubsystem.AddImprovementResources(CallFunc_Map_GetKeyValueByIndex_Key, CallFunc_FTrunc_ReturnValue)
+  L185F: pop-flow
+  L1860: CallFunc_Add_IntInt_ReturnValue = Add_IntInt(Temp_int_Variable, 1)
+  L188A: Temp_int_Variable = CallFunc_Add_IntInt_ReturnValue
+  L18A5: CallFunc_Map_Length_ReturnValue = Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_Length(CallFunc_GetTraitByClassForItem_ReturnValue_1.self.Resources)
+  L18F6: CallFunc_Less_IntInt_ReturnValue = Less_IntInt(Temp_int_Variable, CallFunc_Map_Length_ReturnValue)
+  L191C: if not (CallFunc_Less_IntInt_ReturnValue) goto L192F
+  L192A: goto L178B
+  L192F: GetInventoryComponent(CallFunc_GetInventoryComponent_Component_1)
+  L1946: CallFunc_GetInventoryComponent_Component_1.AC_Inventory.MassReduceCount(K2Node_ComponentBoundEvent_ItemData.ItemAsset, 1, CallFunc_GetInventoryComponent_Component_1, -1, true, CallFunc_MassReduceCount_RemainingCount_2)
+  L1995: pop-flow
+  L1996: Temp_int_Variable = 0
+  L19AD: goto L18A5
+  L19B2: CallFunc_Conv_InputActionValueToBool_ReturnValue_7 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_6)
+  L19CF: Temp_bool_Variable_7 = CallFunc_Conv_InputActionValueToBool_ReturnValue_7
+  L19E2: Temp_real_Variable_15 = K2Node_EnhancedInputActionEvent_ElapsedTime_6
+  L19FF: Temp_real_Variable_15 = Temp_real_Variable_15
+  L1A1A: Temp_real_Variable_14 = K2Node_EnhancedInputActionEvent_TriggeredTime_6
+  L1A37: Temp_real_Variable_14 = Temp_real_Variable_14
+  L1A52: Temp_object_Variable_8 = K2Node_EnhancedInputActionEvent_SourceAction_6
+  L1A65: CallFunc_BooleanOR_ReturnValue_1 = BooleanOR(self.bWindowOpening, self.bPauseMenuOpening)
+  L1A8B: if not (CallFunc_BooleanOR_ReturnValue_1) goto L1A9A
+  L1A99: pop-flow
+  L1A9A: self.bPauseMenuOpening = true
+  L1AA5: KismetSystemLibrary.DelayUntilNextTick(self, LatentActionInfo{L04E2, 252877037, 'ExecuteUbergraph_BP_DrdPlayerController', self})
+  L1AD6: pop-flow
+  L1AD7: K2Node_MakeStruct_DrdObjectId.Tag = GameplayTag{'GameEntities.Player.MainChar'}
+  L1B0D: K2Node_MakeStruct_DrdObjectId.Guid = Guid{0, 0, 0, 0}
+  L1B4A: K2Node_GetActorFromRefsSubsystem_HasPropertyResult = DrdActorRefsSubsystem.IsActorWithIdOfClassRegistered(self, K2Node_MakeStruct_DrdObjectId, DrdPlayerCharacter)
+  L1B71: if not (K2Node_GetActorFromRefsSubsystem_HasPropertyResult) pop-flow
+  L1B7B: CallFunc_GetIsAnyInteractionActive_ReturnValue = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId, DrdPlayerCharacter).self.PlayerInteractComponent.GetIsAnyInteractionActive()
+  L1BD3: if not (CallFunc_GetIsAnyInteractionActive_ReturnValue) goto L1BE2
+  L1BE1: pop-flow
+  L1BE2: CallFunc_GetGameplayTagCount_ReturnValue = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId, DrdPlayerCharacter).self.AbilitySystemComponent.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GAS.Character.IsMenusOpeningBlocked'})
+  L1C59: CallFunc_EqualEqual_IntInt_ReturnValue = EqualEqual_IntInt(CallFunc_GetGameplayTagCount_ReturnValue, 0)
+  L1C7B: CallFunc_GetGameplayTagCount_ReturnValue_1 = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId, DrdPlayerCharacter).self.AbilitySystemComponent.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GAS.Character.IsInteracting'})
+  L1CF2: CallFunc_EqualEqual_IntInt_ReturnValue_1 = EqualEqual_IntInt(CallFunc_GetGameplayTagCount_ReturnValue_1, 0)
+  L1D14: CallFunc_BooleanAND_ReturnValue = BooleanAND(CallFunc_EqualEqual_IntInt_ReturnValue_1, CallFunc_EqualEqual_IntInt_ReturnValue)
+  L1D3A: if not (CallFunc_BooleanAND_ReturnValue) pop-flow
+  L1D44: if not (self.bPauseMenuOpening) goto L1D53
+  L1D52: pop-flow
+  L1D53: self.bWindowOpening = true
+  L1D5E: CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_4 = BlueprintGameplayTagLibrary.MakeLiteralGameplayTagContainer(GameplayTagContainer{[GameplayTag{'GAS.Character.IsInteracting'}]})
+  L1DB1: CallFunc_AddLooseGameplayTags_ReturnValue_2 = AbilitySystemBlueprintLibrary.AddLooseGameplayTags(DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId, DrdPlayerCharacter), CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_4, false)
+  L1DEC: bind(K2Node_CreateDelegate_OutputDelegate_10, self, 'OnLoaded_8D25763A449828E18B9A73A6A8642DC1')
+  L1E03: KismetSystemLibrary.LoadAssetClass(self, self.MapPanelClass, K2Node_CreateDelegate_OutputDelegate_10, LatentActionInfo{-1, 1426397453, 'ExecuteUbergraph_BP_DrdPlayerController', self})
+  L1E46: pop-flow
+  L1E47: CallFunc_Conv_InputActionValueToBool_ReturnValue_8 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_5)
+  L1E64: Temp_bool_Variable_8 = CallFunc_Conv_InputActionValueToBool_ReturnValue_8
+  L1E77: Temp_real_Variable_17 = K2Node_EnhancedInputActionEvent_ElapsedTime_5
+  L1E94: Temp_real_Variable_17 = Temp_real_Variable_17
+  L1EAF: Temp_real_Variable_16 = K2Node_EnhancedInputActionEvent_TriggeredTime_5
+  L1ECC: Temp_real_Variable_16 = Temp_real_Variable_16
+  L1EE7: Temp_object_Variable_9 = K2Node_EnhancedInputActionEvent_SourceAction_5
+  L1EFA: K2Node_MakeStruct_DrdObjectId_2.Tag = GameplayTag{'GameEntities.Player.MainChar'}
+  L1F30: K2Node_MakeStruct_DrdObjectId_2.Guid = Guid{0, 0, 0, 0}
+  L1F6D: K2Node_GetActorFromRefsSubsystem_2_HasPropertyResult = DrdActorRefsSubsystem.IsActorWithIdOfClassRegistered(self, K2Node_MakeStruct_DrdObjectId_2, DrdPlayerCharacter)
+  L1F94: if not (K2Node_GetActorFromRefsSubsystem_2_HasPropertyResult) pop-flow
+  L1F9E: CallFunc_GetIsAnyInteractionActive_ReturnValue_2 = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_2, DrdPlayerCharacter).self.PlayerInteractComponent.GetIsAnyInteractionActive()
+  L1FF6: if not (CallFunc_GetIsAnyInteractionActive_ReturnValue_2) goto L2005
+  L2004: pop-flow
+  L2005: CallFunc_GetGameplayTagCount_ReturnValue_4 = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_2, DrdPlayerCharacter).self.AbilitySystemComponent.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GAS.Character.IsMenusOpeningBlocked'})
+  L207C: CallFunc_EqualEqual_IntInt_ReturnValue_4 = EqualEqual_IntInt(CallFunc_GetGameplayTagCount_ReturnValue_4, 0)
+  L209E: CallFunc_GetGameplayTagCount_ReturnValue_5 = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_2, DrdPlayerCharacter).self.AbilitySystemComponent.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GAS.Character.IsInteracting'})
+  L2115: CallFunc_EqualEqual_IntInt_ReturnValue_5 = EqualEqual_IntInt(CallFunc_GetGameplayTagCount_ReturnValue_5, 0)
+  L2137: CallFunc_BooleanAND_ReturnValue_2 = BooleanAND(CallFunc_EqualEqual_IntInt_ReturnValue_5, CallFunc_EqualEqual_IntInt_ReturnValue_4)
+  L215D: if not (CallFunc_BooleanAND_ReturnValue_2) pop-flow
+  L2167: if not (self.bPauseMenuOpening) goto L2176
+  L2175: pop-flow
+  L2176: self.bWindowOpening = true
+  L2181: CallFunc_MakeLiteralGameplayTagContainer_ReturnValue = BlueprintGameplayTagLibrary.MakeLiteralGameplayTagContainer(GameplayTagContainer{[GameplayTag{'GAS.Character.IsInteracting'}]})
+  L21D4: CallFunc_AddLooseGameplayTags_ReturnValue = AbilitySystemBlueprintLibrary.AddLooseGameplayTags(DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_2, DrdPlayerCharacter), CallFunc_MakeLiteralGameplayTagContainer_ReturnValue, false)
+  L220F: bind(K2Node_CreateDelegate_OutputDelegate_12, self, 'OnLoaded_8D25763A449828E18B9A73A6013BA2FE')
+  L2226: KismetSystemLibrary.LoadAssetClass(self, self.ResearchPanelClass, K2Node_CreateDelegate_OutputDelegate_12, LatentActionInfo{-1, 1426397453, 'ExecuteUbergraph_BP_DrdPlayerController', self})
+  L2269: pop-flow
+  L226A: Temp_class_Variable = K2Node_CustomEvent_Loaded_1
+  L227D: K2Node_ClassDynamicCast_AsCommon_Activatable_Widget = classcast<CommonActivatableWidget>(Temp_class_Variable)
+  L22A1: K2Node_ClassDynamicCast_bSuccess = K2Node_ClassDynamicCast_AsCommon_Activatable_Widget
+  L22BE: if not (K2Node_ClassDynamicCast_bSuccess) pop-flow
+  L22C8: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L22E2: CallFunc_GetLocalPlayerFromController_ReturnValue_7 = Default__CommonUIExtensions.CommonUIExtensions.GetLocalPlayerFromController(CallFunc_GetPlayerController_ReturnValue)
+  L2315: CallFunc_PushContentToLayer_ForPlayer_ReturnValue_5 = Default__CommonUIExtensions.CommonUIExtensions.PushContentToLayer_ForPlayer(CallFunc_GetLocalPlayerFromController_ReturnValue_7, GameplayTag{'UI.Layer.Game'}, K2Node_ClassDynamicCast_AsCommon_Activatable_Widget)
+  L236C: pop-flow
+  L236D: Temp_class_Variable_1 = K2Node_CustomEvent_Loaded
+  L2380: K2Node_ClassDynamicCast_AsCommon_Activatable_Widget_1 = classcast<CommonActivatableWidget>(Temp_class_Variable_1)
+  L23A4: K2Node_ClassDynamicCast_bSuccess_1 = K2Node_ClassDynamicCast_AsCommon_Activatable_Widget_1
+  L23C1: if not (K2Node_ClassDynamicCast_bSuccess_1) goto L066B
+  L23CF: CallFunc_GetLocalPlayerFromController_ReturnValue_8 = Default__CommonUIExtensions.CommonUIExtensions.GetLocalPlayerFromController(self)
+  L23FA: CallFunc_PushContentToLayer_ForPlayer_ReturnValue_7 = Default__CommonUIExtensions.CommonUIExtensions.PushContentToLayer_ForPlayer(CallFunc_GetLocalPlayerFromController_ReturnValue_8, GameplayTag{'UI.Layer.Menu'}, K2Node_ClassDynamicCast_AsCommon_Activatable_Widget_1)
+  L2451: self.ActivePauseWidget = CallFunc_PushContentToLayer_ForPlayer_ReturnValue_7
+  L2464: self.bPauseMenuOpening = false
+  L246F: CallFunc_GetHUD_ReturnValue = PlayerController.GetHUD()
+  L2483: if not (CallFunc_GetHUD_ReturnValue.self.bShowHUD) goto L24A8
+  L24A7: pop-flow
+  L24A8: SwitchUIHidden()
+  L24B6: pop-flow
+  L24B7: CallFunc_Conv_InputActionValueToBool_ReturnValue_9 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_4)
+  L24D4: Temp_bool_Variable_9 = CallFunc_Conv_InputActionValueToBool_ReturnValue_9
+  L24E7: Temp_real_Variable_19 = K2Node_EnhancedInputActionEvent_ElapsedTime_4
+  L2504: Temp_real_Variable_19 = Temp_real_Variable_19
+  L251F: Temp_real_Variable_18 = K2Node_EnhancedInputActionEvent_TriggeredTime_4
+  L253C: Temp_real_Variable_18 = Temp_real_Variable_18
+  L2557: Temp_object_Variable_10 = K2Node_EnhancedInputActionEvent_SourceAction_4
+  L256A: K2Node_MakeStruct_DrdObjectId_8.Tag = GameplayTag{'GameEntities.Player.MainChar'}
+  L25A0: K2Node_MakeStruct_DrdObjectId_8.Guid = Guid{0, 0, 0, 0}
+  L25DD: K2Node_GetActorFromRefsSubsystem_8_HasPropertyResult = DrdActorRefsSubsystem.IsActorWithIdOfClassRegistered(self, K2Node_MakeStruct_DrdObjectId_8, DrdPlayerCharacter)
+  L2604: if not (K2Node_GetActorFromRefsSubsystem_8_HasPropertyResult) pop-flow
+  L260E: CallFunc_GetIsAnyInteractionActive_ReturnValue_8 = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_8, DrdPlayerCharacter).self.PlayerInteractComponent.GetIsAnyInteractionActive()
+  L2666: if not (CallFunc_GetIsAnyInteractionActive_ReturnValue_8) goto L2675
+  L2674: pop-flow
+  L2675: CallFunc_GetGameplayTagCount_ReturnValue_13 = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_8, DrdPlayerCharacter).self.AbilitySystemComponent.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GAS.Character.IsMenusOpeningBlocked'})
+  L26EC: CallFunc_EqualEqual_IntInt_ReturnValue_12 = EqualEqual_IntInt(CallFunc_GetGameplayTagCount_ReturnValue_13, 0)
+  L270E: CallFunc_GetGameplayTagCount_ReturnValue_14 = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_8, DrdPlayerCharacter).self.AbilitySystemComponent.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GAS.Character.IsInteracting'})
+  L2785: CallFunc_EqualEqual_IntInt_ReturnValue_13 = EqualEqual_IntInt(CallFunc_GetGameplayTagCount_ReturnValue_14, 0)
+  L27A7: CallFunc_BooleanAND_ReturnValue_6 = BooleanAND(CallFunc_EqualEqual_IntInt_ReturnValue_13, CallFunc_EqualEqual_IntInt_ReturnValue_12)
+  L27CD: if not (CallFunc_BooleanAND_ReturnValue_6) pop-flow
+  L27D7: if not (self.bPauseMenuOpening) goto L27E6
+  L27E5: pop-flow
+  L27E6: self.bWindowOpening = true
+  L27F1: CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_8 = BlueprintGameplayTagLibrary.MakeLiteralGameplayTagContainer(GameplayTagContainer{[GameplayTag{'GAS.Character.IsInteracting'}]})
+  L2844: CallFunc_AddLooseGameplayTags_ReturnValue_6 = AbilitySystemBlueprintLibrary.AddLooseGameplayTags(DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_8, DrdPlayerCharacter), CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_8, false)
+  L287F: bind(K2Node_CreateDelegate_OutputDelegate_8, self, 'OnLoaded_8D25763A449828E18B9A73A6CB54668B')
+  L2896: KismetSystemLibrary.LoadAssetClass(self, self.JournalPanelClass, K2Node_CreateDelegate_OutputDelegate_8, LatentActionInfo{-1, 1426397453, 'ExecuteUbergraph_BP_DrdPlayerController', self})
+  L28D9: pop-flow
+  L28DA: CallFunc_Conv_InputActionValueToBool_ReturnValue_10 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_3)
+  L28F7: Temp_bool_Variable_10 = CallFunc_Conv_InputActionValueToBool_ReturnValue_10
+  L290A: Temp_real_Variable_21 = K2Node_EnhancedInputActionEvent_ElapsedTime_3
+  L2927: Temp_real_Variable_21 = Temp_real_Variable_21
+  L2942: Temp_real_Variable_20 = K2Node_EnhancedInputActionEvent_TriggeredTime_3
+  L295F: Temp_real_Variable_20 = Temp_real_Variable_20
+  L297A: Temp_object_Variable_11 = K2Node_EnhancedInputActionEvent_SourceAction_3
+  L298D: K2Node_MakeStruct_DrdObjectId_4.Tag = GameplayTag{'GameEntities.Player.MainChar'}
+  L29C3: K2Node_MakeStruct_DrdObjectId_4.Guid = Guid{0, 0, 0, 0}
+  L2A00: K2Node_GetActorFromRefsSubsystem_4_HasPropertyResult = DrdActorRefsSubsystem.IsActorWithIdOfClassRegistered(self, K2Node_MakeStruct_DrdObjectId_4, DrdPlayerCharacter)
+  L2A27: if not (K2Node_GetActorFromRefsSubsystem_4_HasPropertyResult) pop-flow
+  L2A31: CallFunc_GetIsAnyInteractionActive_ReturnValue_3 = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_4, DrdPlayerCharacter).self.PlayerInteractComponent.GetIsAnyInteractionActive()
+  L2A89: if not (CallFunc_GetIsAnyInteractionActive_ReturnValue_3) goto L2A98
+  L2A97: pop-flow
+  L2A98: CallFunc_GetGameplayTagCount_ReturnValue_7 = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_4, DrdPlayerCharacter).self.AbilitySystemComponent.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GAS.Character.IsMenusOpeningBlocked'})
+  L2B0F: CallFunc_GetGameplayTagCount_ReturnValue_8 = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_4, DrdPlayerCharacter).self.AbilitySystemComponent.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GAS.Character.IsInteracting'})
+  L2B86: CallFunc_EqualEqual_IntInt_ReturnValue_6 = EqualEqual_IntInt(CallFunc_GetGameplayTagCount_ReturnValue_7, 0)
+  L2BA8: CallFunc_EqualEqual_IntInt_ReturnValue_7 = EqualEqual_IntInt(CallFunc_GetGameplayTagCount_ReturnValue_8, 0)
+  L2BCA: CallFunc_BooleanAND_ReturnValue_3 = BooleanAND(CallFunc_EqualEqual_IntInt_ReturnValue_7, CallFunc_EqualEqual_IntInt_ReturnValue_6)
+  L2BF0: if not (CallFunc_BooleanAND_ReturnValue_3) pop-flow
+  L2BFA: if not (self.bPauseMenuOpening) goto L2C09
+  L2C08: pop-flow
+  L2C09: self.bWindowOpening = true
+  L2C14: CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_10 = BlueprintGameplayTagLibrary.MakeLiteralGameplayTagContainer(GameplayTagContainer{[GameplayTag{'GAS.Character.IsInteracting'}]})
+  L2C67: CallFunc_AddLooseGameplayTags_ReturnValue_3 = AbilitySystemBlueprintLibrary.AddLooseGameplayTags(DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_4, DrdPlayerCharacter), CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_10, false)
+  L2CA2: goto L000F
+  L2CA7: CallFunc_Conv_InputActionValueToBool_ReturnValue_11 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_2)
+  L2CC4: Temp_bool_Variable_11 = CallFunc_Conv_InputActionValueToBool_ReturnValue_11
+  L2CD7: Temp_real_Variable_23 = K2Node_EnhancedInputActionEvent_ElapsedTime_2
+  L2CF4: Temp_real_Variable_23 = Temp_real_Variable_23
+  L2D0F: Temp_real_Variable_22 = K2Node_EnhancedInputActionEvent_TriggeredTime_2
+  L2D2C: Temp_real_Variable_22 = Temp_real_Variable_22
+  L2D47: Temp_object_Variable_12 = K2Node_EnhancedInputActionEvent_SourceAction_2
+  L2D5A: CallFunc_IsPackagedForDistribution_ReturnValue_7 = KismetSystemLibrary.IsPackagedForDistribution()
+  L2D6E: if not (CallFunc_IsPackagedForDistribution_ReturnValue_7) goto L2D7D
+  L2D7C: pop-flow
+  L2D7D: CallFunc_GetGlobalTimeDilation_ReturnValue = GameplayStatics.GetGlobalTimeDilation(self)
+  L2D9A: CallFunc_Subtract_DoubleDouble_A_ImplicitCast = CallFunc_GetGlobalTimeDilation_ReturnValue
+  L2DB7: CallFunc_Subtract_DoubleDouble_ReturnValue = Subtract_DoubleDouble(CallFunc_Subtract_DoubleDouble_A_ImplicitCast, 0.1)
+  L2DE5: CallFunc_FClamp_ReturnValue = FClamp(CallFunc_Subtract_DoubleDouble_ReturnValue, 0, 2)
+  L2E1C: CallFunc_SetGlobalTimeDilation_TimeDilation_ImplicitCast_1 = CallFunc_FClamp_ReturnValue
+  L2E39: GameplayStatics.SetGlobalTimeDilation(self, CallFunc_SetGlobalTimeDilation_TimeDilation_ImplicitCast_1)
+  L2E4D: pop-flow
+  L2E4E: CallFunc_Conv_InputActionValueToBool_ReturnValue_12 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_1)
+  L2E6B: Temp_bool_Variable_12 = CallFunc_Conv_InputActionValueToBool_ReturnValue_12
+  L2E7E: Temp_real_Variable_25 = K2Node_EnhancedInputActionEvent_ElapsedTime_1
+  L2E9B: Temp_real_Variable_25 = Temp_real_Variable_25
+  L2EB6: Temp_real_Variable_24 = K2Node_EnhancedInputActionEvent_TriggeredTime_1
+  L2ED3: Temp_real_Variable_24 = Temp_real_Variable_24
+  L2EEE: Temp_object_Variable_13 = K2Node_EnhancedInputActionEvent_SourceAction_1
+  L2F01: CallFunc_IsPackagedForDistribution_ReturnValue_8 = KismetSystemLibrary.IsPackagedForDistribution()
+  L2F15: if not (CallFunc_IsPackagedForDistribution_ReturnValue_8) goto L2F24
+  L2F23: pop-flow
+  L2F24: CallFunc_GetGlobalTimeDilation_ReturnValue_1 = GameplayStatics.GetGlobalTimeDilation(self)
+  L2F41: CallFunc_Add_DoubleDouble_A_ImplicitCast = CallFunc_GetGlobalTimeDilation_ReturnValue_1
+  L2F5E: CallFunc_Add_DoubleDouble_ReturnValue = Add_DoubleDouble(CallFunc_Add_DoubleDouble_A_ImplicitCast, 0.1)
+  L2F8C: CallFunc_FClamp_ReturnValue_1 = FClamp(CallFunc_Add_DoubleDouble_ReturnValue, 0, 2)
+  L2FC3: CallFunc_SetGlobalTimeDilation_TimeDilation_ImplicitCast_2 = CallFunc_FClamp_ReturnValue_1
+  L2FE0: GameplayStatics.SetGlobalTimeDilation(self, CallFunc_SetGlobalTimeDilation_TimeDilation_ImplicitCast_2)
+  L2FF4: pop-flow
+  L2FF5: CallFunc_Conv_InputActionValueToBool_ReturnValue_13 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue)
+  L3012: Temp_bool_Variable_13 = CallFunc_Conv_InputActionValueToBool_ReturnValue_13
+  L3025: Temp_real_Variable_27 = K2Node_EnhancedInputActionEvent_ElapsedTime
+  L3042: Temp_real_Variable_27 = Temp_real_Variable_27
+  L305D: Temp_real_Variable_26 = K2Node_EnhancedInputActionEvent_TriggeredTime
+  L307A: Temp_real_Variable_26 = Temp_real_Variable_26
+  L3095: Temp_object_Variable_14 = K2Node_EnhancedInputActionEvent_SourceAction
+  L30A8: CallFunc_GetNarrativeComponent_ReturnValue = NarrativeFunctionLibrary.GetNarrativeComponent(self)
+  L30BD: CallFunc_DrdGetTrackQuestSuggestion_ReturnValue = CallFunc_GetNarrativeComponent_ReturnValue.DrdGetTrackQuestSuggestion()
+  L30EB: CallFunc_IsValid_ReturnValue_8 = KismetSystemLibrary.IsValid(CallFunc_DrdGetTrackQuestSuggestion_ReturnValue)
+  L3108: if not (CallFunc_IsValid_ReturnValue_8) pop-flow
+  L3112: CallFunc_GetNarrativeComponent_ReturnValue = NarrativeFunctionLibrary.GetNarrativeComponent(self)
+  L3127: CallFunc_DrdGetQuestInstanceGuid_ReturnValue = CallFunc_DrdGetTrackQuestSuggestion_ReturnValue.Quest.DrdGetQuestInstanceGuid()
+  L3159: CallFunc_GetNarrativeComponent_ReturnValue.DrdTrackQuest(CallFunc_DrdGetQuestInstanceGuid_ReturnValue)
+  L3186: pop-flow
+  L3187: Temp_object_Variable_15 = K2Node_CustomEvent_UserWidget_1
+  L319A: pop-flow
+  L319B: Temp_object_Variable_15 = K2Node_CustomEvent_UserWidget
+  L31AE: K2Node_DynamicCast_AsWBP_Important_Item_Gained_Notifcation_1 = cast<WBP_ImportantItemGained_Notifcation_C>(Temp_object_Variable_15)
+  L31D2: K2Node_DynamicCast_bSuccess_1 = K2Node_DynamicCast_AsWBP_Important_Item_Gained_Notifcation_1
+  L31EF: if not (K2Node_DynamicCast_bSuccess_1) pop-flow
+  L31F9: K2Node_DynamicCast_AsWBP_Important_Item_Gained_Notifcation_1.SetItem(K2Node_ComponentBoundEvent_ItemData.ItemAsset)
+  L322F: pop-flow
+  L3230: CallFunc_GetGameInstanceSubsystem_ReturnValue_1 = SubsystemBlueprintLibrary.GetGameInstanceSubsystem(self, DrdSaveSlotsSubsystem)
+  L324E: CallFunc_GetGameInstanceSubsystem_ReturnValue_1.DrdSaveSlotsSubsystem.SaveNew(2)
+  L3270: pop-flow
+  L3271: CallFunc_GetGameInstanceSubsystem_ReturnValue_2 = SubsystemBlueprintLibrary.GetGameInstanceSubsystem(self, DrdSaveSlotsSubsystem)
+  L328F: CallFunc_QuickLoad_ReturnValue = CallFunc_GetGameInstanceSubsystem_ReturnValue_2.DrdSaveSlotsSubsystem.QuickLoad()
+  L32B9: pop-flow
+  L32BA: CallFunc_GetWorldSubsystem_ReturnValue_3 = SubsystemBlueprintLibrary.GetWorldSubsystem(self, DrdAudioSubsystem)
+  L32D8: CallFunc_GetWorldSubsystem_ReturnValue_3.DrdAudioSubsystem.StartMusicPlaylist()
+  L32F8: pop-flow
+  L32F9: K2Node_MakeStruct_DrdObjectId_3.Tag = GameplayTag{'GameEntities.Player.MainChar'}
+  L332F: K2Node_MakeStruct_DrdObjectId_3.Guid = Guid{0, 0, 0, 0}
+  L336C: K2Node_GetActorFromRefsSubsystem_3_HasPropertyResult = DrdActorRefsSubsystem.IsActorWithIdOfClassRegistered(self, K2Node_MakeStruct_DrdObjectId_3, DrdPlayerCharacter)
+  L3393: if not (K2Node_GetActorFromRefsSubsystem_3_HasPropertyResult) goto L3449
+  L33A1: CallFunc_GetGameplayTagCount_ReturnValue_6 = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_3, DrdPlayerCharacter).self.AbilitySystemComponent.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GAS.Character.KeepObjectInHandsInDialogue'})
+  L3418: CallFunc_Greater_IntInt_ReturnValue = Greater_IntInt(CallFunc_GetGameplayTagCount_ReturnValue_6, 0)
+  L343A: if not (CallFunc_Greater_IntInt_ReturnValue) goto L3449
+  L3448: pop-flow
+  L3449: self.BP_HandObjectsVisibilityComponent.RequestHideHandObjects(self.Narrative)
+  L3476: pop-flow
+  L3477: Temp_class_Variable_2 = K2Node_CustomEvent_Loaded_3
+  L348A: K2Node_ClassDynamicCast_AsCommon_Activatable_Widget_2 = classcast<CommonActivatableWidget>(Temp_class_Variable_2)
+  L34AE: K2Node_ClassDynamicCast_bSuccess_2 = K2Node_ClassDynamicCast_AsCommon_Activatable_Widget_2
+  L34CB: if not (K2Node_ClassDynamicCast_bSuccess_2) goto L3592
+  L34D9: CallFunc_GetLocalPlayerFromController_ReturnValue_5 = Default__CommonUIExtensions.CommonUIExtensions.GetLocalPlayerFromController(self)
+  L3504: CallFunc_PushContentToLayer_ForPlayer_ReturnValue_2 = Default__CommonUIExtensions.CommonUIExtensions.PushContentToLayer_ForPlayer(CallFunc_GetLocalPlayerFromController_ReturnValue_5, GameplayTag{'UI.Layer.Game'}, K2Node_ClassDynamicCast_AsCommon_Activatable_Widget_2)
+  L355B: KismetSystemLibrary.Delay(self, 0.2, LatentActionInfo{L036C, 3365174, 'ExecuteUbergraph_BP_DrdPlayerController', self})
+  L3591: pop-flow
+  L3592: self.bWindowOpening = false
+  L359D: pop-flow
+  L359E: CallFunc_GetLocalPlayerFromController_ReturnValue = Default__CommonUIExtensions.CommonUIExtensions.GetLocalPlayerFromController(self)
+  L35C9: CallFunc_PushContentToLayer_ForPlayer_ReturnValue_6 = Default__CommonUIExtensions.CommonUIExtensions.PushContentToLayer_ForPlayer(CallFunc_GetLocalPlayerFromController_ReturnValue, GameplayTag{'UI.Layer.Game'}, K2Node_ClassDynamicCast_AsCommon_Activatable_Widget_7)
+  L3620: KismetSystemLibrary.Delay(self, 0.2, LatentActionInfo{L006A, -284579398, 'ExecuteUbergraph_BP_DrdPlayerController', self})
+  L3656: pop-flow
+  L3657: self.bWindowOpening = false
+  L3662: pop-flow
+  L3663: CallFunc_GetLocalPlayerFromController_ReturnValue_1 = Default__CommonUIExtensions.CommonUIExtensions.GetLocalPlayerFromController(self)
+  L368E: CallFunc_PushContentToLayer_ForPlayer_ReturnValue_4 = Default__CommonUIExtensions.CommonUIExtensions.PushContentToLayer_ForPlayer(CallFunc_GetLocalPlayerFromController_ReturnValue_1, GameplayTag{'UI.Layer.Game'}, K2Node_ClassDynamicCast_AsCommon_Activatable_Widget_6)
+  L36E5: KismetSystemLibrary.Delay(self, 0.2, LatentActionInfo{L0104, -1554124101, 'ExecuteUbergraph_BP_DrdPlayerController', self})
+  L371B: pop-flow
+  L371C: CallFunc_Conv_InputActionValueToBool_ReturnValue_14 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_14)
+  L3739: Temp_bool_Variable_15 = CallFunc_Conv_InputActionValueToBool_ReturnValue_14
+  L374C: Temp_real_Variable_28 = K2Node_EnhancedInputActionEvent_ElapsedTime_14
+  L3769: Temp_real_Variable_28 = Temp_real_Variable_28
+  L3784: Temp_real_Variable_29 = K2Node_EnhancedInputActionEvent_TriggeredTime_14
+  L37A1: Temp_real_Variable_29 = Temp_real_Variable_29
+  L37BC: Temp_object_Variable_16 = K2Node_EnhancedInputActionEvent_SourceAction_14
+  L37CF: CallFunc_IsPackagedForDistribution_ReturnValue_3 = KismetSystemLibrary.IsPackagedForDistribution()
+  L37E3: if not (CallFunc_IsPackagedForDistribution_ReturnValue_3) goto L37F2
+  L37F1: pop-flow
+  L37F2: KismetSystemLibrary.ExecuteConsoleCommand(self, "scalability 3", null)
+  L380D: pop-flow
+  L380E: self.bWindowOpening = false
+  L3819: pop-flow
+  L381A: K2Node_ClassDynamicCast_AsCommon_Activatable_Widget_3 = classcast<CommonActivatableWidget>(Temp_class_Variable_3)
+  L383E: K2Node_ClassDynamicCast_bSuccess_3 = K2Node_ClassDynamicCast_AsCommon_Activatable_Widget_3
+  L385B: if not (K2Node_ClassDynamicCast_bSuccess_3) goto L3922
+  L3869: CallFunc_GetLocalPlayerFromController_ReturnValue_4 = Default__CommonUIExtensions.CommonUIExtensions.GetLocalPlayerFromController(self)
+  L3894: CallFunc_PushContentToLayer_ForPlayer_ReturnValue = Default__CommonUIExtensions.CommonUIExtensions.PushContentToLayer_ForPlayer(CallFunc_GetLocalPlayerFromController_ReturnValue_4, GameplayTag{'UI.Layer.Game'}, K2Node_ClassDynamicCast_AsCommon_Activatable_Widget_3)
+  L38EB: KismetSystemLibrary.Delay(self, 0.2, LatentActionInfo{L02D2, -1637598444, 'ExecuteUbergraph_BP_DrdPlayerController', self})
+  L3921: pop-flow
+  L3922: self.bWindowOpening = false
+  L392D: pop-flow
+  L392E: CallFunc_GetLocalPlayerFromController_ReturnValue_2 = Default__CommonUIExtensions.CommonUIExtensions.GetLocalPlayerFromController(self)
+  L3959: CallFunc_PushContentToLayer_ForPlayer_ReturnValue_3 = Default__CommonUIExtensions.CommonUIExtensions.PushContentToLayer_ForPlayer(CallFunc_GetLocalPlayerFromController_ReturnValue_2, GameplayTag{'UI.Layer.Game'}, K2Node_ClassDynamicCast_AsCommon_Activatable_Widget_5)
+  L39B0: KismetSystemLibrary.Delay(self, 0.2, LatentActionInfo{L019E, 2022642352, 'ExecuteUbergraph_BP_DrdPlayerController', self})
+  L39E6: pop-flow
+  L39E7: Temp_class_Variable_3 = K2Node_CustomEvent_Loaded_4
+  L39FA: goto L381A
+  L39FF: CallFunc_Conv_InputActionValueToBool_ReturnValue_15 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_15)
+  L3A1C: Temp_bool_Variable_16 = CallFunc_Conv_InputActionValueToBool_ReturnValue_15
+  L3A2F: Temp_real_Variable_30 = K2Node_EnhancedInputActionEvent_ElapsedTime_15
+  L3A4C: Temp_real_Variable_30 = Temp_real_Variable_30
+  L3A67: Temp_real_Variable_31 = K2Node_EnhancedInputActionEvent_TriggeredTime_15
+  L3A84: Temp_real_Variable_31 = Temp_real_Variable_31
+  L3A9F: Temp_object_Variable_17 = K2Node_EnhancedInputActionEvent_SourceAction_15
+  L3AB2: CallFunc_IsPackagedForDistribution_ReturnValue_2 = KismetSystemLibrary.IsPackagedForDistribution()
+  L3AC6: if not (CallFunc_IsPackagedForDistribution_ReturnValue_2) goto L3AD5
+  L3AD4: pop-flow
+  L3AD5: KismetSystemLibrary.ExecuteConsoleCommand(self, "scalability 2", null)
+  L3AF0: pop-flow
+  L3AF1: self.bWindowOpening = false
+  L3AFC: pop-flow
+  L3AFD: CallFunc_GetLocalPlayerFromController_ReturnValue_3 = Default__CommonUIExtensions.CommonUIExtensions.GetLocalPlayerFromController(self)
+  L3B28: CallFunc_PushContentToLayer_ForPlayer_ReturnValue_1 = Default__CommonUIExtensions.CommonUIExtensions.PushContentToLayer_ForPlayer(CallFunc_GetLocalPlayerFromController_ReturnValue_3, GameplayTag{'UI.Layer.Game'}, K2Node_ClassDynamicCast_AsCommon_Activatable_Widget_4)
+  L3B7F: KismetSystemLibrary.Delay(self, 0.2, LatentActionInfo{L0238, -2106136508, 'ExecuteUbergraph_BP_DrdPlayerController', self})
+  L3BB5: pop-flow
+  L3BB6: CallFunc_Conv_InputActionValueToBool_ReturnValue_16 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_16)
+  L3BD3: Temp_bool_Variable_17 = CallFunc_Conv_InputActionValueToBool_ReturnValue_16
+  L3BE6: Temp_real_Variable_32 = K2Node_EnhancedInputActionEvent_ElapsedTime_16
+  L3C03: Temp_real_Variable_32 = Temp_real_Variable_32
+  L3C1E: Temp_real_Variable_33 = K2Node_EnhancedInputActionEvent_TriggeredTime_16
+  L3C3B: Temp_real_Variable_33 = Temp_real_Variable_33
+  L3C56: Temp_object_Variable_18 = K2Node_EnhancedInputActionEvent_SourceAction_16
+  L3C69: CallFunc_IsPackagedForDistribution_ReturnValue_1 = KismetSystemLibrary.IsPackagedForDistribution()
+  L3C7D: if not (CallFunc_IsPackagedForDistribution_ReturnValue_1) goto L3C8C
+  L3C8B: pop-flow
+  L3C8C: KismetSystemLibrary.ExecuteConsoleCommand(self, "scalability 1", null)
+  L3CA7: pop-flow
+  L3CA8: if not (self.bPauseMenuOpening) goto L3CB7
+  L3CB6: pop-flow
+  L3CB7: self.bWindowOpening = true
+  L3CC2: CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_6 = BlueprintGameplayTagLibrary.MakeLiteralGameplayTagContainer(GameplayTagContainer{[GameplayTag{'GAS.Character.IsInteracting'}]})
+  L3D15: CallFunc_AddLooseGameplayTags_ReturnValue_5 = AbilitySystemBlueprintLibrary.AddLooseGameplayTags(DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_7, DrdPlayerCharacter), CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_6, false)
+  L3D50: bind(K2Node_CreateDelegate_OutputDelegate_9, self, 'OnLoaded_8D25763A449828E18B9A73A6A93E6C87')
+  L3D67: KismetSystemLibrary.LoadAssetClass(self, self.CharacterInventoryPanelClass, K2Node_CreateDelegate_OutputDelegate_9, LatentActionInfo{-1, 1426397453, 'ExecuteUbergraph_BP_DrdPlayerController', self})
+  L3DAA: pop-flow
+  L3DAB: self.bWindowOpening = false
+  L3DB6: pop-flow
+  L3DB7: CallFunc_Conv_InputActionValueToBool_ReturnValue_17 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_17)
+  L3DD4: Temp_bool_Variable_18 = CallFunc_Conv_InputActionValueToBool_ReturnValue_17
+  L3DE7: Temp_real_Variable_34 = K2Node_EnhancedInputActionEvent_ElapsedTime_17
+  L3E04: Temp_real_Variable_34 = Temp_real_Variable_34
+  L3E1F: Temp_real_Variable_35 = K2Node_EnhancedInputActionEvent_TriggeredTime_17
+  L3E3C: Temp_real_Variable_35 = Temp_real_Variable_35
+  L3E57: Temp_object_Variable_19 = K2Node_EnhancedInputActionEvent_SourceAction_17
+  L3E6A: CallFunc_IsPackagedForDistribution_ReturnValue = KismetSystemLibrary.IsPackagedForDistribution()
+  L3E7E: if not (CallFunc_IsPackagedForDistribution_ReturnValue) goto L3E8D
+  L3E8C: pop-flow
+  L3E8D: KismetSystemLibrary.ExecuteConsoleCommand(self, "scalability 0", null)
+  L3EA8: pop-flow
+  L3EA9: K2Node_ClassDynamicCast_AsCommon_Activatable_Widget_4 = classcast<CommonActivatableWidget>(Temp_class_Variable_4)
+  L3ECD: K2Node_ClassDynamicCast_bSuccess_4 = K2Node_ClassDynamicCast_AsCommon_Activatable_Widget_4
+  L3EEA: if not (K2Node_ClassDynamicCast_bSuccess_4) goto L3DAB
+  L3EF8: goto L3AFD
+  L3EFD: Temp_class_Variable_4 = K2Node_CustomEvent_Loaded_5
+  L3F10: goto L3EA9
+  L3F15: K2Node_ClassDynamicCast_AsCommon_Activatable_Widget_5 = classcast<CommonActivatableWidget>(Temp_class_Variable_5)
+  L3F39: K2Node_ClassDynamicCast_bSuccess_5 = K2Node_ClassDynamicCast_AsCommon_Activatable_Widget_5
+  L3F56: if not (K2Node_ClassDynamicCast_bSuccess_5) goto L3AF1
+  L3F64: goto L392E
+  L3F69: CallFunc_GetLocalPlayerFromController_ReturnValue_6 = Default__CommonUIExtensions.CommonUIExtensions.GetLocalPlayerFromController(self)
+  L3F94: CallFunc_PushContentToLayer_ForPlayer_ReturnValue_8 = Default__CommonUIExtensions.CommonUIExtensions.PushContentToLayer_ForPlayer(CallFunc_GetLocalPlayerFromController_ReturnValue_6, GameplayTag{'UI.Layer.GameMenu'}, K2Node_ClassDynamicCast_AsCommon_Activatable_Widget_8)
+  L3FEB: KismetSystemLibrary.Delay(self, 0.2, LatentActionInfo{L0406, -129185498, 'ExecuteUbergraph_BP_DrdPlayerController', self})
+  L4021: pop-flow
+  L4022: CallFunc_Conv_InputActionValueToBool_ReturnValue_18 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_18)
+  L403F: Temp_bool_Variable_19 = CallFunc_Conv_InputActionValueToBool_ReturnValue_18
+  L4052: Temp_real_Variable_36 = K2Node_EnhancedInputActionEvent_ElapsedTime_18
+  L406F: Temp_real_Variable_36 = Temp_real_Variable_36
+  L408A: Temp_real_Variable_37 = K2Node_EnhancedInputActionEvent_TriggeredTime_18
+  L40A7: Temp_real_Variable_37 = Temp_real_Variable_37
+  L40C2: Temp_object_Variable_20 = K2Node_EnhancedInputActionEvent_SourceAction_18
+  L40D5: CallFunc_IsPackagedForDistribution_ReturnValue_10 = KismetSystemLibrary.IsPackagedForDistribution()
+  L40E9: if not (CallFunc_IsPackagedForDistribution_ReturnValue_10) goto L3271
+  L40F7: pop-flow
+  L40F8: if not (self.bPauseMenuOpening) goto L4107
+  L4106: pop-flow
+  L4107: self.bWindowOpening = true
+  L4112: CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_12 = BlueprintGameplayTagLibrary.MakeLiteralGameplayTagContainer(GameplayTagContainer{[GameplayTag{'GAS.Character.IsInteracting'}]})
+  L4165: CallFunc_AddLooseGameplayTags_ReturnValue_4 = AbilitySystemBlueprintLibrary.AddLooseGameplayTags(DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_5, DrdPlayerCharacter), CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_12, false)
+  L41A0: bind(K2Node_CreateDelegate_OutputDelegate_6, self, 'OnLoaded_16BFA5654DEE0983CDB25798685653F0')
+  L41B7: KismetSystemLibrary.LoadAssetClass(self, self.MapPanelClass, K2Node_CreateDelegate_OutputDelegate_6, LatentActionInfo{-1, -2120212222, 'ExecuteUbergraph_BP_DrdPlayerController', self})
+  L41FA: pop-flow
+  L41FB: self.bWindowOpening = false
+  L4206: pop-flow
+  L4207: Temp_class_Variable_5 = K2Node_CustomEvent_Loaded_6
+  L421A: goto L3F15
+  L421F: Temp_int_Array_Index_Variable = 0
+  L4236: CallFunc_Array_Length_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(CallFunc_GetTraitsByTagForItem_FoundTraits)
+  L4271: CallFunc_Less_IntInt_ReturnValue_1 = Less_IntInt(Temp_int_Loop_Counter_Variable_1, CallFunc_Array_Length_ReturnValue)
+  L4297: if not (CallFunc_Less_IntInt_ReturnValue_1) pop-flow
+  L42A1: Temp_int_Array_Index_Variable = Temp_int_Loop_Counter_Variable_1
+  L42BC: push L43FC
+  L42C1: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetTraitsByTagForItem_FoundTraits, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L42FC: K2Node_DynamicCast_AsIT_Item_Component_Trait = cast<IT_ItemComponentTrait>(CallFunc_Array_Get_Item)
+  L4320: K2Node_DynamicCast_bSuccess_2 = K2Node_DynamicCast_AsIT_Item_Component_Trait
+  L433D: if not (K2Node_DynamicCast_bSuccess_2) pop-flow
+  L4347: CallFunc_GetPlayerCharacter_ReturnValue = GameplayStatics.GetPlayerCharacter(self, 0)
+  L4361: CallFunc_GetItemComponent_ReturnValue = self.BP_InventoryComponent.AC_Inventory.GetItemComponent(K2Node_ComponentBoundEvent_ItemData, K2Node_DynamicCast_AsIT_Item_Component_Trait, true, CallFunc_GetPlayerCharacter_ReturnValue, GameplayTag{'IFP.Event.ItemUsed'}, ItemComponentPayload{GameplayTagContainer{[]}, [], null})
+  L43FB: pop-flow
+  L43FC: CallFunc_Add_IntInt_ReturnValue_2 = Add_IntInt(Temp_int_Loop_Counter_Variable_1, 1)
+  L4426: Temp_int_Loop_Counter_Variable_1 = CallFunc_Add_IntInt_ReturnValue_2
+  L4441: goto L4236
+  L4446: push L4516
+  L444B: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetAllWidgetsOfClass_FoundWidgets, Temp_int_Array_Index_Variable_1, CallFunc_Array_Get_Item_1)
+  L4486: CallFunc_IsActivated_ReturnValue = CallFunc_Array_Get_Item_1.CommonActivatableWidget.IsActivated()
+  L44B0: if not (CallFunc_IsActivated_ReturnValue) pop-flow
+  L44BA: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetAllWidgetsOfClass_FoundWidgets, Temp_int_Array_Index_Variable_1, CallFunc_Array_Get_Item_1)
+  L44F5: CallFunc_Array_Get_Item_1.CommonActivatableWidget.DeactivateWidget()
+  L4515: pop-flow
+  L4516: CallFunc_Add_IntInt_ReturnValue_1 = Add_IntInt(Temp_int_Loop_Counter_Variable, 1)
+  L4540: Temp_int_Loop_Counter_Variable = CallFunc_Add_IntInt_ReturnValue_1
+  L455B: CallFunc_Array_Length_ReturnValue_1 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(CallFunc_GetAllWidgetsOfClass_FoundWidgets)
+  L4596: CallFunc_Less_IntInt_ReturnValue_2 = Less_IntInt(Temp_int_Loop_Counter_Variable, CallFunc_Array_Length_ReturnValue_1)
+  L45BC: if not (CallFunc_Less_IntInt_ReturnValue_2) pop-flow
+  L45C6: Temp_int_Array_Index_Variable_1 = Temp_int_Loop_Counter_Variable
+  L45E1: goto L4446
+  L45E6: Temp_int_Loop_Counter_Variable = 0
+  L45FD: Temp_int_Array_Index_Variable_1 = 0
+  L4614: goto L455B
+  L4619: pop-flow
+  L461A: pop-flow
+  L461B: pop-flow
+  L461C: pop-flow
+  L461D: pop-flow
+  L461E: pop-flow
+  L461F: pop-flow
+  L4620: Temp_struct_Variable = ModifyContextOptions{1, 0, 0}
+  L465E: CallFunc_GetLocalPlayerSubSystemFromPlayerController_ReturnValue = SubsystemBlueprintLibrary.GetLocalPlayerSubSystemFromPlayerController(self, EnhancedInputLocalPlayerSubsystem)
+  L467C: CallFunc_GetLocalPlayerSubSystemFromPlayerController_ReturnValue.AddMappingContext(IMC_Globals, 0, Temp_struct_Variable)
+  L46B8: goto L32BA
+  L46BD: AddNewItemNotification(K2Node_ComponentBoundEvent_ItemData)
+  L46D4: CallFunc_IsValid_ReturnValue_2 = KismetSystemLibrary.IsValid(K2Node_ComponentBoundEvent_ItemData.ItemAsset)
+  L46FA: if not (CallFunc_IsValid_ReturnValue_2) pop-flow
+  L4704: CallFunc_MatchesTag_ReturnValue = BlueprintGameplayTagLibrary.MatchesTag(K2Node_ComponentBoundEvent_ItemData.ItemAsset.self.ItemType, GameplayTag{'IFP.Items.Type.Note'}, false)
+  L475C: if not (CallFunc_MatchesTag_ReturnValue) goto L47D1
+  L476A: CallFunc_GetTraitsByTagForItem_FoundTraits = []
+  L4775: FL_InventoryFramework.GetTraitsByTagForItem(K2Node_ComponentBoundEvent_ItemData.ItemAsset, GameplayTag{'IFP.Event.ItemUsed'}, CallFunc_GetTraitsByTagForItem_FoundTraits)
+  L47B5: Temp_int_Loop_Counter_Variable_1 = 0
+  L47CC: goto L421F
+  L47D1: CallFunc_GetTraitByClassForItem_ReturnValue_2 = FL_InventoryFramework.GetTraitByClassForItem(K2Node_ComponentBoundEvent_ItemData.ItemAsset, IT_GrantRecipes_C, false)
+  L4801: CallFunc_IsValid_ReturnValue_3 = KismetSystemLibrary.IsValid(CallFunc_GetTraitByClassForItem_ReturnValue_2)
+  L481E: if not (CallFunc_IsValid_ReturnValue_3) goto L4ABE
+  L482C: CallFunc_GetWorldSubsystem_ReturnValue = SubsystemBlueprintLibrary.GetWorldSubsystem(self, DrdCraftingSubsystem)
+  L484A: CallFunc_BreakGameplayTagContainer_GameplayTags = []
+  L4855: BlueprintGameplayTagLibrary.BreakGameplayTagContainer(CallFunc_GetTraitByClassForItem_ReturnValue_2.self.Recipes, CallFunc_BreakGameplayTagContainer_GameplayTags)
+  L4887: CallFunc_GetWorldSubsystem_ReturnValue.DrdCraftingSubsystem.GrantRecipe(CallFunc_BreakGameplayTagContainer_GameplayTags[0])
+  L48B6: GetInventoryComponent(CallFunc_GetInventoryComponent_Component)
+  L48CD: CallFunc_GetInventoryComponent_Component.AC_Inventory.MassReduceCount(K2Node_ComponentBoundEvent_ItemData.ItemAsset, 1, CallFunc_GetInventoryComponent_Component, -1, true, CallFunc_MassReduceCount_RemainingCount_1)
+  L491C: CallFunc_GetPlayerController_ReturnValue_1 = GameplayStatics.GetPlayerController(self, 0)
+  L4936: CallFunc_PushContentToLayerForPlayer_ReturnValue = Default__AsyncAction_PushContentToLayerForPlayer.AsyncAction_PushContentToLayerForPlayer.PushContentToLayerForPlayer(CallFunc_GetPlayerController_ReturnValue_1, soft("/Game/Dreadmoor/UI/Notifications/WBP_ImportantItemGained_Notifcation.WBP_ImportantItemGained_Notifcation_C"), GameplayTag{'UI.Layer.NotificationsAtTop'}, false)
+  L49F2: CallFunc_IsValid_ReturnValue_6 = KismetSystemLibrary.IsValid(CallFunc_PushContentToLayerForPlayer_ReturnValue)
+  L4A0F: if not (CallFunc_IsValid_ReturnValue_6) pop-flow
+  L4A19: bind(K2Node_CreateDelegate_OutputDelegate_1, self, 'BeforePush_DBA62F164CAD84155F45E8A19D7182BF')
+  L4A30: CallFunc_PushContentToLayerForPlayer_ReturnValue.self.BeforePush += K2Node_CreateDelegate_OutputDelegate_1
+  L4A59: bind(K2Node_CreateDelegate_OutputDelegate, self, 'AfterPush_DBA62F164CAD84155F45E8A19D7182BF')
+  L4A70: CallFunc_PushContentToLayerForPlayer_ReturnValue.self.AfterPush += K2Node_CreateDelegate_OutputDelegate
+  L4A99: CallFunc_PushContentToLayerForPlayer_ReturnValue.Activate()
+  L4ABD: pop-flow
+  L4ABE: CallFunc_GetTraitByClassForItem_ReturnValue_1 = FL_InventoryFramework.GetTraitByClassForItem(K2Node_ComponentBoundEvent_ItemData.ItemAsset, IT_MasteryResources_C, false)
+  L4AEE: CallFunc_IsValid_ReturnValue_1 = KismetSystemLibrary.IsValid(CallFunc_GetTraitByClassForItem_ReturnValue_1)
+  L4B0B: if not (CallFunc_IsValid_ReturnValue_1) goto L4B1E
+  L4B19: goto L1996
+  L4B1E: CallFunc_GetTraitByClassForItem_ReturnValue = FL_InventoryFramework.GetTraitByClassForItem(K2Node_ComponentBoundEvent_ItemData.ItemAsset, IT_LearnNode_C, false)
+  L4B4E: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(CallFunc_GetTraitByClassForItem_ReturnValue)
+  L4B6B: if not (CallFunc_IsValid_ReturnValue) pop-flow
+  L4B75: CallFunc_GetWorldSubsystem_ReturnValue_2 = SubsystemBlueprintLibrary.GetWorldSubsystem(self, DrdImprovementTreeSubsystem)
+  L4B93: CallFunc_GetWorldSubsystem_ReturnValue_2.DrdImprovementTreeSubsystem.LearnNode(CallFunc_GetTraitByClassForItem_ReturnValue.self.NodeID, false)
+  L4BD3: GetInventoryComponent(CallFunc_GetInventoryComponent_Component_2)
+  L4BEA: CallFunc_GetInventoryComponent_Component_2.AC_Inventory.MassReduceCount(K2Node_ComponentBoundEvent_ItemData.ItemAsset, 1, CallFunc_GetInventoryComponent_Component_2, -1, true, CallFunc_MassReduceCount_RemainingCount_3)
+  L4C39: CallFunc_PushContentToLayerForPlayer_ReturnValue_1 = Default__AsyncAction_PushContentToLayerForPlayer.AsyncAction_PushContentToLayerForPlayer.PushContentToLayerForPlayer(self, soft("/Game/Dreadmoor/UI/Notifications/WBP_ImportantItemGained_Notifcation.WBP_ImportantItemGained_Notifcation_C"), GameplayTag{'UI.Layer.NotificationsAtTop'}, false)
+  L4CED: CallFunc_IsValid_ReturnValue_9 = KismetSystemLibrary.IsValid(CallFunc_PushContentToLayerForPlayer_ReturnValue_1)
+  L4D0A: if not (CallFunc_IsValid_ReturnValue_9) pop-flow
+  L4D14: bind(K2Node_CreateDelegate_OutputDelegate_3, self, 'BeforePush_5E492BEB4CD28315B5E4029F9058BF27')
+  L4D2B: CallFunc_PushContentToLayerForPlayer_ReturnValue_1.self.BeforePush += K2Node_CreateDelegate_OutputDelegate_3
+  L4D54: bind(K2Node_CreateDelegate_OutputDelegate_2, self, 'AfterPush_5E492BEB4CD28315B5E4029F9058BF27')
+  L4D6B: CallFunc_PushContentToLayerForPlayer_ReturnValue_1.self.AfterPush += K2Node_CreateDelegate_OutputDelegate_2
+  L4D94: CallFunc_PushContentToLayerForPlayer_ReturnValue_1.Activate()
+  L4DB8: pop-flow
+  L4DB9: K2Node_MakeStruct_DrdObjectId_5.Tag = GameplayTag{'GameEntities.Player.MainChar'}
+  L4DEF: K2Node_MakeStruct_DrdObjectId_5.Guid = Guid{0, 0, 0, 0}
+  L4E2C: K2Node_GetActorFromRefsSubsystem_5_HasPropertyResult = DrdActorRefsSubsystem.IsActorWithIdOfClassRegistered(self, K2Node_MakeStruct_DrdObjectId_5, DrdPlayerCharacter)
+  L4E53: if not (K2Node_GetActorFromRefsSubsystem_5_HasPropertyResult) pop-flow
+  L4E5D: CallFunc_GetIsAnyInteractionActive_ReturnValue_4 = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_5, DrdPlayerCharacter).self.PlayerInteractComponent.GetIsAnyInteractionActive()
+  L4EB5: if not (CallFunc_GetIsAnyInteractionActive_ReturnValue_4) pop-flow
+  L4EBF: CallFunc_GetGameplayTagCount_ReturnValue_9 = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_5, DrdPlayerCharacter).self.AbilitySystemComponent.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GAS.Character.IsMenusOpeningBlocked'})
+  L4F36: CallFunc_EqualEqual_IntInt_ReturnValue_8 = EqualEqual_IntInt(CallFunc_GetGameplayTagCount_ReturnValue_9, 0)
+  L4F58: CallFunc_GetGameplayTagCount_ReturnValue_10 = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_5, DrdPlayerCharacter).self.AbilitySystemComponent.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GAS.Character.IsInteracting'})
+  L4FCF: CallFunc_EqualEqual_IntInt_ReturnValue_9 = EqualEqual_IntInt(CallFunc_GetGameplayTagCount_ReturnValue_10, 1)
+  L4FF1: CallFunc_BooleanAND_ReturnValue_4 = BooleanAND(CallFunc_EqualEqual_IntInt_ReturnValue_9, CallFunc_EqualEqual_IntInt_ReturnValue_8)
+  L5017: if not (CallFunc_BooleanAND_ReturnValue_4) pop-flow
+  L5021: goto L40F8
+  L5026: self.BP_InventoryComponent.AC_Inventory.MassReduceCount(K2Node_ComponentBoundEvent_CurrencyUsed, K2Node_ComponentBoundEvent_CurrencyAmount, self.BP_InventoryComponent, 9, true, CallFunc_MassReduceCount_RemainingCount)
+  L5070: pop-flow
+  L5071: K2Node_ClassDynamicCast_AsCommon_Activatable_Widget_6 = classcast<CommonActivatableWidget>(Temp_class_Variable_6)
+  L5095: K2Node_ClassDynamicCast_bSuccess_6 = K2Node_ClassDynamicCast_AsCommon_Activatable_Widget_6
+  L50B2: if not (K2Node_ClassDynamicCast_bSuccess_6) goto L380E
+  L50C0: goto L3663
+  L50C5: Temp_class_Variable_6 = K2Node_CustomEvent_Loaded_7
+  L50D8: goto L5071
+  L50DD: K2Node_ClassDynamicCast_AsCommon_Activatable_Widget_7 = classcast<CommonActivatableWidget>(Temp_class_Variable_7)
+  L5101: K2Node_ClassDynamicCast_bSuccess_7 = K2Node_ClassDynamicCast_AsCommon_Activatable_Widget_7
+  L511E: if not (K2Node_ClassDynamicCast_bSuccess_7) goto L3657
+  L512C: goto L359E
+  L5131: Temp_class_Variable_7 = K2Node_CustomEvent_Loaded_8
+  L5144: goto L50DD
+  L5149: push L51F6
+  L514E: if not (K2Node_CustomEvent_SwitchHiddenAtStart) goto L519E
+  L515C: CallFunc_K2_GetPawn_ReturnValue_8 = Controller.K2_GetPawn()
+  L5170: CallFunc_K2_GetPawn_ReturnValue_8.SetActorHiddenInGame(K2Node_CustomEvent_HiddenChar)
+  L519D: pop-flow
+  L519E: CallFunc_Delay_Duration_ImplicitCast = K2Node_CustomEvent_InTime
+  L51BB: KismetSystemLibrary.Delay(self, CallFunc_Delay_Duration_ImplicitCast, LatentActionInfo{L04A0, -562895116, 'ExecuteUbergraph_BP_DrdPlayerController', self})
+  L51F5: pop-flow
+  L51F6: CallFunc_SetViewTargetWithBlend_BlendTime_ImplicitCast = K2Node_CustomEvent_InTime
+  L5213: SetViewTargetWithBlend(K2Node_CustomEvent_InNewTarget, CallFunc_SetViewTargetWithBlend_BlendTime_ImplicitCast, 0, 0, false)
+  L523B: pop-flow
+  L523C: CallFunc_Conv_InputActionValueToBool_ReturnValue_19 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_19)
+  L5259: Temp_bool_Variable_20 = CallFunc_Conv_InputActionValueToBool_ReturnValue_19
+  L526C: Temp_real_Variable_38 = K2Node_EnhancedInputActionEvent_ElapsedTime_19
+  L5289: Temp_real_Variable_38 = Temp_real_Variable_38
+  L52A4: Temp_real_Variable_39 = K2Node_EnhancedInputActionEvent_TriggeredTime_19
+  L52C1: Temp_real_Variable_39 = Temp_real_Variable_39
+  L52DC: Temp_object_Variable_21 = K2Node_EnhancedInputActionEvent_SourceAction_19
+  L52EF: CallFunc_IsPackagedForDistribution_ReturnValue_9 = KismetSystemLibrary.IsPackagedForDistribution()
+  L5303: if not (CallFunc_IsPackagedForDistribution_ReturnValue_9) goto L5312
+  L5311: pop-flow
+  L5312: CheckCanSaveGameAtThisMoment(CallFunc_CheckCanSaveGameAtThisMoment_bCanSave)
+  L5329: if not (CallFunc_CheckCanSaveGameAtThisMoment_bCanSave) pop-flow
+  L5333: goto L3230
+  L5338: Default__BP_UI_Utils_C.GetUiCallback(self, CallFunc_GetUiCallback_UiCallbackComponent)
+  L5366: CallFunc_GetUiCallback_UiCallbackComponent.SlotTriggered()
+  L538A: pop-flow
+  L538B: Controller.ReceivePossess(K2Node_Event_PossessedPawn)
+  L539E: pop-flow
+  L539F: CallFunc_Conv_InputActionValueToBool_ReturnValue_20 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_20)
+  L53BC: Temp_bool_Variable_21 = CallFunc_Conv_InputActionValueToBool_ReturnValue_20
+  L53CF: Temp_real_Variable_40 = K2Node_EnhancedInputActionEvent_ElapsedTime_20
+  L53EC: Temp_real_Variable_40 = Temp_real_Variable_40
+  L5407: Temp_real_Variable_41 = K2Node_EnhancedInputActionEvent_TriggeredTime_20
+  L5424: Temp_real_Variable_41 = Temp_real_Variable_41
+  L543F: Temp_object_Variable_22 = K2Node_EnhancedInputActionEvent_SourceAction_20
+  L5452: CallFunc_K2_GetPawn_ReturnValue_13 = Controller.K2_GetPawn()
+  L5466: K2Node_DynamicCast_AsDrd_Ship_Base = cast<DrdShipBase>(CallFunc_K2_GetPawn_ReturnValue_13)
+  L548A: K2Node_DynamicCast_bSuccess_4 = K2Node_DynamicCast_AsDrd_Ship_Base
+  L54A7: if not (K2Node_DynamicCast_bSuccess_4) goto L1AD7
+  L54B5: goto L4DB9
+  L54BA: goto L0DAF
+  L54BF: CallFunc_Conv_InputActionValueToBool_ReturnValue_21 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_21)
+  L54DC: Temp_bool_Variable_22 = CallFunc_Conv_InputActionValueToBool_ReturnValue_21
+  L54EF: Temp_real_Variable_42 = K2Node_EnhancedInputActionEvent_ElapsedTime_21
+  L550C: Temp_real_Variable_42 = Temp_real_Variable_42
+  L5527: Temp_real_Variable_43 = K2Node_EnhancedInputActionEvent_TriggeredTime_21
+  L5544: Temp_real_Variable_43 = Temp_real_Variable_43
+  L555F: Temp_object_Variable_23 = K2Node_EnhancedInputActionEvent_SourceAction_21
+  L5572: K2Node_MakeStruct_DrdObjectId_7.Tag = GameplayTag{'GameEntities.Player.MainChar'}
+  L55A8: K2Node_MakeStruct_DrdObjectId_7.Guid = Guid{0, 0, 0, 0}
+  L55E5: K2Node_GetActorFromRefsSubsystem_7_HasPropertyResult = DrdActorRefsSubsystem.IsActorWithIdOfClassRegistered(self, K2Node_MakeStruct_DrdObjectId_7, DrdPlayerCharacter)
+  L560C: if not (K2Node_GetActorFromRefsSubsystem_7_HasPropertyResult) pop-flow
+  L5616: CallFunc_GetIsAnyInteractionActive_ReturnValue_6 = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_7, DrdPlayerCharacter).self.PlayerInteractComponent.GetIsAnyInteractionActive()
+  L566E: if not (CallFunc_GetIsAnyInteractionActive_ReturnValue_6) goto L567D
+  L567C: pop-flow
+  L567D: CallFunc_GetGameplayTagCount_ReturnValue_11 = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_7, DrdPlayerCharacter).self.AbilitySystemComponent.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GAS.Character.IsMenusOpeningBlocked'})
+  L56F4: CallFunc_EqualEqual_IntInt_ReturnValue_10 = EqualEqual_IntInt(CallFunc_GetGameplayTagCount_ReturnValue_11, 0)
+  L5716: CallFunc_GetGameplayTagCount_ReturnValue_12 = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_7, DrdPlayerCharacter).self.AbilitySystemComponent.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GAS.Character.IsInteracting'})
+  L578D: CallFunc_EqualEqual_IntInt_ReturnValue_11 = EqualEqual_IntInt(CallFunc_GetGameplayTagCount_ReturnValue_12, 0)
+  L57AF: CallFunc_BooleanAND_ReturnValue_5 = BooleanAND(CallFunc_EqualEqual_IntInt_ReturnValue_11, CallFunc_EqualEqual_IntInt_ReturnValue_10)
+  L57D5: if not (CallFunc_BooleanAND_ReturnValue_5) pop-flow
+  L57DF: goto L3CA8
+  L57E4: push L32F9
+  L57E9: self.BP_AC_MusicDucking.RequestMusicDuck(K2Node_ComponentBoundEvent_Dialogue_1, 0.15)
+  L581F: pop-flow
+  L5820: push L5853
+  L5825: self.BP_AC_MusicDucking.ReleaseMusicDuck(K2Node_ComponentBoundEvent_Dialogue)
+  L5852: pop-flow
+  L5853: KismetSystemLibrary.Delay(self, 0.65, LatentActionInfo{L06D2, 1274175900, 'ExecuteUbergraph_BP_DrdPlayerController', self})
+  L5889: pop-flow
+  L588A: CallFunc_Conv_SoftClassReferenceToClass_ReturnValue = KismetSystemLibrary.Conv_SoftClassReferenceToClass(self.MapPanelClass)
+  L58A7: K2Node_ClassDynamicCast_AsCommon_Activatable_Widget_9 = classcast<CommonActivatableWidget>(CallFunc_Conv_SoftClassReferenceToClass_ReturnValue)
+  L58CB: K2Node_ClassDynamicCast_bSuccess_9 = K2Node_ClassDynamicCast_AsCommon_Activatable_Widget_9
+  L58E8: if not (K2Node_ClassDynamicCast_bSuccess_9) pop-flow
+  L58F2: CallFunc_GetAllWidgetsOfClass_FoundWidgets = []
+  L58FD: Default__WidgetBlueprintLibrary.WidgetBlueprintLibrary.GetAllWidgetsOfClass(self, CallFunc_GetAllWidgetsOfClass_FoundWidgets, K2Node_ClassDynamicCast_AsCommon_Activatable_Widget_9, false)
+  L5931: goto L45E6
+  L5936: K2Node_ClassDynamicCast_AsCommon_Activatable_Widget_8 = classcast<CommonActivatableWidget>(Temp_class_Variable_8)
+  L595A: K2Node_ClassDynamicCast_bSuccess_8 = K2Node_ClassDynamicCast_AsCommon_Activatable_Widget_8
+  L5977: if not (K2Node_ClassDynamicCast_bSuccess_8) goto L41FB
+  L5985: goto L3F69
+  L598A: Temp_class_Variable_8 = K2Node_CustomEvent_Loaded_2
+  L599D: goto L5936
+  L59A2: return
+
+## function GetInventoryComponent  flags=0x0C420800
+  L0000: Component = self.BP_InventoryComponent
+  L0013: return
+
+## function InpActEvt_IA_Bilge_K2Node_EnhancedInputActionEvent_3  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_3 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_3 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_3 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_3 = SourceAction
+  L0048: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(10458)
+  L0057: return
+
+## function InpActEvt_IA_Dev_CheatPanel_K2Node_EnhancedInputActionEvent_13  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_13 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_13 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_13 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_13 = SourceAction
+  L0048: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(5722)
+  L0057: return
+
+## function InpActEvt_IA_Dev_QuickScalability0_K2Node_EnhancedInputActionEvent_17  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_17 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_17 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_17 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_17 = SourceAction
+  L0048: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(15799)
+  L0057: return
+
+## function InpActEvt_IA_Dev_QuickScalability1_K2Node_EnhancedInputActionEvent_16  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_16 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_16 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_16 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_16 = SourceAction
+  L0048: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(15286)
+  L0057: return
+
+## function InpActEvt_IA_Dev_QuickScalability2_K2Node_EnhancedInputActionEvent_15  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_15 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_15 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_15 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_15 = SourceAction
+  L0048: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(14847)
+  L0057: return
+
+## function InpActEvt_IA_Dev_QuickScalability3_K2Node_EnhancedInputActionEvent_14  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_14 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_14 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_14 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_14 = SourceAction
+  L0048: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(14108)
+  L0057: return
+
+## function InpActEvt_IA_Dev_SwitchUI_K2Node_EnhancedInputActionEvent_9  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_9 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_9 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_9 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_9 = SourceAction
+  L0048: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(3289)
+  L0057: return
+
+## function InpActEvt_IA_Dev_TeleportToShip_K2Node_EnhancedInputActionEvent_10  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_10 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_10 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_10 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_10 = SourceAction
+  L0048: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(2834)
+  L0057: return
+
+## function InpActEvt_IA_Dev_TimeDilation_Faster_K2Node_EnhancedInputActionEvent_1  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_1 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_1 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_1 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_1 = SourceAction
+  L0048: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(11854)
+  L0057: return
+
+## function InpActEvt_IA_Dev_TimeDilation_K2Node_EnhancedInputActionEvent_12  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_12 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_12 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_12 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_12 = SourceAction
+  L0048: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(1877)
+  L0057: return
+
+## function InpActEvt_IA_Dev_TimeDilation_Slower_K2Node_EnhancedInputActionEvent_2  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_2 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_2 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_2 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_2 = SourceAction
+  L0048: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(11431)
+  L0057: return
+
+## function InpActEvt_IA_Interact_K2Node_EnhancedInputActionEvent_11  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_11 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_11 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_11 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_11 = SourceAction
+  L0048: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(2258)
+  L0057: return
+
+## function InpActEvt_IA_Inventory_K2Node_EnhancedInputActionEvent_21  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_21 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_21 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_21 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_21 = SourceAction
+  L0048: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(21695)
+  L0057: return
+
+## function InpActEvt_IA_Journal_K2Node_EnhancedInputActionEvent_4  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_4 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_4 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_4 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_4 = SourceAction
+  L0048: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(9399)
+  L0057: return
+
+## function InpActEvt_IA_Map_K2Node_EnhancedInputActionEvent_20  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_20 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_20 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_20 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_20 = SourceAction
+  L0048: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(21407)
+  L0057: return
+
+## function InpActEvt_IA_Mastery_K2Node_EnhancedInputActionEvent_5  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_5 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_5 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_5 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_5 = SourceAction
+  L0048: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(7751)
+  L0057: return
+
+## function InpActEvt_IA_Pause_K2Node_EnhancedInputActionEvent_6  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_6 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_6 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_6 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_6 = SourceAction
+  L0048: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(6578)
+  L0057: return
+
+## function InpActEvt_IA_QuickLoad_K2Node_EnhancedInputActionEvent_18  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_18 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_18 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_18 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_18 = SourceAction
+  L0048: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(16418)
+  L0057: return
+
+## function InpActEvt_IA_QuickSave_K2Node_EnhancedInputActionEvent_19  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_19 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_19 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_19 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_19 = SourceAction
+  L0048: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(21052)
+  L0057: return
+
+## function InpActEvt_IA_Recipe_K2Node_EnhancedInputActionEvent_8  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_8 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_8 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_8 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_8 = SourceAction
+  L0048: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(3840)
+  L0057: return
+
+## function InpActEvt_IA_Reload_K2Node_EnhancedInputActionEvent_7  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_7 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_7 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_7 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_7 = SourceAction
+  L0048: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(5068)
+  L0057: return
+
+## function InpActEvt_IA_TrackQuest_K2Node_EnhancedInputActionEvent_0  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction = SourceAction
+  L0048: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(12277)
+  L0057: return
+
+## function IsPreviewActor  flags=0x0C420800
+  L0000: ReturnValue = false
+  L000B: return ReturnValue
+
+## function ItemEquipped  flags=0x0C020800
+  L0000: frame.K2Node_Event_Component_1 = Component
+  L0012: frame.K2Node_Event_Actor_1 = Actor
+  L0024: frame.K2Node_Event_ItemID_1 = ItemID
+  L0036: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(17948)
+  L0045: return
+
+## function ItemUnequipped  flags=0x0C020800
+  L0000: frame.K2Node_Event_Component = Component
+  L0012: frame.K2Node_Event_Actor = Actor
+  L0024: frame.K2Node_Event_ItemID = ItemID
+  L0036: frame.K2Node_Event_RemovalPolicy = RemovalPolicy
+  L0048: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(17949)
+  L0057: return
+
+## function MeetsCurrencyCheck  flags=0x0C420800
+  L0000: ReturnValue = false
+  L000B: return ReturnValue
+
+## function OnLoaded_16BFA5654DEE0983CDB25798685653F0  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Loaded_2 = Loaded
+  L0012: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(22922)
+  L0021: return
+
+## function OnLoaded_1973507F45F389A3F26B2C9DFBCCA77F  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Loaded_1 = Loaded
+  L0012: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(8810)
+  L0021: return
+
+## function OnLoaded_8D25763A449828E18B9A73A6013BA2FE  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Loaded_8 = Loaded
+  L0012: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(20785)
+  L0021: return
+
+## function OnLoaded_8D25763A449828E18B9A73A616EDD295  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Loaded_3 = Loaded
+  L0012: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(13431)
+  L0021: return
+
+## function OnLoaded_8D25763A449828E18B9A73A6A8642DC1  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Loaded_6 = Loaded
+  L0012: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(16903)
+  L0021: return
+
+## function OnLoaded_8D25763A449828E18B9A73A6A93E6C87  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Loaded_5 = Loaded
+  L0012: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(16125)
+  L0021: return
+
+## function OnLoaded_8D25763A449828E18B9A73A6CB54668B  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Loaded_4 = Loaded
+  L0012: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(14823)
+  L0021: return
+
+## function OnLoaded_8D25763A449828E18B9A73A6FF8101DB  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Loaded_7 = Loaded
+  L0012: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(20677)
+  L0021: return
+
+## function OnLoaded_C1D4117445B3E2CF373D8B97A28ADA19  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Loaded = Loaded
+  L0012: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(9069)
+  L0021: return
+
+## function OnPlayerDamaged  flags=0x08020800
+  L0000: frame.K2Node_Event_DamageAmount = DamageAmount
+  L0012: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(22666)
+  L0021: return
+
+## function OnPreSave  flags=0x0C020800
+  L0000: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(17945)
+  L000F: return
+
+## function PassUniqueID  flags=0x0C020800
+  L0000: frame.K2Node_Event_UniqueID = UniqueID
+  L0012: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(17950)
+  L0021: return
+
+## function PostLoadInitialization  flags=0x0C020800
+  L0000: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(17946)
+  L000F: return
+
+## function PostLoadInitializationBlank  flags=0x0C020800
+  L0000: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(17947)
+  L000F: return
+
+## function ReceiveBeginPlay  flags=0x08080800
+  L0000: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(17952)
+  L000F: return
+
+## function ReceivePossess  flags=0x08080800
+  L0000: frame.K2Node_Event_PossessedPawn = PossessedPawn
+  L0012: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(21387)
+  L0021: return
+
+## function SetIsPreviewActor  flags=0x0C020800
+  L0000: frame.K2Node_Event_NewStatus = NewStatus
+  L0012: frame.K2Node_Event_OriginalActor = OriginalActor
+  L0024: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(17951)
+  L0033: return
+
+## function SwitchUIHidden  flags=0x0C000000
+  L0000: BP_DrdPlayerController_C.ExecuteUbergraph_BP_DrdPlayerController(21690)
+  L000F: return

@@ -1,0 +1,46 @@
+# /Game/Dreadmoor/Core/Features/QTE/FishingFromDemo/BP_QTE_FishingBite
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/QTE/FishingFromDemo/BP_QTE_FishingBite.uasset
+
+## imported packages (1)
+  /Game/Dreadmoor/Core/Features/QTE/FishingFromDemo/WBP_QTE_FishingBite
+
+## exports (6)
+  [0] BP_QTE_FishingBite_C : BlueprintGeneratedClass (outer None) super=DrdQteController size=274
+  [1] Default__BP_QTE_FishingBite_C : BP_QTE_FishingBite_C (outer None) size=8
+
+## function Cleanup  flags=0x08020800
+  L0000: BP_QTE_FishingBite_C.ExecuteUbergraph_BP_QTE_FishingBite(346)
+  L000F: return
+
+## function ExecuteUbergraph_BP_QTE_FishingBite  flags=0x00808001
+  L0000: goto computed(EntryPoint)
+  L000A: self.QTE = null
+  L0015: goto L0247
+  L001A: bind(K2Node_CreateDelegate_OutputDelegate, self, 'Finished')
+  L0031: self.QTE.self.OnQTEFinished += K2Node_CreateDelegate_OutputDelegate
+  L005A: goto L0247
+  L005F: DrdQteController.Init()
+  L0069: CallFunc_GetLocalPlayerFromController_ReturnValue = Default__CommonUIExtensions.CommonUIExtensions.GetLocalPlayerFromController(self.PlayerController)
+  L009C: CallFunc_PushContentToLayer_ForPlayer_ReturnValue = Default__CommonUIExtensions.CommonUIExtensions.PushContentToLayer_ForPlayer(CallFunc_GetLocalPlayerFromController_ReturnValue, GameplayTag{'UI.Layer.QTE'}, WBP_QTE_FishingBite_C)
+  L00F3: K2Node_DynamicCast_AsWBP_QTE_Fishing_Bite = cast<WBP_QTE_FishingBite_C>(CallFunc_PushContentToLayer_ForPlayer_ReturnValue)
+  L0117: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsWBP_QTE_Fishing_Bite
+  L0134: if not (K2Node_DynamicCast_bSuccess) goto L0247
+  L0142: self.QTE = K2Node_DynamicCast_AsWBP_QTE_Fishing_Bite
+  L0155: goto L001A
+  L015A: DrdQteController.Cleanup()
+  L0164: goto L000A
+  L0169: Default__CommonUIExtensions.CommonUIExtensions.PopContentFromLayer(self.QTE)
+  L0192: Temp_struct_Variable = GameplayTag{'QTE.Result.Success'}
+  L01BF: Temp_struct_Variable_1 = GameplayTag{'QTE.Result.Failure'}
+  L01EC: Temp_bool_Variable = K2Node_CustomEvent_bSuccessed
+  L01FF: self.OnQteFinished.Broadcast(switch(Temp_bool_Variable){false: Temp_struct_Variable_1; true: Temp_struct_Variable; default: K2Node_Select_Default})
+  L0247: return
+
+## function Finished  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_bSuccessed = bSuccessed
+  L0012: BP_QTE_FishingBite_C.ExecuteUbergraph_BP_QTE_FishingBite(361)
+  L0021: return
+
+## function Init  flags=0x08020800
+  L0000: BP_QTE_FishingBite_C.ExecuteUbergraph_BP_QTE_FishingBite(95)
+  L000F: return

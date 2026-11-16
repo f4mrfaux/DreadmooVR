@@ -1,0 +1,1806 @@
+# /Game/Dreadmoor/Core/Features/Ship/BP_SmallBoat_V2
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/Ship/BP_SmallBoat_V2.uasset
+
+## imported packages (137)
+  /Game/3rdParty/Swampy_indust_zone/Particles/P_candle_flame_01
+  /Game/3rdParty/TFPMovement/Maps/PhysicalMaterials/10_Wood_Footsteps_Mat
+  /Game/Dreadmoor/Animations/Characters/ABP_SK_DreadMore_Steering
+  /Game/Dreadmoor/Animations/Characters/Animations/dm_vs_protagonist_ship_piloting
+  /Game/Dreadmoor/Animations/Characters/New/dm_demo_NewProtagonist
+  /Game/Dreadmoor/Animations/NewBoatConstructor/Door/broken_door
+  /Game/Dreadmoor/Animations/NewBoatConstructor/Door/broken_door_handle
+  /Game/Dreadmoor/Art/Materials/MasterMaterials/Unique/CompletionSweep/MI_Translucent_Simple
+  /Game/Dreadmoor/Art/Materials/MasterMaterials/Unique/ModuleTransparent/MI_Module_02
+  /Game/Dreadmoor/Art/Materials/MasterMaterials/Unique/ModuleTransparent/MI_Module_03
+  /Game/Dreadmoor/Art/Materials/MaterialInstances/SM_First_Aid_Kit/MI_SM_First_Aid_Kit_Opaque_00
+  /Game/Dreadmoor/Art/StaticMesh/Characters/Modular_Boat/Boat_Hold_Hatch
+  /Game/Dreadmoor/Art/StaticMesh/Characters/Modular_Boat/Boat_Hull_new_engine_stand
+  /Game/Dreadmoor/Art/StaticMesh/Characters/Modular_Boat/LowHP_Sections/Boat_Nose_Section_LowHP
+  /Game/Dreadmoor/Art/StaticMesh/Characters/Modular_Boat/LowHP_Sections/Boat_Section_1_L_LowHP
+  /Game/Dreadmoor/Art/StaticMesh/Characters/Modular_Boat/LowHP_Sections/Boat_Section_1_R_LowHP
+  /Game/Dreadmoor/Art/StaticMesh/Characters/Modular_Boat/LowHP_Sections/Boat_Section_2_L_LowHP
+  /Game/Dreadmoor/Art/StaticMesh/Characters/Modular_Boat/LowHP_Sections/Boat_Section_2_R_LowHP
+  /Game/Dreadmoor/Art/StaticMesh/Characters/Modular_Boat/LowHP_Sections/Boat_Section_Back_LowHP
+  /Game/Dreadmoor/Art/StaticMesh/Characters/Modular_Boat/SM_SmallBoatCollisionNew
+  /Game/Dreadmoor/Art/StaticMesh/Characters/Modular_Boat/repair_blocks/Repair_block_section_1_Nose
+  /Game/Dreadmoor/Art/StaticMesh/Characters/Modular_Boat/repair_blocks/Repair_block_section_2_L
+  /Game/Dreadmoor/Art/StaticMesh/Characters/Modular_Boat/repair_blocks/Repair_block_section_2_R
+  /Game/Dreadmoor/Art/StaticMesh/Characters/Modular_Boat/repair_blocks/Repair_block_section_3_L
+  /Game/Dreadmoor/Art/StaticMesh/Characters/Modular_Boat/repair_blocks/Repair_block_section_3_R
+  /Game/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/Compass
+  /Game/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/Compass_Ring_Inner
+  /Game/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/Compass_Ring_Outer
+  /Game/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/Dashboard_Button
+  /Game/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/Dashboard_Button
+  /Game/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/Dashboard_Pointer
+  /Game/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/Dashboard_Pointer
+  /Game/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/Dashboard_Switch
+  /Game/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/Dashboard_Switch
+  /Game/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/SM_BoatPolypusCollision
+  /Game/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/SM_SmallBoatCollision
+  /Game/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/Small_Boat_HullSim
+  /Game/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/Throttle_lever
+  /Game/Dreadmoor/Art/StaticMesh/FirstAidKit/SM_First_Aid_Kit
+  /Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Boat_Light/ABP_Small_Boat_Light
+  /Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Boat_Light/SKM_Small_Boat_Light
+  /Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Fish_trap/Meshes/dm_vs_Fish_trap_wall
+  /Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Furniture/OLD/dm_vs_SM_Barrel_01
+  /Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Furniture/dm_demo_Barrel_01
+  /Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/House_01/Separated_Models/sm_Wood_Planks_04
+  /Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/House_01/Separated_Models/sm_Wood_Planks_06
+  /Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/OldBoatProps/sm_lifebuoy
+  /Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/OldBoatProps/sm_tros
+  /Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Peers_Lantern/ABP_Lantern_05
+  /Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Peers_Lantern/Materials/MI_lantern_02
+  /Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Peers_Lantern/SKM_lantern_05
+  /Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Peers_Lantern/SKM_lantern_05_Physics
+  /Game/Dreadmoor/Art/StaticMesh/PlayersBoat/Family_Photos/SM_Family_Photo
+  /Game/Dreadmoor/Art/StaticMesh/PlayersBoat/FixedCollisionsBoat1/SM_PlayersBoat_dashboard_lamp
+  /Game/Dreadmoor/Art/Textures/IES/IES_file/defined
+  /Game/Dreadmoor/Art/Textures/IES/IES_file/top-post
+  /Game/Dreadmoor/Art/VFX/Niagara/WaterTrail/NS_WaterTrail
+  /Game/Dreadmoor/Art/VFX/Niagara/WaterTrail/NS_WaterTrailMain
+  /Game/Dreadmoor/Art/VFX/Niagara/WaterTrail/NS_WaterTrail_AllCombine
+  /Game/Dreadmoor/Art/VFX/Niagara/WaterTrail/NS_WaterTrail_Drops
+  /Game/Dreadmoor/Audio/SFX/Boat/Hit/SCUE_Boat_Crash
+  /Game/Dreadmoor/Audio/SFX/Boat/Horn/SCUE_Boat_Horn
+  /Game/Dreadmoor/Audio/SFX/Boat/NewEngineBoat/MS_Boat_Engine
+  /Game/Dreadmoor/Audio/SFX/Player/Tools/SCUE_Flashlight_Turn_Off
+  /Game/Dreadmoor/Audio/SFX/Player/Tools/SCUE_Flashlight_Turn_On
+  /Game/Dreadmoor/Blueprints/Developers/Sanich/BP_CraftTable_Ship
+  /Game/Dreadmoor/Core/Features/ActionPlayer/BP_ActionPlayer
+  /Game/Dreadmoor/Core/Features/Fishing/BP_BoatDynamicForceMesh
+  /Game/Dreadmoor/Core/Features/Fishing/BP_ShipFishingSpot_Proxy
+  /Game/Dreadmoor/Core/Features/Fishing/BP_ShipFishingSpot_Proxy2
+  /Game/Dreadmoor/Core/Features/FuelStation/GAS/GE_FuelDrain
+  /Game/Dreadmoor/Core/Features/PlayerCharacter/BP_PlayerCharacter
+  /Game/Dreadmoor/Core/Features/PlayerCharacter/GAS/BP_DamageData
+  /Game/Dreadmoor/Core/Features/QuestFeatures/QuestModularObjects/BP_QuestModularObject_SlotInteractable
+  /Game/Dreadmoor/Core/Features/QuestFeatures/QuestModularObjects/Boat/BP_BoatModularObject
+  /Game/Dreadmoor/Core/Features/Radio/BP_Radio
+  /Game/Dreadmoor/Core/Features/Ship/Barnacles/BP_BoatBarnacle
+  /Game/Dreadmoor/Core/Features/Ship/Barnacles/GE_BarnacleSlow
+  /Game/Dreadmoor/Core/Features/Ship/Barnacles/PCG_BoatBarnacles
+  /Game/Dreadmoor/Core/Features/Ship/Curve_HitImpulseMitigationFactorCurve
+  /Game/Dreadmoor/Core/Features/Ship/Docking/BP_DockingPoint
+  /Game/Dreadmoor/Core/Features/Ship/Docking/BP_ShipGangplank
+  /Game/Dreadmoor/Core/Features/Ship/Docking/GA_Docking
+  /Game/Dreadmoor/Core/Features/Ship/Effects/GE_ApplyDamageToShip
+  /Game/Dreadmoor/Core/Features/Ship/FishScanner/BP_ShipFishScanner
+  /Game/Dreadmoor/Core/Features/Ship/Riding/BP_ShipSteeringWheel
+  /Game/Dreadmoor/Core/Features/Ship/Riding/GA_ShipReleaseControl
+  /Game/Dreadmoor/Core/Features/Ship/Riding/GA_ShipReleaseControlAndStartFishing
+  /Game/Dreadmoor/Core/Features/Ship/ShipModules/BP_SideModulesInteractButton
+  /Game/Dreadmoor/Core/Features/Ship/StorageBox/BP_Storage
+  /Game/Dreadmoor/Core/Features/UpgradeDock/BP_ShipHoldHatchSlotInteractable
+  /Game/Dreadmoor/Core/Features/UpgradeDock/BP_ShipUpgradeSlotInteractable
+  /Game/Dreadmoor/Core/Features/UpgradeDock/Components/BP_SlotTracerComponent
+  /Game/Dreadmoor/Core/Features/WaterFeatures/SurfaceSwimming/BP_WaterExit_Boat_Left
+  /Game/Dreadmoor/Core/Features/WaterFeatures/SurfaceSwimming/BP_WaterExit_Boat_Right
+  /Game/Dreadmoor/Core/Input/Boat/IA_BoatAfterrburner
+  /Game/Dreadmoor/Core/Input/Boat/IA_BoatFishing
+  /Game/Dreadmoor/Core/Input/Boat/IA_BoatInteract
+  /Game/Dreadmoor/Core/Input/Boat/IA_BoatLights
+  /Game/Dreadmoor/Core/Input/Boat/IA_BoatLook
+  /Game/Dreadmoor/Core/Input/Boat/IA_BoatMove
+  /Game/Dreadmoor/Core/Input/Boat/IA_BoatSwitchCamera
+  /Game/Dreadmoor/Core/Input/Boat/IA_BoatZoom
+  /Game/Dreadmoor/Core/Input/Boat/IA_Docker
+  /Game/Dreadmoor/Core/Input/Boat/IA_Klaxon
+  /Game/Dreadmoor/Core/Input/Boat/IMC_Boat
+  /Game/Dreadmoor/Core/Libraries/BPFL_MIscFunctions
+  /Game/Dreadmoor/InventoryFramework/Components/BP_InventoryComponent
+  /Game/Dreadmoor/InventoryFramework/Items/Modules/ShipModules/CabinSlots/CanisterRackMk1/IDA_ShipModule_CanisterRack_Mk1
+  /Game/Dreadmoor/InventoryFramework/Items/Modules/ShipModules/CabinSlots/SpotlightMk1/IDA_ShipModule_Spotlight_Mk1
+  /Game/Dreadmoor/InventoryFramework/Items/Modules/ShipModules/EngineSlot/EngineMk1/IDA_ShipModule_EngineMk1
+  /Game/Dreadmoor/InventoryFramework/Items/Modules/ShipModules/EngineSlot/EngineNitroMk1/IDA_ShipModule_EngineNitroMk1
+  /Game/Dreadmoor/InventoryFramework/Items/Modules/ShipModules/EngineSlot/EnginePropellerMk1/IDA_ShipModule_EnginePropellerMk1
+  /Game/Dreadmoor/InventoryFramework/Items/Modules/ShipModules/FuelTankSlot/FuelTankMk1/IDA_ShipModule_FuelTankMk1
+  /Game/Dreadmoor/InventoryFramework/Items/Modules/ShipModules/HoldModules/BasicHold_Mk1/IDA_ShipModule_BasicHold_Mk1
+  /Game/Dreadmoor/InventoryFramework/Items/Modules/ShipModules/SideSlot/FishnetMk1/IDA_ShipModule_Fishnet_Mk1
+  /Game/Dreadmoor/Localization/ST_ObjectDispalyNames
+  /Game/Dreadmoor/Localization/ST_UI
+  /Game/Dreadmoor/Narrative/QuestScripts/BP_Q_3_ShipQuestOpenDoorInteraction
+  /Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcTabsImprovementsShipBoost002_Active
+  /Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcTabsImprovementsShipEngine001_Active
+  /Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcTabsImprovementsShipFrontModule002_Active
+  /Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcTabsImprovementsShipFuelTank001_Active
+  /Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcTabsImprovementsShipFuelTank002_Active
+  /Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcTabsImprovementsShipLight001_Active
+  /Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcTabsImprovementsShipRearModule001_Active
+  /Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcTabsImprovementsShipScrew001_Active
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_IcTabsImprovementsShipBackpart001_HoverPressed
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_IcTabsImprovementsShipBilges001_Active
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_IcTabsImprovementsShipMiddlepart001_Active
+  /Game/Dreadmoor/UI/Core/BPFL_UiFunctions
+  /Game/Dreadmoor/UI/DeathScreen/WBP_FadeOut_DeathScreen
+  /Game/Dreadmoor/UI/HUD/WBP_BoatHUD
+  /Game/Dreadmoor/UI/Notifications/WBP_Notification_LowFuel
+  /Game/Dreadmoor/UI/Notifications/WBP_Notification_Polyps
+  /Game/EasyOptionsMenu/EasyGameUI/BP_EasyGameHUD
+  /Game/EasyOptionsMenu/EasyGameUI/Utilities/BPI_EGUI_HUDInterface
+
+## exports (408)
+  [0] AbilityComponentInitializer_GEN_VARIABLE : AbilityComponentInitializer (outer BP_SmallBoat_V2_C) size=26
+        refs: name:Ship, obj:/Game/Dreadmoor/Core/Features/Ship/Riding/GA_ShipReleaseControl.GA_ShipReleaseControl_C
+  [1] AbilitySystemComp : AbilitySystemComponent (outer Default__BP_SmallBoat_V2_C) size=10
+        refs: name:ClosestLocatoin
+  [2] KlaxonSound_GEN_VARIABLE : AudioComponent (outer BP_SmallBoat_V2_C) size=43
+        refs: obj:/Game/Dreadmoor/Audio/SFX/Boat/Horn/SCUE_Boat_Horn.SCUE_Boat_Horn, exp:FishingSpot_GEN_VARIABLE
+  [3] SFX_Boats_Ambience_GEN_VARIABLE : AudioComponent (outer BP_SmallBoat_V2_C) size=51
+        refs: exp:KlaxonSound_GEN_VARIABLE, exp:FishingSpot_GEN_VARIABLE, exp:ModuleInteract_Armor_LeftFront_GEN_VARIABLE
+  [4] EngineAudioComponent : AudioComponent (outer Default__BP_SmallBoat_V2_C) size=49
+        refs: obj:/Game/Dreadmoor/Audio/SFX/Boat/NewEngineBoat/MS_Boat_Engine.MS_Boat_Engine, exp:CollisionComponent0, exp:Module_Armor_Nose_GEN_VARIABLE, exp:FishingSpot_GEN_VARIABLE
+  [5] BP_SmallBoat_V2_C : BlueprintGeneratedClass (outer None) super=DrdShipBase size=9367
+  [6] InsideAudioTriggerBox_GEN_VARIABLE : BoxComponent (outer BP_SmallBoat_V2_C) size=169
+        refs: name:Custom, exp:LimiterCollision1_GEN_VARIABLE, name:Camera, name:Vehicle, name:Visibility, name:WorldStatic, name:WorldDynamic, name:PhysicsBody, name:Destructible, name:Pawn, exp:FishingSpot_GEN_VARIABLE, exp:Module_Armor_Nose_GEN_VARIABLE, name:CallFunc_BreakHitResult_TraceEnd
+  [7] LimiterCollision1_GEN_VARIABLE : BoxComponent (outer BP_SmallBoat_V2_C) size=188
+        refs: exp:FishingSpot_GEN_VARIABLE, name:Custom, exp:InsideAudioTriggerBox_GEN_VARIABLE, name:WorldStatic, name:WorldDynamic, name:Visibility, name:Camera, name:PhysicsBody, name:Vehicle, name:Destructible, exp:Module_Armor_Nose_GEN_VARIABLE, name:CallFunc_BreakHitResult_TraceEnd
+  [8] LimiterCollision2_GEN_VARIABLE : BoxComponent (outer BP_SmallBoat_V2_C) size=188
+        refs: exp:FishingSpot_GEN_VARIABLE, name:Custom, exp:InsideAudioTriggerBox_GEN_VARIABLE, name:WorldStatic, name:WorldDynamic, name:Visibility, name:Camera, name:PhysicsBody, name:Vehicle, name:Destructible, name:BlocksInteraction
+  [9] LimiterCollision3_GEN_VARIABLE : BoxComponent (outer BP_SmallBoat_V2_C) size=188
+        refs: exp:FishingSpot_GEN_VARIABLE, name:Custom, exp:InsideAudioTriggerBox_GEN_VARIABLE, name:WorldStatic, name:WorldDynamic, name:Visibility, name:Camera, name:PhysicsBody, name:Vehicle, name:Destructible, name:CallFunc_BreakHitResult_TraceEnd
+  [10] LimiterCollision4_GEN_VARIABLE : BoxComponent (outer BP_SmallBoat_V2_C) size=212
+        refs: exp:FishingSpot_GEN_VARIABLE, name:Custom, exp:InsideAudioTriggerBox_GEN_VARIABLE, name:WorldStatic, name:WorldDynamic, name:Visibility, name:Camera, name:PhysicsBody, name:Vehicle, name:Destructible, exp:DynamicForceWaterTrack2_GEN_VARIABLE, exp:FishingSpot1_GEN_VARIABLE
+  [11] DynamicForceWaterTrack1_GEN_VARIABLE_BP_BoadDynamicForceMesh_C_CAT : BP_BoatDynamicForceMesh_C (outer DynamicForceWaterTrack1_GEN_VARIABLE) size=86
+        refs: exp:EngineAudioComponent, exp:FishingSpot1_GEN_VARIABLE, exp:SCS_Node_168, exp:BP_ShipHoldHatchSlotInteractable_GEN_VARIABLE_BP_ShipHoldHatchSlotInteractable_C_CAT, name:AcceptedCurrenciesOverwrite
+  [12] DynamicForceWaterTrack2_GEN_VARIABLE_BP_BoatDynamicForceMesh_C_CAT : BP_BoatDynamicForceMesh_C (outer DynamicForceWaterTrack2_GEN_VARIABLE) size=86
+        refs: exp:EngineAudioComponent, exp:FishingSpot1_GEN_VARIABLE, exp:SCS_Node_168, exp:BP_ShipHoldHatchSlotInteractable_GEN_VARIABLE_BP_ShipHoldHatchSlotInteractable_C_CAT, name:AcceptedCurrenciesOverwrite
+  [13] DynamicForceWaterTrack_GEN_VARIABLE_BP_BoadDynamicForceMesh_C_CAT : BP_BoatDynamicForceMesh_C (outer DynamicForceWaterTrack_GEN_VARIABLE) size=86
+        refs: exp:EngineAudioComponent, exp:FishingSpot1_GEN_VARIABLE, exp:SCS_Node_168, exp:BP_ShipHoldHatchSlotInteractable_GEN_VARIABLE_BP_ShipHoldHatchSlotInteractable_C_CAT, name:AcceptedCurrenciesOverwrite
+  [14] BoatModular_GEN_VARIABLE_BP_BoatModularObject_C_CAT : BP_BoatModularObject_C (outer BoatModular_GEN_VARIABLE) size=67
+        refs: exp:HullModule_Front_GEN_VARIABLE, exp:SCS_Node_168, exp:BP_ShipFishScanner_GEN_VARIABLE, name:bAbsoluteRotation
+  [15] CraftTable_GEN_VARIABLE_BP_CraftTable_Ship_C_CAT : BP_CraftTable_Ship_C (outer CraftTable_GEN_VARIABLE) size=65
+        refs: exp:SimpleConstructionScript_0, exp:SCS_Node_168, exp:FishingSpot1_GEN_VARIABLE_BP_ShipFishingSpot_Proxy2_C_CAT, name:ArrayProperty
+  [16] BP_InventoryComponent_GEN_VARIABLE : BP_InventoryComponent_C (outer BP_SmallBoat_V2_C) size=3379
+        refs: exp:FishingSpot1_GEN_VARIABLE_BP_ShipFishingSpot_Proxy2_C_CAT, obj:/Game/Dreadmoor/Core/Features/Fishing/BP_ShipFishingSpot_Proxy.BP_ShipFishingSpot_Proxy_C.DrdInteractable_GEN_VARIABLE, name:IFP.Container.Identifier.Ship.UpgradeSlot_Armor_Nose, exp:SCS_Node_170, exp:SCS_Node_168, obj:/Script/Dreadmoor.DrdSavable.PostLoadInitialization, obj:/Script/InventoryFrameworkPlugin.TagQueryCompatibilitySettings, exp:ModuleInteract_EngineNitro_GEN_VARIABLE, exp:SCS_Node_17, name:IFP.Items.Type.Module.Ship.Nose, exp:EngineAudioComponent, exp:ShipModule_Hold3_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:ShipModule_Engine1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:KlaxonSound_GEN_VARIABLE, name:IFP.Container.Identifier.Ship.UpgradeSlot_Engine, exp:ModuleInteract_FuelTank_GEN_VARIABLE, name:IFP.Items.Type.Module.Ship.Engine, exp:ModuleInteract_HullUtility_RightBack1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:ModuleInteract_Hold1_GEN_VARIABLE, name:IDA_ShipModule_EngineMk1, name:AbilityComponentInitializer_GEN_VARIABLE, obj:/Script/Dreadmoor.DrdShipModuleItemInstanceData, exp:DynamicForceWaterTrack_GEN_VARIABLE_BP_BoadDynamicForceMesh_C_CAT, exp:GangplankRight_GEN_VARIABLE, name:IFP.Container.Identifier.Ship.UpgradeSlot_EnginePropeller, exp:RadioActor_GEN_VARIABLE, name:IFP.Items.Type.Module.Ship.EnginePropeller, exp:Buoyancy, exp:ModuleInteract_Hold3_GEN_VARIABLE, name:IDA_ShipModule_EnginePropellerMk1, name:IFP.Container.Identifier.Ship.UpgradeSlot_EngineNitro, exp:ModuleInteract_HullUtility_LeftBack_GEN_VARIABLE, name:IFP.Items.Type.Module.Ship.EngineNitro, exp:Default__BP_SmallBoat_V2_C, name:IFP.Container.Identifier.Ship.UpgradeSlot_MonsterHook, name:IFP.Items.Type.Module.Ship.Hook, name:IFP.Container.Identifier.Ship.UpgradeSlot_Armor_LeftFront, name:IFP.Items.Type.Module.Ship.Side, name:IFP.Container.Identifier.Ship.UpgradeSlot_Armor_LeftBack, name:IFP.Container.Identifier.Ship.UpgradeSlot_Armor_RightFront, name:IFP.Container.Identifier.Ship.UpgradeSlot_Armor_RightBack, name:IFP.Container.Identifier.Ship.UpgradeSlot_FuelTank, exp:ModuleInteract_Hold2_GEN_VARIABLE, name:IFP.Items.Type.Module.Ship.FuelTank, exp:ModuleInteract_HullUtility_RightFront1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:ModuleInteract_Hook_GEN_VARIABLE, name:IDA_ShipModule_FuelTankMk1, name:IFP.Container.Identifier.Ship.UpgradeSlot_CabinSide_Left, name:IFP.Items.Type.Module.Ship.CabinSide, exp:ModuleInteract_HullUtility_Front_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, name:IFP.Container.Identifier.Ship.UpgradeSlot_CabinSide_Right, name:IFP.Container.Identifier.Ship.UpgradeSlot_Hold1, name:IFP.Items.Type.Module.Ship.Hold, name:IDA_ShipModule_BasicHold_Mk1, name:IFP.Container.Identifier.Ship.UpgradeSlot_Hold2, name:IFP.Container.Identifier.Ship.UpgradeSlot_Hold3, name:IFP.Container.Identifier.Ship.UpgradeSlot_CabinTop_Front, exp:ModuleInteract_HullUtility_RightBack_GEN_VARIABLE, name:IFP.Items.Type.Module.Ship.CabinTopFront, exp:WaterExitPointLeft_GEN_VARIABLE_BP_WaterExit_Boat_Left_C_CAT
+  [17] RadioActor_GEN_VARIABLE_BP_Radio_C_CAT : BP_Radio_C (outer RadioActor_GEN_VARIABLE) size=55
+        refs: exp:dm_demo_Barrel_02_GEN_VARIABLE, exp:SCS_Node_168, exp:LimiterCollision2_GEN_VARIABLE, name:ApplyDamageFromEventDamageData
+  [18] FishingSpot1_GEN_VARIABLE_BP_ShipFishingSpot_Proxy2_C_CAT : BP_ShipFishingSpot_Proxy2_C (outer FishingSpot1_GEN_VARIABLE) size=72
+        refs: exp:SCS_Node_95, exp:SCS_Node_168, exp:ShipModule_LeftSide_Front1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:WaterExitPointRight_GEN_VARIABLE_BP_WaterExit_Boat_Right_C_CAT
+  [19] FishingSpot_GEN_VARIABLE_BP_ProxyFishingSpot_C_CAT : BP_ShipFishingSpot_Proxy_C (outer FishingSpot_GEN_VARIABLE) size=66
+        refs: exp:SCS_Node_95, exp:SCS_Node_168, exp:FishingSpot_GEN_VARIABLE_BP_ProxyFishingSpot_C_CAT, name:bAbsoluteRotation
+  [20] BP_ShipFishScanner_GEN_VARIABLE : BP_ShipFishScanner_C (outer BP_SmallBoat_V2_C) size=10
+        refs: name:CallFunc_NotEqual_BoolBool_ReturnValue
+  [21] GangplankLeft_GEN_VARIABLE_BP_ShipGangplank_C_CAT : BP_ShipGangplank_C (outer GangplankLeft_GEN_VARIABLE) size=82
+        refs: exp:PlankLeftPoint, exp:PlankRightPoint, exp:PlankRotationPoint, name:CallFunc_BreakHitResult_FaceIndex, exp:BP_InventoryComponent_GEN_VARIABLE, name:Actor
+  [22] GangplankRight_GEN_VARIABLE_BP_ShipGangplank_C_CAT : BP_ShipGangplank_C (outer GangplankRight_GEN_VARIABLE) size=81
+        refs: exp:PlankLeftPoint, exp:PlankRightPoint, exp:PlankRotationPoint, name:CallFunc_BreakHitResult_HitItem, exp:BP_InventoryComponent_GEN_VARIABLE, name:Actor
+  [23] BP_ShipHoldHatchSlotInteractable_GEN_VARIABLE_BP_ShipHoldHatchSlotInteractable_C_CAT : BP_ShipHoldHatchSlotInteractable_C (outer BP_ShipHoldHatchSlotInteractable_GEN_VARIABLE) size=79
+        refs: exp:SCS_Node_99, exp:SCS_Node_168, exp:ShipModule_Hold4_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:BndEvt__BP_DrdSmallBoat_Box_K2Node_ComponentBoundEvent_2_ComponentEndOverlapSignature__DelegateSignature
+  [24] BP_ShipSteeringWheel_GEN_VARIABLE_BP_ShipSteeringWheel_C_CAT : BP_ShipSteeringWheel_C (outer BP_ShipSteeringWheel_GEN_VARIABLE) size=67
+        refs: exp:SCS_Node_95, exp:SCS_Node_168, exp:BP_ShipFishScanner_GEN_VARIABLE, name:AddControllerPitchInput
+  [25] ShipModule_LeftSide_Front1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT : BP_ShipUpgradeSlotInteractable_C (outer ModuleInteract_Armor_LeftBack_GEN_VARIABLE) size=149
+        refs: name:IFP.Container.Identifier.Ship.UpgradeSlot_Armor_LeftBack, exp:WaterExitPointLeft_GEN_VARIABLE, exp:FishingSpot_GEN_VARIABLE_BP_ProxyFishingSpot_C_CAT, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_IcTabsImprovementsShipBackpart001_HoverPressed.SPR_IcTabsImprovementsShipBackpart001_HoverPressed, exp:Module_Armor_LeftFront_GEN_VARIABLE, exp:FishingSpot1_GEN_VARIABLE, exp:SCS_Node_168, exp:ShipModule_Cabin2_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:BndEvt__BP_DrdSmallBoat_Box_K2Node_ComponentBoundEvent_2_ComponentEndOverlapSignature__DelegateSignature
+  [26] ShipModule_RightSide_Front1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT : BP_ShipUpgradeSlotInteractable_C (outer ModuleInteract_Armor_LeftFront_GEN_VARIABLE) size=149
+        refs: name:IFP.Container.Identifier.Ship.UpgradeSlot_Armor_LeftFront, exp:WaterExitPointLeft_GEN_VARIABLE, exp:FishingSpot_GEN_VARIABLE_BP_ProxyFishingSpot_C_CAT, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_IcTabsImprovementsShipMiddlepart001_Active.SPR_IcTabsImprovementsShipMiddlepart001_Active, exp:Module_Armor_LeftFront_GEN_VARIABLE, exp:FishingSpot1_GEN_VARIABLE, exp:SCS_Node_168, exp:ShipModule_Cabin2_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:BndEvt__BP_DrdSmallBoat_Box_K2Node_ComponentBoundEvent_2_ComponentEndOverlapSignature__DelegateSignature
+  [27] ShipModule_Nose_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT : BP_ShipUpgradeSlotInteractable_C (outer ModuleInteract_Armor_Nose_GEN_VARIABLE) size=129
+        refs: name:IFP.Container.Identifier.Ship.UpgradeSlot_Armor_Nose, exp:WaterExitPointLeft_GEN_VARIABLE, exp:FishingSpot_GEN_VARIABLE_BP_ProxyFishingSpot_C_CAT, exp:GetClosestDockLocation, exp:SCS_Node_168, exp:ShipModule_Cabin2_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:BndEvt__BP_DrdSmallBoat_Box_K2Node_ComponentBoundEvent_2_ComponentEndOverlapSignature__DelegateSignature
+  [28] ShipModule_RightSide_Front1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT : BP_ShipUpgradeSlotInteractable_C (outer ModuleInteract_Armor_RightBack_GEN_VARIABLE) size=133
+        refs: name:IFP.Container.Identifier.Ship.UpgradeSlot_Armor_RightBack, exp:WaterExitPointLeft_GEN_VARIABLE, exp:FishingSpot_GEN_VARIABLE_BP_ProxyFishingSpot_C_CAT, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_IcTabsImprovementsShipBackpart001_HoverPressed.SPR_IcTabsImprovementsShipBackpart001_HoverPressed, exp:SCS_Node_168, exp:ShipModule_Cabin2_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:BndEvt__BP_DrdSmallBoat_Box_K2Node_ComponentBoundEvent_2_ComponentEndOverlapSignature__DelegateSignature
+  [29] ShipModule_Nose1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT : BP_ShipUpgradeSlotInteractable_C (outer ModuleInteract_Armor_RightFront_GEN_VARIABLE) size=133
+        refs: name:IFP.Container.Identifier.Ship.UpgradeSlot_Armor_RightFront, exp:WaterExitPointLeft_GEN_VARIABLE, exp:FishingSpot_GEN_VARIABLE_BP_ProxyFishingSpot_C_CAT, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_IcTabsImprovementsShipMiddlepart001_Active.SPR_IcTabsImprovementsShipMiddlepart001_Active, exp:SCS_Node_168, exp:ShipModule_Cabin2_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:BndEvt__BP_DrdSmallBoat_Box_K2Node_ComponentBoundEvent_2_ComponentEndOverlapSignature__DelegateSignature
+  [30] ShipModule_Cabin2_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT : BP_ShipUpgradeSlotInteractable_C (outer ModuleInteract_CabinSide_Left_GEN_VARIABLE) size=152
+        refs: name:IFP.Container.Identifier.Ship.UpgradeSlot_CabinSide_Left, obj:/Game/Dreadmoor/InventoryFramework/Items/Modules/ShipModules/CabinSlots/CanisterRackMk1/IDA_ShipModule_CanisterRack_Mk1.IDA_ShipModule_CanisterRack_Mk1, exp:WaterExitPointLeft_GEN_VARIABLE, exp:BP_ShipHoldHatchSlotInteractable_GEN_VARIABLE_BP_ShipHoldHatchSlotInteractable_C_CAT, obj:/Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcTabsImprovementsShipFuelTank002_Active.SPR_IcTabsImprovementsShipFuelTank002_Active, exp:SCS_Node_168, exp:ShipModule_Cabin2_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:BndEvt__BP_DrdSmallBoat_Box_K2Node_ComponentBoundEvent_2_ComponentEndOverlapSignature__DelegateSignature
+  [31] ShipModule_FuelTank1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT : BP_ShipUpgradeSlotInteractable_C (outer ModuleInteract_CabinSide_Right_GEN_VARIABLE) size=155
+        refs: name:IFP.Container.Identifier.Ship.UpgradeSlot_CabinSide_Right, obj:/Game/Dreadmoor/InventoryFramework/Items/Modules/ShipModules/CabinSlots/CanisterRackMk1/IDA_ShipModule_CanisterRack_Mk1.IDA_ShipModule_CanisterRack_Mk1, exp:WaterExitPointLeft_GEN_VARIABLE, exp:BP_ShipHoldHatchSlotInteractable_GEN_VARIABLE_BP_ShipHoldHatchSlotInteractable_C_CAT, obj:/Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcTabsImprovementsShipFuelTank002_Active.SPR_IcTabsImprovementsShipFuelTank002_Active, exp:SCS_Node_168, exp:ShipModule_Cabin2_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:BndEvt__BP_DrdSmallBoat_Box_K2Node_ComponentBoundEvent_2_ComponentEndOverlapSignature__DelegateSignature
+  [32] ShipModule_Hold4_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT : BP_ShipUpgradeSlotInteractable_C (outer ModuleInteract_CabinTop_Front_GEN_VARIABLE) size=151
+        refs: name:IFP.Container.Identifier.Ship.UpgradeSlot_CabinTop_Front, obj:/Game/Dreadmoor/InventoryFramework/Items/Modules/ShipModules/CabinSlots/SpotlightMk1/IDA_ShipModule_Spotlight_Mk1.IDA_ShipModule_Spotlight_Mk1, exp:WaterExitPointLeft_GEN_VARIABLE, exp:GangplankRight_GEN_VARIABLE_BP_ShipGangplank_C_CAT, obj:/Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcTabsImprovementsShipLight001_Active.SPR_IcTabsImprovementsShipLight001_Active, exp:SCS_Node_168, exp:ShipModule_Cabin2_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:BndEvt__BP_DrdSmallBoat_Box_K2Node_ComponentBoundEvent_2_ComponentEndOverlapSignature__DelegateSignature
+  [33] ShipModule_LeftSide_Back1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT : BP_ShipUpgradeSlotInteractable_C (outer ModuleInteract_Engine_GEN_VARIABLE) size=135
+        refs: name:IFP.Container.Identifier.Ship.UpgradeSlot_Engine, obj:/Game/Dreadmoor/InventoryFramework/Items/Modules/ShipModules/EngineSlot/EngineMk1/IDA_ShipModule_EngineMk1.IDA_ShipModule_EngineMk1, exp:WaterExitPointLeft_GEN_VARIABLE, exp:BP_ShipFishScanner_GEN_VARIABLE, obj:/Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcTabsImprovementsShipEngine001_Active.SPR_IcTabsImprovementsShipEngine001_Active, exp:SCS_Node_168, exp:ShipModule_Cabin2_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:BndEvt__BP_DrdSmallBoat_Box_K2Node_ComponentBoundEvent_2_ComponentEndOverlapSignature__DelegateSignature
+  [34] ModuleInteract_Engine1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT : BP_ShipUpgradeSlotInteractable_C (outer ModuleInteract_EngineNitro_GEN_VARIABLE) size=140
+        refs: name:IFP.Container.Identifier.Ship.UpgradeSlot_EngineNitro, obj:/Game/Dreadmoor/InventoryFramework/Items/Modules/ShipModules/EngineSlot/EngineNitroMk1/IDA_ShipModule_EngineNitroMk1.IDA_ShipModule_EngineNitroMk1, exp:WaterExitPointLeft_GEN_VARIABLE, exp:FishingSpot_GEN_VARIABLE_BP_ProxyFishingSpot_C_CAT, obj:/Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcTabsImprovementsShipBoost002_Active.SPR_IcTabsImprovementsShipBoost002_Active, exp:SCS_Node_168, exp:ShipModule_Cabin2_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:BndEvt__BP_DrdSmallBoat_Box_K2Node_ComponentBoundEvent_2_ComponentEndOverlapSignature__DelegateSignature
+  [35] ModuleInteract_Engine1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT : BP_ShipUpgradeSlotInteractable_C (outer ModuleInteract_EnginePropeller_GEN_VARIABLE) size=144
+        refs: name:IFP.Container.Identifier.Ship.UpgradeSlot_EnginePropeller, obj:/Game/Dreadmoor/InventoryFramework/Items/Modules/ShipModules/EngineSlot/EnginePropellerMk1/IDA_ShipModule_EnginePropellerMk1.IDA_ShipModule_EnginePropellerMk1, exp:WaterExitPointLeft_GEN_VARIABLE, exp:BP_ShipHoldHatchSlotInteractable_GEN_VARIABLE_BP_ShipHoldHatchSlotInteractable_C_CAT, obj:/Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcTabsImprovementsShipScrew001_Active.SPR_IcTabsImprovementsShipScrew001_Active, exp:SCS_Node_168, exp:ShipModule_Cabin2_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:BndEvt__BP_DrdSmallBoat_Box_K2Node_ComponentBoundEvent_2_ComponentEndOverlapSignature__DelegateSignature
+  [36] ShipModule_Hook1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT : BP_ShipUpgradeSlotInteractable_C (outer ModuleInteract_FuelTank_GEN_VARIABLE) size=133
+        refs: name:IFP.Container.Identifier.Ship.UpgradeSlot_FuelTank, obj:/Game/Dreadmoor/InventoryFramework/Items/Modules/ShipModules/FuelTankSlot/FuelTankMk1/IDA_ShipModule_FuelTankMk1.IDA_ShipModule_FuelTankMk1, exp:WaterExitPointLeft_GEN_VARIABLE, exp:FishingSpot1_GEN_VARIABLE_BP_ShipFishingSpot_Proxy2_C_CAT, obj:/Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcTabsImprovementsShipFuelTank001_Active.SPR_IcTabsImprovementsShipFuelTank001_Active, exp:SCS_Node_168, exp:ShipModule_Cabin2_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:BndEvt__BP_DrdSmallBoat_Box_K2Node_ComponentBoundEvent_2_ComponentEndOverlapSignature__DelegateSignature
+  [37] ShipModule_Cabin3_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT : BP_ShipUpgradeSlotInteractable_C (outer ModuleInteract_Hold1_GEN_VARIABLE) size=133
+        refs: name:IFP.Container.Identifier.Ship.UpgradeSlot_Hold1, obj:/Game/Dreadmoor/InventoryFramework/Items/Modules/ShipModules/HoldModules/BasicHold_Mk1/IDA_ShipModule_BasicHold_Mk1.IDA_ShipModule_BasicHold_Mk1, exp:WaterExitPointLeft_GEN_VARIABLE, exp:FishingSpot1_GEN_VARIABLE_BP_ShipFishingSpot_Proxy2_C_CAT, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_IcTabsImprovementsShipBilges001_Active.SPR_IcTabsImprovementsShipBilges001_Active, exp:SCS_Node_168, exp:ShipModule_Cabin2_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:BndEvt__BP_DrdSmallBoat_Box_K2Node_ComponentBoundEvent_2_ComponentEndOverlapSignature__DelegateSignature
+  [38] ShipModule_Hold2_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT : BP_ShipUpgradeSlotInteractable_C (outer ModuleInteract_Hold2_GEN_VARIABLE) size=133
+        refs: name:IFP.Container.Identifier.Ship.UpgradeSlot_Hold2, obj:/Game/Dreadmoor/InventoryFramework/Items/Modules/ShipModules/HoldModules/BasicHold_Mk1/IDA_ShipModule_BasicHold_Mk1.IDA_ShipModule_BasicHold_Mk1, exp:WaterExitPointLeft_GEN_VARIABLE, exp:FishingSpot1_GEN_VARIABLE_BP_ShipFishingSpot_Proxy2_C_CAT, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_IcTabsImprovementsShipBilges001_Active.SPR_IcTabsImprovementsShipBilges001_Active, exp:SCS_Node_168, exp:ShipModule_Cabin2_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:BndEvt__BP_DrdSmallBoat_Box_K2Node_ComponentBoundEvent_2_ComponentEndOverlapSignature__DelegateSignature
+  [39] ShipModule_Hold3_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT : BP_ShipUpgradeSlotInteractable_C (outer ModuleInteract_Hold3_GEN_VARIABLE) size=133
+        refs: name:IFP.Container.Identifier.Ship.UpgradeSlot_Hold3, obj:/Game/Dreadmoor/InventoryFramework/Items/Modules/ShipModules/HoldModules/BasicHold_Mk1/IDA_ShipModule_BasicHold_Mk1.IDA_ShipModule_BasicHold_Mk1, exp:WaterExitPointLeft_GEN_VARIABLE, exp:FishingSpot1_GEN_VARIABLE_BP_ShipFishingSpot_Proxy2_C_CAT, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_IcTabsImprovementsShipBilges001_Active.SPR_IcTabsImprovementsShipBilges001_Active, exp:SCS_Node_168, exp:ShipModule_Cabin2_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:BndEvt__BP_DrdSmallBoat_Box_K2Node_ComponentBoundEvent_2_ComponentEndOverlapSignature__DelegateSignature
+  [40] ShipModule_Engine1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT : BP_ShipUpgradeSlotInteractable_C (outer ModuleInteract_Hook_GEN_VARIABLE) size=90
+        refs: name:IFP.Container.Identifier.Ship.UpgradeSlot_MonsterHook, exp:SCS_Node_168, exp:ShipModule_Cabin2_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:BndEvt__BP_DrdSmallBoat_Box_K2Node_ComponentBoundEvent_2_ComponentEndOverlapSignature__DelegateSignature
+  [41] ModuleInteract_HullUtility_RightBack1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT : BP_ShipUpgradeSlotInteractable_C (outer ModuleInteract_HullUtility_LeftBack_GEN_VARIABLE) size=156
+        refs: name:IFP.Container.Identifier.Ship.UpgradeSlot_HullUtility_Back, obj:/Game/Dreadmoor/InventoryFramework/Items/Modules/ShipModules/SideSlot/FishnetMk1/IDA_ShipModule_Fishnet_Mk1.IDA_ShipModule_Fishnet_Mk1, exp:WaterExitPointLeft_GEN_VARIABLE, exp:GangplankRight_GEN_VARIABLE_BP_ShipGangplank_C_CAT, obj:/Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcTabsImprovementsShipRearModule001_Active.SPR_IcTabsImprovementsShipRearModule001_Active, exp:Module_Armor_LeftFront_GEN_VARIABLE, exp:FishingSpot1_GEN_VARIABLE, exp:SCS_Node_168, exp:ShipModule_Cabin2_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:BndEvt__BP_DrdSmallBoat_Box_K2Node_ComponentBoundEvent_2_ComponentEndOverlapSignature__DelegateSignature
+  [42] ModuleInteract_HullUtility_RightFront1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT : BP_ShipUpgradeSlotInteractable_C (outer ModuleInteract_HullUtility_LeftFront_GEN_VARIABLE) size=157
+        refs: name:IFP.Container.Identifier.Ship.UpgradeSlot_HullUtility_Front, obj:/Game/Dreadmoor/InventoryFramework/Items/Modules/ShipModules/SideSlot/FishnetMk1/IDA_ShipModule_Fishnet_Mk1.IDA_ShipModule_Fishnet_Mk1, exp:WaterExitPointLeft_GEN_VARIABLE, exp:BP_ShipHoldHatchSlotInteractable_GEN_VARIABLE_BP_ShipHoldHatchSlotInteractable_C_CAT, obj:/Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcTabsImprovementsShipFrontModule002_Active.SPR_IcTabsImprovementsShipFrontModule002_Active, exp:Module_Armor_LeftFront_GEN_VARIABLE, exp:FishingSpot1_GEN_VARIABLE, exp:SCS_Node_168, exp:ShipModule_Cabin2_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:BndEvt__BP_DrdSmallBoat_Box_K2Node_ComponentBoundEvent_2_ComponentEndOverlapSignature__DelegateSignature
+  [43] ModuleInteract_HullUtility_RightFront1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT : BP_ShipUpgradeSlotInteractable_C (outer ModuleInteract_HullUtility_RightBack_GEN_VARIABLE) size=143
+        refs: name:IFP.Container.Identifier.Ship.UpgradeSlot_HullUtility_Back, obj:/Game/Dreadmoor/InventoryFramework/Items/Modules/ShipModules/SideSlot/FishnetMk1/IDA_ShipModule_Fishnet_Mk1.IDA_ShipModule_Fishnet_Mk1, exp:WaterExitPointLeft_GEN_VARIABLE, exp:BP_ShipHoldHatchSlotInteractable_GEN_VARIABLE_BP_ShipHoldHatchSlotInteractable_C_CAT, obj:/Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcTabsImprovementsShipRearModule001_Active.SPR_IcTabsImprovementsShipRearModule001_Active, exp:SCS_Node_168, exp:ShipModule_Cabin2_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:BndEvt__BP_DrdSmallBoat_Box_K2Node_ComponentBoundEvent_2_ComponentEndOverlapSignature__DelegateSignature
+  [44] ModuleInteract_HullUtility_Front_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT : BP_ShipUpgradeSlotInteractable_C (outer ModuleInteract_HullUtility_RightFront_GEN_VARIABLE) size=144
+        refs: name:IFP.Container.Identifier.Ship.UpgradeSlot_HullUtility_Front, obj:/Game/Dreadmoor/InventoryFramework/Items/Modules/ShipModules/SideSlot/FishnetMk1/IDA_ShipModule_Fishnet_Mk1.IDA_ShipModule_Fishnet_Mk1, exp:WaterExitPointLeft_GEN_VARIABLE, exp:BP_ShipSteeringWheel_GEN_VARIABLE_BP_ShipSteeringWheel_C_CAT, obj:/Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcTabsImprovementsShipFrontModule002_Active.SPR_IcTabsImprovementsShipFrontModule002_Active, exp:SCS_Node_168, exp:ShipModule_Cabin2_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:BndEvt__BP_DrdSmallBoat_Box_K2Node_ComponentBoundEvent_2_ComponentEndOverlapSignature__DelegateSignature
+  [45] BP_SideModulesInteractButton_GEN_VARIABLE_BP_SideModulesInteractButton_C_CAT : BP_SideModulesInteractButton_C (outer BP_SideModulesInteractButton_GEN_VARIABLE) size=75
+        refs: exp:ModuleMount_EnginePropeller_GEN_VARIABLE, exp:SCS_Node_168, exp:ShipModule_RightSide_Front1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, name:Amount
+  [46] Default__BP_SmallBoat_V2_C : BP_SmallBoat_V2_C (outer None) size=328
+        refs: exp:SCS_Node_168, obj:/Script/Dreadmoor.DrdGangplank.ForceChangeState, exp:BP_ShipHoldHatchSlotInteractable_GEN_VARIABLE, name:SCUE_Boat_Inside, exp:KlaxonSound_GEN_VARIABLE, name:IFP.Container.Identifier.Bilge.Chamber.One, name:IFP.Container.Identifier.Bilge.Chamber.Three, name:IFP.Container.Identifier.Bilge.Chamber.Two, exp:MovementComponent0, name:Hit, exp:Module_Armor_Nose_GEN_VARIABLE, exp:BP_SmallBoat_V2_C, name:HullCosmetic_Front, name:HullCosmetic_Left_Front, name:HullCosmetic_Left_Back, name:HullCosmetic_Right_Front, name:HullCosmetic_Right_Back, name:HullCosmetic_Back, exp:ShipCharSet, obj:/Game/Dreadmoor/Core/Features/Ship/Effects/GE_ApplyDamageToShip.GE_ApplyDamageToShip_C, obj:/Game/Dreadmoor/Core/Input/Boat/IMC_Boat.IMC_Boat, obj:/Game/Dreadmoor/Core/Input/Boat/IA_BoatLook.IA_BoatLook, obj:/Game/Dreadmoor/Core/Input/Boat/IA_BoatMove.IA_BoatMove, obj:/Game/Dreadmoor/Core/Input/Boat/IA_BoatSwitchCamera.IA_BoatSwitchCamera, obj:/Game/Dreadmoor/Core/Input/Boat/IA_BoatInteract.IA_BoatInteract, obj:/Game/Dreadmoor/Core/Input/Boat/IA_Docker.IA_Docker, obj:/Game/Dreadmoor/Core/Input/Boat/IA_BoatAfterrburner.IA_BoatAfterrburner, exp:DockingComponentV2, exp:SpringArmComp, exp:EngineAudioComponent, exp:CameraComp, exp:ModulesController, exp:CollisionComponent0, name:BlocksInteraction
+  [47] BP_Storage_GEN_VARIABLE_BP_Storage_C_CAT : BP_Storage_C (outer BP_Storage_GEN_VARIABLE) size=57
+        refs: exp:SCS_Node_90, exp:SCS_Node_168, exp:LimiterCollision4_GEN_VARIABLE, exp:BndEvt__BP_DrdSmallBoat_Box_K2Node_ComponentBoundEvent_2_ComponentEndOverlapSignature__DelegateSignature
+  [48] WaterExitPointLeft_GEN_VARIABLE_BP_WaterExit_Boat_Left_C_CAT : BP_WaterExit_Boat_Left_C (outer WaterExitPointLeft_GEN_VARIABLE) size=85
+        refs: exp:SCS_Node_145, exp:SCS_Node_168, exp:GangplankRight_GEN_VARIABLE_BP_ShipGangplank_C_CAT, name:bAbsoluteRotation
+  [49] WaterExitPointRight_GEN_VARIABLE_BP_WaterExit_Boat_Right_C_CAT : BP_WaterExit_Boat_Right_C (outer WaterExitPointRight_GEN_VARIABLE) size=86
+        refs: exp:SCS_Node_0, exp:SCS_Node_168, exp:BP_ShipHoldHatchSlotInteractable_GEN_VARIABLE_BP_ShipHoldHatchSlotInteractable_C_CAT, name:bAbsoluteRotation
+  [50] Buoyancy : BuoyancyComponent (outer WaterDataUnrealWater_GEN_VARIABLE) size=10
+        refs: name:CallFunc_Not_PreBool_ReturnValue
+  [51] FirstPersonCamera_GEN_VARIABLE : CameraComponent (outer BP_SmallBoat_V2_C) size=11
+        refs: name:DynamicForceWaterTrack_GEN_VARIABLE
+  [52] CameraComp : CameraComponent (outer Default__BP_SmallBoat_V2_C) size=14
+        refs: name:FirstPersonCamera
+  [53] BoatModular_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=20
+        refs: obj:/Game/Dreadmoor/Core/Features/QuestFeatures/QuestModularObjects/Boat/BP_BoatModularObject.BP_BoatModularObject_C, exp:BoatModular_GEN_VARIABLE_BP_BoatModularObject_C_CAT
+  [54] BP_ShipHoldHatchSlotInteractable_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=46
+        refs: obj:/Game/Dreadmoor/Core/Features/UpgradeDock/BP_ShipHoldHatchSlotInteractable.BP_ShipHoldHatchSlotInteractable_C, exp:BP_ShipHoldHatchSlotInteractable_GEN_VARIABLE_BP_ShipHoldHatchSlotInteractable_C_CAT, exp:FishingSpot1_GEN_VARIABLE
+  [55] BP_ShipSteeringWheel_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=60
+        refs: obj:/Game/Dreadmoor/Core/Features/Ship/Riding/BP_ShipSteeringWheel.BP_ShipSteeringWheel_C, exp:BP_ShipSteeringWheel_GEN_VARIABLE_BP_ShipSteeringWheel_C_CAT, exp:FishingSpot_GEN_VARIABLE, exp:SCS_Node_72, name:SteeringWheel
+  [56] BP_SideModulesInteractButton_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=20
+        refs: obj:/Game/Dreadmoor/Core/Features/Ship/ShipModules/BP_SideModulesInteractButton.BP_SideModulesInteractButton_C, exp:BP_SideModulesInteractButton_GEN_VARIABLE_BP_SideModulesInteractButton_C_CAT
+  [57] BP_Storage_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=70
+        refs: obj:/Game/Dreadmoor/Core/Features/Ship/StorageBox/BP_Storage.BP_Storage_C, exp:BP_Storage_GEN_VARIABLE_BP_Storage_C_CAT, exp:FishingSpot_GEN_VARIABLE
+  [58] CraftTable_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=70
+        refs: obj:/Game/Dreadmoor/Blueprints/Developers/Sanich/BP_CraftTable_Ship.BP_CraftTable_Ship_C, exp:CraftTable_GEN_VARIABLE_BP_CraftTable_Ship_C_CAT, exp:FishingSpot_GEN_VARIABLE, name:BlocksInteraction
+  [59] DynamicForceWaterTrack1_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=49
+        refs: obj:/Game/Dreadmoor/Core/Features/Fishing/BP_BoatDynamicForceMesh.BP_BoatDynamicForceMesh_C, exp:DynamicForceWaterTrack1_GEN_VARIABLE_BP_BoadDynamicForceMesh_C_CAT, exp:FishingSpot_GEN_VARIABLE
+  [60] DynamicForceWaterTrack2_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=49
+        refs: obj:/Game/Dreadmoor/Core/Features/Fishing/BP_BoatDynamicForceMesh.BP_BoatDynamicForceMesh_C, exp:DynamicForceWaterTrack2_GEN_VARIABLE_BP_BoatDynamicForceMesh_C_CAT, exp:FishingSpot_GEN_VARIABLE
+  [61] DynamicForceWaterTrack_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=49
+        refs: obj:/Game/Dreadmoor/Core/Features/Fishing/BP_BoatDynamicForceMesh.BP_BoatDynamicForceMesh_C, exp:DynamicForceWaterTrack_GEN_VARIABLE_BP_BoadDynamicForceMesh_C_CAT, exp:FishingSpot_GEN_VARIABLE
+  [62] FishingSpot1_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=70
+        refs: obj:/Game/Dreadmoor/Core/Features/Fishing/BP_ShipFishingSpot_Proxy2.BP_ShipFishingSpot_Proxy2_C, exp:FishingSpot1_GEN_VARIABLE_BP_ShipFishingSpot_Proxy2_C_CAT, exp:FishingSpot_GEN_VARIABLE
+  [63] FishingSpot_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=70
+        refs: obj:/Game/Dreadmoor/Core/Features/Fishing/BP_ShipFishingSpot_Proxy.BP_ShipFishingSpot_Proxy_C, exp:FishingSpot_GEN_VARIABLE_BP_ProxyFishingSpot_C_CAT, exp:FishingSpot_GEN_VARIABLE
+  [64] GangplankLeft_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=70
+        refs: obj:/Game/Dreadmoor/Core/Features/Ship/Docking/BP_ShipGangplank.BP_ShipGangplank_C, exp:GangplankLeft_GEN_VARIABLE_BP_ShipGangplank_C_CAT, exp:FishingSpot_GEN_VARIABLE, name:CallFunc_BreakHitResult_TraceEnd
+  [65] GangplankRight_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=70
+        refs: obj:/Game/Dreadmoor/Core/Features/Ship/Docking/BP_ShipGangplank.BP_ShipGangplank_C, exp:GangplankRight_GEN_VARIABLE_BP_ShipGangplank_C_CAT, exp:FishingSpot_GEN_VARIABLE
+  [66] ModuleInteract_Armor_LeftBack_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=94
+        refs: obj:/Game/Dreadmoor/Core/Features/UpgradeDock/BP_ShipUpgradeSlotInteractable.BP_ShipUpgradeSlotInteractable_C, exp:ShipModule_LeftSide_Front1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:FishingSpot_GEN_VARIABLE, exp:FishingSpot1_GEN_VARIABLE
+  [67] ModuleInteract_Armor_LeftFront_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=94
+        refs: obj:/Game/Dreadmoor/Core/Features/UpgradeDock/BP_ShipUpgradeSlotInteractable.BP_ShipUpgradeSlotInteractable_C, exp:ShipModule_RightSide_Front1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:FishingSpot_GEN_VARIABLE, exp:FishingSpot1_GEN_VARIABLE
+  [68] ModuleInteract_Armor_Nose_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=72
+        refs: obj:/Game/Dreadmoor/Core/Features/UpgradeDock/BP_ShipUpgradeSlotInteractable.BP_ShipUpgradeSlotInteractable_C, exp:ShipModule_Nose_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:FishingSpot_GEN_VARIABLE
+  [69] ModuleInteract_Armor_RightBack_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=94
+        refs: obj:/Game/Dreadmoor/Core/Features/UpgradeDock/BP_ShipUpgradeSlotInteractable.BP_ShipUpgradeSlotInteractable_C, exp:ShipModule_RightSide_Front1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:FishingSpot_GEN_VARIABLE, name:CallFunc_BreakHitResult_TraceEnd, exp:FishingSpot1_GEN_VARIABLE
+  [70] ModuleInteract_Armor_RightFront_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=94
+        refs: obj:/Game/Dreadmoor/Core/Features/UpgradeDock/BP_ShipUpgradeSlotInteractable.BP_ShipUpgradeSlotInteractable_C, exp:ShipModule_Nose1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:FishingSpot_GEN_VARIABLE, name:CallFunc_BreakHitResult_TraceEnd, exp:FishingSpot1_GEN_VARIABLE
+  [71] ModuleInteract_CabinSide_Left_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=70
+        refs: obj:/Game/Dreadmoor/Core/Features/UpgradeDock/BP_ShipUpgradeSlotInteractable.BP_ShipUpgradeSlotInteractable_C, exp:ShipModule_Cabin2_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:FishingSpot_GEN_VARIABLE, name:BlocksInteraction
+  [72] ModuleInteract_CabinSide_Right_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=73
+        refs: obj:/Game/Dreadmoor/Core/Features/UpgradeDock/BP_ShipUpgradeSlotInteractable.BP_ShipUpgradeSlotInteractable_C, exp:ShipModule_FuelTank1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:FishingSpot_GEN_VARIABLE, name:BlocksInteraction
+  [73] ModuleInteract_CabinTop_Front_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=70
+        refs: obj:/Game/Dreadmoor/Core/Features/UpgradeDock/BP_ShipUpgradeSlotInteractable.BP_ShipUpgradeSlotInteractable_C, exp:ShipModule_Hold4_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:FishingSpot_GEN_VARIABLE, name:BlocksInteraction
+  [74] ModuleInteract_Engine_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=108
+        refs: obj:/Game/Dreadmoor/Core/Features/UpgradeDock/BP_ShipUpgradeSlotInteractable.BP_ShipUpgradeSlotInteractable_C, exp:ShipModule_LeftSide_Back1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:FishingSpot_GEN_VARIABLE, name:CallFunc_BreakHitResult_TraceEnd, exp:FishingSpot1_GEN_VARIABLE, exp:SCS_Node_71, name:EngineModule
+  [75] ModuleInteract_EngineNitro_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=94
+        refs: obj:/Game/Dreadmoor/Core/Features/UpgradeDock/BP_ShipUpgradeSlotInteractable.BP_ShipUpgradeSlotInteractable_C, exp:ModuleInteract_Engine1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:FishingSpot_GEN_VARIABLE, exp:FishingSpot1_GEN_VARIABLE
+  [76] ModuleInteract_EnginePropeller_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=94
+        refs: obj:/Game/Dreadmoor/Core/Features/UpgradeDock/BP_ShipUpgradeSlotInteractable.BP_ShipUpgradeSlotInteractable_C, exp:ModuleInteract_Engine1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:FishingSpot_GEN_VARIABLE, name:CallFunc_BreakHitResult_TraceEnd, exp:FishingSpot1_GEN_VARIABLE
+  [77] ModuleInteract_FuelTank_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=94
+        refs: obj:/Game/Dreadmoor/Core/Features/UpgradeDock/BP_ShipUpgradeSlotInteractable.BP_ShipUpgradeSlotInteractable_C, exp:ShipModule_Hook1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:FishingSpot_GEN_VARIABLE, exp:ItemUnequipped, exp:FishingSpot1_GEN_VARIABLE
+  [78] ModuleInteract_Hold1_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=94
+        refs: obj:/Game/Dreadmoor/Core/Features/UpgradeDock/BP_ShipUpgradeSlotInteractable.BP_ShipUpgradeSlotInteractable_C, exp:ShipModule_Cabin3_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:FishingSpot_GEN_VARIABLE, exp:ItemUnequipped, exp:FishingSpot1_GEN_VARIABLE
+  [79] ModuleInteract_Hold2_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=94
+        refs: obj:/Game/Dreadmoor/Core/Features/UpgradeDock/BP_ShipUpgradeSlotInteractable.BP_ShipUpgradeSlotInteractable_C, exp:ShipModule_Hold2_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:FishingSpot_GEN_VARIABLE, exp:ItemUnequipped, exp:FishingSpot1_GEN_VARIABLE
+  [80] ModuleInteract_Hold3_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=94
+        refs: obj:/Game/Dreadmoor/Core/Features/UpgradeDock/BP_ShipUpgradeSlotInteractable.BP_ShipUpgradeSlotInteractable_C, exp:ShipModule_Hold3_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:FishingSpot_GEN_VARIABLE, exp:ItemUnequipped, exp:FishingSpot1_GEN_VARIABLE
+  [81] ModuleInteract_Hook_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=73
+        refs: obj:/Game/Dreadmoor/Core/Features/UpgradeDock/BP_ShipUpgradeSlotInteractable.BP_ShipUpgradeSlotInteractable_C, exp:ShipModule_Engine1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:FishingSpot_GEN_VARIABLE, name:CallFunc_BreakHitResult_TraceEnd
+  [82] ModuleInteract_HullUtility_LeftBack_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=97
+        refs: obj:/Game/Dreadmoor/Core/Features/UpgradeDock/BP_ShipUpgradeSlotInteractable.BP_ShipUpgradeSlotInteractable_C, exp:ModuleInteract_HullUtility_RightBack1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:FishingSpot_GEN_VARIABLE, name:CallFunc_BreakHitResult_TraceEnd, exp:FishingSpot1_GEN_VARIABLE
+  [83] ModuleInteract_HullUtility_LeftFront_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=97
+        refs: obj:/Game/Dreadmoor/Core/Features/UpgradeDock/BP_ShipUpgradeSlotInteractable.BP_ShipUpgradeSlotInteractable_C, exp:ModuleInteract_HullUtility_RightFront1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:FishingSpot_GEN_VARIABLE, name:CallFunc_BreakHitResult_TraceEnd, exp:FishingSpot1_GEN_VARIABLE
+  [84] ModuleInteract_HullUtility_RightBack_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=97
+        refs: obj:/Game/Dreadmoor/Core/Features/UpgradeDock/BP_ShipUpgradeSlotInteractable.BP_ShipUpgradeSlotInteractable_C, exp:ModuleInteract_HullUtility_RightFront1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:FishingSpot_GEN_VARIABLE, name:CallFunc_BreakHitResult_TraceEnd, exp:FishingSpot1_GEN_VARIABLE
+  [85] ModuleInteract_HullUtility_RightFront_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=94
+        refs: obj:/Game/Dreadmoor/Core/Features/UpgradeDock/BP_ShipUpgradeSlotInteractable.BP_ShipUpgradeSlotInteractable_C, exp:ModuleInteract_HullUtility_Front_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:FishingSpot_GEN_VARIABLE, name:CallFunc_BreakHitResult_TraceEnd, exp:FishingSpot1_GEN_VARIABLE
+  [86] RadioActor_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=70
+        refs: obj:/Game/Dreadmoor/Core/Features/Radio/BP_Radio.BP_Radio_C, exp:RadioActor_GEN_VARIABLE_BP_Radio_C_CAT, exp:FishingSpot_GEN_VARIABLE, name:CallFunc_BreakHitResult_TraceEnd
+  [87] WaterExitPointLeft_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=70
+        refs: obj:/Game/Dreadmoor/Core/Features/WaterFeatures/SurfaceSwimming/BP_WaterExit_Boat_Left.BP_WaterExit_Boat_Left_C, exp:WaterExitPointLeft_GEN_VARIABLE_BP_WaterExit_Boat_Left_C_CAT, exp:FishingSpot_GEN_VARIABLE, name:BlocksInteraction
+  [88] WaterExitPointRight_GEN_VARIABLE : ChildActorComponent (outer BP_SmallBoat_V2_C) size=70
+        refs: obj:/Game/Dreadmoor/Core/Features/WaterFeatures/SurfaceSwimming/BP_WaterExit_Boat_Right.BP_WaterExit_Boat_Right_C, exp:WaterExitPointRight_GEN_VARIABLE_BP_WaterExit_Boat_Right_C_CAT, exp:FishingSpot_GEN_VARIABLE, name:CallFunc_BreakHitResult_TraceEnd
+  [89] ComponentDelegateBinding_0 : ComponentDelegateBinding (outer BP_SmallBoat_V2_C) size=140
+        refs: exp:EngineAudioComponent, name:DrdBarnaclesSpawn, name:OnBarnaclesTierChanged, exp:OnShipPulledOutOfWater, name:DockingComponent, name:OnDockingFinished, exp:OnSectorHealthChanged, name:OnDockingStarted, exp:OnRigidCollisionHitEvent, name:InsideAudioTriggerBox, name:OnComponentEndOverlap, exp:OnLoaded_F31EDF7A44BBA462116356BD67B556AB, name:OnComponentBeginOverlap, exp:OnFuelStatusChanged
+  [90] DrdActorTag_GEN_VARIABLE : DrdActorTagComponent (outer BP_SmallBoat_V2_C) size=38
+        refs: exp:SCS_Node_18, name:GameEntities.Player.MainBoat, name:CallFunc_EqualEqual_IntInt_ReturnValue
+  [91] ShipCharSet : DrdAttributeSetShip (outer Default__BP_SmallBoat_V2_C) size=6
+        refs: exp:SCS_Node_22
+  [92] DrdBarnaclesSpawn_GEN_VARIABLE : DrdBarnaclesSpawnComponent (outer BP_SmallBoat_V2_C) size=68
+        refs: obj:/Game/Dreadmoor/Core/Features/Ship/Barnacles/PCG_BoatBarnacles.PCG_BoatBarnacles, obj:/Game/Dreadmoor/Core/Features/Ship/Barnacles/BP_BoatBarnacle.BP_BoatBarnacle_C, obj:/Game/Dreadmoor/Core/Features/Ship/Barnacles/GE_BarnacleSlow.GE_BarnacleSlow_C, obj:/Game/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/SM_BoatPolypusCollision.SM_BoatPolypusCollision, exp:FishingSpot1_GEN_VARIABLE, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [93] DockingComponentV2 : DrdShipDockingComponent (outer Default__BP_SmallBoat_V2_C) size=40
+        refs: name:GameEntities.Interactable.DockingPlace, obj:/Game/Dreadmoor/Core/Features/Ship/Docking/GA_Docking.GA_Docking_C, name:Hit
+  [94] MovementComponent0 : DrdShipFloatingMovementComponent (outer Default__BP_SmallBoat_V2_C) size=23
+        refs: obj:/Game/Dreadmoor/Core/Features/Ship/Curve_HitImpulseMitigationFactorCurve.Curve_HitImpulseMitigationFactorCurve, name:Hit
+  [95] ModulesController : DrdShipUpgradeModulesController (outer Default__BP_SmallBoat_V2_C) size=510
+        refs: exp:SCS_Node_21, exp:Default__BP_SmallBoat_V2_C, name:OnModuleHealthChanged, exp:RadioActor_GEN_VARIABLE_BP_Radio_C_CAT, name:IFP.Container.Identifier.Ship.UpgradeSlot_CabinSide_Left, name:ModuleSide_CabinSide_Left, name:IFP.Container.Identifier.Ship.UpgradeSlot_CabinSide_Right, name:ModuleSide_CabinSide_Right, name:IFP.Container.Identifier.Ship.UpgradeSlot_Engine, name:ModuleMountEngine, name:IFP.Container.Identifier.Ship.UpgradeSlot_FuelTank, name:ModuleMountFuelTank, name:IFP.Container.Identifier.Ship.UpgradeSlot_Hold1, name:ModuleMount_Hold1, name:IFP.Container.Identifier.Ship.UpgradeSlot_Hold2, name:ModuleMount_Hold2, name:IFP.Container.Identifier.Ship.UpgradeSlot_Hold3, name:ModuleMount_Hold3, name:IFP.Container.Identifier.Ship.UpgradeSlot_Armor_LeftFront, name:Module_Armor_LeftFront, name:IFP.Container.Identifier.Ship.UpgradeSlot_Armor_LeftBack, name:Module_Armor_LeftBack, name:IFP.Container.Identifier.Ship.UpgradeSlot_MonsterHook, name:TrophyHookPlace, name:IFP.Container.Identifier.Ship.UpgradeSlot_Armor_Nose, name:Module_Armor_Nose, name:IFP.Container.Identifier.Ship.UpgradeSlot_Armor_RightFront, name:Module_Armor_RightFront, name:IFP.Container.Identifier.Ship.UpgradeSlot_Armor_RightBack, name:Module_Armor_RightBack, name:IFP.Container.Identifier.Ship.UpgradeSlot_CabinTop_Front, name:ModuleMount_CabinTop_Front, name:IFP.Container.Identifier.Ship.UpgradeSlot_EnginePropeller, name:ModuleMountEnginePropeller, name:IFP.Container.Identifier.Ship.UpgradeSlot_EngineNitro, name:ModuleMountEngineNitro, name:IFP.Container.Identifier.Ship.UpgradeSlot_HullUtility_Front, name:Module_HullUtility_Front, name:IFP.Container.Identifier.Ship.UpgradeSlot_HullUtility_Back, name:Module_HullUtility_Back, exp:BP_SmallBoat_V2_C, name:EDrdShipSectorId::RightSideFront, name:EDrdShipSectorId::LeftSideBack, name:EDrdShipSectorId::RightSideBack, name:EDrdShipSectorId::LeftSideFront, name:EDrdShipSectorId::Nose, name:EDrdShipSectorId::Back, exp:SCS_Node_168, obj:/Game/Dreadmoor/Art/Materials/MasterMaterials/Unique/ModuleTransparent/MI_Module_03.MI_Module_03, obj:/Game/Dreadmoor/Art/Materials/MasterMaterials/Unique/ModuleTransparent/MI_Module_02.MI_Module_02
+  [96] EnhancedInputActionDelegateBinding_0 : EnhancedInputActionDelegateBinding (outer BP_SmallBoat_V2_C) size=130
+        refs: exp:LimiterCollision1_GEN_VARIABLE, obj:/Game/Dreadmoor/Core/Input/Boat/IA_BoatLook.IA_BoatLook, exp:InsideAudioTriggerBox_GEN_VARIABLE, obj:/Game/Dreadmoor/Core/Input/Boat/IA_BoatZoom.IA_BoatZoom, obj:/Game/Dreadmoor/Core/Input/Boat/IA_Klaxon.IA_Klaxon, exp:SCS_Node_168, obj:/Game/Dreadmoor/Core/Input/Boat/IA_BoatFishing.IA_BoatFishing, exp:KlaxonSound_GEN_VARIABLE, exp:SFX_Boats_Ambience_GEN_VARIABLE, exp:EngineAudioComponent, obj:/Game/Dreadmoor/Core/Input/Boat/IA_BoatLights.IA_BoatLights, exp:BP_SmallBoat_V2_C
+  [97] EnhancedInputActionValueBinding_0 : EnhancedInputActionValueBinding (outer BP_SmallBoat_V2_C) size=40
+        refs: obj:/Game/Dreadmoor/Core/Input/Boat/IA_BoatMove.IA_BoatMove, name:GetBoundActionValue
+  [155] NavigationMarker_GEN_VARIABLE : NavigationMarkerComponent (outer BP_SmallBoat_V2_C) size=124
+        refs: exp:LimiterCollision2_GEN_VARIABLE, exp:ModuleInteract_HullUtility_RightFront_GEN_VARIABLE, exp:ComponentDelegateBinding_0, name:SPR_IcCompassShip001, exp:FishingSpot1_GEN_VARIABLE, exp:FishingSpot_GEN_VARIABLE, exp:KlaxonSound_GEN_VARIABLE, name:ModuleInteract_Armor_RightFront_GEN_VARIABLE
+  [156] VFX_BoatCenterDrops_GEN_VARIABLE : NiagaraComponent (outer BP_SmallBoat_V2_C) size=46
+        refs: obj:/Game/Dreadmoor/Art/VFX/Niagara/WaterTrail/NS_WaterTrail_Drops.NS_WaterTrail_Drops, exp:SCS_Node_2, name:CallFunc_BreakHitResult_TraceEnd, exp:FishingSpot_GEN_VARIABLE
+  [157] VFX_BoatCenterRipples_GEN_VARIABLE : NiagaraComponent (outer BP_SmallBoat_V2_C) size=46
+        refs: obj:/Game/Dreadmoor/Art/VFX/Niagara/WaterTrail/NS_WaterTrail_AllCombine.NS_WaterTrail_AllCombine, exp:Module_Armor_LeftBack_GEN_VARIABLE, exp:FishingSpot_GEN_VARIABLE
+  [158] VFX_WaterTrailLeft_GEN_VARIABLE : NiagaraComponent (outer BP_SmallBoat_V2_C) size=296
+        refs: obj:/Game/Dreadmoor/Art/VFX/Niagara/WaterTrail/NS_WaterTrail.NS_WaterTrail, exp:InsideAudioTriggerBox_GEN_VARIABLE, exp:KlaxonSound_GEN_VARIABLE, name:Offset, obj:/Script/Niagara.NiagaraFloat, name:User.Offset, name:PowerWave, name:User.PowerWave, name:Water, obj:/Script/Water.NiagaraDataInterfaceWater, name:User.Water, exp:SFX_Boats_Ambience_GEN_VARIABLE, exp:LimiterCollision1_GEN_VARIABLE, exp:SCS_Node_71, exp:NiagaraDataInterfaceWater_1, exp:FishingSpot_GEN_VARIABLE, name:CallFunc_BreakHitResult_TraceEnd
+  [159] VFX_WaterTrailMain_GEN_VARIABLE : NiagaraComponent (outer BP_SmallBoat_V2_C) size=272
+        refs: obj:/Game/Dreadmoor/Art/VFX/Niagara/WaterTrail/NS_WaterTrailMain.NS_WaterTrailMain, exp:InsideAudioTriggerBox_GEN_VARIABLE, exp:KlaxonSound_GEN_VARIABLE, name:Offset, obj:/Script/Niagara.NiagaraFloat, name:User.Offset, name:PowerWave, name:User.PowerWave, name:Water, obj:/Script/Water.NiagaraDataInterfaceWater, name:User.Water, exp:SFX_Boats_Ambience_GEN_VARIABLE, exp:LimiterCollision1_GEN_VARIABLE, exp:SCS_Node_71, exp:NiagaraDataInterfaceWater_1, exp:FishingSpot_GEN_VARIABLE
+  [160] VFX_WaterTrailRight_GEN_VARIABLE : NiagaraComponent (outer BP_SmallBoat_V2_C) size=296
+        refs: obj:/Game/Dreadmoor/Art/VFX/Niagara/WaterTrail/NS_WaterTrail.NS_WaterTrail, exp:InsideAudioTriggerBox_GEN_VARIABLE, exp:KlaxonSound_GEN_VARIABLE, name:Offset, obj:/Script/Niagara.NiagaraFloat, name:User.Offset, name:PowerWave, name:User.PowerWave, name:Water, obj:/Script/Water.NiagaraDataInterfaceWater, name:User.Water, exp:SFX_Boats_Ambience_GEN_VARIABLE, exp:LimiterCollision1_GEN_VARIABLE, exp:SCS_Node_71, exp:NiagaraDataInterfaceWater_1, exp:Module_Armor_Nose_GEN_VARIABLE, exp:FishingSpot_GEN_VARIABLE, name:BlocksInteraction
+  [161] NiagaraDataInterfaceWater_0 : NiagaraDataInterfaceWater (outer VFX_WaterTrailLeft_GEN_VARIABLE) size=58
+        refs: exp:WaterExitPointRight_GEN_VARIABLE, name:MainLevel, exp:ShipModule_FuelTank1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:WaterExitPointLeft_GEN_VARIABLE_BP_WaterExit_Boat_Left_C_CAT
+  [162] NiagaraDataInterfaceWater_1 : NiagaraDataInterfaceWater (outer VFX_WaterTrailLeft_GEN_VARIABLE) size=58
+        refs: exp:WaterExitPointRight_GEN_VARIABLE, name:MainLevel, exp:ShipModule_FuelTank1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:WaterExitPointLeft_GEN_VARIABLE_BP_WaterExit_Boat_Left_C_CAT
+  [163] NiagaraDataInterfaceWater_0 : NiagaraDataInterfaceWater (outer VFX_WaterTrailMain_GEN_VARIABLE) size=58
+        refs: exp:WaterExitPointRight_GEN_VARIABLE, name:MainLevel, exp:ShipModule_FuelTank1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:WaterExitPointLeft_GEN_VARIABLE_BP_WaterExit_Boat_Left_C_CAT
+  [164] NiagaraDataInterfaceWater_1 : NiagaraDataInterfaceWater (outer VFX_WaterTrailMain_GEN_VARIABLE) size=58
+        refs: exp:WaterExitPointRight_GEN_VARIABLE, name:MainLevel, exp:ShipModule_FuelTank1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:WaterExitPointLeft_GEN_VARIABLE_BP_WaterExit_Boat_Left_C_CAT
+  [165] NiagaraDataInterfaceWater_0 : NiagaraDataInterfaceWater (outer VFX_WaterTrailRight_GEN_VARIABLE) size=58
+        refs: exp:WaterExitPointRight_GEN_VARIABLE, name:MainLevel, exp:ShipModule_FuelTank1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:WaterExitPointLeft_GEN_VARIABLE_BP_WaterExit_Boat_Left_C_CAT
+  [166] NiagaraDataInterfaceWater_1 : NiagaraDataInterfaceWater (outer VFX_WaterTrailRight_GEN_VARIABLE) size=58
+        refs: exp:WaterExitPointRight_GEN_VARIABLE, name:MainLevel, exp:ShipModule_FuelTank1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, exp:WaterExitPointLeft_GEN_VARIABLE_BP_WaterExit_Boat_Left_C_CAT
+  [167] P_candle_flame_01_GEN_VARIABLE : ParticleSystemComponent (outer BP_SmallBoat_V2_C) size=95
+        refs: obj:/Game/3rdParty/Swampy_indust_zone/Particles/P_candle_flame_01.P_candle_flame_01, exp:Module_Armor_LeftBack_GEN_VARIABLE, exp:FishingSpot_GEN_VARIABLE, name:WorldStatic
+  [168] ParticleSystem_GEN_VARIABLE : ParticleSystemComponent (outer BP_SmallBoat_V2_C) size=95
+        refs: obj:/Game/3rdParty/Swampy_indust_zone/Particles/P_candle_flame_01.P_candle_flame_01, exp:DynamicForceWaterTrack2_GEN_VARIABLE, name:WorldStatic
+  [169] PointLight1_GEN_VARIABLE : PointLightComponent (outer BP_SmallBoat_V2_C) size=99
+        refs: exp:SCS_Node_77, name:CallFunc_K2_SetRelativeLocation_SweepHitResult, name:CallFunc_BreakHitResult_TraceEnd, exp:FishingSpot_GEN_VARIABLE
+  [170] PointLight_Lentern_GEN_VARIABLE : PointLightComponent (outer BP_SmallBoat_V2_C) size=49
+        refs: exp:SCS_Node_77, name:CallFunc_K2_SetRelativeLocation_SweepHitResult
+  [171] RectLight1_GEN_VARIABLE : RectLightComponent (outer BP_SmallBoat_V2_C) size=134
+        refs: obj:/Game/Dreadmoor/Art/Textures/IES/IES_file/defined.defined, exp:SCS_Node_167, exp:FirstPersonSpringArm_GEN_VARIABLE, exp:Module_Armor_Nose_GEN_VARIABLE, exp:FishingSpot1_GEN_VARIABLE
+  [172] RectLight2_GEN_VARIABLE : RectLightComponent (outer BP_SmallBoat_V2_C) size=134
+        refs: obj:/Game/Dreadmoor/Art/Textures/IES/IES_file/defined.defined, exp:SCS_Node_167, exp:Module_Armor_Nose_GEN_VARIABLE, exp:FishingSpot1_GEN_VARIABLE
+  [173] BarnaclesRoot_GEN_VARIABLE : SceneComponent (outer BP_SmallBoat_V2_C) size=19
+        refs: name:WorldStatic
+  [174] BoatDeckHatchRoot_GEN_VARIABLE : SceneComponent (outer BP_SmallBoat_V2_C) size=48
+        refs: exp:SCS_Node_72, name:ShipHoldHatchRoot
+  [175] DefaultSceneRoot_GEN_VARIABLE : SceneComponent (outer BP_SmallBoat_V2_C) size=10
+        refs: name:ChildForScopedMovement2
+  [176] ExteriorFurniture_GEN_VARIABLE : SceneComponent (outer BP_SmallBoat_V2_C) size=10
+        refs: name:ChildForScopedMovement2
+  [177] PlankLeftPoint : SceneComponent (outer GangplankLeft_GEN_VARIABLE_BP_ShipGangplank_C_CAT) size=14
+        refs: name:CallFunc_BreakHitResult_FaceIndex
+  [178] PlankRightPoint : SceneComponent (outer GangplankLeft_GEN_VARIABLE_BP_ShipGangplank_C_CAT) size=14
+        refs: name:CallFunc_BreakHitResult_FaceIndex
+  [179] PlankRotationPoint : SceneComponent (outer GangplankLeft_GEN_VARIABLE_BP_ShipGangplank_C_CAT) size=14
+        refs: name:CallFunc_BreakHitResult_FaceIndex
+  [180] RootComponent : SceneComponent (outer GangplankLeft_GEN_VARIABLE_BP_ShipGangplank_C_CAT) size=10
+        refs: name:ChildForScopedMovement2
+  [181] PlankLeftPoint : SceneComponent (outer GangplankRight_GEN_VARIABLE_BP_ShipGangplank_C_CAT) size=14
+        refs: name:CallFunc_BreakHitResult_HitItem
+  [182] PlankRightPoint : SceneComponent (outer GangplankRight_GEN_VARIABLE_BP_ShipGangplank_C_CAT) size=14
+        refs: name:CallFunc_BreakHitResult_HitItem
+  [183] PlankRotationPoint : SceneComponent (outer GangplankRight_GEN_VARIABLE_BP_ShipGangplank_C_CAT) size=14
+        refs: name:CallFunc_BreakHitResult_HitItem
+  [184] RootComponent : SceneComponent (outer GangplankRight_GEN_VARIABLE_BP_ShipGangplank_C_CAT) size=10
+        refs: name:ChildForScopedMovement2
+  [185] HullElements_GEN_VARIABLE : SceneComponent (outer BP_SmallBoat_V2_C) size=10
+        refs: name:ChildForScopedMovement2
+  [186] HullRockingRoot_GEN_VARIABLE : SceneComponent (outer BP_SmallBoat_V2_C) size=10
+        refs: name:ChildForScopedMovement2
+  [187] InteriorFurniture_GEN_VARIABLE : SceneComponent (outer BP_SmallBoat_V2_C) size=10
+        refs: name:ChildForScopedMovement2
+  [188] Logic_GEN_VARIABLE : SceneComponent (outer BP_SmallBoat_V2_C) size=10
+        refs: name:ChildForScopedMovement2
+  [189] Module_Armor_LeftBack_GEN_VARIABLE : SceneComponent (outer BP_SmallBoat_V2_C) size=51
+        refs: exp:EngineAudioComponent, name:CallFunc_BreakHitResult_TraceEnd, exp:SCS_Node_168, name:Module_Armor_LeftBack
+  [190] Module_Armor_LeftFront_GEN_VARIABLE : SceneComponent (outer BP_SmallBoat_V2_C) size=51
+        refs: exp:EngineAudioComponent, name:CallFunc_BreakHitResult_TraceEnd, exp:SCS_Node_168, name:Module_Armor_LeftFront
+  [191] Module_Armor_Nose_GEN_VARIABLE : SceneComponent (outer BP_SmallBoat_V2_C) size=51
+        refs: exp:EngineAudioComponent, name:CallFunc_BreakHitResult_TraceEnd, exp:SCS_Node_168, name:Module_Armor_Nose
+  [192] Module_Armor_RightBack_GEN_VARIABLE : SceneComponent (outer BP_SmallBoat_V2_C) size=51
+        refs: exp:EngineAudioComponent, name:CallFunc_BreakHitResult_TraceEnd, exp:SCS_Node_168, name:Module_Armor_RightBack
+  [193] Module_Armor_RightFront_GEN_VARIABLE : SceneComponent (outer BP_SmallBoat_V2_C) size=51
+        refs: exp:EngineAudioComponent, name:CallFunc_BreakHitResult_TraceEnd, exp:SCS_Node_168, name:Module_Armor_RightFront
+  [194] Module_HullUtility_Back_GEN_VARIABLE : SceneComponent (outer BP_SmallBoat_V2_C) size=25
+        refs: exp:SCS_Node_168, name:Module_HullUtility_Back
+  [195] Module_HullUtility_Front_GEN_VARIABLE : SceneComponent (outer BP_SmallBoat_V2_C) size=25
+        refs: exp:SCS_Node_168, name:Module_HullUtility_Front
+  [196] ModuleSide_Cabin_Left_GEN_VARIABLE : SceneComponent (outer BP_SmallBoat_V2_C) size=25
+        refs: exp:SCS_Node_168, name:ModuleSide_CabinSide_Left
+  [197] ModuleSide_Cabin_Right_GEN_VARIABLE : SceneComponent (outer BP_SmallBoat_V2_C) size=25
+        refs: exp:SCS_Node_168, name:ModuleSide_CabinSide_Right
+  [198] RepairOutlineRoot_GEN_VARIABLE : SceneComponent (outer BP_SmallBoat_V2_C) size=10
+        refs: name:ChildForScopedMovement2
+  [199] ShipModuleInstancesRoot_GEN_VARIABLE : SceneComponent (outer BP_SmallBoat_V2_C) size=13
+        refs: name:WorldStatic
+  [200] ShipModuleInteractSlotsRoot_GEN_VARIABLE : SceneComponent (outer BP_SmallBoat_V2_C) size=14
+        refs: name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [201] TeleportToOnUnpossess_GEN_VARIABLE : SceneComponent (outer BP_SmallBoat_V2_C) size=34
+        refs: exp:FishingSpot_GEN_VARIABLE
+  [202] TrophyHookPlace_GEN_VARIABLE : SceneComponent (outer BP_SmallBoat_V2_C) size=72
+        refs: exp:KlaxonSound_GEN_VARIABLE, exp:Module_Armor_Nose_GEN_VARIABLE, exp:FishingSpot_GEN_VARIABLE, exp:dm_vs_Fish_trap_wall_GEN_VARIABLE, name:TrophyHookPlace
+  [203] VFX_GEN_VARIABLE : SceneComponent (outer BP_SmallBoat_V2_C) size=10
+        refs: name:ChildForScopedMovement2
+  [204] SCS_Node_0 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SceneComponent, exp:DefaultSceneRoot_GEN_VARIABLE, name:DefaultSceneRoot
+  [205] SCS_Node_1 : SCS_Node (outer SimpleConstructionScript_0) size=142
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:HullStaticMesh_GEN_VARIABLE, exp:BP_ShipHoldHatchSlotInteractable_GEN_VARIABLE_BP_ShipHoldHatchSlotInteractable_C_CAT, exp:SCS_Node_14, exp:SCS_Node_30, exp:SCS_Node_41, exp:SCS_Node_6, exp:SCS_Node_9, exp:SCS_Node_10, exp:SCS_Node_8, exp:SCS_Node_139, exp:SCS_Node_140, exp:SCS_Node_51, exp:SCS_Node_145, exp:SCS_Node_160, exp:SCS_Node_159, exp:SCS_Node_94, exp:SCS_Node_163, exp:SCS_Node_168, exp:SCS_Node_43, exp:SCS_Node_38, exp:SCS_Node_59, exp:SCS_Node_71, exp:SCS_Node_81, exp:SCS_Node_45, exp:SCS_Node_46, exp:SCS_Node_98, name:HullStaticMesh
+  [206] SCS_Node_10 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SceneComponent, exp:TeleportToOnUnpossess_GEN_VARIABLE, name:TeleportToOnUnpossess
+  [207] SCS_Node_100 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:Repair_block_section_2_L_GEN_VARIABLE, name:Repair_block_section_2_L
+  [208] SCS_Node_101 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:Repair_block_section_2_R_GEN_VARIABLE, name:Repair_block_section_2_R
+  [209] SCS_Node_102 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:Repair_block_section_3_L_GEN_VARIABLE, name:Repair_block_section_3_L
+  [210] SCS_Node_103 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:Repair_block_section_3_R_GEN_VARIABLE, name:Repair_block_section_3_R
+  [211] SCS_Node_11 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/DWP2.ShipRudderComponent, exp:ModuleMount_FuelTank_GEN_VARIABLE, name:ModuleMount_FuelTank
+  [212] SCS_Node_111 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.RectLightComponent, exp:RectLight2_GEN_VARIABLE, name:RectLight2
+  [213] SCS_Node_12 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Engine.ParticleSystemComponent, exp:P_candle_flame_01_GEN_VARIABLE, name:Bone, name:P_candle_flame_01
+  [214] SCS_Node_125 : SCS_Node (outer SimpleConstructionScript_0) size=54
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:sm_Wood_Planks_04_GEN_VARIABLE, exp:SCS_Node_127, exp:SCS_Node_128, name:sm_Wood_Planks_04
+  [215] SCS_Node_126 : SCS_Node (outer SimpleConstructionScript_0) size=64
+        refs: obj:/Script/Engine.ParticleSystemComponent, exp:ParticleSystem_GEN_VARIABLE, name:Light_Socket, exp:SCS_Node_130, exp:SCS_Node_134, name:ParticleSystem
+  [216] SCS_Node_127 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:sm_Wood_Planks_06_GEN_VARIABLE, name:sm_Wood_Planks_06
+  [217] SCS_Node_128 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:sm_Wood_Planks_07_GEN_VARIABLE, name:sm_Wood_Planks_07
+  [218] SCS_Node_129 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:SM_PlayersBoat_dashboard_lamp_1_GEN_VARIABLE, name:K2Node_EnhancedInputActionEvent_ActionValue
+  [219] SCS_Node_13 : SCS_Node (outer SimpleConstructionScript_0) size=53
+        refs: obj:/Script/Engine.BoxComponent, exp:LimiterCollision1_GEN_VARIABLE, name:DockingComponentV2, name:LimiterCollision1
+  [220] SCS_Node_130 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.BillboardComponent, name:Billboard
+  [221] SCS_Node_134 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ArrowComponent, name:Arrow1
+  [222] SCS_Node_135 : SCS_Node (outer SimpleConstructionScript_0) size=53
+        refs: obj:/Script/Engine.BoxComponent, exp:LimiterCollision4_GEN_VARIABLE, name:DockingComponentV2, name:LimiterCollision4
+  [223] SCS_Node_136 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:BoatDeckHatch_GEN_VARIABLE, exp:SCS_Node_60, name:BoatDeckHatch
+  [224] SCS_Node_137 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:CabinPointer1_GEN_VARIABLE, name:CabinPointer1
+  [225] SCS_Node_139 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:GangplankLeft_GEN_VARIABLE, name:GangplankLeft
+  [226] SCS_Node_14 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:BoatDoor_GEN_VARIABLE, exp:SCS_Node_161, name:BoatDoor
+  [227] SCS_Node_140 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:GangplankRight_GEN_VARIABLE, name:GangplankRight
+  [228] SCS_Node_143 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:CabinPointer2_GEN_VARIABLE, name:CabinPointer2
+  [229] SCS_Node_144 : SCS_Node (outer SimpleConstructionScript_0) size=126
+        refs: obj:/Script/Engine.SceneComponent, exp:ShipModuleInteractSlotsRoot_GEN_VARIABLE, exp:FishingSpot_GEN_VARIABLE_BP_ProxyFishingSpot_C_CAT, exp:SCS_Node_148, exp:SCS_Node_149, exp:SCS_Node_151, exp:SCS_Node_152, exp:SCS_Node_153, exp:SCS_Node_154, exp:SCS_Node_155, exp:SCS_Node_16, exp:SCS_Node_19, exp:SCS_Node_26, exp:SCS_Node_29, exp:SCS_Node_37, exp:SCS_Node_15, exp:SCS_Node_67, exp:SCS_Node_65, exp:SCS_Node_74, exp:SCS_Node_75, exp:SCS_Node_77, exp:SCS_Node_79, exp:SCS_Node_80, name:ShipModuleInteractSlotsRoot
+  [230] SCS_Node_145 : SCS_Node (outer SimpleConstructionScript_0) size=114
+        refs: obj:/Script/Engine.SceneComponent, exp:ShipModuleInstancesRoot_GEN_VARIABLE, exp:BP_InventoryComponent_GEN_VARIABLE, exp:SCS_Node_146, exp:SCS_Node_150, exp:SCS_Node_157, exp:SCS_Node_158, exp:SCS_Node_17, exp:SCS_Node_11, exp:SCS_Node_62, exp:SCS_Node_63, exp:SCS_Node_64, exp:SCS_Node_66, exp:SCS_Node_68, exp:SCS_Node_69, exp:SCS_Node_7, exp:SCS_Node_72, exp:SCS_Node_73, exp:SCS_Node_76, exp:SCS_Node_78, name:ShipModuleInstancesRoot
+  [231] SCS_Node_146 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SceneComponent, exp:Module_Armor_LeftFront_GEN_VARIABLE, name:Module_Armor_LeftFront
+  [232] SCS_Node_147 : SCS_Node (outer SimpleConstructionScript_0) size=53
+        refs: obj:/Script/Engine.BoxComponent, exp:InsideAudioTriggerBox_GEN_VARIABLE, name:EngineAudioComponent, name:InsideAudioTriggerBox
+  [233] SCS_Node_148 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:ModuleInteract_Armor_Nose_GEN_VARIABLE, name:ModuleInteract_Armor_Nose
+  [234] SCS_Node_149 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:ModuleInteract_Armor_RightFront_GEN_VARIABLE, name:ModuleInteract_Armor_RightFront
+  [235] SCS_Node_15 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:ModuleInteract_Hold2_GEN_VARIABLE, name:ModuleInteract_Hold2
+  [236] SCS_Node_150 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SceneComponent, exp:Module_Armor_LeftBack_GEN_VARIABLE, name:Module_Armor_LeftBack
+  [237] SCS_Node_151 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:ModuleInteract_Armor_RightBack_GEN_VARIABLE, name:ModuleInteract_Armor_RightBack
+  [238] SCS_Node_152 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:ModuleInteract_Armor_LeftFront_GEN_VARIABLE, name:ModuleInteract_Armor_LeftFront
+  [239] SCS_Node_153 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:ModuleInteract_Armor_LeftBack_GEN_VARIABLE, name:ModuleInteract_Armor_LeftBack
+  [240] SCS_Node_154 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:ModuleInteract_Engine_GEN_VARIABLE, name:ModuleInteract_Engine
+  [241] SCS_Node_155 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:ModuleInteract_Hook_GEN_VARIABLE, name:ModuleInteract_Hook
+  [242] SCS_Node_156 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:dm_vs_Fish_trap_wall_GEN_VARIABLE, name:dm_vs_Fish_trap_wall
+  [243] SCS_Node_157 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SceneComponent, exp:Module_Armor_RightBack_GEN_VARIABLE, name:Module_Armor_RightBack
+  [244] SCS_Node_158 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SceneComponent, exp:Module_Armor_RightFront_GEN_VARIABLE, name:Module_Armor_RightFront
+  [245] SCS_Node_159 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:DynamicForceWaterTrack_GEN_VARIABLE, name:DynamicForceWaterTrack
+  [246] SCS_Node_16 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:ModuleInteract_Hold1_GEN_VARIABLE, name:ModuleInteract_Hold1
+  [247] SCS_Node_160 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:DynamicForceWaterTrack1_GEN_VARIABLE, name:DynamicForceWaterTrack1
+  [248] SCS_Node_161 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:broken_door_handle_GEN_VARIABLE, name:broken_door_handle
+  [249] SCS_Node_162 : SCS_Node (outer SimpleConstructionScript_0) size=61
+        refs: obj:/Script/Engine.SceneComponent, exp:HullRockingRoot_GEN_VARIABLE, name:CollisionComponent0, exp:SCS_Node_17, exp:SCS_Node_1, name:HullRockingRoot
+  [250] SCS_Node_163 : SCS_Node (outer SimpleConstructionScript_0) size=130
+        refs: obj:/Script/Engine.SceneComponent, exp:InteriorFurniture_GEN_VARIABLE, exp:BP_ShipFishScanner_GEN_VARIABLE, exp:SCS_Node_36, exp:SCS_Node_55, exp:SCS_Node_125, exp:SCS_Node_165, exp:SCS_Node_167, exp:SCS_Node_164, exp:SCS_Node_166, exp:SCS_Node_129, exp:SCS_Node_171, exp:SCS_Node_172, exp:SCS_Node_25, exp:SCS_Node_170, exp:SCS_Node_111, exp:SCS_Node_137, exp:SCS_Node_143, exp:SCS_Node_24, exp:SCS_Node_27, exp:SCS_Node_35, exp:SCS_Node_40, exp:SCS_Node_22, exp:SCS_Node_70, name:InteriorFurniture
+  [251] SCS_Node_164 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:Throttle_lever_GEN_VARIABLE, name:Throttle_lever
+  [252] SCS_Node_165 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:Dashboard_Button_1_GEN_VARIABLE, exp:SCS_Node_78
+  [253] SCS_Node_166 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:Dashboard_Button_2_GEN_VARIABLE, exp:SCS_Node_78, exp:KlaxonSound_GEN_VARIABLE
+  [254] SCS_Node_167 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:Dashboard_Switch_1_GEN_VARIABLE, exp:SCS_Node_79
+  [255] SCS_Node_168 : SCS_Node (outer SimpleConstructionScript_0) size=62
+        refs: obj:/Script/Engine.SceneComponent, exp:ExteriorFurniture_GEN_VARIABLE, exp:SFX_Boats_Ambience_GEN_VARIABLE, exp:SCS_Node_156, exp:SCS_Node_95, exp:SCS_Node_61, exp:SCS_Node_50, name:ExteriorFurniture
+  [256] SCS_Node_17 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/DWP2.ShipRudderComponent, exp:ModuleMount_Engine_GEN_VARIABLE, name:ModuleMount_Engine
+  [257] SCS_Node_170 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:Dashboard_Switch_2_GEN_VARIABLE, exp:SCS_Node_79, exp:KlaxonSound_GEN_VARIABLE
+  [258] SCS_Node_171 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.RectLightComponent, exp:RectLight1_GEN_VARIABLE, name:RectLight1
+  [259] SCS_Node_172 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:SM_PlayersBoat_dashboard_lamp_2_GEN_VARIABLE, name:WaterObject
+  [260] SCS_Node_18 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Game/Dreadmoor/InventoryFramework/Components/BP_InventoryComponent.BP_InventoryComponent_C, exp:BP_InventoryComponent_GEN_VARIABLE, name:BP_InventoryComponent
+  [261] SCS_Node_19 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:ModuleInteract_CabinSide_Left_GEN_VARIABLE, name:ModuleInteract_CabinSide_Left
+  [262] SCS_Node_2 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/DWP2.WaterDataUnrealWater, exp:WaterDataUnrealWater_GEN_VARIABLE, name:WaterDataUnrealWater
+  [263] SCS_Node_20 : SCS_Node (outer SimpleConstructionScript_0) size=53
+        refs: obj:/Script/Engine.BoxComponent, exp:LimiterCollision2_GEN_VARIABLE, name:DockingComponentV2, name:LimiterCollision2
+  [264] SCS_Node_21 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.PointLightComponent, exp:PointLight1_GEN_VARIABLE, name:PointLight1
+  [265] SCS_Node_22 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:Compass_Ring_Inner1_GEN_VARIABLE, name:Compass_Ring_Inner1
+  [266] SCS_Node_23 : SCS_Node (outer SimpleConstructionScript_0) size=53
+        refs: obj:/Script/Engine.BoxComponent, exp:LimiterCollision3_GEN_VARIABLE, name:DockingComponentV2, name:LimiterCollision3
+  [267] SCS_Node_24 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SkeletalMeshComponent, exp:PossessedCharacterDoll_GEN_VARIABLE, name:PossessedCharacterDoll
+  [268] SCS_Node_25 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SceneComponent, exp:TrophyHookPlace_GEN_VARIABLE, name:TrophyHookPlace
+  [269] SCS_Node_26 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:ModuleInteract_CabinSide_Right_GEN_VARIABLE, name:ModuleInteract_CabinSide_Right
+  [270] SCS_Node_27 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:CraftTable_GEN_VARIABLE, name:CraftTable
+  [271] SCS_Node_29 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:ModuleInteract_FuelTank_GEN_VARIABLE, name:ModuleInteract_FuelTank
+  [272] SCS_Node_3 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.WorldPartitionStreamingSourceComponent, exp:WorldPartitionStreamingSource_GEN_VARIABLE, name:WorldPartitionStreamingSource
+  [273] SCS_Node_30 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:BP_Storage_GEN_VARIABLE, name:BP_Storage
+  [274] SCS_Node_31 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Niagara.NiagaraComponent, exp:VFX_WaterTrailLeft_GEN_VARIABLE, name:VFX_WaterTrailLeft
+  [275] SCS_Node_32 : SCS_Node (outer SimpleConstructionScript_0) size=73
+        refs: obj:/Script/Engine.SceneComponent, exp:VFX_GEN_VARIABLE, name:CollisionComponent0, exp:SFX_Boats_Ambience_GEN_VARIABLE, exp:SCS_Node_31, exp:SCS_Node_54, exp:SCS_Node_90, exp:SCS_Node_56, name:VFX
+  [276] SCS_Node_33 : SCS_Node (outer SimpleConstructionScript_0) size=61
+        refs: obj:/Script/Engine.SpotLightComponent, exp:TopSpotLight_GEN_VARIABLE, name:CollisionComponent0, exp:SCS_Node_17, exp:SCS_Node_34, name:TopSpotLight
+  [277] SCS_Node_34 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ArrowComponent, name:Arrow
+  [278] SCS_Node_35 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:Compass_Ring_Outer1_GEN_VARIABLE, name:Compass_Ring_Outer1
+  [279] SCS_Node_36 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:SM_Family_Photo_2_GEN_VARIABLE, name:WaterObject
+  [280] SCS_Node_37 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:ModuleInteract_Hold3_GEN_VARIABLE, name:ModuleInteract_Hold3
+  [281] SCS_Node_38 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:DynamicForceWaterTrack2_GEN_VARIABLE, name:DynamicForceWaterTrack2
+  [282] SCS_Node_39 : SCS_Node (outer SimpleConstructionScript_0) size=69
+        refs: obj:/Script/Engine.SceneComponent, exp:Logic_GEN_VARIABLE, name:CollisionComponent0, exp:KlaxonSound_GEN_VARIABLE, exp:SCS_Node_4, exp:SCS_Node_144, exp:SCS_Node_44, name:Logic
+  [283] SCS_Node_4 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/DWP2.WaterObjectComponent, exp:WaterObject_GEN_VARIABLE, name:WaterObject
+  [284] SCS_Node_40 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:Compass1_GEN_VARIABLE, name:Compass1
+  [285] SCS_Node_41 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.AudioComponent, exp:SFX_Boats_Ambience_GEN_VARIABLE, name:SFX_Boats_Ambience
+  [286] SCS_Node_42 : SCS_Node (outer SimpleConstructionScript_0) size=53
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:WaterCaptureProxyMesh_GEN_VARIABLE, name:CollisionComponent0, name:WaterCaptureProxyMesh
+  [287] SCS_Node_43 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Engine.SpringArmComponent, exp:FirstPersonSpringArm_GEN_VARIABLE, exp:SCS_Node_52, name:FirstPersonSpringArm
+  [288] SCS_Node_44 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.AudioComponent, exp:KlaxonSound_GEN_VARIABLE, name:KlaxonSound
+  [289] SCS_Node_45 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:BoatModular_GEN_VARIABLE, name:BoatModular
+  [290] SCS_Node_46 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Niagara.NiagaraComponent, exp:VFX_BoatCenterDrops_GEN_VARIABLE, name:VFX_BoatCenterDrops
+  [291] SCS_Node_47 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Dreadmoor.DrdActorTagComponent, exp:DrdActorTag_GEN_VARIABLE, name:DrdActorTag
+  [292] SCS_Node_48 : SCS_Node (outer SimpleConstructionScript_0) size=53
+        refs: obj:/Script/Engine.ChildActorComponent, exp:WaterExitPointLeft_GEN_VARIABLE, name:CollisionComponent0, name:WaterExitPointLeft
+  [293] SCS_Node_49 : SCS_Node (outer SimpleConstructionScript_0) size=53
+        refs: obj:/Script/Engine.ChildActorComponent, exp:WaterExitPointRight_GEN_VARIABLE, name:CollisionComponent0, name:WaterExitPointRight
+  [294] SCS_Node_5 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Dreadmoor.AbilityComponentInitializer, name:AbilityComponentInitializer
+  [295] SCS_Node_50 : SCS_Node (outer SimpleConstructionScript_0) size=54
+        refs: obj:/Script/Engine.SkeletalMeshComponent, exp:Small_Boat_Light_Armature_GEN_VARIABLE, exp:SCS_Node_12, exp:SCS_Node_21, name:Small_Boat_Light_Armature
+  [296] SCS_Node_51 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:RadioActor_GEN_VARIABLE, name:RadioActor
+  [297] SCS_Node_52 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.CameraComponent, exp:FirstPersonCamera_GEN_VARIABLE, name:FirstPersonCamera
+  [298] SCS_Node_53 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/NarrativeNavigator.NavigationMarkerComponent, exp:NavigationMarker_GEN_VARIABLE, name:NavigationMarker
+  [299] SCS_Node_54 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Niagara.NiagaraComponent, exp:VFX_WaterTrailMain_GEN_VARIABLE, name:VFX_WaterTrailMain
+  [300] SCS_Node_55 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:SM_First_Aid_Kit_GEN_VARIABLE, name:SM_First_Aid_Kit
+  [301] SCS_Node_56 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Niagara.NiagaraComponent, exp:VFX_BoatCenterRipples_GEN_VARIABLE, name:VFX_BoatCenterRipples
+  [302] SCS_Node_57 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Dreadmoor.DrdBarnaclesSpawnComponent, exp:DrdBarnaclesSpawn_GEN_VARIABLE, name:DrdBarnaclesSpawn
+  [303] SCS_Node_58 : SCS_Node (outer SimpleConstructionScript_0) size=53
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:Small_Boat_HullSim_GEN_VARIABLE, name:CollisionComponent0, name:Small_Boat_HullSim
+  [304] SCS_Node_59 : SCS_Node (outer SimpleConstructionScript_0) size=70
+        refs: obj:/Script/Engine.SceneComponent, exp:HullElements_GEN_VARIABLE, exp:BP_SmallBoat_V2_C, exp:SCS_Node_85, exp:SCS_Node_88, exp:SCS_Node_89, exp:SCS_Node_91, exp:SCS_Node_92, exp:SCS_Node_93, name:HullElements
+  [305] SCS_Node_6 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:FishingSpot_GEN_VARIABLE, name:FishingSpot
+  [306] SCS_Node_60 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:BP_ShipHoldHatchSlotInteractable_GEN_VARIABLE, name:BP_ShipHoldHatchSlotInteractable
+  [307] SCS_Node_61 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Engine.SceneComponent, exp:BoatDeckHatchRoot_GEN_VARIABLE, exp:SCS_Node_136, name:BoatDeckHatchRoot
+  [308] SCS_Node_62 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/DWP2.ShipRudderComponent, exp:ModuleMount_Hold1_GEN_VARIABLE, name:ModuleMount_Hold1
+  [309] SCS_Node_63 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/DWP2.ShipRudderComponent, exp:ModuleMount_Hold2_GEN_VARIABLE, name:ModuleMount_Hold2
+  [310] SCS_Node_64 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/DWP2.ShipRudderComponent, exp:ModuleMount_Hold3_GEN_VARIABLE, name:ModuleMount_Hold3
+  [311] SCS_Node_65 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:ModuleInteract_EnginePropeller_GEN_VARIABLE, name:ModuleInteract_EnginePropeller
+  [312] SCS_Node_66 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/DWP2.ShipRudderComponent, exp:ModuleMount_CabinTop_Front_GEN_VARIABLE, name:ModuleMount_CabinTop_Front
+  [313] SCS_Node_67 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:ModuleInteract_CabinTop_Front_GEN_VARIABLE, name:ModuleInteract_CabinTop_Front
+  [314] SCS_Node_68 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SceneComponent, exp:ModuleSide_Cabin_Left_GEN_VARIABLE, name:ModuleSide_Cabin_Left
+  [315] SCS_Node_69 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SceneComponent, exp:ModuleSide_Cabin_Right_GEN_VARIABLE, name:ModuleSide_Cabin_Right
+  [316] SCS_Node_7 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SceneComponent, exp:Module_Armor_Nose_GEN_VARIABLE, name:Module_Armor_Nose
+  [317] SCS_Node_70 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:BP_SideModulesInteractButton_GEN_VARIABLE, name:BP_SideModulesInteractButton
+  [318] SCS_Node_71 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:DrdCleaningProxy_GEN_VARIABLE, name:DrdCleaningProxy
+  [319] SCS_Node_72 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/DWP2.ShipRudderComponent, exp:ModuleMount_EnginePropeller_GEN_VARIABLE, name:ModuleMount_EnginePropeller
+  [320] SCS_Node_73 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/DWP2.ShipRudderComponent, exp:ModuleMount_EngineNitro_GEN_VARIABLE, name:ModuleMount_EngineNitro
+  [321] SCS_Node_74 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:ModuleInteract_EngineNitro_GEN_VARIABLE, name:ModuleInteract_EngineNitro
+  [322] SCS_Node_75 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:ModuleInteract_HullUtility_RightFront_GEN_VARIABLE, name:ModuleInteract_HullUtility_RightFront
+  [323] SCS_Node_76 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SceneComponent, exp:Module_HullUtility_Front_GEN_VARIABLE, name:Module_HullUtility_Front
+  [324] SCS_Node_77 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:ModuleInteract_HullUtility_RightBack_GEN_VARIABLE, name:ModuleInteract_HullUtility_RightBack
+  [325] SCS_Node_78 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SceneComponent, exp:Module_HullUtility_Back_GEN_VARIABLE, name:Module_HullUtility_Back
+  [326] SCS_Node_79 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:ModuleInteract_HullUtility_LeftFront_GEN_VARIABLE, name:ModuleInteract_HullUtility_LeftFront
+  [327] SCS_Node_8 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:FishingSpot1_GEN_VARIABLE, name:FishingSpot1
+  [328] SCS_Node_80 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:ModuleInteract_HullUtility_LeftBack_GEN_VARIABLE, name:ModuleInteract_HullUtility_LeftBack
+  [329] SCS_Node_81 : SCS_Node (outer SimpleConstructionScript_0) size=58
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:dm_demo_Barrel_01_GEN_VARIABLE, exp:KlaxonSound_GEN_VARIABLE, exp:SCS_Node_84, exp:SCS_Node_82, exp:SCS_Node_87, name:dm_demo_Barrel_01
+  [330] SCS_Node_82 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:dm_demo_Barrel_02_GEN_VARIABLE, name:dm_demo_Barrel_02
+  [331] SCS_Node_83 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Game/Dreadmoor/Core/Features/Ship/FishScanner/BP_ShipFishScanner.BP_ShipFishScanner_C, exp:BP_ShipFishScanner_GEN_VARIABLE, name:BP_ShipFishScanner
+  [332] SCS_Node_84 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:dm_vs_SM_Barrel_01_GEN_VARIABLE, exp:SCS_Node_86, name:dm_vs_SM_Barrel_01
+  [333] SCS_Node_85 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SkeletalMeshComponent, exp:HullModule_Front_GEN_VARIABLE, name:HullModule_Front
+  [334] SCS_Node_86 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:sm_tros_GEN_VARIABLE, name:sm_tros
+  [335] SCS_Node_87 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:sm_lifebuoy_GEN_VARIABLE, name:sm_lifebuoy
+  [336] SCS_Node_88 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SkeletalMeshComponent, exp:HullModule_Right_Front_GEN_VARIABLE, name:HullModule_Right_Front
+  [337] SCS_Node_89 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SkeletalMeshComponent, exp:HullModule_Right_Back_GEN_VARIABLE, name:HullModule_Right_Back
+  [338] SCS_Node_9 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:BP_ShipSteeringWheel_GEN_VARIABLE, name:BP_ShipSteeringWheel
+  [339] SCS_Node_90 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Niagara.NiagaraComponent, exp:VFX_WaterTrailRight_GEN_VARIABLE, name:VFX_WaterTrailRight
+  [340] SCS_Node_91 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SkeletalMeshComponent, exp:HullModule_Left_Front_GEN_VARIABLE, name:HullModule_Left_Front
+  [341] SCS_Node_92 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SkeletalMeshComponent, exp:HullModule_Left_Back_GEN_VARIABLE, name:HullModule_Left_Back
+  [342] SCS_Node_93 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SkeletalMeshComponent, exp:HullModule_Back_GEN_VARIABLE, name:HullModule_Back
+  [343] SCS_Node_94 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Engine.SceneComponent, exp:BarnaclesRoot_GEN_VARIABLE, exp:SCS_Node_57, name:BarnaclesRoot
+  [344] SCS_Node_95 : SCS_Node (outer SimpleConstructionScript_0) size=54
+        refs: obj:/Script/Engine.SkeletalMeshComponent, exp:SKM_lantern_05_GEN_VARIABLE, exp:SCS_Node_97, exp:SCS_Node_126, name:SKM_lantern_05
+  [345] SCS_Node_97 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Engine.PointLightComponent, exp:PointLight_Lentern_GEN_VARIABLE, name:Light_Socket, name:PointLight_Lentern
+  [346] SCS_Node_98 : SCS_Node (outer SimpleConstructionScript_0) size=66
+        refs: obj:/Script/Engine.SceneComponent, exp:RepairOutlineRoot_GEN_VARIABLE, exp:EngineAudioComponent, exp:SCS_Node_99, exp:SCS_Node_100, exp:SCS_Node_101, exp:SCS_Node_102, exp:SCS_Node_103, name:RepairOutlineRoot
+  [347] SCS_Node_99 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:Repair_block_section_1_GEN_VARIABLE, name:K2Node_EnhancedInputActionEvent_ActionValue
+  [348] ModuleMount_CabinTop_Front_GEN_VARIABLE : ShipRudderComponent (outer BP_SmallBoat_V2_C) size=61
+        refs: exp:SCS_Node_168, name:ModuleMount_CabinTop_Front
+  [349] ModuleMount_Engine_GEN_VARIABLE : ShipRudderComponent (outer BP_SmallBoat_V2_C) size=85
+        refs: exp:SCS_Node_72, name:CallFunc_BreakHitResult_TraceEnd, exp:SCS_Node_168, name:ModuleMountEngine
+  [350] ModuleMount_EngineNitro_GEN_VARIABLE : ShipRudderComponent (outer BP_SmallBoat_V2_C) size=35
+        refs: exp:SCS_Node_168, name:ModuleMountEngineNitro
+  [351] ModuleMount_EnginePropeller_GEN_VARIABLE : ShipRudderComponent (outer BP_SmallBoat_V2_C) size=61
+        refs: exp:SCS_Node_168, name:ModuleMountEnginePropeller
+  [352] ModuleMount_FuelTank_GEN_VARIABLE : ShipRudderComponent (outer BP_SmallBoat_V2_C) size=61
+        refs: exp:SCS_Node_168, name:ModuleMountFuelTank
+  [353] ModuleMount_Hold1_GEN_VARIABLE : ShipRudderComponent (outer BP_SmallBoat_V2_C) size=61
+        refs: exp:SCS_Node_168, name:ModuleMount_Hold1
+  [354] ModuleMount_Hold2_GEN_VARIABLE : ShipRudderComponent (outer BP_SmallBoat_V2_C) size=61
+        refs: exp:SCS_Node_168, name:ModuleMount_Hold2
+  [355] ModuleMount_Hold3_GEN_VARIABLE : ShipRudderComponent (outer BP_SmallBoat_V2_C) size=61
+        refs: exp:SCS_Node_168, name:ModuleMount_Hold3
+  [356] SimpleConstructionScript_0 : SimpleConstructionScript (outer BP_SmallBoat_V2_C) size=670
+        refs: exp:FishingSpot_GEN_VARIABLE_BP_ProxyFishingSpot_C_CAT, exp:SCS_Node_2, exp:SCS_Node_47, exp:SCS_Node_53, exp:SCS_Node_5, exp:SCS_Node_3, exp:SCS_Node_20, exp:SCS_Node_23, exp:SCS_Node_13, exp:SCS_Node_18, exp:SCS_Node_33, exp:SCS_Node_147, exp:SCS_Node_135, exp:SCS_Node_162, exp:SCS_Node_32, exp:SCS_Node_39, exp:SCS_Node_42, exp:SCS_Node_58, exp:SCS_Node_83, exp:SCS_Node_48, exp:SCS_Node_49, exp:ReceiveUnpossessed, exp:SCS_Node_14, exp:SCS_Node_30, exp:SCS_Node_41, exp:SCS_Node_6, exp:SCS_Node_9, exp:SCS_Node_10, exp:SCS_Node_8, exp:SCS_Node_127, exp:SCS_Node_128, exp:SCS_Node_34, exp:SCS_Node_97, exp:SCS_Node_126, exp:SCS_Node_130, exp:SCS_Node_134, exp:SCS_Node_139, exp:SCS_Node_140, exp:SCS_Node_148, exp:SCS_Node_149, exp:SCS_Node_151, exp:SCS_Node_152, exp:SCS_Node_153, exp:SCS_Node_154, exp:SCS_Node_155, exp:SCS_Node_16, exp:SCS_Node_19, exp:SCS_Node_26, exp:SCS_Node_29, exp:SCS_Node_37, exp:SCS_Node_15, exp:SCS_Node_51, exp:SCS_Node_146, exp:SCS_Node_150, exp:SCS_Node_157, exp:SCS_Node_158, exp:SCS_Node_145, exp:SCS_Node_160, exp:SCS_Node_159, exp:SCS_Node_161
+  [357] HullModule_Back_GEN_VARIABLE : SkeletalMeshComponent (outer BP_SmallBoat_V2_C) size=37
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/Characters/Modular_Boat/LowHP_Sections/Boat_Section_Back_LowHP.Boat_Section_Back_LowHP, exp:SCS_Node_168, name:HullCosmetic_Back
+  [358] HullModule_Front_GEN_VARIABLE : SkeletalMeshComponent (outer BP_SmallBoat_V2_C) size=25
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/Characters/Modular_Boat/LowHP_Sections/Boat_Nose_Section_LowHP.Boat_Nose_Section_LowHP, name:WorldStatic
+  [359] HullModule_Left_Back_GEN_VARIABLE : SkeletalMeshComponent (outer BP_SmallBoat_V2_C) size=25
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/Characters/Modular_Boat/LowHP_Sections/Boat_Section_2_L_LowHP.Boat_Section_2_L_LowHP, name:WorldStatic
+  [360] HullModule_Left_Front_GEN_VARIABLE : SkeletalMeshComponent (outer BP_SmallBoat_V2_C) size=25
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/Characters/Modular_Boat/LowHP_Sections/Boat_Section_1_L_LowHP.Boat_Section_1_L_LowHP, name:WorldStatic
+  [361] HullModule_Right_Back_GEN_VARIABLE : SkeletalMeshComponent (outer BP_SmallBoat_V2_C) size=25
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/Characters/Modular_Boat/LowHP_Sections/Boat_Section_2_R_LowHP.Boat_Section_2_R_LowHP, name:WorldStatic
+  [362] HullModule_Right_Front_GEN_VARIABLE : SkeletalMeshComponent (outer BP_SmallBoat_V2_C) size=25
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/Characters/Modular_Boat/LowHP_Sections/Boat_Section_1_R_LowHP.Boat_Section_1_R_LowHP, name:WorldStatic
+  [363] PossessedCharacterDoll_GEN_VARIABLE : SkeletalMeshComponent (outer BP_SmallBoat_V2_C) size=90
+        refs: obj:/Game/Dreadmoor/Animations/Characters/ABP_SK_DreadMore_Steering.ABP_SK_DreadMore_Steering_C, obj:/Game/Dreadmoor/Animations/Characters/Animations/dm_vs_protagonist_ship_piloting.dm_vs_protagonist_ship_piloting, obj:/Game/Dreadmoor/Animations/Characters/New/dm_demo_NewProtagonist.dm_demo_NewProtagonist, exp:FishingSpot_GEN_VARIABLE, name:CallFunc_BreakHitResult_TraceEnd
+  [364] SKM_lantern_05_GEN_VARIABLE : SkeletalMeshComponent (outer BP_SmallBoat_V2_C) size=153
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Peers_Lantern/ABP_Lantern_05.ABP_Lantern_05_C, obj:/Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Peers_Lantern/SKM_lantern_05.SKM_lantern_05, obj:/Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Peers_Lantern/SKM_lantern_05_Physics.SKM_lantern_05_Physics, obj:/Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Peers_Lantern/Materials/MI_lantern_02.MI_lantern_02, name:Custom, exp:SCS_Node_171, name:Pawn, exp:FishingSpot1_GEN_VARIABLE
+  [365] Small_Boat_Light_Armature_GEN_VARIABLE : SkeletalMeshComponent (outer BP_SmallBoat_V2_C) size=52
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Boat_Light/ABP_Small_Boat_Light.ABP_Small_Boat_Light_C, obj:/Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Boat_Light/SKM_Small_Boat_Light.SKM_Small_Boat_Light, exp:FishingSpot_GEN_VARIABLE
+  [366] TopSpotLight_GEN_VARIABLE : SpotLightComponent (outer BP_SmallBoat_V2_C) size=102
+        refs: obj:/Game/Dreadmoor/Art/Textures/IES/IES_file/top-post.top-post, obj:/Script/Water.NiagaraDataInterfaceWater, exp:Module_Armor_Nose_GEN_VARIABLE, exp:FishingSpot_GEN_VARIABLE, name:CurrentValue
+  [367] FirstPersonSpringArm_GEN_VARIABLE : SpringArmComponent (outer BP_SmallBoat_V2_C) size=60
+        refs: exp:FishingSpot_GEN_VARIABLE, exp:SCS_Node_72, name:FirstPersonCameraSpringArm
+  [368] SpringArmComp : SpringArmComponent (outer Default__BP_SmallBoat_V2_C) size=49
+        refs: exp:ModuleInteract_Armor_LeftFront_GEN_VARIABLE, name:Hit
+  [369] BoatDeckHatch_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=87
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/Characters/Modular_Boat/Boat_Hold_Hatch.Boat_Hold_Hatch, name:CallFunc_BreakHitResult_Time, exp:FishingSpot_GEN_VARIABLE, name:WorldStatic, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [370] BoatDoor_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=130
+        refs: obj:/Game/Dreadmoor/Animations/NewBoatConstructor/Door/broken_door.broken_door, name:Custom, exp:KlaxonSound_GEN_VARIABLE, name:WorldStatic, name:Vehicle, name:Destructible, exp:FishingSpot_GEN_VARIABLE, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [371] broken_door_handle_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=130
+        refs: obj:/Game/Dreadmoor/Animations/NewBoatConstructor/Door/broken_door_handle.broken_door_handle, name:NoCollision, name:Visibility, name:Camera, name:WorldStatic, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [372] CabinPointer1_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=125
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/Dashboard_Pointer.<c85b19226f3c59e1>, name:NoCollision, name:Visibility, name:Camera, exp:FishingSpot_GEN_VARIABLE, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [373] CabinPointer2_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=149
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/Dashboard_Pointer.<33becb13e57c46e4>, name:NoCollision, name:Visibility, name:Camera, exp:FishingSpot1_GEN_VARIABLE, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [374] Compass1_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=128
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/Compass.Compass, name:NoCollision, name:Visibility, name:Camera, exp:FishingSpot_GEN_VARIABLE, exp:SCS_Node_168, name:CallFunc_BreakHitResult_TraceEnd, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [375] Compass_Ring_Inner1_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=125
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/Compass_Ring_Inner.Compass_Ring_Inner, name:NoCollision, name:Visibility, name:Camera, exp:FishingSpot_GEN_VARIABLE, name:CallFunc_BreakHitResult_TraceEnd, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [376] Compass_Ring_Outer1_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=125
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/Compass_Ring_Outer.Compass_Ring_Outer, name:NoCollision, name:Visibility, name:Camera, exp:FishingSpot_GEN_VARIABLE, name:CallFunc_BreakHitResult_TraceEnd, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [377] Dashboard_Button_1_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=125
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/Dashboard_Button.<617ab361f73f9f85>, name:NoCollision, name:Visibility, name:Camera, name:CallFunc_BreakHitResult_TraceEnd, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [378] Dashboard_Button_2_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=125
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/Dashboard_Button.<6b28a159e3edd663>, name:NoCollision, name:Visibility, name:Camera, name:CallFunc_BreakHitResult_TraceEnd, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [379] Dashboard_Switch_1_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=125
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/Dashboard_Switch.<a7bb13db5c690bdc>, name:NoCollision, name:Visibility, name:Camera, exp:FishingSpot_GEN_VARIABLE, name:CallFunc_BreakHitResult_TraceEnd, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [380] Dashboard_Switch_2_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=125
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/Dashboard_Switch.<05f2a6cc834960cc>, name:NoCollision, name:Visibility, name:Camera, exp:FishingSpot_GEN_VARIABLE, name:CallFunc_BreakHitResult_TraceEnd, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [381] dm_demo_Barrel_01_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=101
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Furniture/dm_demo_Barrel_01.dm_demo_Barrel_01, name:NoCollision, name:Visibility, name:Camera, exp:FishingSpot_GEN_VARIABLE, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [382] dm_demo_Barrel_02_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=125
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Furniture/dm_demo_Barrel_01.dm_demo_Barrel_01, name:NoCollision, name:Visibility, name:Camera, exp:FishingSpot_GEN_VARIABLE, name:CallFunc_BreakHitResult_PhysMat, name:CallFunc_BreakHitResult_TraceEnd, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [383] dm_vs_Fish_trap_wall_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=103
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Fish_trap/Meshes/dm_vs_Fish_trap_wall.dm_vs_Fish_trap_wall, obj:/Game/Dreadmoor/Audio/SFX/Player/Tools/SCUE_Flashlight_Turn_On.SCUE_Flashlight_Turn_On, exp:FishingSpot1_GEN_VARIABLE, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [384] dm_vs_SM_Barrel_01_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=125
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Furniture/OLD/dm_vs_SM_Barrel_01.dm_vs_SM_Barrel_01, name:NoCollision, name:Visibility, name:Camera, exp:FishingSpot_GEN_VARIABLE, name:CallFunc_BreakHitResult_TraceEnd, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [385] DrdCleaningProxy_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=164
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/SM_BoatPolypusCollision.SM_BoatPolypusCollision, obj:/Game/Dreadmoor/Art/Materials/MasterMaterials/Unique/CompletionSweep/MI_Translucent_Simple.MI_Translucent_Simple, name:NoCollision, name:Visibility, name:Camera, exp:Module_Armor_Nose_GEN_VARIABLE, exp:SCS_Node_168, name:PurityEffect, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [386] HullStaticMesh_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=131
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/Characters/Modular_Boat/Boat_Hull_new_engine_stand.Boat_Hull_new_engine_stand, name:Custom, exp:FishingSpot_GEN_VARIABLE, name:CallFunc_BreakHitResult_TraceEnd, obj:/Game/3rdParty/TFPMovement/Maps/PhysicalMaterials/10_Wood_Footsteps_Mat.10_Wood_Footsteps_Mat, exp:SCS_Node_72, name:Hull, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [387] Repair_block_section_1_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=105
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/Characters/Modular_Boat/repair_blocks/Repair_block_section_1_Nose.Repair_block_section_1_Nose, name:NoCollision, name:Visibility, name:Camera, name:HullCosmetic_Front, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [388] Repair_block_section_2_L_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=105
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/Characters/Modular_Boat/repair_blocks/Repair_block_section_2_L.Repair_block_section_2_L, name:NoCollision, name:Visibility, name:Camera, name:HullCosmetic_Left_Front, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [389] Repair_block_section_2_R_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=105
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/Characters/Modular_Boat/repair_blocks/Repair_block_section_2_R.Repair_block_section_2_R, name:NoCollision, name:Visibility, name:Camera, name:HullCosmetic_Right_Front, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [390] Repair_block_section_3_L_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=105
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/Characters/Modular_Boat/repair_blocks/Repair_block_section_3_L.Repair_block_section_3_L, name:NoCollision, name:Visibility, name:Camera, name:HullCosmetic_Left_Back, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [391] Repair_block_section_3_R_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=105
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/Characters/Modular_Boat/repair_blocks/Repair_block_section_3_R.Repair_block_section_3_R, name:NoCollision, name:Visibility, name:Camera, name:HullCosmetic_Right_Back, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [392] SM_Family_Photo_2_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=125
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/PlayersBoat/Family_Photos/SM_Family_Photo.<522dad1963da102b>, name:NoCollision, name:Visibility, name:Camera, exp:FishingSpot_GEN_VARIABLE, name:BlocksInteraction, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [393] SM_First_Aid_Kit_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=159
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/FirstAidKit/SM_First_Aid_Kit.SM_First_Aid_Kit, obj:/Game/Dreadmoor/Art/Materials/MaterialInstances/SM_First_Aid_Kit/MI_SM_First_Aid_Kit_Opaque_00.MI_SM_First_Aid_Kit_Opaque_00, name:NoCollision, name:Visibility, name:Camera, exp:FishingSpot1_GEN_VARIABLE, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [394] sm_lifebuoy_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=125
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/OldBoatProps/sm_lifebuoy.sm_lifebuoy, name:NoCollision, name:Visibility, name:Camera, exp:FishingSpot_GEN_VARIABLE, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [395] SM_PlayersBoat_dashboard_lamp_1_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=149
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/PlayersBoat/FixedCollisionsBoat1/SM_PlayersBoat_dashboard_lamp.<784cbdadc3f7d2fe>, name:NoCollision, name:Visibility, name:Camera, exp:FishingSpot_GEN_VARIABLE, exp:FishingSpot1_GEN_VARIABLE, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [396] SM_PlayersBoat_dashboard_lamp_2_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=149
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/PlayersBoat/FixedCollisionsBoat1/SM_PlayersBoat_dashboard_lamp.<784cbdadc3f7d2fe>, name:NoCollision, name:Visibility, name:Camera, exp:FishingSpot_GEN_VARIABLE, exp:ItemUnequipped, name:CallFunc_BreakHitResult_PhysMat, exp:FishingSpot1_GEN_VARIABLE, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [397] sm_tros_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=149
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/OldBoatProps/sm_tros.sm_tros, name:NoCollision, name:Visibility, name:Camera, exp:FishingSpot_GEN_VARIABLE, exp:FishingSpot1_GEN_VARIABLE, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [398] sm_Wood_Planks_04_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=124
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/House_01/Separated_Models/sm_Wood_Planks_04.sm_Wood_Planks_04, name:NoCollision, name:Visibility, name:Camera, exp:FishingSpot1_GEN_VARIABLE, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [399] sm_Wood_Planks_06_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=146
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/House_01/Separated_Models/sm_Wood_Planks_06.sm_Wood_Planks_06, name:NoCollision, name:Visibility, name:Camera, exp:FishingSpot1_GEN_VARIABLE, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [400] sm_Wood_Planks_07_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=146
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/House_01/Separated_Models/sm_Wood_Planks_06.sm_Wood_Planks_06, name:NoCollision, name:Visibility, name:Camera, exp:Module_Armor_Nose_GEN_VARIABLE, exp:FishingSpot_GEN_VARIABLE, exp:FishingSpot1_GEN_VARIABLE, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [401] Small_Boat_HullSim_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=144
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/Small_Boat_HullSim.Small_Boat_HullSim, name:NoCollision, name:Visibility, name:Camera, exp:Module_Armor_Nose_GEN_VARIABLE, exp:Module_Armor_LeftBack_GEN_VARIABLE, exp:FishingSpot1_GEN_VARIABLE, exp:SCS_Node_17, name:WaterSimMesh, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [402] Throttle_lever_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=139
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/Throttle_lever.Throttle_lever, name:NoCollision, name:Visibility, name:Camera, exp:FishingSpot_GEN_VARIABLE, exp:ItemUnequipped, name:CallFunc_BreakHitResult_TraceEnd, exp:SCS_Node_168, name:Throttle_Lever, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [403] WaterCaptureProxyMesh_GEN_VARIABLE : StaticMeshComponent (outer BP_SmallBoat_V2_C) size=182
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/SM_SmallBoatCollision.SM_SmallBoatCollision, name:Custom, exp:LimiterCollision1_GEN_VARIABLE, name:Visibility, name:Camera, name:WorldStatic, name:WorldDynamic, name:Pawn, name:PhysicsBody, name:Vehicle, name:Destructible, exp:DynamicForceWaterTrack_GEN_VARIABLE, name:WaterCapture, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [404] CollisionComponent0 : StaticMeshComponent (outer Default__BP_SmallBoat_V2_C) size=143
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/Characters/Modular_Boat/SM_SmallBoatCollisionNew.SM_SmallBoatCollisionNew, name:Custom, exp:InsideAudioTriggerBox_GEN_VARIABLE, name:Visibility, name:Camera, name:Pawn, name:WorldDynamic, name:PhysicsBody, name:Vehicle, name:Destructible, exp:SCS_Node_17, name:BoatCollision, name:CallFunc_K2_SetRelativeRotation_SweepHitResult
+  [405] WaterDataUnrealWater_GEN_VARIABLE : WaterDataUnrealWater (outer BP_SmallBoat_V2_C) size=14
+        refs: exp:Buoyancy
+  [406] WaterObject_GEN_VARIABLE : WaterObjectComponent (outer BP_SmallBoat_V2_C) size=18
+        refs: name:WaterSimMesh
+  [407] WorldPartitionStreamingSource_GEN_VARIABLE : WorldPartitionStreamingSourceComponent (outer BP_SmallBoat_V2_C) size=14
+        refs: name:CallFunc_K2_SetRelativeLocation_SweepHitResult
+
+## function ApplyDamageFromEventDamageData  flags=0x0C820000
+  L0000: GameplayStatics.BreakHitResult(DamageData.self.HitInfo, CallFunc_BreakHitResult_bBlockingHit, CallFunc_BreakHitResult_bInitialOverlap, CallFunc_BreakHitResult_Time, CallFunc_BreakHitResult_Distance, CallFunc_BreakHitResult_Location, CallFunc_BreakHitResult_ImpactPoint, CallFunc_BreakHitResult_Normal, CallFunc_BreakHitResult_ImpactNormal, CallFunc_BreakHitResult_PhysMat, CallFunc_BreakHitResult_HitActor, CallFunc_BreakHitResult_HitComponent, CallFunc_BreakHitResult_HitBoneName, CallFunc_BreakHitResult_BoneName, CallFunc_BreakHitResult_HitItem, CallFunc_BreakHitResult_ElementIndex, CallFunc_BreakHitResult_FaceIndex, CallFunc_BreakHitResult_TraceStart, CallFunc_BreakHitResult_TraceEnd)
+  L00CB: CallFunc_GetShipSectorByLocation_ReturnValue = DrdShipBase.GetShipSectorByLocation(CallFunc_BreakHitResult_Location)
+  L00E8: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(CallFunc_GetShipSectorByLocation_ReturnValue)
+  L0105: if not (CallFunc_IsValid_ReturnValue) goto L026C
+  L0113: CallFunc_GetAbilitySystemComponent_ReturnValue = AbilitySystemBlueprintLibrary.GetAbilitySystemComponent(CallFunc_GetShipSectorByLocation_ReturnValue)
+  L0130: CallFunc_MakeOutgoingSpec_ReturnValue = CallFunc_GetAbilitySystemComponent_ReturnValue.MakeOutgoingSpec(DamageData.self.DamageEffect, 0, GameplayEffectContextHandle{})
+  L0198: CallFunc_AssignTagSetByCallerMagnitude_Magnitude_ImplicitCast = DamageData.self.Damage
+  L01CB: CallFunc_AssignTagSetByCallerMagnitude_ReturnValue = AbilitySystemBlueprintLibrary.AssignTagSetByCallerMagnitude(CallFunc_MakeOutgoingSpec_ReturnValue, GameplayTag{'GAS.SetByCaller.Damage'}, CallFunc_AssignTagSetByCallerMagnitude_Magnitude_ImplicitCast)
+  L0214: CallFunc_GetAbilitySystemComponent_ReturnValue = AbilitySystemBlueprintLibrary.GetAbilitySystemComponent(CallFunc_GetShipSectorByLocation_ReturnValue)
+  L0231: CallFunc_BP_ApplyGameplayEffectSpecToSelf_ReturnValue = CallFunc_GetAbilitySystemComponent_ReturnValue.AbilitySystemComponent.BP_ApplyGameplayEffectSpecToSelf(CallFunc_AssignTagSetByCallerMagnitude_ReturnValue)
+  L026C: return
+
+## function BndEvt__BP_DrdSmallBoat_Box_K2Node_ComponentBoundEvent_0_ComponentBeginOverlapSignature__DelegateSignature  flags=0x08400000
+  L0000: frame.K2Node_ComponentBoundEvent_OverlappedComponent_1 = OverlappedComponent
+  L0012: frame.K2Node_ComponentBoundEvent_OtherActor_1 = OtherActor
+  L0024: frame.K2Node_ComponentBoundEvent_OtherComp_1 = OtherComp
+  L0036: frame.K2Node_ComponentBoundEvent_OtherBodyIndex_1 = OtherBodyIndex
+  L0048: frame.K2Node_ComponentBoundEvent_bFromSweep = bFromSweep
+  L005A: frame.K2Node_ComponentBoundEvent_SweepResult = SweepResult
+  L006C: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(7993)
+  L007B: return
+
+## function BndEvt__BP_DrdSmallBoat_Box_K2Node_ComponentBoundEvent_2_ComponentEndOverlapSignature__DelegateSignature  flags=0x08000000
+  L0000: frame.K2Node_ComponentBoundEvent_OverlappedComponent = OverlappedComponent
+  L0012: frame.K2Node_ComponentBoundEvent_OtherActor = OtherActor
+  L0024: frame.K2Node_ComponentBoundEvent_OtherComp = OtherComp
+  L0036: frame.K2Node_ComponentBoundEvent_OtherBodyIndex = OtherBodyIndex
+  L0048: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(8139)
+  L0057: return
+
+## function BndEvt__BP_SmallBoat_V2_DockingComponent_K2Node_ComponentBoundEvent_1_OnDockingStarted__DelegateSignature  flags=0x08000000
+  L0000: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(9363)
+  L000F: return
+
+## function BndEvt__BP_SmallBoat_V2_DockingComponent_K2Node_ComponentBoundEvent_3_OnDockingFinished__DelegateSignature  flags=0x08000000
+  L0000: frame.K2Node_ComponentBoundEvent_bSuccess = bSuccess
+  L0012: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(9364)
+  L0021: return
+
+## function BndEvt__BP_SmallBoat_V2_DrdBarnaclesSpawn_K2Node_ComponentBoundEvent_4_OnBarnaclesTierChanged__DelegateSignature  flags=0x08000000
+  L0000: frame.K2Node_ComponentBoundEvent_Tier = Tier
+  L0012: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(11365)
+  L0021: return
+
+## function CameraSwitched  flags=0x08080800
+  L0000: frame.K2Node_Event_bFirstPerson = bFirstPerson
+  L0012: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(6808)
+  L0021: return
+
+## function ClearShipInventory  flags=0x0C820000
+  L0000: push L0650
+  L0005: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L001F: K2Node_DynamicCast_AsI_Inventory = iface<I_Inventory>(CallFunc_GetPlayerController_ReturnValue)
+  L0043: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsI_Inventory
+  L0060: if not (K2Node_DynamicCast_bSuccess) goto L0640
+  L006E: K2Node_DynamicCast_AsI_Inventory.GetInventoryComponent(CallFunc_GetInventoryComponent_Component)
+  L009C: CallFunc_GetItemsFromContainers_ReturnValue = CallFunc_GetInventoryComponent_Component.AC_Inventory.GetItemsFromContainers(self.ShipChamberTags, S_InventoryItem{soft("None"), null, -1, -1, -1, 0, IntPoint{-1, -1}, 0, GameplayTagContainer{[]}, [], S_UniqueID{0, null}, S_ItemOverwriteSettings{Text(""), Text(""), soft("None"), [], 0}, [], [], null, [], null}, S_ContainerSettings{-1, GameplayTag{'None'}, 0, 0, 0, IntPoint{1, 1}, GameplayTagContainer{[]}, [], S_CompatibilitySettings{GameplayTagContainer{[]}, GameplayTagContainer{[]}, GameplayTagContainer{[]}, [], []}, [], IntPoint{-1, -1}, [], [], [], map[], S_UniqueID{0, null}, [], null})
+  L032E: CallFunc_Array_IsNotEmpty_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_IsNotEmpty(CallFunc_GetItemsFromContainers_ReturnValue)
+  L0361: if not (CallFunc_Array_IsNotEmpty_ReturnValue) pop-flow
+  L036B: push L009C
+  L0370: CallFunc_GetItemsFromContainers_ReturnValue = CallFunc_GetInventoryComponent_Component.AC_Inventory.GetItemsFromContainers(self.ShipChamberTags, S_InventoryItem{soft("None"), null, -1, -1, -1, 0, IntPoint{-1, -1}, 0, GameplayTagContainer{[]}, [], S_UniqueID{0, null}, S_ItemOverwriteSettings{Text(""), Text(""), soft("None"), [], 0}, [], [], null, [], null}, S_ContainerSettings{-1, GameplayTag{'None'}, 0, 0, 0, IntPoint{1, 1}, GameplayTagContainer{[]}, [], S_CompatibilitySettings{GameplayTagContainer{[]}, GameplayTagContainer{[]}, GameplayTagContainer{[]}, [], []}, [], IntPoint{-1, -1}, [], [], [], map[], S_UniqueID{0, null}, [], null})
+  L0602: CallFunc_GetInventoryComponent_Component.AC_Inventory.RemoveItemFromInventory(CallFunc_GetItemsFromContainers_ReturnValue[0], true, true, true, true, true, CallFunc_RemoveItemFromInventory_Success)
+  L063F: pop-flow
+  L0640: CallFunc_GetInventoryComponent_Component = null
+  L064B: goto L009C
+  L0650: return
+
+## function CREATEDELEGATE_PROXYFUNCTION_0  flags=0x0C400000
+  L0000: OnUserSettingChanged(Setting)
+  L0017: return
+
+## function CustomEvent  flags=0x0C000000
+  L0000: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(10848)
+  L000F: return
+
+## function DisableShipByStartingQuests  flags=0x0C000000
+  L0000: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(10957)
+  L000F: return
+
+## function DoChildTransformsUpdateWork  flags=0x08080800
+  L0000: frame.K2Node_Event_DeltaTime = DeltaTime
+  L0012: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(9365)
+  L0021: return
+
+## function EventReceived_151AB06742C12301B3A3E5959B5F16CF  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Payload = Payload
+  L0012: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(8248)
+  L0021: return
+
+## function ExecuteUbergraph_BP_SmallBoat_V2  flags=0x00808001
+  L0000: push L2F91
+  L0005: goto computed(EntryPoint)
+  L000F: Temp_bool_IsClosed_Variable = false
+  L001A: Temp_bool_Has_Been_Initd_Variable = true
+  L0025: pop-flow
+  L0026: CallFunc_MakeGameplayTagContainerFromTag_ReturnValue = BlueprintGameplayTagLibrary.MakeGameplayTagContainerFromTag(GameplayTag{'GameEntityStatuses.Ship.KlaxonActive'})
+  L005D: CallFunc_RemoveLooseGameplayTags_ReturnValue_2 = AbilitySystemBlueprintLibrary.RemoveLooseGameplayTags(self, CallFunc_MakeGameplayTagContainerFromTag_ReturnValue, false)
+  L007C: pop-flow
+  L007D: CallFunc_Greater_DoubleDouble_ReturnValue = Greater_DoubleDouble(Temp_real_Variable, 0)
+  L00A3: if not (CallFunc_Greater_DoubleDouble_ReturnValue) goto L0198
+  L00B1: CallFunc_Subtract_DoubleDouble_A_ImplicitCast = self.SpringArmComponent.self.TargetArmLength
+  L00E4: CallFunc_Subtract_DoubleDouble_ReturnValue = Subtract_DoubleDouble(CallFunc_Subtract_DoubleDouble_A_ImplicitCast, 50)
+  L0112: CallFunc_FClamp_ReturnValue_1 = FClamp(CallFunc_Subtract_DoubleDouble_ReturnValue, 700, 1500)
+  L0149: K2Node_VariableSet_TargetArmLength_ImplicitCast_1 = CallFunc_FClamp_ReturnValue_1
+  L0166: self.SpringArmComponent.self.TargetArmLength = K2Node_VariableSet_TargetArmLength_ImplicitCast_1
+  L0197: pop-flow
+  L0198: CallFunc_Add_DoubleDouble_A_ImplicitCast = self.SpringArmComponent.self.TargetArmLength
+  L01CB: CallFunc_Add_DoubleDouble_ReturnValue = Add_DoubleDouble(CallFunc_Add_DoubleDouble_A_ImplicitCast, 50)
+  L01F9: CallFunc_FClamp_ReturnValue = FClamp(CallFunc_Add_DoubleDouble_ReturnValue, 700, 1500)
+  L0230: K2Node_VariableSet_TargetArmLength_ImplicitCast = CallFunc_FClamp_ReturnValue
+  L024D: self.SpringArmComponent.self.TargetArmLength = K2Node_VariableSet_TargetArmLength_ImplicitCast
+  L027E: pop-flow
+  L027F: CallFunc_GetPlayerController_ReturnValue_3 = GameplayStatics.GetPlayerController(self, 0)
+  L0299: CallFunc_GetHUD_ReturnValue = CallFunc_GetPlayerController_ReturnValue_3.PlayerController.GetHUD()
+  L02C3: K2Node_DynamicCast_AsBP_Easy_Game_HUD = cast<BP_EasyGameHUD_C>(CallFunc_GetHUD_ReturnValue)
+  L02E7: K2Node_DynamicCast_bSuccess_8 = K2Node_DynamicCast_AsBP_Easy_Game_HUD
+  L0304: if not (K2Node_DynamicCast_bSuccess_8) goto L0352
+  L0312: bind(K2Node_CreateDelegate_OutputDelegate_5, self, 'CREATEDELEGATE_PROXYFUNCTION_0')
+  L0329: K2Node_DynamicCast_AsBP_Easy_Game_HUD.self.OnUserSettingChanged += K2Node_CreateDelegate_OutputDelegate_5
+  L0352: RefreshAutoRotateCameraSetting()
+  L0360: CallFunc_K2_GetComponentRotation_ReturnValue_1 = self.SpringArmComponent.SceneComponent.K2_GetComponentRotation()
+  L0392: UpdateThirdPersonCameraInheritance(CallFunc_K2_GetComponentRotation_ReturnValue_1)
+  L03A9: pop-flow
+  L03AA: CallFunc_Conv_InputActionValueToBool_ReturnValue = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_5)
+  L03C7: Temp_bool_Variable = CallFunc_Conv_InputActionValueToBool_ReturnValue
+  L03DA: Temp_real_Variable_2 = K2Node_EnhancedInputActionEvent_ElapsedTime_5
+  L03F7: Temp_real_Variable_2 = Temp_real_Variable_2
+  L0412: Temp_real_Variable_1 = K2Node_EnhancedInputActionEvent_TriggeredTime_5
+  L042F: Temp_real_Variable_1 = Temp_real_Variable_1
+  L044A: Temp_object_Variable = K2Node_EnhancedInputActionEvent_SourceAction_5
+  L045D: CallFunc_GetGameplayTagCount_ReturnValue = self.AbilitySystemComponent.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GameEntityStatuses.Ship.LightsOn'})
+  L04AA: CallFunc_EqualEqual_IntInt_ReturnValue = EqualEqual_IntInt(CallFunc_GetGameplayTagCount_ReturnValue, 0)
+  L04CC: if not (CallFunc_EqualEqual_IntInt_ReturnValue) goto L055C
+  L04DA: CallFunc_MakeLiteralGameplayTagContainer_ReturnValue = BlueprintGameplayTagLibrary.MakeLiteralGameplayTagContainer(GameplayTagContainer{[GameplayTag{'GameEntityStatuses.Ship.LightsOn'}]})
+  L052D: CallFunc_AddLooseGameplayTags_ReturnValue = AbilitySystemBlueprintLibrary.AddLooseGameplayTags(self, CallFunc_MakeLiteralGameplayTagContainer_ReturnValue, false)
+  L054C: UpdateLights(true)
+  L055B: pop-flow
+  L055C: CallFunc_MakeLiteralGameplayTagContainer_ReturnValue = BlueprintGameplayTagLibrary.MakeLiteralGameplayTagContainer(GameplayTagContainer{[GameplayTag{'GameEntityStatuses.Ship.LightsOn'}]})
+  L05AF: CallFunc_RemoveLooseGameplayTags_ReturnValue = AbilitySystemBlueprintLibrary.RemoveLooseGameplayTags(self, CallFunc_MakeLiteralGameplayTagContainer_ReturnValue, false)
+  L05CE: UpdateLights(true)
+  L05DD: pop-flow
+  L05DE: CallFunc_Conv_InputActionValueToBool_ReturnValue_1 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_4)
+  L05FB: Temp_bool_Variable_1 = CallFunc_Conv_InputActionValueToBool_ReturnValue_1
+  L060E: Temp_real_Variable_4 = K2Node_EnhancedInputActionEvent_ElapsedTime_4
+  L062B: Temp_real_Variable_4 = Temp_real_Variable_4
+  L0646: Temp_real_Variable_3 = K2Node_EnhancedInputActionEvent_TriggeredTime_4
+  L0663: Temp_real_Variable_3 = Temp_real_Variable_3
+  L067E: Temp_object_Variable_1 = K2Node_EnhancedInputActionEvent_SourceAction_4
+  L0691: DrdShipBase.CancelBraking()
+  L069B: self.bFishingHoldValid = false
+  L06A6: pop-flow
+  L06A7: CallFunc_Conv_InputActionValueToBool_ReturnValue_2 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_3)
+  L06C4: Temp_bool_Variable_1 = CallFunc_Conv_InputActionValueToBool_ReturnValue_2
+  L06D7: Temp_real_Variable_4 = K2Node_EnhancedInputActionEvent_ElapsedTime_3
+  L06F4: Temp_real_Variable_4 = Temp_real_Variable_4
+  L070F: Temp_real_Variable_3 = K2Node_EnhancedInputActionEvent_TriggeredTime_3
+  L072C: Temp_real_Variable_3 = Temp_real_Variable_3
+  L0747: Temp_object_Variable_1 = K2Node_EnhancedInputActionEvent_SourceAction_3
+  L075A: goto L0691
+  L075F: CallFunc_Conv_InputActionValueToBool_ReturnValue_3 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_2)
+  L077C: Temp_bool_Variable_1 = CallFunc_Conv_InputActionValueToBool_ReturnValue_3
+  L078F: Temp_real_Variable_4 = K2Node_EnhancedInputActionEvent_ElapsedTime_2
+  L07AC: Temp_real_Variable_4 = Temp_real_Variable_4
+  L07C7: Temp_real_Variable_3 = K2Node_EnhancedInputActionEvent_TriggeredTime_2
+  L07E4: Temp_real_Variable_3 = Temp_real_Variable_3
+  L07FF: Temp_object_Variable_1 = K2Node_EnhancedInputActionEvent_SourceAction_2
+  L0812: CallFunc_GetGameplayTagCount_ReturnValue_1 = self.AbilitySystemComponent.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GameEntityStatuses.Ship.SpotReady'})
+  L085F: CallFunc_Greater_IntInt_ReturnValue_1 = Greater_IntInt(CallFunc_GetGameplayTagCount_ReturnValue_1, 0)
+  L0881: if not (CallFunc_Greater_IntInt_ReturnValue_1) pop-flow
+  L088B: self.bFishingHoldValid = true
+  L0896: DrdShipBase.StartBrakingToStop(1, true)
+  L08A6: pop-flow
+  L08A7: CallFunc_Conv_InputActionValueToBool_ReturnValue_4 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_1)
+  L08C4: Temp_bool_Variable_1 = CallFunc_Conv_InputActionValueToBool_ReturnValue_4
+  L08D7: Temp_real_Variable_4 = K2Node_EnhancedInputActionEvent_ElapsedTime_1
+  L08F4: Temp_real_Variable_4 = Temp_real_Variable_4
+  L090F: Temp_real_Variable_3 = K2Node_EnhancedInputActionEvent_TriggeredTime_1
+  L092C: Temp_real_Variable_3 = Temp_real_Variable_3
+  L0947: Temp_object_Variable_1 = K2Node_EnhancedInputActionEvent_SourceAction_1
+  L095A: if not (self.bFishingHoldValid) pop-flow
+  L0964: CallFunc_K2_GiveAbilityAndActivateOnce_ReturnValue = self.AbilitySystemComponent.AbilitySystemComponent.K2_GiveAbilityAndActivateOnce(GA_ShipReleaseControlAndStartFishing_C, 0, -1)
+  L09A9: pop-flow
+  L09AA: CallFunc_GetGameInstanceSubsystem_ReturnValue = SubsystemBlueprintLibrary.GetGameInstanceSubsystem(self, DrdSaveSlotsSubsystem)
+  L09C8: CallFunc_LoadLatestSave_ReturnValue = CallFunc_GetGameInstanceSubsystem_ReturnValue.DrdSaveSlotsSubsystem.LoadLatestSave()
+  L09F2: pop-flow
+  L09F3: CallFunc_Conv_InputActionValueToBool_ReturnValue_5 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue)
+  L0A10: Temp_bool_Variable_2 = CallFunc_Conv_InputActionValueToBool_ReturnValue_5
+  L0A23: Temp_real_Variable_6 = K2Node_EnhancedInputActionEvent_ElapsedTime
+  L0A40: Temp_real_Variable_6 = Temp_real_Variable_6
+  L0A5B: Temp_real_Variable_5 = K2Node_EnhancedInputActionEvent_TriggeredTime
+  L0A78: Temp_real_Variable_5 = Temp_real_Variable_5
+  L0A93: Temp_object_Variable_2 = K2Node_EnhancedInputActionEvent_SourceAction
+  L0AA6: CallFunc_GetGameplayTagCount_ReturnValue_2 = self.AbilitySystemComponent.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GameEntityStatuses.Ship.KlaxonInstalled'})
+  L0AF3: CallFunc_Greater_IntInt_ReturnValue_2 = Greater_IntInt(CallFunc_GetGameplayTagCount_ReturnValue_2, 0)
+  L0B15: if not (CallFunc_Greater_IntInt_ReturnValue_2) pop-flow
+  L0B1F: CallFunc_IsPlaying_ReturnValue = self.KlaxonSound.IsPlaying()
+  L0B4D: if not (CallFunc_IsPlaying_ReturnValue) goto L0B5C
+  L0B5B: pop-flow
+  L0B5C: self.KlaxonSound.Play(0)
+  L0B85: CallFunc_GetGameplayTagCount_ReturnValue_3 = self.AbilitySystemComponent.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GameEntityStatuses.Ship.KlaxonActive'})
+  L0BD2: CallFunc_EqualEqual_IntInt_ReturnValue_1 = EqualEqual_IntInt(CallFunc_GetGameplayTagCount_ReturnValue_3, 0)
+  L0BF4: if not (CallFunc_EqualEqual_IntInt_ReturnValue_1) pop-flow
+  L0BFE: CallFunc_MakeGameplayTagContainerFromTag_ReturnValue = BlueprintGameplayTagLibrary.MakeGameplayTagContainerFromTag(GameplayTag{'GameEntityStatuses.Ship.KlaxonActive'})
+  L0C35: CallFunc_AddLooseGameplayTags_ReturnValue_3 = AbilitySystemBlueprintLibrary.AddLooseGameplayTags(self, CallFunc_MakeGameplayTagContainerFromTag_ReturnValue, false)
+  L0C54: KismetSystemLibrary.Delay(self, 2, LatentActionInfo{L0026, 1380701928, 'ExecuteUbergraph_BP_SmallBoat_V2', self})
+  L0C8A: pop-flow
+  L0C8B: CallFunc_GetGameInstanceSubsystem_ReturnValue_1 = SubsystemBlueprintLibrary.GetGameInstanceSubsystem(self, DrdPersistentDataSubsystem)
+  L0CA9: CallFunc_GetLooseSavedFlagValue_ReturnValue = CallFunc_GetGameInstanceSubsystem_ReturnValue_1.DrdPersistentDataSubsystem.GetLooseSavedFlagValue('ShipDisabledByFirstQuests')
+  L0CE0: if not (CallFunc_GetLooseSavedFlagValue_ReturnValue) pop-flow
+  L0CEA: DisableShipByStartingQuests()
+  L0CF8: pop-flow
+  L0CF9: push L0DBB
+  L0CFE: CallFunc_Greater_IntInt_ReturnValue = Greater_IntInt(K2Node_CustomEvent_TagCount, 0)
+  L0D20: CallFunc_GetChildrenComponents_Children = []
+  L0D2B: self.ShipModuleInteractSlotsRoot.SceneComponent.GetChildrenComponents(false, CallFunc_GetChildrenComponents_Children)
+  L0D55: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetChildrenComponents_Children, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L0D90: CallFunc_Array_Get_Item.SceneComponent.SetVisibility(CallFunc_Greater_IntInt_ReturnValue, false)
+  L0DBA: pop-flow
+  L0DBB: CallFunc_Add_IntInt_ReturnValue = Add_IntInt(Temp_int_Loop_Counter_Variable, 1)
+  L0DE5: Temp_int_Loop_Counter_Variable = CallFunc_Add_IntInt_ReturnValue
+  L0E00: CallFunc_GetChildrenComponents_Children = []
+  L0E0B: self.ShipModuleInteractSlotsRoot.SceneComponent.GetChildrenComponents(false, CallFunc_GetChildrenComponents_Children)
+  L0E35: CallFunc_Array_Length_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(CallFunc_GetChildrenComponents_Children)
+  L0E70: CallFunc_Less_IntInt_ReturnValue = Less_IntInt(Temp_int_Loop_Counter_Variable, CallFunc_Array_Length_ReturnValue)
+  L0E96: if not (CallFunc_Less_IntInt_ReturnValue) pop-flow
+  L0EA0: Temp_int_Array_Index_Variable = Temp_int_Loop_Counter_Variable
+  L0EBB: goto L0CF9
+  L0EC0: Temp_int_Array_Index_Variable = 0
+  L0ED7: goto L0E00
+  L0EDC: pop-flow
+  L0EDD: pop-flow
+  L0EDE: pop-flow
+  L0EDF: pop-flow
+  L0EE0: Temp_int_Loop_Counter_Variable = 0
+  L0EF7: goto L0EC0
+  L0EFC: push L11C1
+  L0F01: push L0C8B
+  L0F06: push L1187
+  L0F0B: push L1177
+  L0F10: push L1128
+  L0F15: push L0FD8
+  L0F1A: CallFunc_WaitGameplayEventToActor_ReturnValue = AbilityAsync_WaitGameplayEvent.WaitGameplayEventToActor(self, GameplayTag{'GAS.Event.Damage'}, false, true)
+  L0F4C: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(CallFunc_WaitGameplayEventToActor_ReturnValue)
+  L0F69: if not (CallFunc_IsValid_ReturnValue) pop-flow
+  L0F73: bind(K2Node_CreateDelegate_OutputDelegate_2, self, 'EventReceived_151AB06742C12301B3A3E5959B5F16CF')
+  L0F8A: CallFunc_WaitGameplayEventToActor_ReturnValue.self.EventReceived += K2Node_CreateDelegate_OutputDelegate_2
+  L0FB3: CallFunc_WaitGameplayEventToActor_ReturnValue.Activate()
+  L0FD7: pop-flow
+  L0FD8: bind(K2Node_CreateDelegate_OutputDelegate_1, self, 'OnShipPulledOutOfWater')
+  L0FEF: CallFunc_BindEventWrapperToAnyOfGameplayTagContainerChanged_ReturnValue = AbilitySystemBlueprintLibrary.BindEventWrapperToAnyOfGameplayTagContainerChanged(self.AbilitySystemComponent, GameplayTagContainer{[GameplayTag{'GameEntityStatuses.Ship.PulledOutOfWater'}]}, K2Node_CreateDelegate_OutputDelegate_1, true, 0)
+  L1057: self.TagEventHandlerPulledOutOfWater = CallFunc_BindEventWrapperToAnyOfGameplayTagContainerChanged_ReturnValue
+  L1072: bind(K2Node_CreateDelegate_OutputDelegate_3, self, 'OnFuelStatusChanged')
+  L1089: CallFunc_BindEventWrapperToAnyOfGameplayTagContainerChanged_ReturnValue_1 = AbilitySystemBlueprintLibrary.BindEventWrapperToAnyOfGameplayTagContainerChanged(self.AbilitySystemComponent, GameplayTagContainer{[GameplayTag{'GameEntityStatuses.Ship.LowFuel'}, GameplayTag{'GameEntityStatuses.Ship.NoFuel'}]}, K2Node_CreateDelegate_OutputDelegate_3, true, 0)
+  L110C: self.TagEventHandlerFuel = CallFunc_BindEventWrapperToAnyOfGameplayTagContainerChanged_ReturnValue_1
+  L1127: pop-flow
+  L1128: if not (self.bDoorHandleRemoved) pop-flow
+  L1132: self.broken_door_handle.SceneComponent.SetHiddenInGame(true, false)
+  L1154: self.broken_door_handle.SceneComponent.SetVisibility(false, true)
+  L1176: pop-flow
+  L1177: UpdateLights(false)
+  L1186: pop-flow
+  L1187: self.ChildForScopedMovement0 = self.HullRockingRoot
+  L119A: self.ChildForScopedMovement1 = self.BP_ShipSteeringWheel
+  L11AD: self.ChildForScopedMovement2 = self.Throttle_lever
+  L11C0: pop-flow
+  L11C1: CallFunc_K2_GetComponentRotation_ReturnValue_3 = self.SpringArmComponent.SceneComponent.K2_GetComponentRotation()
+  L11F3: UpdateThirdPersonCameraInheritance(CallFunc_K2_GetComponentRotation_ReturnValue_3)
+  L120A: KismetSystemLibrary.DelayUntilNextTick(self, LatentActionInfo{L027F, 906248966, 'ExecuteUbergraph_BP_SmallBoat_V2', self})
+  L123B: pop-flow
+  L123C: Pawn.ReceivePossessed(K2Node_Event_NewController)
+  L124F: push L1600
+  L1254: SetupCharacterMesh()
+  L1262: CallFunc_IsActive_ReturnValue = self.CameraComponent.ActorComponent.IsActive()
+  L128C: self.PossessedCharacterDoll.SceneComponent.SetVisibility(CallFunc_IsActive_ReturnValue, false)
+  L12B6: CallFunc_GetPlayerCameraManager_ReturnValue = GameplayStatics.GetPlayerCameraManager(self, 0)
+  L12D0: CallFunc_GetPlayerCameraManager_ReturnValue.self.ViewPitchMax = 10
+  L12FD: CallFunc_GetPlayerCameraManager_ReturnValue = GameplayStatics.GetPlayerCameraManager(self, 0)
+  L1317: CallFunc_GetPlayerCameraManager_ReturnValue.self.ViewPitchMin = -90
+  L1344: self.BoatDoor.SceneComponent.K2_SetRelativeRotation(Rot(0,-90,-6), false, CallFunc_K2_SetRelativeRotation_SweepHitResult, false)
+  L1388: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L13A2: CallFunc_GetLocalPlayerFromController_ReturnValue = Default__CommonUIExtensions.CommonUIExtensions.GetLocalPlayerFromController(CallFunc_GetPlayerController_ReturnValue)
+  L13D5: CallFunc_PushContentToLayer_ForPlayer_ReturnValue = Default__CommonUIExtensions.CommonUIExtensions.PushContentToLayer_ForPlayer(CallFunc_GetLocalPlayerFromController_ReturnValue, GameplayTag{'UI.Layer.BoatHud'}, WBP_BoatHUD_C)
+  L142C: self.BoatHUD = CallFunc_PushContentToLayer_ForPlayer_ReturnValue
+  L143F: CallFunc_MakeEffectContext_ReturnValue = self.AbilitySystemComponent.MakeEffectContext()
+  L1475: CallFunc_BP_ApplyGameplayEffectToSelf_ReturnValue = self.AbilitySystemComponent.AbilitySystemComponent.BP_ApplyGameplayEffectToSelf(GE_FuelDrain_C, 0, CallFunc_MakeEffectContext_ReturnValue)
+  L14BE: self.FuelDrainEffectSpec = CallFunc_BP_ApplyGameplayEffectToSelf_ReturnValue
+  L14D9: Default__BPFL_MIscFunctions_C.MoveAllShipModulesToGlobalStorage(self)
+  L14FE: CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_1 = BlueprintGameplayTagLibrary.MakeLiteralGameplayTagContainer(GameplayTagContainer{[GameplayTag{'GameEntityStatuses.Ship.ShipDriving'}]})
+  L1551: CallFunc_AddLooseGameplayTags_ReturnValue_1 = AbilitySystemBlueprintLibrary.AddLooseGameplayTags(self, CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_1, false)
+  L1570: if not (self.bEngineModulesPresent) goto L157F
+  L157E: pop-flow
+  L157F: Default__BPFL_UiFunctions_C.PlayNotification(TextTable("/Game/Dreadmoor/Localization/ST_UI.ST_UI", "ShipNotification_EngineIsDisassembled"), self)
+  L15FF: pop-flow
+  L1600: self.EngineAudioComponent.FadeIn(0.5, 1, 0, 0)
+  L1635: pop-flow
+  L1636: Pawn.ReceiveUnpossessed(K2Node_Event_OldController)
+  L1649: push L18BB
+  L164E: push L1913
+  L1653: self.PossessedCharacterDoll.SceneComponent.SetVisibility(false, false)
+  L1675: CallFunc_GetPlayerCameraManager_ReturnValue_1 = GameplayStatics.GetPlayerCameraManager(self, 0)
+  L168F: CallFunc_GetPlayerCameraManager_ReturnValue_1.self.ViewPitchMax = 90
+  L16BC: CallFunc_GetPlayerCameraManager_ReturnValue_1 = GameplayStatics.GetPlayerCameraManager(self, 0)
+  L16D6: CallFunc_GetPlayerCameraManager_ReturnValue_1.self.ViewPitchMin = -90
+  L1703: self.BoatDoor.SceneComponent.K2_SetRelativeRotation(Rot(-4.22,-225.36,4.26), false, CallFunc_K2_SetRelativeRotation_SweepHitResult_1, false)
+  L1747: Default__CommonUIExtensions.CommonUIExtensions.PopContentFromLayer(self.BoatHUD)
+  L1770: CallFunc_RemoveActiveGameplayEffect_ReturnValue = self.AbilitySystemComponent.RemoveActiveGameplayEffect(self.FuelDrainEffectSpec, -1)
+  L17AC: self.SpringArmComponent.SceneComponent.K2_SetRelativeRotation(Rot(0,0,0), false, CallFunc_K2_SetRelativeRotation_SweepHitResult_2, false)
+  L17F0: self.FirstPersonSpringArm.SceneComponent.K2_SetRelativeRotation(Rot(0,0,0), false, CallFunc_K2_SetRelativeRotation_SweepHitResult_2, false)
+  L1834: KismetSystemLibrary.K2_ClearAndInvalidateTimerHandle(self, self.ReleaseControlTimerHandle)
+  L1848: CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_2 = BlueprintGameplayTagLibrary.MakeLiteralGameplayTagContainer(GameplayTagContainer{[GameplayTag{'GameEntityStatuses.Ship.ShipDriving'}]})
+  L189B: CallFunc_RemoveLooseGameplayTags_ReturnValue_1 = AbilitySystemBlueprintLibrary.RemoveLooseGameplayTags(self, CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_2, false)
+  L18BA: pop-flow
+  L18BB: CallFunc_IsValid_ReturnValue_3 = KismetSystemLibrary.IsValid(self.PlayingSoundInsideCabin)
+  L18D8: if not (CallFunc_IsValid_ReturnValue_3) pop-flow
+  L18E2: self.PlayingSoundInsideCabin.FadeOut(1.7, 0, 0)
+  L1912: pop-flow
+  L1913: self.EngineAudioComponent.FadeOut(1.7, 0, 0)
+  L1943: pop-flow
+  L1944: Actor.ReceiveTick(K2Node_Event_DeltaSeconds)
+  L1957: CallFunc_K2_GetComponentRotation_ReturnValue = self.SpringArmComponent.SceneComponent.K2_GetComponentRotation()
+  L1989: UpdateThirdPersonCameraInheritance(CallFunc_K2_GetComponentRotation_ReturnValue)
+  L19A0: pop-flow
+  L19A1: CallFunc_Conv_InputActionValueToAxis1D_ReturnValue = EnhancedInputLibrary.Conv_InputActionValueToAxis1D(K2Node_EnhancedInputActionEvent_ActionValue_7)
+  L19C6: Temp_real_Variable = CallFunc_Conv_InputActionValueToAxis1D_ReturnValue
+  L19E1: Temp_real_Variable_7 = K2Node_EnhancedInputActionEvent_ElapsedTime_7
+  L19FE: Temp_real_Variable_7 = Temp_real_Variable_7
+  L1A19: Temp_real_Variable_8 = K2Node_EnhancedInputActionEvent_TriggeredTime_7
+  L1A36: Temp_real_Variable_8 = Temp_real_Variable_8
+  L1A51: Temp_object_Variable_3 = K2Node_EnhancedInputActionEvent_SourceAction_7
+  L1A64: goto L007D
+  L1A69: DrdSavable.PostLoadInitialization()
+  L1A73: if not (self.bDoorClosedByQuest) pop-flow
+  L1A7D: SetMainDoorClosedByQuest(true)
+  L1A8C: pop-flow
+  L1A8D: DrdSavable.PostLoadInitializationBlank()
+  L1A97: pop-flow
+  L1A98: self.bFirstPersonCameraEnabled = K2Node_Event_bFirstPerson
+  L1AAB: CallFunc_K2_GetComponentRotation_ReturnValue_2 = self.SpringArmComponent.SceneComponent.K2_GetComponentRotation()
+  L1ADD: UpdateThirdPersonCameraInheritance(CallFunc_K2_GetComponentRotation_ReturnValue_2)
+  L1AF4: CallFunc_Not_PreBool_ReturnValue = Not_PreBool(K2Node_Event_bFirstPerson)
+  L1B11: self.PossessedCharacterDoll.SceneComponent.SetVisibility(CallFunc_Not_PreBool_ReturnValue, false)
+  L1B3B: if not (self.bFirstPersonCameraEnabled) goto L1BF9
+  L1B49: CallFunc_IsValid_ReturnValue_2 = KismetSystemLibrary.IsValid(self.PlayingSoundInsideCabin)
+  L1B66: if not (CallFunc_IsValid_ReturnValue_2) goto L1B9E
+  L1B74: self.PlayingSoundInsideCabin.Play(0)
+  L1B9D: pop-flow
+  L1B9E: bind(K2Node_CreateDelegate_OutputDelegate_4, self, 'OnLoaded_F31EDF7A44BBA462116356BD67B556AB')
+  L1BB5: KismetSystemLibrary.LoadAsset(self, self.InsideBoatSound, K2Node_CreateDelegate_OutputDelegate_4, LatentActionInfo{-1, -1309517187, 'ExecuteUbergraph_BP_SmallBoat_V2', self})
+  L1BF8: pop-flow
+  L1BF9: CallFunc_IsValid_ReturnValue_1 = KismetSystemLibrary.IsValid(self.PlayingSoundInsideCabin)
+  L1C16: if not (CallFunc_IsValid_ReturnValue_1) pop-flow
+  L1C20: self.PlayingSoundInsideCabin.Stop()
+  L1C44: pop-flow
+  L1C45: CallFunc_VSizeSquared_ReturnValue = VSizeSquared(self.MovementComponent.self.Velocity)
+  L1C80: CallFunc_Greater_DoubleDouble_ReturnValue_2 = Greater_DoubleDouble(CallFunc_VSizeSquared_ReturnValue, 20000)
+  L1CA6: if not (CallFunc_Greater_DoubleDouble_ReturnValue_2) pop-flow
+  L1CB0: push L1CDD
+  L1CB5: if not (Temp_bool_Has_Been_Initd_Variable) goto L1CC4
+  L1CC3: pop-flow
+  L1CC4: Temp_bool_Has_Been_Initd_Variable = true
+  L1CCF: if not (false) pop-flow
+  L1CD1: Temp_bool_IsClosed_Variable = true
+  L1CDC: pop-flow
+  L1CDD: if not (Temp_bool_IsClosed_Variable) goto L1CEC
+  L1CEB: pop-flow
+  L1CEC: Temp_bool_IsClosed_Variable = true
+  L1CF7: GameplayStatics.BreakHitResult(K2Node_Event_EventData.Hit, CallFunc_BreakHitResult_bBlockingHit, CallFunc_BreakHitResult_bInitialOverlap, CallFunc_BreakHitResult_Time, CallFunc_BreakHitResult_Distance, CallFunc_BreakHitResult_Location, CallFunc_BreakHitResult_ImpactPoint, CallFunc_BreakHitResult_Normal, CallFunc_BreakHitResult_ImpactNormal, CallFunc_BreakHitResult_PhysMat, CallFunc_BreakHitResult_HitActor, CallFunc_BreakHitResult_HitComponent, CallFunc_BreakHitResult_HitBoneName, CallFunc_BreakHitResult_BoneName, CallFunc_BreakHitResult_HitItem, CallFunc_BreakHitResult_ElementIndex, CallFunc_BreakHitResult_FaceIndex, CallFunc_BreakHitResult_TraceStart, CallFunc_BreakHitResult_TraceEnd)
+  L1DB5: GameplayStatics.PlaySoundAtLocation(self, SCUE_Boat_Crash, CallFunc_BreakHitResult_Location, Rot(0,0,0), 1, 1, 0, null, null, null, null)
+  L1DFE: KismetSystemLibrary.Delay(self, 0.5, LatentActionInfo{L000F, 1867152469, 'ExecuteUbergraph_BP_SmallBoat_V2', self})
+  L1E34: pop-flow
+  L1E35: K2Node_DynamicCast_AsBP_Damage_Data = cast<BP_DamageData_C>(Temp_struct_Variable.OptionalObject)
+  L1E62: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsBP_Damage_Data
+  L1E7F: if not (K2Node_DynamicCast_bSuccess) pop-flow
+  L1E89: ApplyDamageFromEventDamageData(K2Node_DynamicCast_AsBP_Damage_Data)
+  L1EA0: pop-flow
+  L1EA1: if not (self.bFirstPersonCameraEnabled) pop-flow
+  L1EAB: CallFunc_SpawnSoundAttached_ReturnValue = GameplayStatics.SpawnSoundAttached(K2Node_DynamicCast_AsSound_Cue, self.BP_ShipSteeringWheel, 'None', Vec(0,0,0), Rot(0,0,0), 0, false, 1, 1, 0, null, null, true)
+  L1F25: self.PlayingSoundInsideCabin = CallFunc_SpawnSoundAttached_ReturnValue
+  L1F38: pop-flow
+  L1F39: K2Node_DynamicCast_AsBP_Player_Character = cast<BP_PlayerCharacter_C>(K2Node_ComponentBoundEvent_OtherActor_1)
+  L1F5D: K2Node_DynamicCast_bSuccess_1 = K2Node_DynamicCast_AsBP_Player_Character
+  L1F7A: if not (K2Node_DynamicCast_bSuccess_1) pop-flow
+  L1F84: self.EngineAudioComponent.AudioComponent.SetLowPassFilterEnabled(true)
+  L1FA5: self.EngineAudioComponent.AudioComponent.SetLowPassFilterFrequency(1200)
+  L1FCA: pop-flow
+  L1FCB: K2Node_DynamicCast_AsBP_Player_Character_1 = cast<BP_PlayerCharacter_C>(K2Node_ComponentBoundEvent_OtherActor)
+  L1FEF: K2Node_DynamicCast_bSuccess_2 = K2Node_DynamicCast_AsBP_Player_Character_1
+  L200C: if not (K2Node_DynamicCast_bSuccess_2) pop-flow
+  L2016: self.EngineAudioComponent.AudioComponent.SetLowPassFilterEnabled(false)
+  L2037: pop-flow
+  L2038: Temp_struct_Variable = K2Node_CustomEvent_Payload
+  L2053: goto L1E35
+  L2058: goto L0EE0
+  L205D: self.bDoorHandleRemoved = true
+  L2068: pop-flow
+  L2069: UpdateSectorMorph(K2Node_Event_SectorId)
+  L2080: CallFunc_LessEqual_DoubleDouble_A_ImplicitCast = K2Node_Event_NewValue
+  L209D: CallFunc_LessEqual_DoubleDouble_ReturnValue = LessEqual_DoubleDouble(CallFunc_LessEqual_DoubleDouble_A_ImplicitCast, 0)
+  L20C3: if not (CallFunc_LessEqual_DoubleDouble_ReturnValue) pop-flow
+  L20CD: CallFunc_GetPlayerController_ReturnValue_1 = GameplayStatics.GetPlayerController(self, 0)
+  L20E7: CallFunc_GetLocalPlayerFromController_ReturnValue_1 = Default__CommonUIExtensions.CommonUIExtensions.GetLocalPlayerFromController(CallFunc_GetPlayerController_ReturnValue_1)
+  L211A: CallFunc_PushContentToLayer_ForPlayer_ReturnValue_1 = Default__CommonUIExtensions.CommonUIExtensions.PushContentToLayer_ForPlayer(CallFunc_GetLocalPlayerFromController_ReturnValue_1, GameplayTag{'UI.Layer.QTE'}, WBP_FadeOut_DeathScreen_C)
+  L2171: K2Node_DynamicCast_AsWBP_Fade_Out_Death_Screen = cast<WBP_FadeOut_DeathScreen_C>(CallFunc_PushContentToLayer_ForPlayer_ReturnValue_1)
+  L2195: K2Node_DynamicCast_bSuccess_4 = K2Node_DynamicCast_AsWBP_Fade_Out_Death_Screen
+  L21B2: if not (K2Node_DynamicCast_bSuccess_4) pop-flow
+  L21BC: bind(K2Node_CreateDelegate_OutputDelegate, self, 'CustomEvent')
+  L21D3: K2Node_DynamicCast_AsWBP_Fade_Out_Death_Screen.self.OnAnyKeyPressedEvent += K2Node_CreateDelegate_OutputDelegate
+  L21FC: pop-flow
+  L21FD: CallFunc_MakeVector_Z_ImplicitCast = self.CurrentHullCalmRockVertical
+  L221A: CallFunc_MakeVector_ReturnValue = MakeVector(0, 0, CallFunc_MakeVector_Z_ImplicitCast)
+  L2251: BreakVector2D(self.CurrentHullRigidImpactPitchRoll, CallFunc_BreakVector2D_X_1, CallFunc_BreakVector2D_Y_1)
+  L2276: BreakRotator(self.CurrentHullMovingRoll, CallFunc_BreakRotator_Roll_1, CallFunc_BreakRotator_Pitch_1, CallFunc_BreakRotator_Yaw_1)
+  L22A4: CallFunc_Add_DoubleDouble_A_ImplicitCast_2 = CallFunc_BreakRotator_Pitch_1
+  L22C1: CallFunc_Add_DoubleDouble_ReturnValue_1 = Add_DoubleDouble(CallFunc_Add_DoubleDouble_A_ImplicitCast_2, CallFunc_BreakVector2D_X_1)
+  L22EF: CallFunc_Add_DoubleDouble_A_ImplicitCast_1 = CallFunc_BreakRotator_Roll_1
+  L230C: CallFunc_Add_DoubleDouble_B_ImplicitCast = self.CurrentHullCalmRockRoll
+  L2329: CallFunc_Add_DoubleDouble_ReturnValue_2 = Add_DoubleDouble(CallFunc_Add_DoubleDouble_A_ImplicitCast_1, CallFunc_Add_DoubleDouble_B_ImplicitCast)
+  L2357: CallFunc_MakeRotator_Roll_ImplicitCast = CallFunc_Add_DoubleDouble_ReturnValue_2
+  L2374: CallFunc_MakeRotator_Pitch_ImplicitCast = CallFunc_Add_DoubleDouble_ReturnValue_1
+  L2391: CallFunc_MakeRotator_ReturnValue = MakeRotator(CallFunc_MakeRotator_Roll_ImplicitCast, CallFunc_MakeRotator_Pitch_ImplicitCast, self.CurrentHullCalmRockYaw)
+  L23C8: CallFunc_ComposeRotators_ReturnValue = ComposeRotators(CallFunc_MakeRotator_ReturnValue, self.CurrentHullEventAdditionalRotation)
+  L23F6: CallFunc_MakeTransform_ReturnValue = MakeTransform(CallFunc_MakeVector_ReturnValue, CallFunc_ComposeRotators_ReturnValue, Vec(1,1,1))
+  L243D: self.ChildForScopedMovement0Transform = CallFunc_MakeTransform_ReturnValue
+  L2458: pop-flow
+  L2459: Actor.ReceiveEndPlay(K2Node_Event_EndPlayReason)
+  L246C: AbilitySystemBlueprintLibrary.UnbindAllGameplayTagChangedEventWrappersForHandle(self.TagEventHandlerFuel)
+  L247F: AbilitySystemBlueprintLibrary.UnbindAllGameplayTagChangedEventWrappersForHandle(self.TagEventHandlerPulledOutOfWater)
+  L2492: pop-flow
+  L2493: pop-flow
+  L2494: pop-flow
+  L2495: DrdShipBase.DoChildTransformsUpdateWork(K2Node_Event_DeltaTime)
+  L24A8: push L24B7
+  L24AD: push L2768
+  L24B2: goto L21FD
+  L24B7: CallFunc_GetBoundActionValue_ReturnValue = EnhancedInputLibrary.GetBoundActionValue(self, IA_BoatMove)
+  L24DD: CallFunc_Conv_InputActionValueToAxis2D_ReturnValue = EnhancedInputLibrary.Conv_InputActionValueToAxis2D(CallFunc_GetBoundActionValue_ReturnValue)
+  L2502: BreakVector2D(CallFunc_Conv_InputActionValueToAxis2D_ReturnValue, CallFunc_BreakVector2D_X, CallFunc_BreakVector2D_Y)
+  L2527: CallFunc_Greater_DoubleDouble_ReturnValue_1 = Greater_DoubleDouble(CallFunc_BreakVector2D_Y, 0)
+  L254D: CallFunc_EqualEqual_DoubleDouble_ReturnValue = EqualEqual_DoubleDouble(CallFunc_BreakVector2D_Y, 0)
+  L2573: CallFunc_SelectFloat_ReturnValue = SelectFloat(25, -22, CallFunc_Greater_DoubleDouble_ReturnValue_1)
+  L25AA: CallFunc_SelectFloat_ReturnValue_1 = SelectFloat(0, CallFunc_SelectFloat_ReturnValue, CallFunc_EqualEqual_DoubleDouble_ReturnValue)
+  L25E1: BreakRotator(self.Throttle_lever.self.RelativeRotation, CallFunc_BreakRotator_Roll_2, CallFunc_BreakRotator_Pitch_2, CallFunc_BreakRotator_Yaw_2)
+  L2625: CallFunc_FInterpTo_Current_ImplicitCast_1 = CallFunc_BreakRotator_Roll_2
+  L2642: CallFunc_FInterpTo_DeltaTime_ImplicitCast = K2Node_Event_DeltaTime
+  L265F: CallFunc_FInterpTo_ReturnValue_1 = FInterpTo(CallFunc_FInterpTo_Current_ImplicitCast_1, CallFunc_SelectFloat_ReturnValue_1, CallFunc_FInterpTo_DeltaTime_ImplicitCast, 2)
+  L269F: CallFunc_MakeRotator_Roll_ImplicitCast_2 = CallFunc_FInterpTo_ReturnValue_1
+  L26BC: CallFunc_MakeRotator_ReturnValue_2 = MakeRotator(CallFunc_MakeRotator_Roll_ImplicitCast_2, 0, CallFunc_BreakRotator_Yaw_2)
+  L26EF: CallFunc_MakeTransform_ReturnValue_2 = MakeTransform(self.Throttle_lever.self.RelativeLocation, CallFunc_MakeRotator_ReturnValue_2, Vec(1,1,1))
+  L274C: self.ChildForScopedMovement2Transform = CallFunc_MakeTransform_ReturnValue_2
+  L2767: pop-flow
+  L2768: CallFunc_Multiply_DoubleDouble_A_ImplicitCast = self.CurrentHullCalmRockRoll
+  L2785: CallFunc_Multiply_DoubleDouble_ReturnValue = Multiply_DoubleDouble(CallFunc_Multiply_DoubleDouble_A_ImplicitCast, -2)
+  L27B3: BreakRotator(self.BP_ShipSteeringWheel.self.RelativeRotation, CallFunc_BreakRotator_Roll, CallFunc_BreakRotator_Pitch, CallFunc_BreakRotator_Yaw)
+  L27F7: CallFunc_GetBoundActionValue_ReturnValue_1 = EnhancedInputLibrary.GetBoundActionValue(self, IA_BoatMove)
+  L281D: CallFunc_Conv_InputActionValueToAxis2D_ReturnValue_1 = EnhancedInputLibrary.Conv_InputActionValueToAxis2D(CallFunc_GetBoundActionValue_ReturnValue_1)
+  L2842: BreakVector2D(CallFunc_Conv_InputActionValueToAxis2D_ReturnValue_1, CallFunc_BreakVector2D_X_2, CallFunc_BreakVector2D_Y_2)
+  L2867: CallFunc_EqualEqual_DoubleDouble_ReturnValue_1 = EqualEqual_DoubleDouble(CallFunc_BreakVector2D_X_2, 0)
+  L288D: CallFunc_Greater_DoubleDouble_ReturnValue_3 = Greater_DoubleDouble(CallFunc_BreakVector2D_X_2, 0)
+  L28B3: CallFunc_SelectFloat_ReturnValue_2 = SelectFloat(65, -65, CallFunc_Greater_DoubleDouble_ReturnValue_3)
+  L28EA: CallFunc_SelectFloat_ReturnValue_3 = SelectFloat(CallFunc_Multiply_DoubleDouble_ReturnValue, CallFunc_SelectFloat_ReturnValue_2, CallFunc_EqualEqual_DoubleDouble_ReturnValue_1)
+  L2921: CallFunc_FInterpTo_Current_ImplicitCast = CallFunc_BreakRotator_Roll
+  L293E: CallFunc_FInterpTo_DeltaTime_ImplicitCast_1 = K2Node_Event_DeltaTime
+  L295B: CallFunc_FInterpTo_ReturnValue = FInterpTo(CallFunc_FInterpTo_Current_ImplicitCast, CallFunc_SelectFloat_ReturnValue_3, CallFunc_FInterpTo_DeltaTime_ImplicitCast_1, 2)
+  L299B: CallFunc_MakeRotator_Roll_ImplicitCast_1 = CallFunc_FInterpTo_ReturnValue
+  L29B8: CallFunc_MakeRotator_ReturnValue_1 = MakeRotator(CallFunc_MakeRotator_Roll_ImplicitCast_1, 0, 0)
+  L29E7: CallFunc_MakeTransform_ReturnValue_1 = MakeTransform(self.BP_ShipSteeringWheel.self.RelativeLocation, CallFunc_MakeRotator_ReturnValue_1, Vec(1,1,1))
+  L2A44: self.ChildForScopedMovement1Transform = CallFunc_MakeTransform_ReturnValue_1
+  L2A5F: pop-flow
+  L2A60: goto L09AA
+  L2A65: K2Node_DynamicCast_AsSound_Cue = cast<SoundCue>(Temp_object_Variable_4)
+  L2A89: K2Node_DynamicCast_bSuccess_3 = K2Node_DynamicCast_AsSound_Cue
+  L2AA6: if not (K2Node_DynamicCast_bSuccess_3) pop-flow
+  L2AB0: goto L1EA1
+  L2AB5: Temp_object_Variable_4 = K2Node_CustomEvent_Loaded
+  L2AC8: goto L2A65
+  L2ACD: self.DrdShipBase.ForceSetIsEngineBroken(true)
+  L2AE6: CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_3 = BlueprintGameplayTagLibrary.MakeLiteralGameplayTagContainer(GameplayTagContainer{[GameplayTag{'GameEntityStatuses.Ship.ControlsDisabled'}]})
+  L2B39: CallFunc_AddLooseGameplayTags_ReturnValue_2 = AbilitySystemBlueprintLibrary.AddLooseGameplayTags(self, CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_3, false)
+  L2B58: push L2BE1
+  L2B5D: K2Node_DynamicCast_AsDrd_Gangplank = cast<DrdGangplank>(self.GangplankLeft.self.ChildActor)
+  L2B97: K2Node_DynamicCast_bSuccess_5 = K2Node_DynamicCast_AsDrd_Gangplank
+  L2BB4: if not (K2Node_DynamicCast_bSuccess_5) pop-flow
+  L2BBE: K2Node_DynamicCast_AsDrd_Gangplank.DrdGangplank.ForceChangeState(false, true)
+  L2BE0: pop-flow
+  L2BE1: K2Node_DynamicCast_AsDrd_Gangplank_1 = cast<DrdGangplank>(self.GangplankRight.self.ChildActor)
+  L2C1B: K2Node_DynamicCast_bSuccess_6 = K2Node_DynamicCast_AsDrd_Gangplank_1
+  L2C38: if not (K2Node_DynamicCast_bSuccess_6) pop-flow
+  L2C42: K2Node_DynamicCast_AsDrd_Gangplank_1.DrdGangplank.ForceChangeState(false, true)
+  L2C64: pop-flow
+  L2C65: push L2DF5
+  L2C6A: CallFunc_IsPawnControlled_ReturnValue = IsPawnControlled()
+  L2C82: CallFunc_Greater_IntInt_ReturnValue_3 = Greater_IntInt(K2Node_ComponentBoundEvent_Tier, self.PrevPolypsTier)
+  L2CA8: CallFunc_BooleanAND_ReturnValue = BooleanAND(CallFunc_Greater_IntInt_ReturnValue_3, CallFunc_IsPawnControlled_ReturnValue)
+  L2CCE: if not (CallFunc_BooleanAND_ReturnValue) pop-flow
+  L2CD8: CallFunc_GetPlayerController_ReturnValue_2 = GameplayStatics.GetPlayerController(self, 0)
+  L2CF2: CallFunc_GetLocalPlayerFromController_ReturnValue_2 = Default__CommonUIExtensions.CommonUIExtensions.GetLocalPlayerFromController(CallFunc_GetPlayerController_ReturnValue_2)
+  L2D25: CallFunc_PushContentToLayer_ForPlayer_ReturnValue_2 = Default__CommonUIExtensions.CommonUIExtensions.PushContentToLayer_ForPlayer(CallFunc_GetLocalPlayerFromController_ReturnValue_2, GameplayTag{'UI.Layer.NotificationsAtTop'}, WBP_Notification_Polyps_C)
+  L2D7C: K2Node_DynamicCast_AsWBP_Notification_Polyps = cast<WBP_Notification_Polyps_C>(CallFunc_PushContentToLayer_ForPlayer_ReturnValue_2)
+  L2DA0: K2Node_DynamicCast_bSuccess_7 = K2Node_DynamicCast_AsWBP_Notification_Polyps
+  L2DBD: if not (K2Node_DynamicCast_bSuccess_7) pop-flow
+  L2DC7: K2Node_DynamicCast_AsWBP_Notification_Polyps.SetTier(K2Node_ComponentBoundEvent_Tier)
+  L2DF4: pop-flow
+  L2DF5: self.PrevPolypsTier = K2Node_ComponentBoundEvent_Tier
+  L2E10: pop-flow
+  L2E11: BreakVector2D(Temp_struct_Variable_1, CallFunc_BreakVector2D_X_3, CallFunc_BreakVector2D_Y_3)
+  L2E36: CallFunc_AddControllerPitchInput_Val_ImplicitCast = CallFunc_BreakVector2D_Y_3
+  L2E53: AddControllerPitchInput(CallFunc_AddControllerPitchInput_Val_ImplicitCast)
+  L2E6A: pop-flow
+  L2E6B: BreakVector2D(Temp_struct_Variable_1, CallFunc_BreakVector2D_X_3, CallFunc_BreakVector2D_Y_3)
+  L2E90: CallFunc_AddControllerYawInput_Val_ImplicitCast = CallFunc_BreakVector2D_X_3
+  L2EAD: AddControllerYawInput(CallFunc_AddControllerYawInput_Val_ImplicitCast)
+  L2EC4: goto L2E11
+  L2EC9: CallFunc_Conv_InputActionValueToAxis2D_ReturnValue_2 = EnhancedInputLibrary.Conv_InputActionValueToAxis2D(K2Node_EnhancedInputActionEvent_ActionValue_6)
+  L2EEE: Temp_struct_Variable_1 = CallFunc_Conv_InputActionValueToAxis2D_ReturnValue_2
+  L2F09: Temp_real_Variable_9 = K2Node_EnhancedInputActionEvent_ElapsedTime_6
+  L2F26: Temp_real_Variable_9 = Temp_real_Variable_9
+  L2F41: Temp_real_Variable_10 = K2Node_EnhancedInputActionEvent_TriggeredTime_6
+  L2F5E: Temp_real_Variable_10 = Temp_real_Variable_10
+  L2F79: Temp_object_Variable_5 = K2Node_EnhancedInputActionEvent_SourceAction_6
+  L2F8C: goto L2E6B
+  L2F91: return
+
+## function GetCharacterTranformOnUnpossess  flags=0x1CC80800
+  L0000: CallFunc_K2_GetComponentToWorld_ReturnValue = self.TeleportToOnUnpossess.SceneComponent.K2_GetComponentToWorld()
+  L0032: ReturnValue = CallFunc_K2_GetComponentToWorld_ReturnValue
+  L004D: return ReturnValue
+
+## function GetClosestDockLocation  flags=0x1CC20000
+  L0000: push L0506
+  L0005: MinDistance = 1e+16
+  L0020: CallFunc_K2_GetActorLocation_ReturnValue = Actor.K2_GetActorLocation()
+  L003C: ClosestLocatoin = CallFunc_K2_GetActorLocation_ReturnValue
+  L0057: CallFunc_GetAllActorsOfClass_OutActors = []
+  L0062: GameplayStatics.GetAllActorsOfClass(self, BP_DockingPoint_C, CallFunc_GetAllActorsOfClass_OutActors)
+  L007F: Temp_int_Loop_Counter_Variable = 0
+  L0096: Temp_int_Array_Index_Variable = 0
+  L00AD: CallFunc_Array_Length_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(CallFunc_GetAllActorsOfClass_OutActors)
+  L00E8: CallFunc_Less_IntInt_ReturnValue = Less_IntInt(Temp_int_Loop_Counter_Variable, CallFunc_Array_Length_ReturnValue)
+  L010E: if not (CallFunc_Less_IntInt_ReturnValue) goto L0481
+  L011C: Temp_int_Array_Index_Variable = Temp_int_Loop_Counter_Variable
+  L0137: push L04BC
+  L013C: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetAllActorsOfClass_OutActors, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L0177: CallFunc_Array_Get_Item.GetIsReadyToTeleportOnDeath(CallFunc_GetIsReadyToTeleportOnDeath_bIsReady)
+  L01A4: if not (CallFunc_GetIsReadyToTeleportOnDeath_bIsReady) pop-flow
+  L01AE: CallFunc_K2_GetActorLocation_ReturnValue_1 = Actor.K2_GetActorLocation()
+  L01CA: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetAllActorsOfClass_OutActors, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L0205: CallFunc_K2_GetActorLocation_ReturnValue_2 = CallFunc_Array_Get_Item.Actor.K2_GetActorLocation()
+  L0237: CallFunc_Vector_DistanceSquared_ReturnValue = Vector_DistanceSquared(CallFunc_K2_GetActorLocation_ReturnValue_2, CallFunc_K2_GetActorLocation_ReturnValue_1)
+  L0265: CallFunc_Less_DoubleDouble_ReturnValue = Less_DoubleDouble(CallFunc_Vector_DistanceSquared_ReturnValue, MinDistance)
+  L028B: if not (CallFunc_Less_DoubleDouble_ReturnValue) pop-flow
+  L0295: CallFunc_K2_GetActorLocation_ReturnValue_1 = Actor.K2_GetActorLocation()
+  L02B1: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetAllActorsOfClass_OutActors, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L02EC: CallFunc_K2_GetActorLocation_ReturnValue_2 = CallFunc_Array_Get_Item.Actor.K2_GetActorLocation()
+  L031E: CallFunc_Vector_DistanceSquared_ReturnValue = Vector_DistanceSquared(CallFunc_K2_GetActorLocation_ReturnValue_2, CallFunc_K2_GetActorLocation_ReturnValue_1)
+  L034C: MinDistance = CallFunc_Vector_DistanceSquared_ReturnValue
+  L0367: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetAllActorsOfClass_OutActors, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L03A2: CallFunc_CalculateShipDockingPoint_ReturnValue = self.DockingComponent.DrdShipDockingComponent.CalculateShipDockingPoint(CallFunc_Array_Get_Item)
+  L03DD: ClosestLocatoin = CallFunc_CalculateShipDockingPoint_ReturnValue
+  L03F8: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetAllActorsOfClass_OutActors, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L0433: CallFunc_K2_GetActorRotation_ReturnValue = CallFunc_Array_Get_Item.Actor.K2_GetActorRotation()
+  L0465: ClosestRotation = CallFunc_K2_GetActorRotation_ReturnValue
+  L0480: pop-flow
+  L0481: Location = ClosestLocatoin
+  L049C: Rotation = ClosestRotation
+  L04B7: goto L0506
+  L04BC: CallFunc_Add_IntInt_ReturnValue = Add_IntInt(Temp_int_Loop_Counter_Variable, 1)
+  L04E6: Temp_int_Loop_Counter_Variable = CallFunc_Add_IntInt_ReturnValue
+  L0501: goto L00AD
+  L0506: return
+
+## function GetInventory  flags=0x1C420000
+  L0000: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L001A: K2Node_DynamicCast_AsI_Inventory = iface<I_Inventory>(CallFunc_GetPlayerController_ReturnValue)
+  L003E: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsI_Inventory
+  L005B: if not (K2Node_DynamicCast_bSuccess) goto L00AF
+  L0069: K2Node_DynamicCast_AsI_Inventory.GetInventoryComponent(CallFunc_GetInventoryComponent_Component)
+  L0097: Inventory = CallFunc_GetInventoryComponent_Component
+  L00AA: goto L00BF
+  L00AF: CallFunc_GetInventoryComponent_Component = null
+  L00BA: goto L0097
+  L00BF: return
+
+## function GetInventoryComponent  flags=0x0C420800
+  L0000: Component = self.BP_InventoryComponent
+  L0013: return
+
+## function GetRockingRootComponent  flags=0x1C420800
+  L0000: ReturnValue = self.HullRockingRoot
+  L0013: return ReturnValue
+
+## function InpActEvt_IA_BoatFishing_K2Node_EnhancedInputActionEvent_1  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_1 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_1 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_1 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_1 = SourceAction
+  L0048: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(2215)
+  L0057: return
+
+## function InpActEvt_IA_BoatFishing_K2Node_EnhancedInputActionEvent_2  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_2 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_2 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_2 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_2 = SourceAction
+  L0048: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(1887)
+  L0057: return
+
+## function InpActEvt_IA_BoatFishing_K2Node_EnhancedInputActionEvent_3  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_3 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_3 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_3 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_3 = SourceAction
+  L0048: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(1703)
+  L0057: return
+
+## function InpActEvt_IA_BoatFishing_K2Node_EnhancedInputActionEvent_4  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_4 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_4 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_4 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_4 = SourceAction
+  L0048: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(1502)
+  L0057: return
+
+## function InpActEvt_IA_BoatLights_K2Node_EnhancedInputActionEvent_5  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_5 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_5 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_5 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_5 = SourceAction
+  L0048: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(938)
+  L0057: return
+
+## function InpActEvt_IA_BoatLook_K2Node_EnhancedInputActionEvent_6  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_6 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_6 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_6 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_6 = SourceAction
+  L0048: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(11977)
+  L0057: return
+
+## function InpActEvt_IA_BoatZoom_K2Node_EnhancedInputActionEvent_7  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_7 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_7 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_7 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_7 = SourceAction
+  L0048: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(6561)
+  L0057: return
+
+## function InpActEvt_IA_Klaxon_K2Node_EnhancedInputActionEvent_0  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction = SourceAction
+  L0048: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(2547)
+  L0057: return
+
+## function IsPreviewActor  flags=0x0C420800
+  L0000: ReturnValue = false
+  L000B: return ReturnValue
+
+## function ItemEquipped  flags=0x0C020800
+  L0000: frame.K2Node_Event_Component_1 = Component
+  L0012: frame.K2Node_Event_Actor_1 = Actor
+  L0024: frame.K2Node_Event_ItemID_1 = ItemID
+  L0036: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(3804)
+  L0045: return
+
+## function ItemUnequipped  flags=0x0C020800
+  L0000: frame.K2Node_Event_Component = Component
+  L0012: frame.K2Node_Event_Actor = Actor
+  L0024: frame.K2Node_Event_ItemID = ItemID
+  L0036: frame.K2Node_Event_RemovalPolicy = RemovalPolicy
+  L0048: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(3805)
+  L0057: return
+
+## function MeetsCurrencyCheck  flags=0x0C420800
+  L0000: ReturnValue = false
+  L000B: return ReturnValue
+
+## function OnFuelStatusChanged  flags=0x0CC20000
+  L0000: GameplayTagsK2Node_SwitchGameplayTag_CmpSuccess = BlueprintGameplayTagLibrary.NotEqual_TagTag(Tag, "GameEntityStatuses.Ship.NoFuel")
+  L003D: if not (GameplayTagsK2Node_SwitchGameplayTag_CmpSuccess) goto L009C
+  L004B: GameplayTagsK2Node_SwitchGameplayTag_CmpSuccess = BlueprintGameplayTagLibrary.NotEqual_TagTag(Tag, "GameEntityStatuses.Ship.LowFuel")
+  L0089: if not (GameplayTagsK2Node_SwitchGameplayTag_CmpSuccess) goto L0139
+  L0097: goto L020D
+  L009C: CallFunc_Greater_IntInt_ReturnValue_1 = Greater_IntInt(TagCount, 0)
+  L00BE: if not (CallFunc_Greater_IntInt_ReturnValue_1) goto L020D
+  L00CC: bind(K2Node_CreateDelegate_OutputDelegate, self, 'ReleaseControl')
+  L00E3: CallFunc_K2_SetTimerDelegate_ReturnValue = KismetSystemLibrary.K2_SetTimerDelegate(K2Node_CreateDelegate_OutputDelegate, 3, false, false, 0, 0)
+  L0119: self.ReleaseControlTimerHandle = CallFunc_K2_SetTimerDelegate_ReturnValue
+  L0134: goto L020D
+  L0139: CallFunc_Greater_IntInt_ReturnValue = Greater_IntInt(TagCount, 0)
+  L015B: if not (CallFunc_Greater_IntInt_ReturnValue) goto L020D
+  L0169: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L0183: CallFunc_GetLocalPlayerFromController_ReturnValue = Default__CommonUIExtensions.CommonUIExtensions.GetLocalPlayerFromController(CallFunc_GetPlayerController_ReturnValue)
+  L01B6: CallFunc_PushContentToLayer_ForPlayer_ReturnValue = Default__CommonUIExtensions.CommonUIExtensions.PushContentToLayer_ForPlayer(CallFunc_GetLocalPlayerFromController_ReturnValue, GameplayTag{'UI.Layer.NotificationsAtTop'}, WBP_Notification_LowFuel_C)
+  L020D: return
+
+## function OnLoaded_F31EDF7A44BBA462116356BD67B556AB  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Loaded = Loaded
+  L0012: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(10933)
+  L0021: return
+
+## function OnRigidCollisionHitEvent  flags=0x08080800
+  L0000: frame.K2Node_Event_EventData = EventData
+  L0012: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(7237)
+  L0021: return
+
+## function OnSectorHealthChanged  flags=0x0C080800
+  L0000: frame.K2Node_Event_SectorId = SectorId
+  L0012: frame.K2Node_Event_OldValue = OldValue
+  L0024: frame.K2Node_Event_NewValue = NewValue
+  L0036: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(8297)
+  L0045: return
+
+## function OnShipPulledOutOfWater  flags=0x0C400000
+  L0000: frame.K2Node_CustomEvent_Tag = Tag
+  L0012: frame.K2Node_CustomEvent_TagCount = TagCount
+  L0024: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(8280)
+  L0033: return
+
+## function OnUserSettingChanged  flags=0x0C020000
+  L0000: CallFunc_EqualEqual_StrStr_ReturnValue = KismetStringLibrary.EqualEqual_StrStr(Setting, "Auto Rotate Camera On Ship")
+  L0039: if not (CallFunc_EqualEqual_StrStr_ReturnValue) goto L0055
+  L0047: RefreshAutoRotateCameraSetting()
+  L0055: return
+
+## function PassUniqueID  flags=0x0C020800
+  L0000: frame.K2Node_Event_UniqueID = UniqueID
+  L0012: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(3806)
+  L0021: return
+
+## function PostLoadInitialization  flags=0x0C020800
+  L0000: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(6761)
+  L000F: return
+
+## function PostLoadInitializationBlank  flags=0x0C020800
+  L0000: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(6797)
+  L000F: return
+
+## function ReceiveBeginPlay  flags=0x08080800
+  L0000: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(3836)
+  L000F: return
+
+## function ReceiveEndPlay  flags=0x08080800
+  L0000: frame.K2Node_Event_EndPlayReason = EndPlayReason
+  L0012: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(9305)
+  L0021: return
+
+## function ReceivePossessed  flags=0x08020804
+  L0000: frame.K2Node_Event_NewController = NewController
+  L0012: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(4668)
+  L0021: return
+
+## function ReceiveTick  flags=0x08020800
+  L0000: frame.K2Node_Event_DeltaSeconds = DeltaSeconds
+  L0012: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(6468)
+  L0021: return
+
+## function ReceiveUnpossessed  flags=0x08020804
+  L0000: frame.K2Node_Event_OldController = OldController
+  L0012: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(5686)
+  L0021: return
+
+## function RefreshAutoRotateCameraSetting  flags=0x0C820000
+  L0000: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L001A: CallFunc_GetHUD_ReturnValue = CallFunc_GetPlayerController_ReturnValue.PlayerController.GetHUD()
+  L0044: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(CallFunc_GetHUD_ReturnValue)
+  L0061: if not (CallFunc_IsValid_ReturnValue) goto L01D5
+  L006F: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L0089: CallFunc_GetHUD_ReturnValue = CallFunc_GetPlayerController_ReturnValue.PlayerController.GetHUD()
+  L00B3: K2Node_DynamicCast_AsBPI_EGUI_HUDInterface = iface<BPI_EGUI_HUDInterface_C>(CallFunc_GetHUD_ReturnValue)
+  L00D7: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsBPI_EGUI_HUDInterface
+  L00F4: if not (K2Node_DynamicCast_bSuccess) goto L01AE
+  L0102: K2Node_DynamicCast_AsBPI_EGUI_HUDInterface.GetUserSettings(CallFunc_GetUserSettings_UserSettings)
+  L0130: CallFunc_GetField_ReturnValue = Default__JsonBlueprintFunctionLibrary.JsonBlueprintFunctionLibrary.GetField(CallFunc_GetUserSettings_UserSettings, "Auto Rotate Camera On Ship", CallFunc_GetField_OutValue)
+  L0188: if not (CallFunc_GetField_ReturnValue) goto L01D5
+  L0196: self.bAutoRotateCamera = CallFunc_GetField_OutValue
+  L01A9: goto L01D5
+  L01AE: CallFunc_GetUserSettings_UserSettings = JsonObjectWrapper{""}
+  L01D0: goto L0130
+  L01D5: return
+
+## function ReleaseControl  flags=0x0C020000
+  L0000: CallFunc_TryActivateAbilityByClass_ReturnValue = self.AbilitySystemComponent.AbilitySystemComponent.TryActivateAbilityByClass(GA_ShipReleaseControl_C, true)
+  L0034: return
+
+## function RemoveDoorHandle  flags=0x0C000000
+  L0000: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(8285)
+  L000F: return
+
+## function RestoreHealthOnRevive  flags=0x0C820000
+  L0000: push L03EC
+  L0005: push L00B6
+  L000A: CallFunc_GetActiveModuleInSlot_ReturnValue = self.ModulesController.DrdShipUpgradeModulesController.GetActiveModuleInSlot(GameplayTag{'IFP.Container.Identifier.Ship.UpgradeSlot_Engine'})
+  L004F: CallFunc_GetMaxHealth_ReturnValue = CallFunc_GetActiveModuleInSlot_ReturnValue.DrdShipModuleBase.GetMaxHealth()
+  L0081: CallFunc_GetActiveModuleInSlot_ReturnValue.DrdShipModuleBase.SetHealth(CallFunc_GetMaxHealth_ReturnValue)
+  L00AA: DrdShipBase.ForceSetIsEngineBroken(false)
+  L00B5: pop-flow
+  L00B6: Temp_int_Variable_1 = 0
+  L00CD: Temp_int_Variable = 0
+  L00E4: CallFunc_MakeLiteralInt_ReturnValue = KismetSystemLibrary.MakeLiteralInt(7)
+  L0105: CallFunc_Less_IntInt_ReturnValue = Less_IntInt(Temp_int_Variable_1, CallFunc_MakeLiteralInt_ReturnValue)
+  L012B: if not (CallFunc_Less_IntInt_ReturnValue) pop-flow
+  L0135: CallFunc_Conv_IntToByte_ReturnValue_1 = Conv_IntToByte(Temp_int_Variable_1)
+  L015A: CallFunc_GetEnumeratorValueFromIndex_ReturnValue = KismetNodeHelperLibrary.GetEnumeratorValueFromIndex(EDrdShipSectorId, CallFunc_Conv_IntToByte_ReturnValue_1)
+  L0188: CallFunc_Conv_ByteToInt_ReturnValue = Conv_ByteToInt(CallFunc_GetEnumeratorValueFromIndex_ReturnValue)
+  L01AD: Temp_int_Variable = CallFunc_Conv_ByteToInt_ReturnValue
+  L01C8: push L03A2
+  L01CD: CallFunc_Conv_IntToByte_ReturnValue = Conv_IntToByte(Temp_int_Variable)
+  L01F2: CallFunc_GetValidValue_ReturnValue = KismetNodeHelperLibrary.GetValidValue(EDrdShipSectorId, CallFunc_Conv_IntToByte_ReturnValue)
+  L0220: CallFunc_GetSectorById_ReturnValue = DrdShipBase.GetSectorById(CallFunc_GetValidValue_ReturnValue)
+  L023D: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(CallFunc_GetSectorById_ReturnValue)
+  L025A: if not (CallFunc_IsValid_ReturnValue) pop-flow
+  L0264: CallFunc_GetAbilitySystemComponent_ReturnValue = AbilitySystemBlueprintLibrary.GetAbilitySystemComponent(CallFunc_GetSectorById_ReturnValue)
+  L0281: CallFunc_MakeEffectContext_ReturnValue = CallFunc_GetAbilitySystemComponent_ReturnValue.MakeEffectContext()
+  L02B7: CallFunc_MakeOutgoingSpec_ReturnValue = CallFunc_GetAbilitySystemComponent_ReturnValue.MakeOutgoingSpec(GE_ApplyDamageToShip_C, 0, CallFunc_MakeEffectContext_ReturnValue)
+  L0304: CallFunc_AssignTagSetByCallerMagnitude_ReturnValue = AbilitySystemBlueprintLibrary.AssignTagSetByCallerMagnitude(CallFunc_MakeOutgoingSpec_ReturnValue, GameplayTag{'GAS.SetByCaller.Damage'}, -10000)
+  L0349: CallFunc_GetAbilitySystemComponent_ReturnValue = AbilitySystemBlueprintLibrary.GetAbilitySystemComponent(CallFunc_GetSectorById_ReturnValue)
+  L0366: CallFunc_BP_ApplyGameplayEffectSpecToSelf_ReturnValue = CallFunc_GetAbilitySystemComponent_ReturnValue.AbilitySystemComponent.BP_ApplyGameplayEffectSpecToSelf(CallFunc_AssignTagSetByCallerMagnitude_ReturnValue)
+  L03A1: pop-flow
+  L03A2: CallFunc_Add_IntInt_ReturnValue = Add_IntInt(Temp_int_Variable_1, 1)
+  L03CC: Temp_int_Variable_1 = CallFunc_Add_IntInt_ReturnValue
+  L03E7: goto L00E4
+  L03EC: return
+
+## function SetDynamicWavesStrength  flags=0x0C020000
+  L0000: K2Node_DynamicCast_AsBP_Boat_Dynamic_Force_Mesh_1 = cast<BP_BoatDynamicForceMesh_C>(self.DynamicForceWaterTrack1.self.ChildActor)
+  L003A: K2Node_DynamicCast_bSuccess_1 = K2Node_DynamicCast_AsBP_Boat_Dynamic_Force_Mesh_1
+  L0057: if not (K2Node_DynamicCast_bSuccess_1) goto L0096
+  L0065: K2Node_DynamicCast_AsBP_Boat_Dynamic_Force_Mesh_1.self.Strength = InForceStrength
+  L0096: K2Node_DynamicCast_AsBP_Boat_Dynamic_Force_Mesh = cast<BP_BoatDynamicForceMesh_C>(self.DynamicForceWaterTrack.self.ChildActor)
+  L00D0: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsBP_Boat_Dynamic_Force_Mesh
+  L00ED: if not (K2Node_DynamicCast_bSuccess) goto L012C
+  L00FB: K2Node_DynamicCast_AsBP_Boat_Dynamic_Force_Mesh.self.Strength = InForceStrength
+  L012C: return
+
+## function SetIsPreviewActor  flags=0x0C020800
+  L0000: frame.K2Node_Event_NewStatus = NewStatus
+  L0012: frame.K2Node_Event_OriginalActor = OriginalActor
+  L0024: BP_SmallBoat_V2_C.ExecuteUbergraph_BP_SmallBoat_V2(3807)
+  L0033: return
+
+## function SetMainDoorClosedByQuest  flags=0x0C820000
+  L0000: self.bDoorClosedByQuest = bSet
+  L0013: if not (self.bDoorClosedByQuest) goto L0228
+  L0021: self.BoatDoor.SceneComponent.K2_SetRelativeRotation(Rot(0,-90,-6), false, CallFunc_K2_SetRelativeRotation_SweepHitResult, false)
+  L0065: CallFunc_MakeTransform_ReturnValue = MakeTransform(Vec(0,0,0), Rot(0,0,0), Vec(1,1,1))
+  L00CC: CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue = GameplayStatics.BeginDeferredActorSpawnFromClass(self, BP_Q_3_ShipQuestOpenDoorInteraction_C, CallFunc_MakeTransform_ReturnValue, 0, null, 1)
+  L00F8: CallFunc_MakeTransform_ReturnValue = MakeTransform(Vec(0,0,0), Rot(0,0,0), Vec(1,1,1))
+  L015F: CallFunc_FinishSpawningActor_ReturnValue = GameplayStatics.FinishSpawningActor(CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue, CallFunc_MakeTransform_ReturnValue, 1)
+  L0187: CallFunc_K2_AttachToComponent_ReturnValue = CallFunc_FinishSpawningActor_ReturnValue.Actor.K2_AttachToComponent(self.BoatDoor, 'None', 2, 2, 1, false)
+  L01CE: CallFunc_FinishSpawningActor_ReturnValue.self.DefaultSceneRoot.SceneComponent.K2_SetRelativeLocation(Vec(80,0,80), false, CallFunc_K2_SetRelativeLocation_SweepHitResult, false)
+  L0228: return
+
+## function SetupCharacterMesh  flags=0x0C820000
+  L0000: K2Node_MakeStruct_DrdObjectId.Tag = GameplayTag{'GameEntities.Player.MainChar'}
+  L0036: K2Node_MakeStruct_DrdObjectId.Guid = Guid{0, 0, 0, 0}
+  L0073: K2Node_GetActorFromRefsSubsystem_HasPropertyResult = DrdActorRefsSubsystem.IsActorWithIdOfClassRegistered(self, K2Node_MakeStruct_DrdObjectId, BP_PlayerCharacter_C)
+  L009A: if not (K2Node_GetActorFromRefsSubsystem_HasPropertyResult) goto L01DC
+  L00A8: CallFunc_GetSkeletalMeshAsset_ReturnValue = self.PossessedCharacterDoll.SkeletalMeshComponent.GetSkeletalMeshAsset()
+  L00D2: CallFunc_GetSkeletalMeshAsset_ReturnValue_1 = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId, BP_PlayerCharacter_C).self.Mesh.SkeletalMeshComponent.GetSkeletalMeshAsset()
+  L0126: CallFunc_EqualEqual_ObjectObject_ReturnValue = EqualEqual_ObjectObject(CallFunc_GetSkeletalMeshAsset_ReturnValue_1, CallFunc_GetSkeletalMeshAsset_ReturnValue)
+  L014C: if not (CallFunc_EqualEqual_ObjectObject_ReturnValue) goto L015F
+  L015A: goto L01DC
+  L015F: CallFunc_GetSkeletalMeshAsset_ReturnValue_1 = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId, BP_PlayerCharacter_C).self.Mesh.SkeletalMeshComponent.GetSkeletalMeshAsset()
+  L01B3: self.PossessedCharacterDoll.SkeletalMeshComponent.SetSkeletalMeshAsset(CallFunc_GetSkeletalMeshAsset_ReturnValue_1)
+  L01DC: return
+
+## function UpdateLights  flags=0x0C020000
+  L0000: push L0202
+  L0005: CallFunc_GetGameplayTagCount_ReturnValue = self.AbilitySystemComponent.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GameEntityStatuses.Ship.LightsOn'})
+  L0052: CallFunc_EqualEqual_IntInt_ReturnValue = EqualEqual_IntInt(CallFunc_GetGameplayTagCount_ReturnValue, 0)
+  L0074: if not (CallFunc_EqualEqual_IntInt_ReturnValue) goto L00F7
+  L0082: push L01B7
+  L0087: if not (bPlaySound) pop-flow
+  L0091: CallFunc_K2_GetActorLocation_ReturnValue = Actor.K2_GetActorLocation()
+  L00AD: GameplayStatics.PlaySoundAtLocation(self, SCUE_Flashlight_Turn_On, CallFunc_K2_GetActorLocation_ReturnValue, Rot(0,0,0), 1, 1, 0, null, null, null, null)
+  L00F6: pop-flow
+  L00F7: push L016C
+  L00FC: if not (bPlaySound) pop-flow
+  L0106: CallFunc_K2_GetActorLocation_ReturnValue = Actor.K2_GetActorLocation()
+  L0122: GameplayStatics.PlaySoundAtLocation(self, SCUE_Flashlight_Turn_Off, CallFunc_K2_GetActorLocation_ReturnValue, Rot(0,0,0), 1, 1, 0, null, null, null, null)
+  L016B: pop-flow
+  L016C: self.PointLight1.LightComponent.SetIntensity(80)
+  L0191: self.PointLight_Lentern.LightComponent.SetIntensity(52)
+  L01B6: pop-flow
+  L01B7: self.PointLight1.LightComponent.SetIntensity(0)
+  L01DC: self.PointLight_Lentern.LightComponent.SetIntensity(0)
+  L0201: pop-flow
+  L0202: return
+
+## function UpdateSectorMorph  flags=0x0C020000
+  L0000: CallFunc_GetSectorById_ReturnValue = DrdShipBase.GetSectorById(SectorID)
+  L001D: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(CallFunc_GetSectorById_ReturnValue)
+  L003A: if not (CallFunc_IsValid_ReturnValue) goto L0830
+  L0048: CallFunc_Greater_DoubleDouble_A_ImplicitCast = CallFunc_GetSectorById_ReturnValue.self.AttributeSetHealth.self.MaxHealth.CurrentValue
+  L009A: CallFunc_Greater_DoubleDouble_ReturnValue = Greater_DoubleDouble(CallFunc_Greater_DoubleDouble_A_ImplicitCast, 0)
+  L00C0: if not (CallFunc_Greater_DoubleDouble_ReturnValue) goto L0830
+  L00CE: K2Node_SwitchEnum_CmpSuccess = NotEqual_ByteByte(SectorID, 0)
+  L00ED: if not (K2Node_SwitchEnum_CmpSuccess) goto L0187
+  L00FB: K2Node_SwitchEnum_CmpSuccess = NotEqual_ByteByte(SectorID, 1)
+  L011A: if not (K2Node_SwitchEnum_CmpSuccess) goto L0317
+  L0128: K2Node_SwitchEnum_CmpSuccess = NotEqual_ByteByte(SectorID, 3)
+  L0147: if not (K2Node_SwitchEnum_CmpSuccess) goto L04DE
+  L0155: K2Node_SwitchEnum_CmpSuccess = NotEqual_ByteByte(SectorID, 5)
+  L0174: if not (K2Node_SwitchEnum_CmpSuccess) goto L06A5
+  L0182: goto L0830
+  L0187: CallFunc_Divide_DoubleDouble_A_ImplicitCast = CallFunc_GetSectorById_ReturnValue.self.AttributeSetHealth.self.Health.CurrentValue
+  L01D9: CallFunc_Divide_DoubleDouble_B_ImplicitCast = CallFunc_GetSectorById_ReturnValue.self.AttributeSetHealth.self.MaxHealth.CurrentValue
+  L022B: CallFunc_Divide_DoubleDouble_ReturnValue = Divide_DoubleDouble(CallFunc_Divide_DoubleDouble_A_ImplicitCast, CallFunc_Divide_DoubleDouble_B_ImplicitCast)
+  L0259: CallFunc_Subtract_DoubleDouble_ReturnValue = Subtract_DoubleDouble(1, CallFunc_Divide_DoubleDouble_ReturnValue)
+  L0287: CallFunc_FClamp_ReturnValue = FClamp(CallFunc_Subtract_DoubleDouble_ReturnValue, 0, 1)
+  L02BE: CallFunc_SetMorphTarget_Value_ImplicitCast = CallFunc_FClamp_ReturnValue
+  L02DB: self.HullModule_Front.SkeletalMeshComponent.SetMorphTarget('Key_1', CallFunc_SetMorphTarget_Value_ImplicitCast, true)
+  L0312: goto L0830
+  L0317: CallFunc_Divide_DoubleDouble_A_ImplicitCast = CallFunc_GetSectorById_ReturnValue.self.AttributeSetHealth.self.Health.CurrentValue
+  L0369: CallFunc_Divide_DoubleDouble_B_ImplicitCast = CallFunc_GetSectorById_ReturnValue.self.AttributeSetHealth.self.MaxHealth.CurrentValue
+  L03BB: CallFunc_Divide_DoubleDouble_ReturnValue = Divide_DoubleDouble(CallFunc_Divide_DoubleDouble_A_ImplicitCast, CallFunc_Divide_DoubleDouble_B_ImplicitCast)
+  L03E9: CallFunc_Subtract_DoubleDouble_ReturnValue = Subtract_DoubleDouble(1, CallFunc_Divide_DoubleDouble_ReturnValue)
+  L0417: CallFunc_FClamp_ReturnValue = FClamp(CallFunc_Subtract_DoubleDouble_ReturnValue, 0, 1)
+  L044E: CallFunc_SetMorphTarget_Value_ImplicitCast_1 = CallFunc_FClamp_ReturnValue
+  L046B: self.HullModule_Right_Front.SkeletalMeshComponent.SetMorphTarget('Key_1', CallFunc_SetMorphTarget_Value_ImplicitCast_1, true)
+  L04A2: self.HullModule_Right_Back.SkeletalMeshComponent.SetMorphTarget('Key_1', CallFunc_SetMorphTarget_Value_ImplicitCast_1, true)
+  L04D9: goto L0830
+  L04DE: CallFunc_Divide_DoubleDouble_A_ImplicitCast = CallFunc_GetSectorById_ReturnValue.self.AttributeSetHealth.self.Health.CurrentValue
+  L0530: CallFunc_Divide_DoubleDouble_B_ImplicitCast = CallFunc_GetSectorById_ReturnValue.self.AttributeSetHealth.self.MaxHealth.CurrentValue
+  L0582: CallFunc_Divide_DoubleDouble_ReturnValue = Divide_DoubleDouble(CallFunc_Divide_DoubleDouble_A_ImplicitCast, CallFunc_Divide_DoubleDouble_B_ImplicitCast)
+  L05B0: CallFunc_Subtract_DoubleDouble_ReturnValue = Subtract_DoubleDouble(1, CallFunc_Divide_DoubleDouble_ReturnValue)
+  L05DE: CallFunc_FClamp_ReturnValue = FClamp(CallFunc_Subtract_DoubleDouble_ReturnValue, 0, 1)
+  L0615: CallFunc_SetMorphTarget_Value_ImplicitCast_2 = CallFunc_FClamp_ReturnValue
+  L0632: self.HullModule_Left_Front.SkeletalMeshComponent.SetMorphTarget('Key_1', CallFunc_SetMorphTarget_Value_ImplicitCast_2, true)
+  L0669: self.HullModule_Left_Back.SkeletalMeshComponent.SetMorphTarget('Key_1', CallFunc_SetMorphTarget_Value_ImplicitCast_2, true)
+  L06A0: goto L0830
+  L06A5: CallFunc_Divide_DoubleDouble_A_ImplicitCast = CallFunc_GetSectorById_ReturnValue.self.AttributeSetHealth.self.Health.CurrentValue
+  L06F7: CallFunc_Divide_DoubleDouble_B_ImplicitCast = CallFunc_GetSectorById_ReturnValue.self.AttributeSetHealth.self.MaxHealth.CurrentValue
+  L0749: CallFunc_Divide_DoubleDouble_ReturnValue = Divide_DoubleDouble(CallFunc_Divide_DoubleDouble_A_ImplicitCast, CallFunc_Divide_DoubleDouble_B_ImplicitCast)
+  L0777: CallFunc_Subtract_DoubleDouble_ReturnValue = Subtract_DoubleDouble(1, CallFunc_Divide_DoubleDouble_ReturnValue)
+  L07A5: CallFunc_FClamp_ReturnValue = FClamp(CallFunc_Subtract_DoubleDouble_ReturnValue, 0, 1)
+  L07DC: CallFunc_SetMorphTarget_Value_ImplicitCast_3 = CallFunc_FClamp_ReturnValue
+  L07F9: self.HullModule_Back.SkeletalMeshComponent.SetMorphTarget('Key_1', CallFunc_SetMorphTarget_Value_ImplicitCast_3, true)
+  L0830: return
+
+## function UpdateThirdPersonCameraInheritance  flags=0x0C820000
+  L0000: CallFunc_BooleanOR_ReturnValue = BooleanOR(self.bAutoRotateCamera, self.bFirstPersonCameraEnabled)
+  L0026: CallFunc_Not_PreBool_ReturnValue = Not_PreBool(CallFunc_BooleanOR_ReturnValue)
+  L0043: CallFunc_NotEqual_BoolBool_ReturnValue = NotEqual_BoolBool(CallFunc_Not_PreBool_ReturnValue, self.SpringArmComponent.self.bAbsoluteRotation)
+  L007F: if not (CallFunc_NotEqual_BoolBool_ReturnValue) goto L012F
+  L008D: CallFunc_BooleanOR_ReturnValue = BooleanOR(self.bAutoRotateCamera, self.bFirstPersonCameraEnabled)
+  L00B3: CallFunc_Not_PreBool_ReturnValue = Not_PreBool(CallFunc_BooleanOR_ReturnValue)
+  L00D0: self.SpringArmComponent.SceneComponent.SetAbsolute(false, CallFunc_Not_PreBool_ReturnValue, false)
+  L00FB: self.SpringArmComponent.SceneComponent.K2_SetWorldRotation(SavedWorldRotation, false, CallFunc_K2_SetWorldRotation_SweepHitResult, false)
+  L012F: return
+
+## function VFXSetEngineWavesActive  flags=0x0C020000
+  L0000: if not (Activate) goto L005D
+  L000E: self.VFX_BoatCenterRipples.Activate(false)
+  L0033: self.VFX_BoatCenterDrops.Activate(false)
+  L0058: goto L00A5
+  L005D: self.VFX_BoatCenterRipples.Deactivate()
+  L0081: self.VFX_BoatCenterDrops.Deactivate()
+  L00A5: return

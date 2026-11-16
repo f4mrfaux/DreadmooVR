@@ -1,0 +1,185 @@
+# /Game/Dreadmoor/Core/Features/Hook/HookGun/BP_HookGunEquipment
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/Hook/HookGun/BP_HookGunEquipment.uasset
+
+## imported packages (7)
+  /Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/HookGun/ABP_HookGun
+  /Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/HookGun/SKM_HookGun
+  /Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Hook_gun_grade_2/dm_vs_hook_gun_grade_2_hook
+  /Game/Dreadmoor/Audio/SFX/Hook/SCUE_Hook_Spin
+  /Game/Dreadmoor/Audio/SFX/Hook/SCUE_Hook_Take
+  /Game/Dreadmoor/Core/Features/Hook/Animation/BPI_AnimWeapon
+  /Game/Dreadmoor/InventoryFramework/TraitsAndComponents/IT_MeshData
+
+## exports (27)
+  [0] SoundBack_GEN_VARIABLE : AudioComponent (outer BP_HookGunEquipment_C) size=17
+        refs: obj:/Game/Dreadmoor/Audio/SFX/Hook/SCUE_Hook_Spin.SCUE_Hook_Spin
+  [1] SoundFlyForward_GEN_VARIABLE : AudioComponent (outer BP_HookGunEquipment_C) size=17
+        refs: obj:/Game/Dreadmoor/Audio/SFX/Hook/SCUE_Hook_Spin.SCUE_Hook_Spin
+  [2] BP_HookGunEquipment_C : BlueprintGeneratedClass (outer None) super=Actor size=980
+  [3] Default__BP_HookGunEquipment_C : BP_HookGunEquipment_C (outer None) size=53
+        refs: exp:Default__BP_HookGunEquipment_C, name:dm_demo_hookgun_reinforced_hook, name:dm_vs_hook_gun_mod_01_hook
+  [13] InheritableComponentHandler : InheritableComponentHandler (outer BP_HookGunEquipment_C) size=6
+  [14] DefaultSceneRoot_GEN_VARIABLE : SceneComponent (outer BP_HookGunEquipment_C) size=10
+  [15] SCS_Node_0 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SceneComponent, exp:DefaultSceneRoot_GEN_VARIABLE, name:DefaultSceneRoot
+  [16] SCS_Node_1 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:Hook_GEN_VARIABLE, name:Hook_Socket, name:Hook
+  [17] SCS_Node_2 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.AudioComponent, name:SoundBack
+  [18] SCS_Node_3 : SCS_Node (outer SimpleConstructionScript_0) size=66
+        refs: obj:/Script/Engine.SkeletalMeshComponent, exp:SkeletalMesh_GEN_VARIABLE, exp:ExecuteUbergraph_BP_HookGunEquipment, exp:SCS_Node_1, exp:SCS_Node_2, exp:SCS_Node_4, exp:SCS_Node_5, exp:SCS_Node_6, name:SkeletalMesh
+  [19] SCS_Node_4 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.AudioComponent, name:SoundFlyForward
+  [20] SCS_Node_5 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:HookUpdate_1_GEN_VARIABLE
+  [21] SCS_Node_6 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:HookUpdate_2_GEN_VARIABLE, exp:BP_HookGunEquipment_C
+  [22] SimpleConstructionScript_0 : SimpleConstructionScript (outer BP_HookGunEquipment_C) size=46
+        refs: exp:SCS_Node_3, exp:GetSpawnTransform, exp:SCS_Node_1, exp:SCS_Node_2, exp:SCS_Node_4, exp:SCS_Node_5, exp:SCS_Node_6, name:CallFunc_Array_Length_ReturnValue
+  [23] SkeletalMesh_GEN_VARIABLE : SkeletalMeshComponent (outer BP_HookGunEquipment_C) size=48
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/HookGun/ABP_HookGun.ABP_HookGun_C, obj:/Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/HookGun/SKM_HookGun.SKM_HookGun, name:BlockAllDynamic, exp:BP_HookGunEquipment_C
+  [24] Hook_GEN_VARIABLE : StaticMeshComponent (outer BP_HookGunEquipment_C) size=26
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Hook_gun_grade_2/dm_vs_hook_gun_grade_2_hook.dm_vs_hook_gun_grade_2_hook
+  [25] HookUpdate_1_GEN_VARIABLE : StaticMeshComponent (outer BP_HookGunEquipment_C) size=72
+        refs: name:Items
+  [26] HookUpdate_2_GEN_VARIABLE : StaticMeshComponent (outer BP_HookGunEquipment_C) size=75
+        refs: name:ItemType
+
+## function ExecuteUbergraph_BP_HookGunEquipment  flags=0x00808001
+  L0000: push L0AC3
+  L0005: goto computed(EntryPoint)
+  L000F: push L018F
+  L0014: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetContainerByIdentifier_Container.Items, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L0058: CallFunc_GetTraitByClassForItem_ReturnValue = FL_InventoryFramework.GetTraitByClassForItem(CallFunc_Array_Get_Item.ItemAsset, IT_MeshData_C, false)
+  L0088: CallFunc_IsValidSoftObjectReference_ReturnValue = KismetSystemLibrary.IsValidSoftObjectReference(CallFunc_GetTraitByClassForItem_ReturnValue.self.StaticMesh)
+  L00BB: if not (CallFunc_IsValidSoftObjectReference_ReturnValue) goto L0268
+  L00C9: push L02C5
+  L00CE: CallFunc_LoadAsset_Blocking_ReturnValue = KismetSystemLibrary.LoadAsset_Blocking(CallFunc_GetTraitByClassForItem_ReturnValue.self.StaticMesh)
+  L0101: K2Node_DynamicCast_AsStatic_Mesh = cast<StaticMesh>(CallFunc_LoadAsset_Blocking_ReturnValue)
+  L0125: K2Node_DynamicCast_bSuccess_3 = K2Node_DynamicCast_AsStatic_Mesh
+  L0142: if not (K2Node_DynamicCast_bSuccess_3) pop-flow
+  L014C: CallFunc_SetStaticMesh_ReturnValue = self.HookUpdate_1.SetStaticMesh(K2Node_DynamicCast_AsStatic_Mesh)
+  L0183: self.bShowAdvHook = true
+  L018E: pop-flow
+  L018F: CallFunc_Add_IntInt_ReturnValue = Add_IntInt(Temp_int_Loop_Counter_Variable, 1)
+  L01B9: Temp_int_Loop_Counter_Variable = CallFunc_Add_IntInt_ReturnValue
+  L01D4: CallFunc_Array_Length_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(CallFunc_GetContainerByIdentifier_Container.Items)
+  L0218: CallFunc_Less_IntInt_ReturnValue = Less_IntInt(Temp_int_Loop_Counter_Variable, CallFunc_Array_Length_ReturnValue)
+  L023E: if not (CallFunc_Less_IntInt_ReturnValue) pop-flow
+  L0248: Temp_int_Array_Index_Variable = Temp_int_Loop_Counter_Variable
+  L0263: goto L000F
+  L0268: CallFunc_SetStaticMesh_ReturnValue_1 = self.HookUpdate_1.SetStaticMesh(null)
+  L0297: self.HookUpdate_2.SceneComponent.SetVisibility(false, false)
+  L02B9: self.bShowAdvHook = false
+  L02C4: pop-flow
+  L02C5: self.HookUpdate_2.SceneComponent.SetVisibility(true, false)
+  L02E7: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetContainerByIdentifier_Container.Items, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L032B: CallFunc_EqualEqual_GameplayTag_ReturnValue = BlueprintGameplayTagLibrary.EqualEqual_GameplayTag(CallFunc_Array_Get_Item.ItemAsset.self.ItemType, GameplayTag{'IFP.Items.Type.Module.HookReel.AdvancedT3'})
+  L0382: Temp_bool_Variable = CallFunc_EqualEqual_GameplayTag_ReturnValue
+  L0395: CallFunc_LoadAsset_Blocking_ReturnValue_1 = KismetSystemLibrary.LoadAsset_Blocking(switch(Temp_bool_Variable){false: self.MK2HookMesh; true: self.MK3HookMesh; default: K2Node_Select_Default})
+  L03DE: K2Node_DynamicCast_AsStatic_Mesh_1 = cast<StaticMesh>(CallFunc_LoadAsset_Blocking_ReturnValue_1)
+  L0402: K2Node_DynamicCast_bSuccess_4 = K2Node_DynamicCast_AsStatic_Mesh_1
+  L041F: if not (K2Node_DynamicCast_bSuccess_4) pop-flow
+  L0429: CallFunc_SetStaticMesh_ReturnValue_2 = self.HookUpdate_2.SetStaticMesh(K2Node_DynamicCast_AsStatic_Mesh_1)
+  L0460: pop-flow
+  L0461: Temp_int_Array_Index_Variable = 0
+  L0478: goto L01D4
+  L047D: Temp_int_Loop_Counter_Variable = 0
+  L0494: goto L0461
+  L0499: pop-flow
+  L049A: bind(K2Node_CreateDelegate_OutputDelegate, self, 'StopBackSound')
+  L04B1: CallFunc_K2_SetTimerDelegate_ReturnValue = KismetSystemLibrary.K2_SetTimerDelegate(K2Node_CreateDelegate_OutputDelegate, 0.15, false, false, 0, 0)
+  L04E7: self.StopBackSoundTimer = CallFunc_K2_SetTimerDelegate_ReturnValue
+  L0502: pop-flow
+  L0503: Actor.ReceiveBeginPlay()
+  L050D: CallFunc_K2_GetActorLocation_ReturnValue = Actor.K2_GetActorLocation()
+  L0529: GameplayStatics.PlaySoundAtLocation(self, SCUE_Hook_Take, CallFunc_K2_GetActorLocation_ReturnValue, Rot(0,0,0), 1, 1, 0, null, null, null, null)
+  L0572: CallFunc_GetPlayerCharacter_ReturnValue = GameplayStatics.GetPlayerCharacter(self, 0)
+  L058C: CallFunc_GetComponentByClass_ReturnValue = CallFunc_GetPlayerCharacter_ReturnValue.Actor.GetComponentByClass(SkeletalMeshComponent)
+  L05BF: CallFunc_GetGameplayAnimInstance_ReturnValue = DrdCommonFunctionLibrary.GetGameplayAnimInstance(CallFunc_GetComponentByClass_ReturnValue)
+  L05DC: CallFunc_GetLinkedAnimGraphInstanceByTag_ReturnValue = CallFunc_GetGameplayAnimInstance_ReturnValue.AnimInstance.GetLinkedAnimGraphInstanceByTag('UpperBody')
+  L0613: K2Node_DynamicCast_AsBPI_Anim_Weapon_1 = iface<BPI_AnimWeapon_C>(CallFunc_GetLinkedAnimGraphInstanceByTag_ReturnValue)
+  L0637: K2Node_DynamicCast_bSuccess_1 = K2Node_DynamicCast_AsBPI_Anim_Weapon_1
+  L0654: if not (K2Node_DynamicCast_bSuccess_1) goto L06AB
+  L0662: K2Node_DynamicCast_AsBPI_Anim_Weapon_1.UpdateState(GameplayTag{'Anim.State.Idle'}, 1)
+  L06AB: CallFunc_GetAnimInstance_ReturnValue = self.SkeletalMesh.SkeletalMeshComponent.GetAnimInstance()
+  L06D5: K2Node_DynamicCast_AsBPI_Anim_Weapon = iface<BPI_AnimWeapon_C>(CallFunc_GetAnimInstance_ReturnValue)
+  L06F9: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsBPI_Anim_Weapon
+  L0716: if not (K2Node_DynamicCast_bSuccess) goto L076D
+  L0724: K2Node_DynamicCast_AsBPI_Anim_Weapon.UpdateState(GameplayTag{'Anim.State.Idle'}, 1)
+  L076D: InitModuleVisualFromPlayerInventory()
+  L077B: pop-flow
+  L077C: Actor.ReceiveDestroyed()
+  L0786: pop-flow
+  L0787: GameplayTagsK2Node_SwitchGameplayTag_CmpSuccess = BlueprintGameplayTagLibrary.NotEqual_TagTag(K2Node_Event_InState, "Anim.State.Back")
+  L07B5: if not (GameplayTagsK2Node_SwitchGameplayTag_CmpSuccess) goto L08D2
+  L07C3: GameplayTagsK2Node_SwitchGameplayTag_CmpSuccess = BlueprintGameplayTagLibrary.NotEqual_TagTag(K2Node_Event_InState, "Anim.State.Fire")
+  L07F1: if not (GameplayTagsK2Node_SwitchGameplayTag_CmpSuccess) goto L0888
+  L07FF: self.SoundFlyForward.Deactivate()
+  L0823: CallFunc_IsPlaying_ReturnValue_1 = self.SoundBack.IsPlaying()
+  L0851: if not (CallFunc_IsPlaying_ReturnValue_1) pop-flow
+  L085B: CallFunc_K2_IsTimerActiveHandle_ReturnValue = KismetSystemLibrary.K2_IsTimerActiveHandle(self, self.StopBackSoundTimer)
+  L0879: if not (CallFunc_K2_IsTimerActiveHandle_ReturnValue) goto L049A
+  L0887: pop-flow
+  L0888: self.SoundBack.Deactivate()
+  L08AC: self.SoundFlyForward.Activate(false)
+  L08D1: pop-flow
+  L08D2: KismetSystemLibrary.K2_ClearAndInvalidateTimerHandle(self, self.StopBackSoundTimer)
+  L08E6: CallFunc_IsPlaying_ReturnValue = self.SoundBack.IsPlaying()
+  L0914: if not (CallFunc_IsPlaying_ReturnValue) goto L0923
+  L0922: pop-flow
+  L0923: self.SoundFlyForward.Deactivate()
+  L0947: self.SoundBack.Activate(false)
+  L096C: pop-flow
+  L096D: self.SoundBack.Deactivate()
+  L0991: pop-flow
+  L0992: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L09AC: K2Node_DynamicCast_AsI_Inventory = iface<I_Inventory>(CallFunc_GetPlayerController_ReturnValue)
+  L09D0: K2Node_DynamicCast_bSuccess_2 = K2Node_DynamicCast_AsI_Inventory
+  L09ED: if not (K2Node_DynamicCast_bSuccess_2) goto L0AAE
+  L09FB: K2Node_DynamicCast_AsI_Inventory.GetInventoryComponent(CallFunc_GetInventoryComponent_Component)
+  L0A29: CallFunc_GetInventoryComponent_Component.AC_Inventory.GetContainerByIdentifier(GameplayTag{'IFP.Container.Identifier.Slot.HookReel'}, CallFunc_GetInventoryComponent_Component.self.ContainerSettings, true, CallFunc_GetContainerByIdentifier_FoundContainer, CallFunc_GetContainerByIdentifier_Container, CallFunc_GetContainerByIdentifier_ContainerIndex)
+  L0A9F: if not (CallFunc_GetContainerByIdentifier_FoundContainer) pop-flow
+  L0AA9: goto L047D
+  L0AAE: CallFunc_GetInventoryComponent_Component = null
+  L0AB9: goto L0A29
+  L0ABE: goto L096D
+  L0AC3: return
+
+## function GetSpawnTransform  flags=0x1CC20000
+  L0000: CallFunc_K2_GetComponentToWorld_ReturnValue = self.Hook.SceneComponent.K2_GetComponentToWorld()
+  L0032: ReturnValue = CallFunc_K2_GetComponentToWorld_ReturnValue
+  L004D: return ReturnValue
+
+## function InitModuleVisualFromPlayerInventory  flags=0x0C000000
+  L0000: BP_HookGunEquipment_C.ExecuteUbergraph_BP_HookGunEquipment(2450)
+  L000F: return
+
+## function ReceiveBeginPlay  flags=0x08080800
+  L0000: BP_HookGunEquipment_C.ExecuteUbergraph_BP_HookGunEquipment(1283)
+  L000F: return
+
+## function ReceiveDestroyed  flags=0x08020800
+  L0000: BP_HookGunEquipment_C.ExecuteUbergraph_BP_HookGunEquipment(1916)
+  L000F: return
+
+## function SetHookVisibility  flags=0x0C020000
+  L0000: self.Hook.SceneComponent.SetVisibility(bNewVisibility, false)
+  L002A: if not (self.bShowAdvHook) goto L0062
+  L0038: self.HookUpdate_2.SceneComponent.SetVisibility(bNewVisibility, false)
+  L0062: return
+
+## function StopBackSound  flags=0x0C000000
+  L0000: BP_HookGunEquipment_C.ExecuteUbergraph_BP_HookGunEquipment(2750)
+  L000F: return
+
+## function UpdateAimState  flags=0x0C020000
+  L0000: frame.K2Node_Event_AimState = AimState
+  L0012: BP_HookGunEquipment_C.ExecuteUbergraph_BP_HookGunEquipment(1177)
+  L0021: return
+
+## function UpdateState  flags=0x0C020000
+  L0000: frame.K2Node_Event_InState = InState
+  L0012: frame.K2Node_Event_PlayRate = PlayRate
+  L0024: BP_HookGunEquipment_C.ExecuteUbergraph_BP_HookGunEquipment(1927)
+  L0033: return

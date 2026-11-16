@@ -1,0 +1,207 @@
+# /Game/Dreadmoor/Animations/Characters/ABP_Main_Hero_Fishing
+# file: Dreadmoor/Content/Dreadmoor/Animations/Characters/ABP_Main_Hero_Fishing.uasset
+
+## imported packages (14)
+  /Game/3rdParty/TFPMovement/Demo/Character/Mannequins/Meshes/SK_DreadMoreSkeleton
+  /Game/Dreadmoor/Animations/Characters/Animations/Fishing/BS_Fishing_SimpleRod
+  /Game/Dreadmoor/Animations/Characters/Animations/Fishing/SK_DreadMoreSkeleton_Fishing_Ready
+  /Game/Dreadmoor/Animations/Characters/Animations/Fishing/SK_DreadMoreSkeleton_Fishing_Starting
+  /Game/Dreadmoor/Animations/Characters/Animations/Fishing/SK_DreadMoreSkeleton_Fishing_Starting_Idle
+  /Game/Dreadmoor/Animations/Characters/Animations/Fishing/SK_DreadMoreSkeleton_Ready_Cast
+  /Game/Dreadmoor/Animations/Characters/Animations/Fishing/SK_DreadMoreSkeleton_Ready_Cast_Idle
+  /Game/Dreadmoor/Animations/Characters/Animations/Fishing/SK_Main_Hero_Fishing_Idle
+  /Game/Dreadmoor/Animations/Characters/Animations/Fishing/SK_Main_Hero_Fishing_Start_Hook
+  /Game/Dreadmoor/Animations/Characters/Animations/Tremor_Curve
+  /Game/Dreadmoor/Animations/Characters/Animations/Tremor_Curve_Fast
+  /Game/Dreadmoor/Animations/Characters/Animations/dm_vs_protagonist_fishhanging_player
+  /Game/Dreadmoor/Core/Features/Fishing/BP_FishingController
+  /Game/Dreadmoor/Core/Features/WaterFeatures/DeckTentacle/BP_DeckTentacleComponent
+
+## exports (19)
+  [0] Default__ABP_Main_Hero_Fishing_C : ABP_Main_Hero_Fishing_C (outer None) size=3924
+        refs: obj:/Game/Dreadmoor/Animations/Characters/Animations/Fishing/SK_Main_Hero_Fishing_Start_Hook.SK_Main_Hero_Fishing_Start_Hook, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_Main_Hero_Fishing_AnimGraphNode_TransitionResult_7F3263E145929235DB11C382BEF27A17, obj:/Game/Dreadmoor/Animations/Characters/Animations/dm_vs_protagonist_fishhanging_player.dm_vs_protagonist_fishhanging_player, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_Main_Hero_Fishing_AnimGraphNode_TransitionResult_911BF77C471FB68375A91FA270705656, obj:/Game/Dreadmoor/Animations/Characters/Animations/Fishing/SK_Main_Hero_Fishing_Idle.SK_Main_Hero_Fishing_Idle, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_Main_Hero_Fishing_AnimGraphNode_TransitionResult_A058ED6A40B0C8B5800E33A53D819CF5, obj:/Game/Dreadmoor/Animations/Characters/Animations/Fishing/SK_DreadMoreSkeleton_Ready_Cast.SK_DreadMoreSkeleton_Ready_Cast, exp:ExecuteUbergraph_ABP_Main_Hero_Fishing, obj:/Game/Dreadmoor/Animations/Characters/Animations/Fishing/SK_DreadMoreSkeleton_Ready_Cast_Idle.SK_DreadMoreSkeleton_Ready_Cast_Idle, exp:AnimBlueprintGeneratedConstantData, obj:/Game/Dreadmoor/Animations/Characters/Animations/Fishing/SK_DreadMoreSkeleton_Fishing_Starting_Idle.SK_DreadMoreSkeleton_Fishing_Starting_Idle, obj:/Game/Dreadmoor/Animations/Characters/Animations/Fishing/SK_DreadMoreSkeleton_Fishing_Starting.SK_DreadMoreSkeleton_Fishing_Starting, obj:/Game/Dreadmoor/Animations/Characters/Animations/Fishing/BS_Fishing_SimpleRod.BS_Fishing_SimpleRod, obj:/Game/Dreadmoor/Animations/Characters/Animations/Fishing/SK_DreadMoreSkeleton_Fishing_Ready.SK_DreadMoreSkeleton_Fishing_Ready, exp:AnimGraph, name:DefaultSlot, name:bAllowConduitEntryStates, name:upperarm_l, obj:/Script/Engine.PoseLink, name:RodCache, name:hand_l, name:middle_02_l, exp:BlueprintUpdateAnimation, name:bNoTwist, name:hand_r, name:Fishing.State.Idle, name:Fishing.State.Fighting, obj:/Game/Dreadmoor/Animations/Characters/Animations/Tremor_Curve.Tremor_Curve, obj:/Game/Dreadmoor/Animations/Characters/Animations/Tremor_Curve_Fast.Tremor_Curve_Fast, name:Temp_bool_Variable, name:Caught, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_Main_Hero_Fishing_AnimGraphNode_TransitionResult_56B433F242CC9E40E7F287AE1D350677, name:Success, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_Main_Hero_Fishing_AnimGraphNode_TransitionResult_14A21B2749F3D51A5AACC4ACCDD11D1E, name:Idle, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_Main_Hero_Fishing_AnimGraphNode_TransitionResult_0F1CD6A94B947EB4D9BF78B612A2AF0A, name:Casting_Cast, name:Casting, exp:BlueprintInitializeAnimation, name:Starting_Idle, name:Staring, name:Fishing, name:Aiming, name:DefaultSharedGroup, name:AnimGraph, exp:AnimBlueprintGeneratedMutableData, name:Tremor_Alpha, name:AnimGraphNode_ModifyBone, obj:/Script/AnimGraphRuntime.AnimNode_ModifyBone, name:Alpha, obj:/Script/AnimGraphRuntime.AnimNode_SkeletalControlBase, name:Tremor_Yaw, name:Rotation, obj:/Script/CoreUObject.Rotator, name:Roll, name:EffectorLocation, name:AnimGraphNode_TwoBoneIK, obj:/Script/AnimGraphRuntime.AnimNode_TwoBoneIK, name:LeftHandAlpha, name:AnimGraphNode_LayeredBoneBlend
+  [1] ABP_Main_Hero_Fishing_C : AnimBlueprintGeneratedClass (outer None) super=AnimInstance size=10128
+  [17] AnimBlueprintGeneratedConstantData : ScriptStruct (outer ABP_Main_Hero_Fishing_C) super=AnimBlueprintConstantData size=3665
+        refs: obj:/Script/Engine.AnimBlueprintConstantData, name:NameProperty, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_Main_Hero_Fishing_AnimGraphNode_TransitionResult_14A21B2749F3D51A5AACC4ACCDD11D1E, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_Main_Hero_Fishing_AnimGraphNode_TransitionResult_911BF77C471FB68375A91FA270705656, name:__EnumProperty, name:None, name:IntProperty, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_Main_Hero_Fishing_AnimGraphNode_TransitionResult_0F1CD6A94B947EB4D9BF78B612A2AF0A, exp:BlueprintInitializeAnimation, name:BoolProperty, name:FloatProperty, exp:BlueprintUpdateAnimation, name:StructProperty, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_Main_Hero_Fishing_AnimGraphNode_TransitionResult_56B433F242CC9E40E7F287AE1D350677, obj:/Script/Engine.InputScaleBiasClampConstants, name:EnumProperty, obj:/Script/Engine.EAnimSyncMethod, name:ByteProperty, name:UnderlyingType, name:upperarm_l, exp:AnimGraph, obj:/Script/Engine.EAnimGroupRole, obj:/Script/Engine.AnimNodeFunctionRef, name:AnimBlueprintExtension_PropertyAccess, name:Min, obj:/Script/Engine.AnimSubsystem_PropertyAccess, name:AnimBlueprintExtension_Base, name:BoneToModify, obj:/Script/Engine.AnimSubsystem_Base, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_Main_Hero_Fishing_AnimGraphNode_TransitionResult_7F3263E145929235DB11C382BEF27A17, name:BlueprintInitializeAnimation, obj:/Script/Engine.AnimNodeExposedValueHandler_PropertyAccess, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_Main_Hero_Fishing_AnimGraphNode_TransitionResult_6E98231D452F9FC662C97F900AC0B90E, name:AnimGraphNode_TransitionResult, name:AnimGraphNode_BlendSpacePlayer, name:AnimGraphNode_SequencePlayer, name:AnimGraphNode_StateResult, name:AnimGraphNode_StateMachine, name:AnimGraphNode_Slot, name:AnimGraphNode_LayeredBoneBlend, name:AnimGraphNode_SaveCachedPose, name:AnimGraphNode_UseCachedPose, name:AnimGraphNode_TwoBoneIK, name:AnimGraphNode_Root, name:AnimGraphNode_LocalToComponentSpace, name:AnimGraphNode_ComponentToLocalSpace, name:AnimGraphNode_ModifyBone
+  [18] AnimBlueprintGeneratedMutableData : ScriptStruct (outer ABP_Main_Hero_Fishing_C) super=AnimBlueprintMutableData size=124
+        refs: obj:/Script/Engine.AnimBlueprintMutableData, name:FloatProperty, name:__FloatProperty, exp:BlueprintInitializeAnimation, name:__EnumProperty, name:None, exp:BlueprintUpdateAnimation
+
+## function AnimGraph  flags=0x0C400000
+  L0000: AnimGraph = PoseLink{-1}
+  L0025: return
+
+## function BlueprintInitializeAnimation  flags=0x08020800
+  L0000: ABP_Main_Hero_Fishing_C.ExecuteUbergraph_ABP_Main_Hero_Fishing(459)
+  L000F: return
+
+## function BlueprintUpdateAnimation  flags=0x08020800
+  L0000: frame.K2Node_Event_DeltaTimeX = DeltaTimeX
+  L0012: ABP_Main_Hero_Fishing_C.ExecuteUbergraph_ABP_Main_Hero_Fishing(596)
+  L0021: return
+
+## function EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_Main_Hero_Fishing_AnimGraphNode_TransitionResult_0F1CD6A94B947EB4D9BF78B612A2AF0A  flags=0x08000000
+  L0000: ABP_Main_Hero_Fishing_C.ExecuteUbergraph_ABP_Main_Hero_Fishing(232)
+  L000F: return
+
+## function EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_Main_Hero_Fishing_AnimGraphNode_TransitionResult_14A21B2749F3D51A5AACC4ACCDD11D1E  flags=0x08000000
+  L0000: ABP_Main_Hero_Fishing_C.ExecuteUbergraph_ABP_Main_Hero_Fishing(321)
+  L000F: return
+
+## function EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_Main_Hero_Fishing_AnimGraphNode_TransitionResult_56B433F242CC9E40E7F287AE1D350677  flags=0x08000000
+  L0000: ABP_Main_Hero_Fishing_C.ExecuteUbergraph_ABP_Main_Hero_Fishing(4185)
+  L000F: return
+
+## function EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_Main_Hero_Fishing_AnimGraphNode_TransitionResult_6E98231D452F9FC662C97F900AC0B90E  flags=0x08000000
+  L0000: ABP_Main_Hero_Fishing_C.ExecuteUbergraph_ABP_Main_Hero_Fishing(4274)
+  L000F: return
+
+## function EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_Main_Hero_Fishing_AnimGraphNode_TransitionResult_7F3263E145929235DB11C382BEF27A17  flags=0x08000000
+  L0000: ABP_Main_Hero_Fishing_C.ExecuteUbergraph_ABP_Main_Hero_Fishing(3696)
+  L000F: return
+
+## function EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_Main_Hero_Fishing_AnimGraphNode_TransitionResult_84279BD04A2E6E9E658896AD645860E6  flags=0x08000000
+  L0000: ABP_Main_Hero_Fishing_C.ExecuteUbergraph_ABP_Main_Hero_Fishing(10)
+  L000F: return
+
+## function EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_Main_Hero_Fishing_AnimGraphNode_TransitionResult_911BF77C471FB68375A91FA270705656  flags=0x08000000
+  L0000: ABP_Main_Hero_Fishing_C.ExecuteUbergraph_ABP_Main_Hero_Fishing(4052)
+  L000F: return
+
+## function EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_Main_Hero_Fishing_AnimGraphNode_TransitionResult_9249EF654B66ED6086C421AF3DF5C253  flags=0x08000000
+  L0000: ABP_Main_Hero_Fishing_C.ExecuteUbergraph_ABP_Main_Hero_Fishing(326)
+  L000F: return
+
+## function EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_Main_Hero_Fishing_AnimGraphNode_TransitionResult_A058ED6A40B0C8B5800E33A53D819CF5  flags=0x08000000
+  L0000: ABP_Main_Hero_Fishing_C.ExecuteUbergraph_ABP_Main_Hero_Fishing(3963)
+  L000F: return
+
+## function EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_Main_Hero_Fishing_AnimGraphNode_TransitionResult_B8EF7326475A133B880BE7B9E0B320C9  flags=0x08000000
+  L0000: ABP_Main_Hero_Fishing_C.ExecuteUbergraph_ABP_Main_Hero_Fishing(3785)
+  L000F: return
+
+## function ExecuteUbergraph_ABP_Main_Hero_Fishing  flags=0x00008001
+  L0000: goto computed(EntryPoint)
+  L000A: CallFunc_EqualEqual_GameplayTag_ReturnValue_1 = BlueprintGameplayTagLibrary.EqualEqual_GameplayTag(self.State, GameplayTag{'Fishing.State.Idle'})
+  L0042: self.AnimGraphNode_TransitionResult_5.bCanEnterTransition = CallFunc_EqualEqual_GameplayTag_ReturnValue_1
+  L005E: goto L10B7
+  L0063: CallFunc_GetInstanceAssetPlayerTimeFromEndFraction_ReturnValue = AnimInstance.GetInstanceAssetPlayerTimeFromEndFraction(24)
+  L0084: CallFunc_Less_DoubleDouble_A_ImplicitCast = CallFunc_GetInstanceAssetPlayerTimeFromEndFraction_ReturnValue
+  L00A1: CallFunc_Less_DoubleDouble_ReturnValue = Less_DoubleDouble(CallFunc_Less_DoubleDouble_A_ImplicitCast, 0.05)
+  L00C7: self.AnimGraphNode_TransitionResult_7.bCanEnterTransition = CallFunc_Less_DoubleDouble_ReturnValue
+  L00E3: goto L10B7
+  L00E8: CallFunc_EqualEqual_GameplayTag_ReturnValue = BlueprintGameplayTagLibrary.EqualEqual_GameplayTag(self.State, GameplayTag{'Fishing.State.Idle'})
+  L0120: self.AnimGraphNode_TransitionResult_6.bCanEnterTransition = CallFunc_EqualEqual_GameplayTag_ReturnValue
+  L013C: goto L10B7
+  L0141: goto L0063
+  L0146: CallFunc_GetInstanceAssetPlayerTimeFromEndFraction_ReturnValue_1 = AnimInstance.GetInstanceAssetPlayerTimeFromEndFraction(30)
+  L0167: CallFunc_Less_DoubleDouble_A_ImplicitCast_1 = CallFunc_GetInstanceAssetPlayerTimeFromEndFraction_ReturnValue_1
+  L0184: CallFunc_Less_DoubleDouble_ReturnValue_1 = Less_DoubleDouble(CallFunc_Less_DoubleDouble_A_ImplicitCast_1, 0.05)
+  L01AA: self.AnimGraphNode_TransitionResult_9.bCanEnterTransition = CallFunc_Less_DoubleDouble_ReturnValue_1
+  L01C6: goto L10B7
+  L01CB: AnimInstance.BlueprintInitializeAnimation()
+  L01D5: CallFunc_TryGetPawnOwner_ReturnValue = TryGetPawnOwner()
+  L01ED: K2Node_DynamicCast_AsBP_Fishing_Controller = cast<BP_FishingController_C>(CallFunc_TryGetPawnOwner_ReturnValue)
+  L0211: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsBP_Fishing_Controller
+  L022E: if not (K2Node_DynamicCast_bSuccess) goto L10B7
+  L023C: self.FishingController = K2Node_DynamicCast_AsBP_Fishing_Controller
+  L024F: goto L10B7
+  L0254: AnimInstance.BlueprintUpdateAnimation(K2Node_Event_DeltaTimeX)
+  L0267: CallFunc_IsValid_ReturnValue_2 = KismetSystemLibrary.IsValid(self.FishingController)
+  L0284: if not (CallFunc_IsValid_ReturnValue_2) goto L10B7
+  L0292: CallFunc_Add_DoubleDouble_B_ImplicitCast = K2Node_Event_DeltaTimeX
+  L02AF: CallFunc_Add_DoubleDouble_ReturnValue = Add_DoubleDouble(self.Time, CallFunc_Add_DoubleDouble_B_ImplicitCast)
+  L02DD: CallFunc_GreaterEqual_DoubleDouble_ReturnValue_1 = GreaterEqual_DoubleDouble(CallFunc_Add_DoubleDouble_ReturnValue, 1)
+  L0303: CallFunc_SelectFloat_ReturnValue_5 = SelectFloat(0, CallFunc_Add_DoubleDouble_ReturnValue, CallFunc_GreaterEqual_DoubleDouble_ReturnValue_1)
+  L033A: self.Time = CallFunc_SelectFloat_ReturnValue_5
+  L0355: self.State = self.FishingController.self.State
+  L0386: self.FishingController.IsSameDirection(CallFunc_IsSameDirection_bOut_1)
+  L03B3: CallFunc_SelectFloat_ReturnValue_2 = SelectFloat(1, 0.6, CallFunc_IsSameDirection_bOut_1)
+  L03EA: CallFunc_FInterpTo_DeltaTime_ImplicitCast = K2Node_Event_DeltaTimeX
+  L0407: CallFunc_FInterpTo_ReturnValue_1 = FInterpTo(self.Mult, CallFunc_SelectFloat_ReturnValue_2, CallFunc_FInterpTo_DeltaTime_ImplicitCast, 4)
+  L0447: self.Mult = CallFunc_FInterpTo_ReturnValue_1
+  L0462: self.FishingController.IsSameDirection(CallFunc_IsSameDirection_bOut)
+  L048F: self.SameDirection = CallFunc_IsSameDirection_bOut
+  L04A2: self.FishingController.IsEventActive(CallFunc_IsEventActive_bOut)
+  L04CF: CallFunc_BooleanOR_ReturnValue = BooleanOR(self.FishingController.self.bFishExhausted, CallFunc_IsEventActive_bOut)
+  L050B: CallFunc_MapRangeClamped_InRangeA_ImplicitCast = self.FishingController.self.StruggleXLimits.Min
+  L0547: CallFunc_MapRangeClamped_InRangeB_ImplicitCast = self.FishingController.self.StruggleXLimits.Max
+  L0583: CallFunc_MapRangeClamped_ReturnValue_1 = MapRangeClamped(self.FishingController.self.StruggleX, CallFunc_MapRangeClamped_InRangeA_ImplicitCast, CallFunc_MapRangeClamped_InRangeB_ImplicitCast, -1, 1)
+  L05E2: CallFunc_Multiply_DoubleDouble_ReturnValue = Multiply_DoubleDouble(CallFunc_MapRangeClamped_ReturnValue_1, self.Mult)
+  L0610: CallFunc_SelectFloat_ReturnValue_3 = SelectFloat(0, CallFunc_Multiply_DoubleDouble_ReturnValue, CallFunc_BooleanOR_ReturnValue)
+  L0647: CallFunc_FInterpTo_Current_ImplicitCast_1 = self.Left_Right
+  L0664: CallFunc_FInterpTo_DeltaTime_ImplicitCast_1 = K2Node_Event_DeltaTimeX
+  L0681: CallFunc_FInterpTo_ReturnValue_2 = FInterpTo(CallFunc_FInterpTo_Current_ImplicitCast_1, CallFunc_SelectFloat_ReturnValue_3, CallFunc_FInterpTo_DeltaTime_ImplicitCast_1, self.FishingController.self.RodControl)
+  L06D7: K2Node_VariableSet_Left_Right_ImplicitCast = CallFunc_FInterpTo_ReturnValue_2
+  L06F4: self.Left_Right = K2Node_VariableSet_Left_Right_ImplicitCast
+  L070F: CallFunc_IsValid_ReturnValue_1 = KismetSystemLibrary.IsValid(self.FishingController.self.StrugglingFish)
+  L0742: self.bCaught = CallFunc_IsValid_ReturnValue_1
+  L0755: CallFunc_SelectFloat_ReturnValue_1 = SelectFloat(1, 0, self.FishingController.self.bMousePressed)
+  L07A2: CallFunc_FInterpTo_Current_ImplicitCast = self.Reel
+  L07BF: CallFunc_FInterpTo_DeltaTime_ImplicitCast_2 = K2Node_Event_DeltaTimeX
+  L07DC: CallFunc_FInterpTo_ReturnValue = FInterpTo(CallFunc_FInterpTo_Current_ImplicitCast, CallFunc_SelectFloat_ReturnValue_1, CallFunc_FInterpTo_DeltaTime_ImplicitCast_2, 4)
+  L081C: K2Node_VariableSet_Reel_ImplicitCast = CallFunc_FInterpTo_ReturnValue
+  L0839: self.Reel = K2Node_VariableSet_Reel_ImplicitCast
+  L0854: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(self.FishingController.self.SK_FishingRod)
+  L0887: if not (CallFunc_IsValid_ReturnValue) goto L10B7
+  L0895: CallFunc_GetSocketRotation_ReturnValue = self.FishingController.self.GG_FishermanMix.GetSocketRotation('hand_l')
+  L08EE: CallFunc_GetSocketLocation_ReturnValue = self.FishingController.self.SK_FishingRod.GetSocketLocation('LeftHand_IK')
+  L0947: CallFunc_GreaterGreater_VectorRotator_ReturnValue = GreaterGreater_VectorRotator(self.AttachOffset, CallFunc_GetSocketRotation_ReturnValue)
+  L0975: CallFunc_Add_VectorVector_ReturnValue = Add_VectorVector(CallFunc_GetSocketLocation_ReturnValue, CallFunc_GreaterGreater_VectorRotator_ReturnValue)
+  L09A3: self.EffectorLocation = CallFunc_Add_VectorVector_ReturnValue
+  L09BE: GetLeftHandAlpha(CallFunc_GetLeftHandAlpha_Alpha)
+  L09D5: CallFunc_FInterpTo_Current_ImplicitCast_2 = self.LeftHandAlpha
+  L09F2: CallFunc_FInterpTo_DeltaTime_ImplicitCast_3 = K2Node_Event_DeltaTimeX
+  L0A0F: CallFunc_FInterpTo_ReturnValue_3 = FInterpTo(CallFunc_FInterpTo_Current_ImplicitCast_2, CallFunc_GetLeftHandAlpha_Alpha, CallFunc_FInterpTo_DeltaTime_ImplicitCast_3, 4)
+  L0A4F: K2Node_VariableSet_LeftHandAlpha_ImplicitCast = CallFunc_FInterpTo_ReturnValue_3
+  L0A6C: self.LeftHandAlpha = K2Node_VariableSet_LeftHandAlpha_ImplicitCast
+  L0A87: self.FishingController.GetTenstionPercent(CallFunc_GetTenstionPercent_Percent_1)
+  L0AB4: CallFunc_GreaterEqual_DoubleDouble_B_ImplicitCast = self.FishingController.self.Config.DangerTensionThreshold
+  L0AF0: CallFunc_GreaterEqual_DoubleDouble_ReturnValue = GreaterEqual_DoubleDouble(CallFunc_GetTenstionPercent_Percent_1, CallFunc_GreaterEqual_DoubleDouble_B_ImplicitCast)
+  L0B16: CallFunc_SelectFloat_ReturnValue = SelectFloat(1, 0, CallFunc_GreaterEqual_DoubleDouble_ReturnValue)
+  L0B4D: CallFunc_FInterpTo_Current_ImplicitCast_3 = self.Tremor_Alpha
+  L0B6A: CallFunc_FInterpTo_DeltaTime_ImplicitCast_4 = K2Node_Event_DeltaTimeX
+  L0B87: CallFunc_FInterpTo_ReturnValue_4 = FInterpTo(CallFunc_FInterpTo_Current_ImplicitCast_3, CallFunc_SelectFloat_ReturnValue, CallFunc_FInterpTo_DeltaTime_ImplicitCast_4, 4)
+  L0BC7: K2Node_VariableSet_Tremor_Alpha_ImplicitCast = CallFunc_FInterpTo_ReturnValue_4
+  L0BE4: self.Tremor_Alpha = K2Node_VariableSet_Tremor_Alpha_ImplicitCast
+  L0BFF: self.FishingController.GetTenstionPercent(CallFunc_GetTenstionPercent_Percent)
+  L0C2C: CallFunc_MapRangeClamped_ReturnValue = MapRangeClamped(CallFunc_GetTenstionPercent_Percent, 0.8, 1, 0.2, 3)
+  L0C75: self.FishingController.GetTenstionPercent(CallFunc_GetTenstionPercent_Percent_1)
+  L0CA2: CallFunc_GreaterEqual_DoubleDouble_B_ImplicitCast = self.FishingController.self.Config.DangerTensionThreshold
+  L0CDE: CallFunc_GreaterEqual_DoubleDouble_ReturnValue = GreaterEqual_DoubleDouble(CallFunc_GetTenstionPercent_Percent_1, CallFunc_GreaterEqual_DoubleDouble_B_ImplicitCast)
+  L0D04: CallFunc_SelectFloat_ReturnValue_4 = SelectFloat(self.Time, self.FishingController.self.ReelTime, CallFunc_GreaterEqual_DoubleDouble_ReturnValue)
+  L0D51: Temp_bool_Variable = CallFunc_GreaterEqual_DoubleDouble_ReturnValue
+  L0D64: CallFunc_GetFloatValue_InTime_ImplicitCast = CallFunc_SelectFloat_ReturnValue_4
+  L0D81: CallFunc_GetFloatValue_ReturnValue = switch(Temp_bool_Variable){false: self.Tremor_Curve_Slow; true: self.Tremor_Curve_Fast; default: K2Node_Select_Default}.CurveFloat.GetFloatValue(CallFunc_GetFloatValue_InTime_ImplicitCast)
+  L0DE8: CallFunc_Multiply_DoubleDouble_A_ImplicitCast = CallFunc_GetFloatValue_ReturnValue
+  L0E05: CallFunc_Multiply_DoubleDouble_ReturnValue_1 = Multiply_DoubleDouble(CallFunc_Multiply_DoubleDouble_A_ImplicitCast, CallFunc_MapRangeClamped_ReturnValue)
+  L0E33: K2Node_VariableSet_Tremor_Yaw_ImplicitCast = CallFunc_Multiply_DoubleDouble_ReturnValue_1
+  L0E50: self.Tremor_Yaw = K2Node_VariableSet_Tremor_Yaw_ImplicitCast
+  L0E6B: goto L10B7
+  L0E70: CallFunc_EqualEqual_GameplayTag_ReturnValue_2 = BlueprintGameplayTagLibrary.EqualEqual_GameplayTag(self.State, GameplayTag{'Fishing.State.Finish.Success'})
+  L0EA8: self.AnimGraphNode_TransitionResult_4.bCanEnterTransition = CallFunc_EqualEqual_GameplayTag_ReturnValue_2
+  L0EC4: goto L10B7
+  L0EC9: CallFunc_EqualEqual_GameplayTag_ReturnValue_4 = BlueprintGameplayTagLibrary.EqualEqual_GameplayTag(self.State, GameplayTag{'Fishing.State.Casting'})
+  L0F01: self.AnimGraphNode_TransitionResult_3.bCanEnterTransition = CallFunc_EqualEqual_GameplayTag_ReturnValue_4
+  L0F1D: goto L10B7
+  L0F22: CallFunc_EqualEqual_GameplayTag_ReturnValue_3 = BlueprintGameplayTagLibrary.EqualEqual_GameplayTag(self.State, GameplayTag{'Fishing.State.Fighting'})
+  L0F5A: self.AnimGraphNode_TransitionResult_8.bCanEnterTransition = CallFunc_EqualEqual_GameplayTag_ReturnValue_3
+  L0F76: goto L10B7
+  L0F7B: CallFunc_EqualEqual_GameplayTag_ReturnValue_6 = BlueprintGameplayTagLibrary.EqualEqual_GameplayTag(self.State, GameplayTag{'Fishing.State.Start'})
+  L0FB3: self.AnimGraphNode_TransitionResult_2.bCanEnterTransition = CallFunc_EqualEqual_GameplayTag_ReturnValue_6
+  L0FCF: goto L10B7
+  L0FD4: CallFunc_GetInstanceAssetPlayerTimeFromEndFraction_ReturnValue_2 = AnimInstance.GetInstanceAssetPlayerTimeFromEndFraction(18)
+  L0FF5: CallFunc_Less_DoubleDouble_A_ImplicitCast_2 = CallFunc_GetInstanceAssetPlayerTimeFromEndFraction_ReturnValue_2
+  L1012: CallFunc_Less_DoubleDouble_ReturnValue_2 = Less_DoubleDouble(CallFunc_Less_DoubleDouble_A_ImplicitCast_2, 0.05)
+  L1038: self.AnimGraphNode_TransitionResult_1.bCanEnterTransition = CallFunc_Less_DoubleDouble_ReturnValue_2
+  L1054: goto L10B7
+  L1059: CallFunc_EqualEqual_GameplayTag_ReturnValue_5 = BlueprintGameplayTagLibrary.EqualEqual_GameplayTag(self.State, GameplayTag{'Fishing.State.Aiming'})
+  L1091: self.AnimGraphNode_TransitionResult.bCanEnterTransition = CallFunc_EqualEqual_GameplayTag_ReturnValue_5
+  L10AD: goto L10B7
+  L10B2: goto L0F22
+  L10B7: return
+
+## function GetLeftHandAlpha  flags=0x1C420000
+  L0000: CallFunc_HasTag_ReturnValue = BlueprintGameplayTagLibrary.HasTag(self.LeftHandStates, self.State, false)
+  L0027: CallFunc_Conv_BoolToDouble_ReturnValue = Conv_BoolToDouble(CallFunc_HasTag_ReturnValue)
+  L004C: Alpha = CallFunc_Conv_BoolToDouble_ReturnValue
+  L0067: return

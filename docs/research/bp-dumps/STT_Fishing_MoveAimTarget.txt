@@ -1,0 +1,82 @@
+# /Game/Dreadmoor/Core/Features/Fishing/StateTree/STT_Fishing_MoveAimTarget
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/Fishing/StateTree/STT_Fishing_MoveAimTarget.uasset
+
+## imported packages (3)
+  /Game/Dreadmoor/Core/Features/Fishing/BP_FishingAimTarget
+  /Game/Dreadmoor/Core/Features/Fishing/BP_FishingController
+  /Game/Dreadmoor/Core/Features/WaterFeatures/DeckTentacle/BP_DeckTentacleComponent
+
+## exports (6)
+  [0] STT_Fishing_MoveAimTarget_C : BlueprintGeneratedClass (outer None) super=StateTreeTaskBlueprintBase size=325
+  [5] Default__STT_Fishing_MoveAimTarget_C : STT_Fishing_MoveAimTarget_C (outer None) size=8
+
+## function ExecuteUbergraph_STT_Fishing_MoveAimTarget  flags=0x00808001
+  L0000: goto computed(EntryPoint)
+  L000A: StateTreeTaskBlueprintBase.ReceiveLatentEnterState(K2Node_Event_Transition_1)
+  L001D: CallFunc_K2_GetActorLocation_ReturnValue = self.Actor.Actor.K2_GetActorLocation()
+  L004F: CallFunc_GetControlRotation_ReturnValue = self.Actor.Pawn.GetControlRotation()
+  L0081: CallFunc_Conv_RotatorToVector_ReturnValue = Conv_RotatorToVector(CallFunc_GetControlRotation_ReturnValue)
+  L00A6: CallFunc_Conv_DoubleToVector_InDouble_ImplicitCast = self.Actor.self.Config.ThrowFloatDistance.Min
+  L00EB: CallFunc_Conv_DoubleToVector_ReturnValue = Conv_DoubleToVector(CallFunc_Conv_DoubleToVector_InDouble_ImplicitCast)
+  L0110: CallFunc_Multiply_VectorVector_ReturnValue = Multiply_VectorVector(CallFunc_Conv_RotatorToVector_ReturnValue, CallFunc_Conv_DoubleToVector_ReturnValue)
+  L013E: CallFunc_Add_VectorVector_ReturnValue = Add_VectorVector(CallFunc_K2_GetActorLocation_ReturnValue, CallFunc_Multiply_VectorVector_ReturnValue)
+  L016C: CallFunc_Conv_VectorToTransform_ReturnValue = Conv_VectorToTransform(CallFunc_Add_VectorVector_ReturnValue)
+  L0191: CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue = GameplayStatics.BeginDeferredActorSpawnFromClass(self, BP_FishingAimTarget_C, CallFunc_Conv_VectorToTransform_ReturnValue, 0, null, 1)
+  L01BD: CallFunc_K2_GetActorLocation_ReturnValue = self.Actor.Actor.K2_GetActorLocation()
+  L01EF: CallFunc_GetControlRotation_ReturnValue = self.Actor.Pawn.GetControlRotation()
+  L0221: CallFunc_Conv_RotatorToVector_ReturnValue = Conv_RotatorToVector(CallFunc_GetControlRotation_ReturnValue)
+  L0246: CallFunc_Conv_DoubleToVector_InDouble_ImplicitCast = self.Actor.self.Config.ThrowFloatDistance.Min
+  L028B: CallFunc_Conv_DoubleToVector_ReturnValue = Conv_DoubleToVector(CallFunc_Conv_DoubleToVector_InDouble_ImplicitCast)
+  L02B0: CallFunc_Multiply_VectorVector_ReturnValue = Multiply_VectorVector(CallFunc_Conv_RotatorToVector_ReturnValue, CallFunc_Conv_DoubleToVector_ReturnValue)
+  L02DE: CallFunc_Add_VectorVector_ReturnValue = Add_VectorVector(CallFunc_K2_GetActorLocation_ReturnValue, CallFunc_Multiply_VectorVector_ReturnValue)
+  L030C: CallFunc_Conv_VectorToTransform_ReturnValue = Conv_VectorToTransform(CallFunc_Add_VectorVector_ReturnValue)
+  L0331: CallFunc_FinishSpawningActor_ReturnValue = GameplayStatics.FinishSpawningActor(CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue, CallFunc_Conv_VectorToTransform_ReturnValue, 1)
+  L0359: self.AimTarget = CallFunc_FinishSpawningActor_ReturnValue
+  L036C: CallFunc_K2_GetActorLocation_ReturnValue = self.Actor.Actor.K2_GetActorLocation()
+  L039E: CallFunc_GetControlRotation_ReturnValue = self.Actor.Pawn.GetControlRotation()
+  L03D0: CallFunc_Conv_RotatorToVector_ReturnValue = Conv_RotatorToVector(CallFunc_GetControlRotation_ReturnValue)
+  L03F5: CallFunc_Conv_DoubleToVector_InDouble_ImplicitCast = self.Actor.self.Config.ThrowFloatDistance.Min
+  L043A: CallFunc_Conv_DoubleToVector_ReturnValue = Conv_DoubleToVector(CallFunc_Conv_DoubleToVector_InDouble_ImplicitCast)
+  L045F: CallFunc_Multiply_VectorVector_ReturnValue = Multiply_VectorVector(CallFunc_Conv_RotatorToVector_ReturnValue, CallFunc_Conv_DoubleToVector_ReturnValue)
+  L048D: CallFunc_Add_VectorVector_ReturnValue = Add_VectorVector(CallFunc_K2_GetActorLocation_ReturnValue, CallFunc_Multiply_VectorVector_ReturnValue)
+  L04BB: self.AimTarget.DrdFishingAimTarget.MoveTargetTo(CallFunc_Add_VectorVector_ReturnValue)
+  L04E4: goto L0869
+  L04E9: StateTreeTaskBlueprintBase.ReceiveLatentTick(K2Node_Event_DeltaTime)
+  L04FC: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(self.AimTarget)
+  L0519: if not (CallFunc_IsValid_ReturnValue) goto L0869
+  L0527: CallFunc_IsValid_ReturnValue_1 = KismetSystemLibrary.IsValid(self.Actor.self.PowerWidget)
+  L055A: if not (CallFunc_IsValid_ReturnValue_1) goto L0869
+  L0568: CallFunc_K2_GetActorLocation_ReturnValue_2 = self.Actor.Actor.K2_GetActorLocation()
+  L059A: CallFunc_GetControlRotation_ReturnValue_1 = self.Actor.Pawn.GetControlRotation()
+  L05CC: CallFunc_Conv_RotatorToVector_ReturnValue_1 = Conv_RotatorToVector(CallFunc_GetControlRotation_ReturnValue_1)
+  L05F1: self.Actor.self.PowerWidget.GetPower(CallFunc_GetPower_Percent)
+  L0634: CallFunc_Lerp_A_ImplicitCast = self.Actor.self.Config.ThrowFloatDistance.Min
+  L0679: CallFunc_Lerp_B_ImplicitCast = self.Actor.self.Config.ThrowFloatDistance.Max
+  L06BE: CallFunc_Lerp_ReturnValue = Lerp(CallFunc_Lerp_A_ImplicitCast, CallFunc_Lerp_B_ImplicitCast, CallFunc_GetPower_Percent)
+  L06F5: CallFunc_Conv_DoubleToVector_ReturnValue_1 = Conv_DoubleToVector(CallFunc_Lerp_ReturnValue)
+  L071A: CallFunc_Multiply_VectorVector_ReturnValue_1 = Multiply_VectorVector(CallFunc_Conv_RotatorToVector_ReturnValue_1, CallFunc_Conv_DoubleToVector_ReturnValue_1)
+  L0748: CallFunc_Add_VectorVector_ReturnValue_1 = Add_VectorVector(CallFunc_K2_GetActorLocation_ReturnValue_2, CallFunc_Multiply_VectorVector_ReturnValue_1)
+  L0776: self.AimTarget.DrdFishingAimTarget.MoveTargetTo(CallFunc_Add_VectorVector_ReturnValue_1)
+  L079F: goto L0869
+  L07A4: StateTreeTaskBlueprintBase.ReceiveExitState(K2Node_Event_Transition)
+  L07B7: CallFunc_IsValid_ReturnValue_2 = KismetSystemLibrary.IsValid(self.AimTarget)
+  L07D4: if not (CallFunc_IsValid_ReturnValue_2) goto L0869
+  L07E2: CallFunc_K2_GetActorLocation_ReturnValue_1 = self.AimTarget.Actor.K2_GetActorLocation()
+  L0814: self.Actor.self.AimTarget = CallFunc_K2_GetActorLocation_ReturnValue_1
+  L0845: self.AimTarget.K2_DestroyActor()
+  L0869: return
+
+## function ReceiveExitState  flags=0x08420800
+  L0000: frame.K2Node_Event_Transition = Transition
+  L0012: STT_Fishing_MoveAimTarget_C.ExecuteUbergraph_STT_Fishing_MoveAimTarget(1956)
+  L0021: return
+
+## function ReceiveLatentEnterState  flags=0x08420800
+  L0000: frame.K2Node_Event_Transition_1 = Transition
+  L0012: STT_Fishing_MoveAimTarget_C.ExecuteUbergraph_STT_Fishing_MoveAimTarget(10)
+  L0021: return
+
+## function ReceiveLatentTick  flags=0x08020800
+  L0000: frame.K2Node_Event_DeltaTime = DeltaTime
+  L0012: STT_Fishing_MoveAimTarget_C.ExecuteUbergraph_STT_Fishing_MoveAimTarget(1257)
+  L0021: return

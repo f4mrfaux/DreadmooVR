@@ -1,0 +1,158 @@
+# /Game/3rdParty/TFPMovement/Demo/Character/ABP_V03
+# file: Dreadmoor/Content/3rdParty/TFPMovement/Demo/Character/ABP_V03.uasset
+
+## imported packages (19)
+  /Game/3rdParty/TFPMovement/Demo/Character/Animations/Crouch/AS_C_to_N_Idle
+  /Game/3rdParty/TFPMovement/Demo/Character/Animations/Crouch/AS_N_to_C_Idle
+  /Game/3rdParty/TFPMovement/Demo/Character/Animations/Jumping/AS_N_FallLoop
+  /Game/3rdParty/TFPMovement/Demo/Character/Animations/Jumping/AS_N_Jump
+  /Game/3rdParty/TFPMovement/Demo/Character/Animations/Jumping/AS_N_Land
+  /Game/3rdParty/TFPMovement/Demo/Character/CR_AimingRotation
+  /Game/3rdParty/TFPMovement/Demo/Character/CR_FixPelvis
+  /Game/3rdParty/TFPMovement/Demo/Character/CR_HandRoationAndSpine_05
+  /Game/3rdParty/TFPMovement/Demo/Character/DrdAnimations/BS_Locomotion
+  /Game/3rdParty/TFPMovement/Demo/Character/DrdAnimations/BS_LocomotionCrouch
+  /Game/3rdParty/TFPMovement/Demo/Character/DrdAnimations/BS_Turn
+  /Game/3rdParty/TFPMovement/Demo/Character/DrdAnimations/BS_TurnCrouch
+  /Game/3rdParty/TFPMovement/Demo/Character/Mannequins/Meshes/EmptyLayer
+  /Game/3rdParty/TFPMovement/Demo/Character/Mannequins/Meshes/SK_DreadMoreSkeleton
+  /Game/Dreadmoor/Art/StaticMesh/Characters/PlayersCharacter/ABP/I_AnimData
+  /Game/Dreadmoor/Core/Features/ActionPlayer/BP_ActionPlayer
+  /Game/Dreadmoor/Core/Features/PlayerCharacter/BP_PlayerCharacter
+  /Game/Dreadmoor/Core/Features/UnderwaterFeatures/DiverCharacter/Animations/BS_Swiming_IdleMove
+  /Game/Dreadmoor/Core/Features/UpgradeDock/Components/BP_SlotTracerComponent
+
+## exports (14)
+  [0] Default__ABP_V03_C : ABP_V03_C (outer None) size=13643
+  [1] ABP_V03_C : AnimBlueprintGeneratedClass (outer None) super=AnimInstance size=12378
+  [12] AnimBlueprintGeneratedConstantData : ScriptStruct (outer ABP_V03_C) super=AnimBlueprintConstantData size=4889
+        refs: obj:/Script/Engine.AnimBlueprintConstantData, name:NameProperty, exp:AnimBlueprintGeneratedMutableData, exp:UpdatePawnPropties, name:__BoolProperty, name:None, name:IntProperty, exp:AnimBlueprintGeneratedConstantData, exp:AnimGraph, name:StructProperty, obj:/Script/Engine.InputScaleBiasClampConstants, name:ArrayProperty, name:bLoopAnimation, name:FloatProperty, name:BoolProperty, name:EnumProperty, exp:TryStopCurrentMontage, obj:/Script/Engine.EAnimSyncMethod, name:ByteProperty, name:UnderlyingType, name:UpdatePawnPropties, exp:BlueprintUpdateAnimation, obj:/Script/Engine.EAnimGroupRole, name:ObjectProperty, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_V03_AnimGraphNode_TransitionResult_03BE25A147F985E8D13A429DEA233CF9, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_V03_AnimGraphNode_TransitionResult_55E6F8C44BBAD685147DCBA3492BDD2B, obj:/Script/Engine.CurveFloat, obj:/Script/AnimGraphRuntime.EBlendListChildUpdateMode, obj:/Script/Engine.EAlphaBlendOption, obj:/Script/AnimGraphRuntime.EBlendListTransitionType, exp:AnimDataData, obj:/Script/Engine.BlendProfile, obj:/Script/Engine.AnimNodeFunctionRef, name:AnimBlueprintExtension_Tag, name:CallFunc_Divide_DoubleDouble_ReturnValue, obj:/Script/Engine.AnimSubsystem_Tag, name:AnimBlueprintExtension_PropertyAccess, name:K2Node_VariableSet_YawVelocityPerSec_ImplicitCast, obj:/Script/Engine.AnimSubsystem_PropertyAccess, name:AnimBlueprintExtension_Base, name:BlendType, obj:/Script/Engine.AnimSubsystem_Base, name:AnimGraphNode_Root, name:BlendMode, obj:/Script/Engine.AnimNodeExposedValueHandler_PropertyAccess, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_V03_AnimGraphNode_TransitionResult_2471080743FE5E944EA26E8998B03FE1, name:AnimGraphNode_TransitionResult, name:AnimGraphNode_SequencePlayer, name:AnimGraphNode_StateResult, name:AnimGraphNode_StateMachine, name:AnimGraphNode_LinkedAnimGraph, name:AnimGraphNode_BlendSpacePlayer, name:AnimGraphNode_SaveCachedPose, name:AnimGraphNode_LayeredBoneBlend, name:AnimGraphNode_ControlRig, name:AnimGraphNode_BlendListByBool, name:AnimGraphNode_UseCachedPose, name:AnimGraphNode_Slot
+  [13] AnimBlueprintGeneratedMutableData : ScriptStruct (outer ABP_V03_C) super=AnimBlueprintMutableData size=771
+        refs: obj:/Script/Engine.AnimBlueprintMutableData, name:BoolProperty, name:__BoolProperty, name:None, name:FloatProperty, exp:UpdatePawnPropties, exp:AnimGraph, exp:AnimDataData, exp:BlueprintUpdateAnimation, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_V03_AnimGraphNode_TransitionResult_03BE25A147F985E8D13A429DEA233CF9, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_V03_AnimGraphNode_TransitionResult_2471080743FE5E944EA26E8998B03FE1, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_V03_AnimGraphNode_TransitionResult_55E6F8C44BBAD685147DCBA3492BDD2B, exp:ExecuteUbergraph_ABP_V03, exp:OnLoaded_AA7F87964ABA7F2F1099ECA9D403D747, exp:TryStopCurrentMontage, exp:AnimBlueprintGeneratedConstantData, exp:AnimBlueprintGeneratedMutableData, name:UpperBody
+
+## function AnimDataData  flags=0x0C020000
+  L0000: frame.K2Node_Event_AnimData = AnimData
+  L0012: ABP_V03_C.ExecuteUbergraph_ABP_V03(963)
+  L0021: return
+
+## function AnimGraph  flags=0x0C400000
+  L0000: AnimGraph = PoseLink{-1}
+  L0025: return
+
+## function BlueprintUpdateAnimation  flags=0x08020800
+  L0000: frame.K2Node_Event_DeltaTimeX = DeltaTimeX
+  L0012: ABP_V03_C.ExecuteUbergraph_ABP_V03(651)
+  L0021: return
+
+## function EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_V03_AnimGraphNode_TransitionResult_03BE25A147F985E8D13A429DEA233CF9  flags=0x08000000
+  L0000: ABP_V03_C.ExecuteUbergraph_ABP_V03(153)
+  L000F: return
+
+## function EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_V03_AnimGraphNode_TransitionResult_2471080743FE5E944EA26E8998B03FE1  flags=0x08000000
+  L0000: ABP_V03_C.ExecuteUbergraph_ABP_V03(521)
+  L000F: return
+
+## function EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_V03_AnimGraphNode_TransitionResult_55E6F8C44BBAD685147DCBA3492BDD2B  flags=0x08000000
+  L0000: ABP_V03_C.ExecuteUbergraph_ABP_V03(287)
+  L000F: return
+
+## function ExecuteUbergraph_ABP_V03  flags=0x00808001
+  L0000: push L041E
+  L0005: goto computed(EntryPoint)
+  L000F: Temp_class_Variable = K2Node_CustomEvent_Loaded
+  L0022: K2Node_ClassDynamicCast_AsAnim_Instance = classcast<AnimInstance>(Temp_class_Variable)
+  L0046: K2Node_ClassDynamicCast_bSuccess = K2Node_ClassDynamicCast_AsAnim_Instance
+  L0063: if not (K2Node_ClassDynamicCast_bSuccess) pop-flow
+  L006D: AnimInstance.LinkAnimGraphByTag('UpperBody', K2Node_ClassDynamicCast_AsAnim_Instance)
+  L008D: self.HasItemInHand = true
+  L0098: pop-flow
+  L0099: CallFunc_GetRelevantAnimTimeRemaining_ReturnValue_1 = AnimInstance.GetRelevantAnimTimeRemaining(28, 2)
+  L00BF: CallFunc_Less_DoubleDouble_A_ImplicitCast_2 = CallFunc_GetRelevantAnimTimeRemaining_ReturnValue_1
+  L00DC: CallFunc_Less_DoubleDouble_ReturnValue_2 = Less_DoubleDouble(CallFunc_Less_DoubleDouble_A_ImplicitCast_2, 0.2)
+  L0102: self.AnimGraphNode_TransitionResult_3.bCanEnterTransition = CallFunc_Less_DoubleDouble_ReturnValue_2
+  L011E: pop-flow
+  L011F: CallFunc_GetRelevantAnimTimeRemaining_ReturnValue = AnimInstance.GetRelevantAnimTimeRemaining(28, 3)
+  L0145: CallFunc_Less_DoubleDouble_A_ImplicitCast_1 = CallFunc_GetRelevantAnimTimeRemaining_ReturnValue
+  L0162: CallFunc_Less_DoubleDouble_ReturnValue_1 = Less_DoubleDouble(CallFunc_Less_DoubleDouble_A_ImplicitCast_1, 0.2)
+  L0188: self.AnimGraphNode_TransitionResult_4.bCanEnterTransition = CallFunc_Less_DoubleDouble_ReturnValue_1
+  L01A4: pop-flow
+  L01A5: bind(K2Node_CreateDelegate_OutputDelegate, self, 'OnLoaded_AA7F87964ABA7F2F1099ECA9D403D747')
+  L01BC: KismetSystemLibrary.LoadAssetClass(self, self.AnimData.UpperLayer, K2Node_CreateDelegate_OutputDelegate, LatentActionInfo{-1, -944299919, 'ExecuteUbergraph_ABP_V03', self})
+  L0208: pop-flow
+  L0209: CallFunc_GetInstanceAssetPlayerTimeFromEnd_ReturnValue = AnimInstance.GetInstanceAssetPlayerTimeFromEnd(42)
+  L022A: CallFunc_Less_DoubleDouble_A_ImplicitCast = CallFunc_GetInstanceAssetPlayerTimeFromEnd_ReturnValue
+  L0247: CallFunc_Less_DoubleDouble_ReturnValue = Less_DoubleDouble(CallFunc_Less_DoubleDouble_A_ImplicitCast, 0.2)
+  L026D: self.AnimGraphNode_TransitionResult_5.bCanEnterTransition = CallFunc_Less_DoubleDouble_ReturnValue
+  L0289: pop-flow
+  L028A: pop-flow
+  L028B: CallFunc_TryGetPawnOwner_ReturnValue = TryGetPawnOwner()
+  L02A3: K2Node_DynamicCast_AsBP_Player_Character = cast<BP_PlayerCharacter_C>(CallFunc_TryGetPawnOwner_ReturnValue)
+  L02C7: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsBP_Player_Character
+  L02E4: if not (K2Node_DynamicCast_bSuccess) pop-flow
+  L02EE: self.OwningPawn = K2Node_DynamicCast_AsBP_Player_Character
+  L0301: CallFunc_TryGetPawnOwner_ReturnValue = TryGetPawnOwner()
+  L0319: CallFunc_GetController_ReturnValue = CallFunc_TryGetPawnOwner_ReturnValue.Pawn.GetController()
+  L0343: self.OwningController = CallFunc_GetController_ReturnValue
+  L0356: UpdatePawnPropties()
+  L0364: CallFunc_EqualEqual_ByteByte_ReturnValue = EqualEqual_ByteByte(K2Node_DynamicCast_AsBP_Player_Character.self.CharacterMovement.self.MovementMode, 4)
+  L03AF: self.bSwimming = CallFunc_EqualEqual_ByteByte_ReturnValue
+  L03C2: pop-flow
+  L03C3: self.AnimData = K2Node_Event_AnimData
+  L03DE: self.HasItemInHand = false
+  L03E9: CallFunc_IsValidSoftClassReference_ReturnValue = KismetSystemLibrary.IsValidSoftClassReference(self.AnimData.UpperLayer)
+  L040F: if not (CallFunc_IsValidSoftClassReference_ReturnValue) pop-flow
+  L0419: goto L01A5
+  L041E: return
+
+## function OnLoaded_AA7F87964ABA7F2F1099ECA9D403D747  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Loaded = Loaded
+  L0012: ABP_V03_C.ExecuteUbergraph_ABP_V03(15)
+  L0021: return
+
+## function TryStopCurrentMontage  flags=0x0C020000
+  L0000: ABP_V03_C.ExecuteUbergraph_ABP_V03(650)
+  L000F: return
+
+## function UpdatePawnPropties  flags=0x0C020000
+  L0000: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(self.OwningPawn)
+  L001D: if not (CallFunc_IsValid_ReturnValue) goto L05F3
+  L002B: CallFunc_GetVelocity_ReturnValue = self.OwningPawn.GetVelocity()
+  L0061: CallFunc_VSize_ReturnValue = VSize(CallFunc_GetVelocity_ReturnValue)
+  L0086: self.Speed = CallFunc_VSize_ReturnValue
+  L00A1: CallFunc_GetActorForwardVector_ReturnValue = self.OwningPawn.Actor.GetActorForwardVector()
+  L00D3: CallFunc_GetVelocity_ReturnValue = self.OwningPawn.GetVelocity()
+  L0109: CallFunc_Dot_VectorVector_ReturnValue = Dot_VectorVector(CallFunc_GetVelocity_ReturnValue, CallFunc_GetActorForwardVector_ReturnValue)
+  L0137: K2Node_VariableSet_ForwardSpeed_ImplicitCast = CallFunc_Dot_VectorVector_ReturnValue
+  L0154: self.ForwardSpeed = K2Node_VariableSet_ForwardSpeed_ImplicitCast
+  L016F: CallFunc_GetActorRightVector_ReturnValue = self.OwningPawn.Actor.GetActorRightVector()
+  L01A1: CallFunc_GetVelocity_ReturnValue = self.OwningPawn.GetVelocity()
+  L01D7: CallFunc_Dot_VectorVector_ReturnValue_1 = Dot_VectorVector(CallFunc_GetVelocity_ReturnValue, CallFunc_GetActorRightVector_ReturnValue)
+  L0205: K2Node_VariableSet_StrafeSpeed_ImplicitCast = CallFunc_Dot_VectorVector_ReturnValue_1
+  L0222: self.StrafeSpeed = K2Node_VariableSet_StrafeSpeed_ImplicitCast
+  L023D: CallFunc_Greater_DoubleDouble_ReturnValue = Greater_DoubleDouble(self.Speed, 50)
+  L0263: self.HasSpeed = CallFunc_Greater_DoubleDouble_ReturnValue
+  L0276: CallFunc_IsValid_ReturnValue_1 = KismetSystemLibrary.IsValid(self.OwningController)
+  L0293: if not (CallFunc_IsValid_ReturnValue_1) goto L05F3
+  L02A1: CallFunc_GetControlRotation_ReturnValue = self.OwningController.GetControlRotation()
+  L02D7: CallFunc_NormalizedDeltaRotator_ReturnValue = NormalizedDeltaRotator(CallFunc_GetControlRotation_ReturnValue, self.ControlRotaton)
+  L0305: self.ControlRotationVelocity = CallFunc_NormalizedDeltaRotator_ReturnValue
+  L0320: CallFunc_GetControlRotation_ReturnValue = self.OwningController.GetControlRotation()
+  L0356: self.ControlRotaton = CallFunc_GetControlRotation_ReturnValue
+  L0371: CallFunc_GetWorldDeltaSeconds_ReturnValue = GameplayStatics.GetWorldDeltaSeconds(self)
+  L038E: BreakRotator(self.ControlRotationVelocity, CallFunc_BreakRotator_Roll, CallFunc_BreakRotator_Pitch, CallFunc_BreakRotator_Yaw)
+  L03BC: CallFunc_Multiply_DoubleDouble_ReturnValue = Multiply_DoubleDouble(CallFunc_GetWorldDeltaSeconds_ReturnValue, 4)
+  L03EA: CallFunc_Divide_DoubleDouble_A_ImplicitCast = CallFunc_BreakRotator_Yaw
+  L0407: CallFunc_Divide_DoubleDouble_ReturnValue = Divide_DoubleDouble(CallFunc_Divide_DoubleDouble_A_ImplicitCast, CallFunc_GetWorldDeltaSeconds_ReturnValue)
+  L0435: CallFunc_Lerp_A_ImplicitCast = self.YawVelocityPerSec
+  L0452: CallFunc_Lerp_ReturnValue = Lerp(CallFunc_Lerp_A_ImplicitCast, CallFunc_Divide_DoubleDouble_ReturnValue, CallFunc_Multiply_DoubleDouble_ReturnValue)
+  L0489: K2Node_VariableSet_YawVelocityPerSec_ImplicitCast = CallFunc_Lerp_ReturnValue
+  L04A6: self.YawVelocityPerSec = K2Node_VariableSet_YawVelocityPerSec_ImplicitCast
+  L04C1: CallFunc_GetMovementComponent_ReturnValue = self.OwningPawn.GetMovementComponent()
+  L04EF: CallFunc_IsCrouching_ReturnValue = CallFunc_GetMovementComponent_ReturnValue.IsCrouching()
+  L051E: self.IsCrouch = CallFunc_IsCrouching_ReturnValue
+  L0531: CallFunc_GetMovementComponent_ReturnValue = self.OwningPawn.GetMovementComponent()
+  L055F: CallFunc_IsFalling_ReturnValue = CallFunc_GetMovementComponent_ReturnValue.IsFalling()
+  L058E: self.IsFlying = CallFunc_IsFalling_ReturnValue
+  L05A1: self.IsAiming = self.OwningPawn.self.IsAiming
+  L05CA: self.IsUpperBody = self.OwningPawn.self.IsUpperBody
+  L05F3: return

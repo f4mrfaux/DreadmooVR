@@ -1,0 +1,187 @@
+# /Game/Dreadmoor/Core/Features/Hook/GAS/Deprecated/GA_GrapplingHookGunDrag
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/Hook/GAS/Deprecated/GA_GrapplingHookGunDrag.uasset
+
+## imported packages (2)
+  /Game/Dreadmoor/Core/Features/Hook/HookGun/BP_HookGunProjectile
+  /InventoryFrameworkPlugin/Demo/Interfaces/BPI_Interact
+
+## exports (12)
+  [0] GA_GrapplingHookGunDrag_C : BlueprintGeneratedClass (outer None) super=DrdGameplayAbility size=880
+  [11] Default__GA_GrapplingHookGunDrag_C : GA_GrapplingHookGunDrag_C (outer None) size=148
+        refs: name:GAS.Event.Hook.Drag, name:GAS.Character.IsInteracting
+
+## function CheckDistance  flags=0x1C420000
+  L0000: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(self.HookGun)
+  L001D: if not (CallFunc_IsValid_ReturnValue) goto L01A4
+  L002B: CallFunc_GetNumOfSegments_ReturnValue = self.HookGun.self.CableActor.GetNumOfSegments()
+  L0077: CallFunc_GetAvatarActorFromActorInfo_ReturnValue = GameplayAbility.GetAvatarActorFromActorInfo()
+  L008B: self.HookGun.self.CableActor.GetSegmentLocation(CallFunc_GetNumOfSegments_ReturnValue, CallFunc_GetSegmentLocation_Location)
+  L00D7: CallFunc_K2_GetActorLocation_ReturnValue = CallFunc_GetAvatarActorFromActorInfo_ReturnValue.Actor.K2_GetActorLocation()
+  L0109: CallFunc_Vector_Distance_ReturnValue = Vector_Distance(CallFunc_GetSegmentLocation_Location, CallFunc_K2_GetActorLocation_ReturnValue)
+  L0137: CallFunc_Less_DoubleDouble_B_ImplicitCast = self.Config.MaxDistance.Max
+  L0166: CallFunc_Less_DoubleDouble_ReturnValue = Less_DoubleDouble(CallFunc_Vector_Distance_ReturnValue, CallFunc_Less_DoubleDouble_B_ImplicitCast)
+  L018C: SuccessDistance = CallFunc_Less_DoubleDouble_ReturnValue
+  L019F: goto L01AF
+  L01A4: SuccessDistance = false
+  L01AF: return
+
+## function CheckStuck  flags=0x0C000000
+  L0000: GA_GrapplingHookGunDrag_C.ExecuteUbergraph_GA_GrapplingHookGunDrag(2860)
+  L000F: return
+
+## function EventReceived_94F0746F44C86464B34DDCBF13DE158A  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Payload = Payload
+  L0012: GA_GrapplingHookGunDrag_C.ExecuteUbergraph_GA_GrapplingHookGunDrag(724)
+  L0021: return
+
+## function EventReceived_D59B23FB4B937C85B3C7FB9F443B4AA0  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Payload_1 = Payload
+  L0012: GA_GrapplingHookGunDrag_C.ExecuteUbergraph_GA_GrapplingHookGunDrag(2427)
+  L0021: return
+
+## function ExecuteUbergraph_GA_GrapplingHookGunDrag  flags=0x00808001
+  L0000: push L0D02
+  L0005: goto computed(EntryPoint)
+  L000F: self.HookGun.AttachToHook()
+  L0033: self.TargetHookInterface.SetIsHookAttached(true)
+  L0059: CallFunc_WaitGameplayEventToActor_ReturnValue = AbilityAsync_WaitGameplayEvent.WaitGameplayEventToActor(K2Node_Event_EventData.Instigator, GameplayTag{'GAS.Event.Hook.Back'}, true, true)
+  L009C: CallFunc_IsValid_ReturnValue_2 = KismetSystemLibrary.IsValid(CallFunc_WaitGameplayEventToActor_ReturnValue)
+  L00B9: if not (CallFunc_IsValid_ReturnValue_2) goto L012B
+  L00C7: bind(K2Node_CreateDelegate_OutputDelegate_1, self, 'EventReceived_D59B23FB4B937C85B3C7FB9F443B4AA0')
+  L00DE: CallFunc_WaitGameplayEventToActor_ReturnValue.self.EventReceived += K2Node_CreateDelegate_OutputDelegate_1
+  L0107: CallFunc_WaitGameplayEventToActor_ReturnValue.Activate()
+  L012B: self.WaitForBackTask = CallFunc_WaitGameplayEventToActor_ReturnValue
+  L013E: CallFunc_WaitGameplayEventToActor_ReturnValue_1 = AbilityAsync_WaitGameplayEvent.WaitGameplayEventToActor(K2Node_Event_EventData.Instigator, GameplayTag{'GAS.Event.Hook.Detach'}, true, true)
+  L0181: CallFunc_IsValid_ReturnValue_1 = KismetSystemLibrary.IsValid(CallFunc_WaitGameplayEventToActor_ReturnValue_1)
+  L019E: if not (CallFunc_IsValid_ReturnValue_1) goto L0210
+  L01AC: bind(K2Node_CreateDelegate_OutputDelegate, self, 'EventReceived_94F0746F44C86464B34DDCBF13DE158A')
+  L01C3: CallFunc_WaitGameplayEventToActor_ReturnValue_1.self.EventReceived += K2Node_CreateDelegate_OutputDelegate
+  L01EC: CallFunc_WaitGameplayEventToActor_ReturnValue_1.Activate()
+  L0210: self.WaitForDetachTask = CallFunc_WaitGameplayEventToActor_ReturnValue_1
+  L0223: pop-flow
+  L0224: CallFunc_IsValidInterface_ReturnValue = KismetSystemLibrary.IsValidInterface(self.TargetHookInterface)
+  L0241: if not (CallFunc_IsValidInterface_ReturnValue) pop-flow
+  L024B: self.TargetHookInterface.SetIsHookAttached(false)
+  L0271: pop-flow
+  L0272: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(self.HookGun)
+  L028F: if not (CallFunc_IsValid_ReturnValue) goto L02C1
+  L029D: self.HookGun.DetachHook()
+  L02C1: K2_EndAbility()
+  L02CF: goto L0224
+  L02D4: Temp_struct_Variable = K2Node_CustomEvent_Payload
+  L02EF: ReleaseLoot()
+  L02FD: pop-flow
+  L02FE: self.Instigator = K2Node_Event_EventData.Instigator
+  L031A: self.Target = K2Node_Event_EventData.Target
+  L0336: K2Node_DynamicCast_AsDrd_Hook_Interface = iface<DrdHookInterface>(self.Target)
+  L035A: K2Node_DynamicCast_bSuccess_3 = K2Node_DynamicCast_AsDrd_Hook_Interface
+  L0377: if not (K2Node_DynamicCast_bSuccess_3) goto L047B
+  L0385: self.TargetHookInterface = K2Node_DynamicCast_AsDrd_Hook_Interface
+  L03A0: K2Node_DynamicCast_AsBP_Hook_Gun_Projectile = cast<BP_HookGunProjectile_C>(K2Node_Event_EventData.OptionalObject)
+  L03CD: K2Node_DynamicCast_bSuccess_1 = K2Node_DynamicCast_AsBP_Hook_Gun_Projectile
+  L03EA: if not (K2Node_DynamicCast_bSuccess_1) goto L047B
+  L03F8: self.HookGun = K2Node_DynamicCast_AsBP_Hook_Gun_Projectile
+  L040B: K2Node_DynamicCast_AsPrimitive_Component = cast<PrimitiveComponent>(K2Node_Event_EventData.OptionalObject2)
+  L0438: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsPrimitive_Component
+  L0455: if not (K2Node_DynamicCast_bSuccess) goto L047B
+  L0463: self.DragComponent = K2Node_DynamicCast_AsPrimitive_Component
+  L0476: goto L000F
+  L047B: K2_EndAbility()
+  L0489: pop-flow
+  L048A: CheckDistance(CallFunc_CheckDistance_SuccessDistance)
+  L04A1: if not (CallFunc_CheckDistance_SuccessDistance) goto L0880
+  L04AF: CallFunc_IsValid_ReturnValue_6 = KismetSystemLibrary.IsValid(self.DragComponent)
+  L04CC: if not (CallFunc_IsValid_ReturnValue_6) pop-flow
+  L04D6: CallFunc_IsSimulatingPhysics_ReturnValue = self.DragComponent.IsSimulatingPhysics('None')
+  L0511: if not (CallFunc_IsSimulatingPhysics_ReturnValue) pop-flow
+  L051B: CallFunc_GetNumOfSegments_ReturnValue = self.HookGun.self.CableActor.GetNumOfSegments()
+  L0567: CallFunc_Subtract_IntInt_ReturnValue = Subtract_IntInt(CallFunc_GetNumOfSegments_ReturnValue, 4)
+  L0591: CallFunc_GetNumOfSegments_ReturnValue_1 = self.HookGun.self.CableActor.GetNumOfSegments()
+  L05DD: self.HookGun.self.CableActor.GetSegmentLocation(CallFunc_GetNumOfSegments_ReturnValue_1, CallFunc_GetSegmentLocation_Location)
+  L0629: self.HookGun.self.CableActor.GetSegmentLocation(CallFunc_Subtract_IntInt_ReturnValue, CallFunc_GetSegmentLocation_Location_1)
+  L0675: CallFunc_Subtract_VectorVector_ReturnValue = Subtract_VectorVector(CallFunc_GetSegmentLocation_Location_1, CallFunc_GetSegmentLocation_Location)
+  L06A3: CallFunc_Normal_ReturnValue = Normal(CallFunc_Subtract_VectorVector_ReturnValue, 0.0001)
+  L06CD: CallFunc_Conv_DoubleToVector_InDouble_ImplicitCast = self.Config.DragForce
+  L06F3: CallFunc_Conv_DoubleToVector_ReturnValue = Conv_DoubleToVector(CallFunc_Conv_DoubleToVector_InDouble_ImplicitCast)
+  L0718: CallFunc_Multiply_VectorVector_ReturnValue = Multiply_VectorVector(CallFunc_Normal_ReturnValue, CallFunc_Conv_DoubleToVector_ReturnValue)
+  L0746: self.DragComponent.AddForceAtLocation(CallFunc_Multiply_VectorVector_ReturnValue, CallFunc_GetSegmentLocation_Location, 'None')
+  L0789: CallFunc_K2_GetActorLocation_ReturnValue = self.Instigator.Actor.K2_GetActorLocation()
+  L07BB: CallFunc_K2_GetComponentLocation_ReturnValue = self.DragComponent.SceneComponent.K2_GetComponentLocation()
+  L07ED: CallFunc_Vector_Distance2D_ReturnValue = Vector_Distance2D(CallFunc_K2_GetComponentLocation_ReturnValue, CallFunc_K2_GetActorLocation_ReturnValue)
+  L081B: CallFunc_Less_DoubleDouble_B_ImplicitCast = self.Config.GrabCompleteDistance
+  L0841: CallFunc_Less_DoubleDouble_ReturnValue = Less_DoubleDouble(CallFunc_Vector_Distance2D_ReturnValue, CallFunc_Less_DoubleDouble_B_ImplicitCast)
+  L0867: if not (CallFunc_Less_DoubleDouble_ReturnValue) pop-flow
+  L0871: Loot()
+  L087F: pop-flow
+  L0880: ReleaseLoot()
+  L088E: pop-flow
+  L088F: GameplayAbility.K2_OnEndAbility(K2Node_Event_bWasCancelled)
+  L08A2: KismetSystemLibrary.K2_ClearAndInvalidateTimerHandle(self, self.TickTimerHandle)
+  L08B6: KismetSystemLibrary.K2_ClearAndInvalidateTimerHandle(self, self.CheckStuckTimerHandle)
+  L08CA: push L0920
+  L08CF: push L092F
+  L08D4: CallFunc_IsValid_ReturnValue_3 = KismetSystemLibrary.IsValid(self.WaitForBackTask)
+  L08F1: if not (CallFunc_IsValid_ReturnValue_3) pop-flow
+  L08FB: self.WaitForBackTask.EndAction()
+  L091F: pop-flow
+  L0920: ReleaseLoot()
+  L092E: pop-flow
+  L092F: CallFunc_IsValid_ReturnValue_4 = KismetSystemLibrary.IsValid(self.WaitForDetachTask)
+  L094C: if not (CallFunc_IsValid_ReturnValue_4) pop-flow
+  L0956: self.WaitForDetachTask.EndAction()
+  L097A: pop-flow
+  L097B: Temp_struct_Variable_1 = K2Node_CustomEvent_Payload_1
+  L0996: bind(K2Node_CreateDelegate_OutputDelegate_3, self, 'TickForce')
+  L09AD: CallFunc_K2_SetTimerDelegate_ReturnValue = KismetSystemLibrary.K2_SetTimerDelegate(K2Node_CreateDelegate_OutputDelegate_3, 0.016667, true, true, 0, 0)
+  L09E3: self.TickTimerHandle = CallFunc_K2_SetTimerDelegate_ReturnValue
+  L09FE: CallFunc_GetWorldSubsystem_ReturnValue = SubsystemBlueprintLibrary.GetWorldSubsystem(self, DrdConfigsSubsystem)
+  L0A1C: CallFunc_GetConfigHookGun_ReturnValue = CallFunc_GetWorldSubsystem_ReturnValue.DrdConfigsSubsystem.GetConfigHookGun()
+  L0A4E: self.Config = CallFunc_GetConfigHookGun_ReturnValue
+  L0A69: bind(K2Node_CreateDelegate_OutputDelegate_2, self, 'CheckStuck')
+  L0A80: CallFunc_K2_SetTimerDelegate_ReturnValue_1 = KismetSystemLibrary.K2_SetTimerDelegate(K2Node_CreateDelegate_OutputDelegate_2, self.Config.CheckStuckInterval, true, true, 0, 0)
+  L0AC3: self.CheckStuckTimerHandle = CallFunc_K2_SetTimerDelegate_ReturnValue_1
+  L0ADE: CallFunc_K2_GetComponentLocation_ReturnValue_1 = self.DragComponent.SceneComponent.K2_GetComponentLocation()
+  L0B10: self.LootLocation = CallFunc_K2_GetComponentLocation_ReturnValue_1
+  L0B2B: pop-flow
+  L0B2C: CallFunc_IsValid_ReturnValue_5 = KismetSystemLibrary.IsValid(self.DragComponent)
+  L0B49: if not (CallFunc_IsValid_ReturnValue_5) pop-flow
+  L0B53: CallFunc_K2_GetComponentLocation_ReturnValue_3 = self.DragComponent.SceneComponent.K2_GetComponentLocation()
+  L0B85: CallFunc_EqualEqual_VectorVector_ReturnValue = EqualEqual_VectorVector(CallFunc_K2_GetComponentLocation_ReturnValue_3, self.LootLocation, self.Config.StuckThreshold)
+  L0BBD: if not (CallFunc_EqualEqual_VectorVector_ReturnValue) goto L0BDA
+  L0BCB: ReleaseLoot()
+  L0BD9: pop-flow
+  L0BDA: CallFunc_K2_GetComponentLocation_ReturnValue_2 = self.DragComponent.SceneComponent.K2_GetComponentLocation()
+  L0C0C: self.LootLocation = CallFunc_K2_GetComponentLocation_ReturnValue_2
+  L0C27: pop-flow
+  L0C28: goto L0272
+  L0C2D: self.HookGun.K2_DestroyActor()
+  L0C51: K2Node_DynamicCast_AsBPI_Interact = iface<BPI_Interact_C>(self.Target)
+  L0C75: K2Node_DynamicCast_bSuccess_2 = K2Node_DynamicCast_AsBPI_Interact
+  L0C92: if not (K2Node_DynamicCast_bSuccess_2) goto L0CF3
+  L0CA0: CallFunc_GetActorInfo_ReturnValue = GameplayAbility.GetActorInfo()
+  L0CBC: K2Node_DynamicCast_AsBPI_Interact.Start Interact(CallFunc_GetActorInfo_ReturnValue.PlayerController)
+  L0CF3: K2_EndAbility()
+  L0D01: pop-flow
+  L0D02: return
+
+## function K2_ActivateAbilityFromEvent  flags=0x08480800
+  L0000: frame.K2Node_Event_EventData = EventData
+  L0012: GA_GrapplingHookGunDrag_C.ExecuteUbergraph_GA_GrapplingHookGunDrag(766)
+  L0021: return
+
+## function K2_OnEndAbility  flags=0x08080800
+  L0000: frame.K2Node_Event_bWasCancelled = bWasCancelled
+  L0012: GA_GrapplingHookGunDrag_C.ExecuteUbergraph_GA_GrapplingHookGunDrag(2191)
+  L0021: return
+
+## function Loot  flags=0x0C000000
+  L0000: GA_GrapplingHookGunDrag_C.ExecuteUbergraph_GA_GrapplingHookGunDrag(3117)
+  L000F: return
+
+## function ReleaseLoot  flags=0x0C000000
+  L0000: GA_GrapplingHookGunDrag_C.ExecuteUbergraph_GA_GrapplingHookGunDrag(3112)
+  L000F: return
+
+## function TickForce  flags=0x0C000000
+  L0000: GA_GrapplingHookGunDrag_C.ExecuteUbergraph_GA_GrapplingHookGunDrag(1162)
+  L000F: return

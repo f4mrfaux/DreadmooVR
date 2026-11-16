@@ -1,0 +1,31 @@
+# /Game/Dreadmoor/Core/Features/Fishing/StateTree/STT_Fishing_BiteFloat
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/Fishing/StateTree/STT_Fishing_BiteFloat.uasset
+
+## imported packages (4)
+  /Game/Dreadmoor/Core/Features/Fishing/BP_FishingController
+  /Game/Dreadmoor/Core/Features/Fishing/BP_FishingDynamic_ForceMesh
+  /Game/Dreadmoor/Core/Features/Fishing/BP_FishingFloat
+  /Game/Dreadmoor/Core/Features/WaterFeatures/DeckTentacle/BP_DeckTentacleComponent
+
+## exports (4)
+  [0] STT_Fishing_BiteFloat_C : BlueprintGeneratedClass (outer None) super=StateTreeTaskBlueprintBase size=293
+  [3] Default__STT_Fishing_BiteFloat_C : STT_Fishing_BiteFloat_C (outer None) size=8
+
+## function ExecuteUbergraph_STT_Fishing_BiteFloat  flags=0x00808001
+  L0000: goto computed(EntryPoint)
+  L000A: StateTreeTaskBlueprintBase.FinishTask(true)
+  L0015: goto L017B
+  L001A: self.Float.Bite()
+  L003E: CallFunc_PlayControllerFeedback_ReturnValue = DrdControllerFeedbackLibrary.PlayControllerFeedback(self.Actor.self.PlayerController, 7, 1)
+  L0078: CallFunc_EqualEqual_GameplayTag_ReturnValue = BlueprintGameplayTagLibrary.EqualEqual_GameplayTag(self.Actor.self.FishingBehavior, GameplayTag{'Fishing.Behavior.Peaceful'})
+  L00C6: if not (CallFunc_EqualEqual_GameplayTag_ReturnValue) goto L000A
+  L00D4: self.Actor.ShowTutorial('FishingStartBiteTutorialShown', soft("/Game/Dreadmoor/UI/Tutorial/FishingSpecial/WBP_FishingSpecial_4.WBP_FishingSpecial_4_C"))
+  L015E: goto L000A
+  L0163: StateTreeTaskBlueprintBase.ReceiveLatentEnterState(K2Node_Event_Transition)
+  L0176: goto L001A
+  L017B: return
+
+## function ReceiveLatentEnterState  flags=0x08420800
+  L0000: frame.K2Node_Event_Transition = Transition
+  L0012: STT_Fishing_BiteFloat_C.ExecuteUbergraph_STT_Fishing_BiteFloat(355)
+  L0021: return

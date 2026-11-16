@@ -1,0 +1,59 @@
+# /Game/Dreadmoor/Core/Features/Fishing/GAS/Abilities/GA_Fishing_ForcePulling
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/Fishing/GAS/Abilities/GA_Fishing_ForcePulling.uasset
+
+## imported packages (6)
+  /Game/Dreadmoor/Animations/Characters/Animations/Fishing/SK_Main_Hero_Fishing_Hook_Montage
+  /Game/Dreadmoor/Animations/Rods/Animations/Simple_Rod/dm_vs_basic_fishing_rod_hook_Montage
+  /Game/Dreadmoor/Core/Features/Fishing/BP_FishingController
+  /Game/Dreadmoor/Core/Features/Fishing/GAS/Abilities/GE_Fishing_ForcePullingCooldown
+  /Game/Dreadmoor/Core/Features/WaterFeatures/DeckTentacle/BP_DeckTentacleComponent
+  /Game/Dreadmoor/Localization/ST_GameplayAbilities
+
+## exports (6)
+  [0] GA_Fishing_ForcePulling_C : BlueprintGeneratedClass (outer None) super=DrdGameplayAbility size=321
+  [5] Default__GA_Fishing_ForcePulling_C : GA_Fishing_ForcePulling_C (outer None) size=154
+        refs: obj:/Script/Dreadmoor.DrdAbilityConfigUI, name:SPR_AbilitySkillReelingFish001, name:GAS.Ability.Fishing.Reel, name:GAS.Ability.Active, obj:/Game/Dreadmoor/Core/Features/Fishing/GAS/Abilities/GE_Fishing_ForcePullingCooldown.GE_Fishing_ForcePullingCooldown_C
+
+## function ExecuteUbergraph_GA_Fishing_ForcePulling  flags=0x00808001
+  L0000: goto computed(EntryPoint)
+  L000A: self.FishingController.PlayMontages(SK_Main_Hero_Fishing_Hook_Montage, dm_vs_basic_fishing_rod_hook_Montage, 1)
+  L0049: K2_EndAbility()
+  L0057: goto L0191
+  L005C: CallFunc_GetActorInfo_ReturnValue = GameplayAbility.GetActorInfo()
+  L0078: K2Node_DynamicCast_AsBP_Fishing_Controller = cast<BP_FishingController_C>(CallFunc_GetActorInfo_ReturnValue.OwnerActor)
+  L00A5: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsBP_Fishing_Controller
+  L00C2: if not (K2Node_DynamicCast_bSuccess) goto L0191
+  L00D0: self.FishingController = K2Node_DynamicCast_AsBP_Fishing_Controller
+  L00E3: IsStartAvailable(CallFunc_IsStartAvailable_bOut)
+  L00FA: if not (CallFunc_IsStartAvailable_bOut) goto L0160
+  L0108: CallFunc_K2_CommitAbility_ReturnValue = K2_CommitAbility()
+  L0120: if not (CallFunc_K2_CommitAbility_ReturnValue) goto L0173
+  L012E: self.FishingController.AddBonusMove(self.Distance)
+  L015B: goto L000A
+  L0160: K2_EndAbility()
+  L016E: goto L0191
+  L0173: K2_EndAbility()
+  L0181: goto L0191
+  L0186: self.FishingController = null
+  L0191: return
+
+## function IsStartAvailable  flags=0x0C420000
+  L0000: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(self.FishingController.self.StrugglingFish)
+  L0033: if not (CallFunc_IsValid_ReturnValue) goto L008C
+  L0041: self.FishingController.IsEventActive(CallFunc_IsEventActive_bOut)
+  L006E: if not (CallFunc_IsEventActive_bOut) goto L009C
+  L007C: bOut = false
+  L0087: goto L00A7
+  L008C: bOut = false
+  L0097: goto L00A7
+  L009C: bOut = true
+  L00A7: return
+
+## function K2_ActivateAbility  flags=0x08080800
+  L0000: GA_Fishing_ForcePulling_C.ExecuteUbergraph_GA_Fishing_ForcePulling(92)
+  L000F: return
+
+## function K2_OnEndAbility  flags=0x08080800
+  L0000: frame.K2Node_Event_bWasCancelled = bWasCancelled
+  L0012: GA_Fishing_ForcePulling_C.ExecuteUbergraph_GA_Fishing_ForcePulling(390)
+  L0021: return

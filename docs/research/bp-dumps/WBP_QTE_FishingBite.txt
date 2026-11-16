@@ -1,0 +1,139 @@
+# /Game/Dreadmoor/Core/Features/QTE/FishingFromDemo/WBP_QTE_FishingBite
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/QTE/FishingFromDemo/WBP_QTE_FishingBite.uasset
+
+## imported packages (4)
+  /Game/Dreadmoor/Core/Input/Fishing/IA_Fishing_Cast
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_BgPrbBiteFish001
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_CircularWaveBg002
+  /Game/Dreadmoor/UI/Materials/MI_UI_RadialBar_Bite
+
+## exports (43)
+  [0] CanvasPanel_22 : CanvasPanel (outer WidgetTree) size=14
+        refs: name:BlueprintType
+  [1] CanvasPanelSlot_0 : CanvasPanelSlot (outer CanvasPanel_22) size=75
+        refs: exp:BP_OnActivated, name:K2Node_EnhancedInputActionEvent_TriggeredTime
+  [2] CommonActionWidget_52 : CommonActionWidget (outer WidgetTree) size=16
+        refs: obj:/Game/Dreadmoor/Core/Input/Fishing/IA_Fishing_Cast.IA_Fishing_Cast, name:K2Node_Event_MyGeometry
+  [3] EnhancedInputActionDelegateBinding_0 : EnhancedInputActionDelegateBinding (outer WBP_QTE_FishingBite_C) size=25
+        refs: obj:/Game/Dreadmoor/Core/Input/Fishing/IA_Fishing_Cast.IA_Fishing_Cast, exp:EaseOutFunction, name:BarImage
+  [11] BarImage : Image (outer WidgetTree) size=49
+        refs: obj:/Game/Dreadmoor/UI/Materials/MI_UI_RadialBar_Bite.MI_UI_RadialBar_Bite, exp:OverlaySlot_8, exp:CommonActionWidget_52
+  [12] Image_1 : Image (outer WidgetTree) size=52
+        refs: obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_BgPrbBiteFish001.SPR_BgPrbBiteFish001, exp:OverlaySlot_7, exp:CommonActionWidget_52
+  [13] WaveImage1 : Image (outer WidgetTree) size=32
+        refs: obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_CircularWaveBg002.SPR_CircularWaveBg002, name:K2Node_Event_InDeltaTime
+  [14] WaveImage2 : Image (outer WidgetTree) size=32
+        refs: obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_CircularWaveBg002.SPR_CircularWaveBg002, name:K2Node_Event_IsDesignTime
+  [15] QTEAnim : MovieScene (outer QTEAnim_INST) size=236
+        refs: exp:EnhancedInputActionDelegateBinding_0, exp:Tick, exp:MovieScene2DTransformTrack_1, exp:MovieSceneColorTrack_1, exp:MovieSceneColorTrack_0, exp:MovieScene2DTransformTrack_0
+  [16] MovieScene2DTransformSection_0 : MovieScene2DTransformSection (outer MovieScene2DTransformTrack_0) size=252
+        refs: exp:EnhancedInputActionDelegateBinding_0, exp:EaseOutFunction, name:EnhancedInputActionDelegateBinding, name:BlueprintType, name:BarImage, exp:EaseInFunction
+  [17] MovieScene2DTransformSection_0 : MovieScene2DTransformSection (outer MovieScene2DTransformTrack_1) size=252
+        refs: exp:EnhancedInputActionDelegateBinding_0, name:BlueprintType, exp:EaseOutFunction, name:EnhancedInputActionDelegateBinding, name:BarImage, exp:EaseInFunction
+  [18] MovieScene2DTransformTrack_0 : MovieScene2DTransformTrack (outer QTEAnim) size=102
+        refs: name:RenderTransform, exp:MovieScene2DTransformSection_0
+  [19] MovieScene2DTransformTrack_1 : MovieScene2DTransformTrack (outer QTEAnim) size=102
+        refs: name:RenderTransform, exp:MovieScene2DTransformSection_0
+  [20] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+  [21] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+  [22] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+  [23] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+  [24] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+  [25] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+  [26] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+  [27] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+  [28] MovieSceneColorSection_0 : MovieSceneColorSection (outer MovieSceneColorTrack_0) size=360
+        refs: name:BoolProperty, name:InpActEvt_IA_Fishing_Cast_K2Node_EnhancedInputActionEvent, name:BarImage, exp:EnhancedInputActionDelegateBinding_0, exp:EaseOutFunction, name:EnhancedInputActionDelegateBinding, name:BlueprintType, exp:CommonActionWidget_52, exp:EaseInFunction
+  [29] MovieSceneColorSection_0 : MovieSceneColorSection (outer MovieSceneColorTrack_1) size=360
+        refs: name:BoolProperty, name:InpActEvt_IA_Fishing_Cast_K2Node_EnhancedInputActionEvent, name:BarImage, exp:EnhancedInputActionDelegateBinding_0, exp:EaseOutFunction, name:EnhancedInputActionDelegateBinding, name:BlueprintType, name:bMaxed, exp:CommonActionWidget_52, exp:EaseInFunction, exp:MovieScene2DTransformTrack_0
+  [30] MovieSceneColorTrack_0 : MovieSceneColorTrack (outer QTEAnim) size=102
+        refs: name:ColorAndOpacity, exp:MovieSceneColorSection_0, exp:EaseInFunction
+  [31] MovieSceneColorTrack_1 : MovieSceneColorTrack (outer QTEAnim) size=102
+        refs: name:ColorAndOpacity, exp:MovieSceneColorSection_0
+  [32] CompiledData : MovieSceneCompiledData (outer QTEAnim_INST) size=373
+        refs: name:BarImage, name:BlueprintType, exp:EnhancedInputActionDelegateBinding_0, name:bSuccessed, exp:CommonActionWidget_52, exp:MovieScene2DTransformSection_0, exp:MovieSceneColorSection_0, exp:OnQTEFinished__DelegateSignature
+  [33] Overlay_59 : Overlay (outer WidgetTree) size=34
+        refs: exp:BP_OnActivated, exp:OverlaySlot_0, exp:OverlaySlot_1, exp:OverlaySlot_7, exp:OverlaySlot_3, exp:OverlaySlot_8, name:BlueprintType
+  [34] OverlaySlot_0 : OverlaySlot (outer Overlay_59) size=14
+        refs: exp:Overlay_59, name:CallFunc_Multiply_DoubleDouble_ReturnValue
+  [35] OverlaySlot_1 : OverlaySlot (outer Overlay_59) size=16
+        refs: exp:Overlay_59, name:CallFunc_PlayAnimation_ReturnValue
+  [36] OverlaySlot_3 : OverlaySlot (outer Overlay_59) size=16
+        refs: exp:Overlay_59, name:bMaxed
+  [37] OverlaySlot_7 : OverlaySlot (outer Overlay_59) size=16
+        refs: exp:Overlay_59, name:CallFunc_IsGamePaused_ReturnValue
+  [38] OverlaySlot_8 : OverlaySlot (outer Overlay_59) size=16
+        refs: exp:Overlay_59, name:CallFunc_GreaterEqual_DoubleDouble_ReturnValue
+  [39] Default__WBP_QTE_FishingBite_C : WBP_QTE_FishingBite_C (outer None) size=47
+  [40] QTEAnim_INST : WidgetAnimation (outer WBP_QTE_FishingBite_C) size=126
+        refs: exp:QTEAnim, name:WaveImage1, name:BarImage, name:WaveImage2, exp:OnQTEFinished__DelegateSignature, exp:CompiledData
+  [41] WBP_QTE_FishingBite_C : WidgetBlueprintGeneratedClass (outer None) super=DrdCommonActivatableWidget size=821
+        refs: exp:WidgetTree, exp:QTEAnim_INST, exp:EnhancedInputActionDelegateBinding_0, name:bSuccessed, exp:InpActEvt_IA_Fishing_Cast_K2Node_EnhancedInputActionEvent_0, name:ValuePerSec, name:OnQTEFinished, name:MaxValue, name:CurrentValue, name:QTEAnim, name:BarImage, exp:MovieScene2DTransformTrack_0, obj:/Script/Dreadmoor.DrdCommonActivatableWidget, exp:SetValue, exp:PreConstruct, exp:Tick, exp:BP_OnActivated, exp:ExecuteUbergraph_WBP_QTE_FishingBite, exp:OnQTEFinished__DelegateSignature, name:StructProperty, name:UberGraphFrame, exp:QTEAnim, name:K2Node_EnhancedInputActionEvent_ElapsedTime, name:None, obj:/Script/Engine.PointerToUberGraphFrame, name:ObjectProperty, obj:/Script/CommonUI.CommonActionWidget, obj:/Script/UMG.Image, obj:/Script/UMG.WidgetAnimation, name:DoubleProperty, name:MulticastInlineDelegateProperty, exp:EaseOutFunction, name:OnQTEFinished__DelegateSignature, name:ExecuteUbergraph_WBP_QTE_FishingBite, name:BP_OnActivated, name:Tick, name:PreConstruct, name:SetValue, obj:/Script/CoreUObject.Object, name:Engine, exp:Default__WBP_QTE_FishingBite_C, name:BlueprintType, exp:WaveImage1
+  [42] WidgetTree : WidgetTree (outer WBP_QTE_FishingBite_C) size=10
+        refs: name:BarImage
+
+## function BP_OnActivated  flags=0x08080800
+  L0000: WBP_QTE_FishingBite_C.ExecuteUbergraph_WBP_QTE_FishingBite(507)
+  L000F: return
+
+## function ExecuteUbergraph_WBP_QTE_FishingBite  flags=0x00808001
+  L0000: goto computed(EntryPoint)
+  L000A: CallFunc_Conv_InputActionValueToBool_ReturnValue = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue)
+  L0027: Temp_bool_Variable = CallFunc_Conv_InputActionValueToBool_ReturnValue
+  L003A: Temp_real_Variable_1 = K2Node_EnhancedInputActionEvent_ElapsedTime
+  L0057: Temp_real_Variable_1 = Temp_real_Variable_1
+  L0072: Temp_real_Variable = K2Node_EnhancedInputActionEvent_TriggeredTime
+  L008F: Temp_real_Variable = Temp_real_Variable
+  L00AA: Temp_object_Variable = K2Node_EnhancedInputActionEvent_SourceAction
+  L00BD: self.OnQTEFinished.Broadcast(true)
+  L00D1: goto L025C
+  L00D6: CallFunc_IsGamePaused_ReturnValue = GameplayStatics.IsGamePaused(self)
+  L00EB: if not (CallFunc_IsGamePaused_ReturnValue) goto L00FE
+  L00F9: goto L025C
+  L00FE: CallFunc_GetWorldDeltaSeconds_ReturnValue = GameplayStatics.GetWorldDeltaSeconds(self)
+  L011B: CallFunc_Multiply_DoubleDouble_ReturnValue = Multiply_DoubleDouble(CallFunc_GetWorldDeltaSeconds_ReturnValue, self.ValuePerSec)
+  L0149: CallFunc_Add_DoubleDouble_ReturnValue = Add_DoubleDouble(self.CurrentValue, CallFunc_Multiply_DoubleDouble_ReturnValue)
+  L0177: SetValue(CallFunc_Add_DoubleDouble_ReturnValue, CallFunc_SetValue_bMaxed_2)
+  L0197: if not (CallFunc_SetValue_bMaxed_2) goto L025C
+  L01A5: self.OnQTEFinished.Broadcast(false)
+  L01B9: goto L025C
+  L01BE: UserWidget.PreConstruct(K2Node_Event_IsDesignTime)
+  L01D1: SetValue(self.CurrentValue, CallFunc_SetValue_bMaxed)
+  L01F1: goto L025C
+  L01F6: goto L00D6
+  L01FB: CommonActivatableWidget.BP_OnActivated()
+  L0205: SetValue(0, CallFunc_SetValue_bMaxed_1)
+  L0225: CallFunc_PlayAnimation_ReturnValue = UserWidget.PlayAnimation(self.QTEAnim, 0, 0, 0, 1, false)
+  L025C: return
+
+## function InpActEvt_IA_Fishing_Cast_K2Node_EnhancedInputActionEvent_0  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction = SourceAction
+  L0048: WBP_QTE_FishingBite_C.ExecuteUbergraph_WBP_QTE_FishingBite(10)
+  L0057: return
+
+## function OnQTEFinished__DelegateSignature  flags=0x0C120000
+  L0000: return
+
+## function PreConstruct  flags=0x08020808
+  L0000: frame.K2Node_Event_IsDesignTime = IsDesignTime
+  L0012: WBP_QTE_FishingBite_C.ExecuteUbergraph_WBP_QTE_FishingBite(446)
+  L0021: return
+
+## function SetValue  flags=0x0C420000
+  L0000: self.CurrentValue = Value
+  L001B: CallFunc_GetDynamicMaterial_ReturnValue = self.BarImage.Image.GetDynamicMaterial()
+  L0045: CallFunc_Divide_DoubleDouble_ReturnValue = Divide_DoubleDouble(self.CurrentValue, self.MaxValue)
+  L0073: CallFunc_SetScalarParameterValue_Value_ImplicitCast = CallFunc_Divide_DoubleDouble_ReturnValue
+  L0090: CallFunc_GetDynamicMaterial_ReturnValue.MaterialInstanceDynamic.SetScalarParameterValue('Value', CallFunc_SetScalarParameterValue_Value_ImplicitCast)
+  L00C6: CallFunc_GreaterEqual_DoubleDouble_ReturnValue = GreaterEqual_DoubleDouble(self.CurrentValue, self.MaxValue)
+  L00EC: bMaxed = CallFunc_GreaterEqual_DoubleDouble_ReturnValue
+  L00FF: return
+
+## function Tick  flags=0x08020808
+  L0000: frame.K2Node_Event_MyGeometry = MyGeometry
+  L0012: frame.K2Node_Event_InDeltaTime = InDeltaTime
+  L0024: WBP_QTE_FishingBite_C.ExecuteUbergraph_WBP_QTE_FishingBite(502)
+  L0033: return

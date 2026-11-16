@@ -1,0 +1,184 @@
+# /Game/Dreadmoor/Core/Features/Hook/GAS/GA_Harpoon
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/Hook/GAS/GA_Harpoon.uasset
+
+## imported packages (7)
+  /Game/Dreadmoor/Core/Features/Hook/Animation/BPI_AnimWeapon
+  /Game/Dreadmoor/Core/Features/Hook/Harpoon/BP_HarpoonEquipment
+  /Game/Dreadmoor/Core/Features/Hook/Harpoon/BP_HarpoonProjectile
+  /Game/Dreadmoor/Dev/RetargetAnim/GG_FishermanMix_Looting_MontageRetarget
+  /Game/Dreadmoor/UI/UI_Utils/BP_UI_Utils
+  /Game/Dreadmoor/UI/UI_Utils/BP_UiCallbacks
+  /Game/OpenWorldAudio/Demo/Audio/Sfx/Sounds/SC_HarpoonShoot
+
+## exports (14)
+  [0] GA_Harpoon_C : BlueprintGeneratedClass (outer None) super=DrdGameplayAbility size=698
+  [13] Default__GA_Harpoon_C : GA_Harpoon_C (outer None) size=52
+        refs: name:Anim.State.Fire
+
+## function CalculateLaunchTransform  flags=0x1CC20000
+  L0000: GetEquippedHarpoon(CallFunc_GetEquippedHarpoon_EquippedHook)
+  L0017: CallFunc_GetSpawnTransform_ReturnValue = CallFunc_GetEquippedHarpoon_EquippedHook.GetSpawnTransform()
+  L004D: BreakTransform(CallFunc_GetSpawnTransform_ReturnValue, CallFunc_BreakTransform_Location, CallFunc_BreakTransform_Rotation, CallFunc_BreakTransform_Scale)
+  L007B: L_StartLocation = CallFunc_BreakTransform_Location
+  L0096: CallFunc_Conv_DoubleToVector_InDouble_ImplicitCast = self.TraceLength
+  L00B3: CallFunc_Conv_DoubleToVector_ReturnValue = Conv_DoubleToVector(CallFunc_Conv_DoubleToVector_InDouble_ImplicitCast)
+  L00D8: CallFunc_GetActorInfo_ReturnValue = GameplayAbility.GetActorInfo()
+  L00F4: CallFunc_GetActorInfo_ReturnValue.PlayerController.GetPlayerViewPoint(CallFunc_GetPlayerViewPoint_Location, CallFunc_GetPlayerViewPoint_Rotation)
+  L0133: CallFunc_Conv_RotatorToVector_ReturnValue = Conv_RotatorToVector(CallFunc_GetPlayerViewPoint_Rotation)
+  L0158: K2Node_MakeArray_Array = [CallFunc_GetActorInfo_ReturnValue.OwnerActor]
+  L0175: CallFunc_Multiply_VectorVector_ReturnValue = Multiply_VectorVector(CallFunc_Conv_RotatorToVector_ReturnValue, CallFunc_Conv_DoubleToVector_ReturnValue)
+  L01A3: CallFunc_Add_VectorVector_ReturnValue = Add_VectorVector(CallFunc_GetPlayerViewPoint_Location, CallFunc_Multiply_VectorVector_ReturnValue)
+  L01D1: CallFunc_LineTraceSingle_ReturnValue = KismetSystemLibrary.LineTraceSingle(self, CallFunc_GetPlayerViewPoint_Location, CallFunc_Add_VectorVector_ReturnValue, 0, false, K2Node_MakeArray_Array, 0, CallFunc_LineTraceSingle_OutHit, true, LinearColor{1, 0, 0, 1}, LinearColor{0, 1, 0, 1}, 5)
+  L0259: if not (CallFunc_LineTraceSingle_ReturnValue) goto L03D6
+  L0267: GameplayStatics.BreakHitResult(CallFunc_LineTraceSingle_OutHit, CallFunc_BreakHitResult_bBlockingHit_1, CallFunc_BreakHitResult_bInitialOverlap_1, CallFunc_BreakHitResult_Time_1, CallFunc_BreakHitResult_Distance_1, CallFunc_BreakHitResult_Location_1, CallFunc_BreakHitResult_ImpactPoint_1, CallFunc_BreakHitResult_Normal_1, CallFunc_BreakHitResult_ImpactNormal_1, CallFunc_BreakHitResult_PhysMat_1, CallFunc_BreakHitResult_HitActor_1, CallFunc_BreakHitResult_HitComponent_1, CallFunc_BreakHitResult_HitBoneName_1, CallFunc_BreakHitResult_BoneName_1, CallFunc_BreakHitResult_HitItem_1, CallFunc_BreakHitResult_ElementIndex_1, CallFunc_BreakHitResult_FaceIndex_1, CallFunc_BreakHitResult_TraceStart_1, CallFunc_BreakHitResult_TraceEnd_1)
+  L031C: CallFunc_GetDirectionUnitVector_ReturnValue_1 = GetDirectionUnitVector(L_StartLocation, CallFunc_BreakHitResult_ImpactPoint_1)
+  L034A: CallFunc_Conv_VectorToRotator_ReturnValue_1 = Conv_VectorToRotator(CallFunc_GetDirectionUnitVector_ReturnValue_1)
+  L036F: CallFunc_MakeTransform_ReturnValue_1 = MakeTransform(L_StartLocation, CallFunc_Conv_VectorToRotator_ReturnValue_1, Vec(1,1,1))
+  L03B6: Transform = CallFunc_MakeTransform_ReturnValue_1
+  L03D1: goto L0540
+  L03D6: GameplayStatics.BreakHitResult(CallFunc_LineTraceSingle_OutHit, CallFunc_BreakHitResult_bBlockingHit, CallFunc_BreakHitResult_bInitialOverlap, CallFunc_BreakHitResult_Time, CallFunc_BreakHitResult_Distance, CallFunc_BreakHitResult_Location, CallFunc_BreakHitResult_ImpactPoint, CallFunc_BreakHitResult_Normal, CallFunc_BreakHitResult_ImpactNormal, CallFunc_BreakHitResult_PhysMat, CallFunc_BreakHitResult_HitActor, CallFunc_BreakHitResult_HitComponent, CallFunc_BreakHitResult_HitBoneName, CallFunc_BreakHitResult_BoneName, CallFunc_BreakHitResult_HitItem, CallFunc_BreakHitResult_ElementIndex, CallFunc_BreakHitResult_FaceIndex, CallFunc_BreakHitResult_TraceStart, CallFunc_BreakHitResult_TraceEnd)
+  L048B: CallFunc_GetDirectionUnitVector_ReturnValue = GetDirectionUnitVector(L_StartLocation, CallFunc_BreakHitResult_TraceEnd)
+  L04B9: CallFunc_Conv_VectorToRotator_ReturnValue = Conv_VectorToRotator(CallFunc_GetDirectionUnitVector_ReturnValue)
+  L04DE: CallFunc_MakeTransform_ReturnValue = MakeTransform(L_StartLocation, CallFunc_Conv_VectorToRotator_ReturnValue, Vec(1,1,1))
+  L0525: Transform = CallFunc_MakeTransform_ReturnValue
+  L0540: return
+
+## function ExecuteUbergraph_GA_Harpoon  flags=0x00808001
+  L0000: push L04E0
+  L0005: goto computed(EntryPoint)
+  L000F: CallFunc_GetActorInfo_ReturnValue_1 = GameplayAbility.GetActorInfo()
+  L002B: CallFunc_K2_GetActorLocation_ReturnValue = CallFunc_GetActorInfo_ReturnValue_1.OwnerActor.Actor.K2_GetActorLocation()
+  L0066: GameplayStatics.PlaySoundAtLocation(self, SC_HarpoonShoot, CallFunc_K2_GetActorLocation_ReturnValue, Rot(0,0,0), 1, 1, 0, null, null, null, null)
+  L00AF: CalculateLaunchTransform(CallFunc_CalculateLaunchTransform_Transform)
+  L00C6: CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue = GameplayStatics.BeginDeferredActorSpawnFromClass(self, BP_HarpoonProjectile_C, CallFunc_CalculateLaunchTransform_Transform, 0, null, 1)
+  L00F2: KismetSystemLibrary.SetDoublePropertyByName(CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue, 'PowerPercent', 1)
+  L011B: KismetSystemLibrary.SetDoublePropertyByName(CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue, 'InitialSpeed', 8000)
+  L0144: GetEquippedHarpoon(CallFunc_GetEquippedHarpoon_EquippedHook)
+  L015B: KismetSystemLibrary.SetObjectPropertyByName(CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue, 'AttachEndTo', CallFunc_GetEquippedHarpoon_EquippedHook.self.Harpoon)
+  L019A: CallFunc_GetAvatarActorFromActorInfo_ReturnValue = GameplayAbility.GetAvatarActorFromActorInfo()
+  L01AE: K2Node_MakeArray_Array = [CallFunc_GetAvatarActorFromActorInfo_ReturnValue]
+  L01C2: Default__KismetArrayLibrary.KismetArrayLibrary.SetArrayPropertyByName(CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue, 'Ignore Actors', K2Node_MakeArray_Array)
+  L0201: CallFunc_GetActorInfo_ReturnValue = GameplayAbility.GetActorInfo()
+  L021D: K2Node_DynamicCast_AsPawn = cast<Pawn>(CallFunc_GetActorInfo_ReturnValue.OwnerActor)
+  L024A: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsPawn
+  L0267: KismetSystemLibrary.SetObjectPropertyByName(CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue, 'Instigator', K2Node_DynamicCast_AsPawn)
+  L0290: CalculateLaunchTransform(CallFunc_CalculateLaunchTransform_Transform)
+  L02A7: CallFunc_FinishSpawningActor_ReturnValue = GameplayStatics.FinishSpawningActor(CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue, CallFunc_CalculateLaunchTransform_Transform, 1)
+  L02CF: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(CallFunc_FinishSpawningActor_ReturnValue)
+  L02EC: if not (CallFunc_IsValid_ReturnValue) goto L0343
+  L02FA: CallFunc_GetActorInfo_ReturnValue_2 = GameplayAbility.GetActorInfo()
+  L0316: CallFunc_PlayControllerFeedback_ReturnValue = DrdControllerFeedbackLibrary.PlayControllerFeedback(CallFunc_GetActorInfo_ReturnValue_2.PlayerController, 5, 1)
+  L0343: ReduceAmmoAmount()
+  L0351: self.CanSpawnNewProjectile = false
+  L035C: KismetSystemLibrary.Delay(self, 0.1, LatentActionInfo{L0393, -1645952892, 'ExecuteUbergraph_GA_Harpoon', self})
+  L0392: pop-flow
+  L0393: K2_EndAbility()
+  L03A1: pop-flow
+  L03A2: K2_EndAbility()
+  L03B0: pop-flow
+  L03B1: GetProjectileAmount(CallFunc_GetProjectileAmount_Count)
+  L03C8: CallFunc_Greater_IntInt_ReturnValue = Greater_IntInt(CallFunc_GetProjectileAmount_Count, 0)
+  L03EA: self.CanSpawnNewProjectile = CallFunc_Greater_IntInt_ReturnValue
+  L03FD: if not (self.CanSpawnNewProjectile) goto L046B
+  L040B: SetAnimState(GameplayTag{'Anim.State.Fire'})
+  L0434: KismetSystemLibrary.Delay(self, 0.2, LatentActionInfo{L000F, -1664408519, 'ExecuteUbergraph_GA_Harpoon', self})
+  L046A: pop-flow
+  L046B: KismetSystemLibrary.Delay(self, 0.2, LatentActionInfo{L03A2, 909449074, 'ExecuteUbergraph_GA_Harpoon', self})
+  L04A1: pop-flow
+  L04A2: pop-flow
+  L04A3: GameplayAbility.K2_OnEndAbility(K2Node_Event_bWasCancelled)
+  L04B6: SetAnimState(GameplayTag{'Anim.State.Idle'})
+  L04DF: pop-flow
+  L04E0: return
+
+## function GetEquippedHarpoon  flags=0x1C420000
+  L0000: CallFunc_GetActorOfClass_ReturnValue = GameplayStatics.GetActorOfClass(self, BP_HarpoonEquipment_C)
+  L001E: EquippedHook = CallFunc_GetActorOfClass_ReturnValue
+  L0031: return
+
+## function GetMesh  flags=0x1C420000
+  L0000: CallFunc_GetAvatarActorFromActorInfo_ReturnValue = GameplayAbility.GetAvatarActorFromActorInfo()
+  L0014: CallFunc_FindComponentByTag_ReturnValue = CallFunc_GetAvatarActorFromActorInfo_ReturnValue.Actor.FindComponentByTag(SkeletalMeshComponent, 'PlayerMesh')
+  L0054: Mesh = CallFunc_FindComponentByTag_ReturnValue
+  L0067: return
+
+## function GetOwningInventory  flags=0x1C420000
+  L0000: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L001A: K2Node_DynamicCast_AsI_Inventory = iface<I_Inventory>(CallFunc_GetPlayerController_ReturnValue)
+  L003E: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsI_Inventory
+  L005B: if not (K2Node_DynamicCast_bSuccess) goto L00AF
+  L0069: K2Node_DynamicCast_AsI_Inventory.GetInventoryComponent(CallFunc_GetInventoryComponent_Component)
+  L0097: InventoryComponent = CallFunc_GetInventoryComponent_Component
+  L00AA: goto L00BF
+  L00AF: CallFunc_GetInventoryComponent_Component = null
+  L00BA: goto L0097
+  L00BF: return
+
+## function GetProjectileAmount  flags=0x1CC20000
+  L0000: L_CheckContainer = GameplayTagContainer{[GameplayTag{'IFP.Items.Type.Weapon.Throwing'}]}
+  L0049: GetOwningInventory(CallFunc_GetOwningInventory_InventoryComponent)
+  L0060: Default__BP_UI_Utils_C.GetProjectilesAmountInWeapon(CallFunc_GetOwningInventory_InventoryComponent, GameplayTag{'IFP.Container.Identifier.Character.QuickSlotGun'}, GameplayTag{'IFP.Items.Type.Projectile.Harpoon'}, self, CallFunc_GetProjectilesAmountInWeapon_Count)
+  L00CD: Count = CallFunc_GetProjectilesAmountInWeapon_Count
+  L00E8: return
+
+## function K2_ActivateAbility  flags=0x08080800
+  L0000: GA_Harpoon_C.ExecuteUbergraph_GA_Harpoon(945)
+  L000F: return
+
+## function K2_OnEndAbility  flags=0x08080800
+  L0000: frame.K2Node_Event_bWasCancelled = bWasCancelled
+  L0012: GA_Harpoon_C.ExecuteUbergraph_GA_Harpoon(1187)
+  L0021: return
+
+## function ReduceAmmoAmount  flags=0x0C820000
+  L0000: GetOwningInventory(CallFunc_GetOwningInventory_InventoryComponent_1)
+  L0017: CallFunc_GetContainersByTag_ReturnValue = CallFunc_GetOwningInventory_InventoryComponent_1.AC_Inventory.GetContainersByTag(GameplayTag{'IFP.Container.Identifier.BackPack.WeaponsAndTools'})
+  L0064: GetOwningInventory(CallFunc_GetOwningInventory_InventoryComponent_1)
+  L007B: CallFunc_GetItemsByType_ReturnValue = CallFunc_GetOwningInventory_InventoryComponent_1.AC_Inventory.GetItemsByType(GameplayTag{'IFP.Items.Type.Weapon.Gun.Harpoon'}, -1)
+  L00CD: CallFunc_Array_Length_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(CallFunc_GetItemsByType_ReturnValue)
+  L0108: CallFunc_Greater_IntInt_ReturnValue = Greater_IntInt(CallFunc_Array_Length_ReturnValue, 0)
+  L012A: if not (CallFunc_Greater_IntInt_ReturnValue) goto L0284
+  L0138: GetOwningInventory(CallFunc_GetOwningInventory_InventoryComponent)
+  L014F: GetProjectileAmount(CallFunc_GetProjectileAmount_Count)
+  L0166: CallFunc_Subtract_IntInt_ReturnValue = Subtract_IntInt(CallFunc_GetProjectileAmount_Count, 1)
+  L0190: CallFunc_Conv_IntToDouble_ReturnValue = Conv_IntToDouble(CallFunc_Subtract_IntInt_ReturnValue)
+  L01B5: CallFunc_SetTagValueForItem_Value_ImplicitCast = CallFunc_Conv_IntToDouble_ReturnValue
+  L01D2: CallFunc_SetTagValueForItem_ReturnValue = CallFunc_GetOwningInventory_InventoryComponent.AC_Inventory.SetTagValueForItem(CallFunc_GetItemsByType_ReturnValue[0], GameplayTag{'IFP.Items.Type.Projectile.Harpoon'}, CallFunc_SetTagValueForItem_Value_ImplicitCast, true, null, false)
+  L0232: Default__BP_UI_Utils_C.GetUiCallback(self, CallFunc_GetUiCallback_UiCallbackComponent)
+  L0260: CallFunc_GetUiCallback_UiCallbackComponent.UpdateAmmoAmount()
+  L0284: return
+
+## function Reload  flags=0x0C000000
+  L0000: GA_Harpoon_C.ExecuteUbergraph_GA_Harpoon(1186)
+  L000F: return
+
+## function SetAnimState  flags=0x0C820000
+  L0000: self.CurrentState = InState
+  L001B: CallFunc_GetActorInfo_ReturnValue = GameplayAbility.GetActorInfo()
+  L0037: CallFunc_GetComponentByClass_ReturnValue = CallFunc_GetActorInfo_ReturnValue.OwnerActor.Actor.GetComponentByClass(SkeletalMeshComponent)
+  L0073: CallFunc_GetAnimInstance_ReturnValue = CallFunc_GetComponentByClass_ReturnValue.SkeletalMeshComponent.GetAnimInstance()
+  L009D: CallFunc_GetLinkedAnimGraphInstanceByTag_ReturnValue = CallFunc_GetAnimInstance_ReturnValue.AnimInstance.GetLinkedAnimGraphInstanceByTag('UpperBody')
+  L00D4: K2Node_DynamicCast_AsBPI_Anim_Weapon_2 = iface<BPI_AnimWeapon_C>(CallFunc_GetLinkedAnimGraphInstanceByTag_ReturnValue)
+  L00F8: K2Node_DynamicCast_bSuccess_2 = K2Node_DynamicCast_AsBPI_Anim_Weapon_2
+  L0115: if not (K2Node_DynamicCast_bSuccess_2) goto L015A
+  L0123: K2Node_DynamicCast_AsBPI_Anim_Weapon_2.UpdateState(self.CurrentState, 1)
+  L015A: GetEquippedHarpoon(CallFunc_GetEquippedHarpoon_EquippedHook)
+  L0171: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(CallFunc_GetEquippedHarpoon_EquippedHook)
+  L018E: if not (CallFunc_IsValid_ReturnValue) goto L0316
+  L019C: GetEquippedHarpoon(CallFunc_GetEquippedHarpoon_EquippedHook)
+  L01B3: CallFunc_GetAnimInstance_ReturnValue_1 = CallFunc_GetEquippedHarpoon_EquippedHook.self.SkeletalMesh.SkeletalMeshComponent.GetAnimInstance()
+  L01F3: K2Node_DynamicCast_AsBPI_Anim_Weapon_1 = iface<BPI_AnimWeapon_C>(CallFunc_GetAnimInstance_ReturnValue_1)
+  L0217: K2Node_DynamicCast_bSuccess_1 = K2Node_DynamicCast_AsBPI_Anim_Weapon_1
+  L0234: if not (K2Node_DynamicCast_bSuccess_1) goto L0279
+  L0242: K2Node_DynamicCast_AsBPI_Anim_Weapon_1.UpdateState(InState, 1)
+  L0279: GetEquippedHarpoon(CallFunc_GetEquippedHarpoon_EquippedHook)
+  L0290: K2Node_DynamicCast_AsBPI_Anim_Weapon = iface<BPI_AnimWeapon_C>(CallFunc_GetEquippedHarpoon_EquippedHook)
+  L02B4: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsBPI_Anim_Weapon
+  L02D1: if not (K2Node_DynamicCast_bSuccess) goto L0316
+  L02DF: K2Node_DynamicCast_AsBPI_Anim_Weapon.UpdateState(InState, 1)
+  L0316: return
+
+## function UpdateAmmoFromInventory  flags=0x0C020000
+  L0000: GetProjectileAmount(CallFunc_GetProjectileAmount_Count)
+  L0017: self.CurrentAmmo = CallFunc_GetProjectileAmount_Count
+  L0032: return

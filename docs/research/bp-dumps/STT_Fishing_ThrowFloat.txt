@@ -1,0 +1,184 @@
+# /Game/Dreadmoor/Core/Features/Fishing/StateTree/STT_Fishing_ThrowFloat
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/Fishing/StateTree/STT_Fishing_ThrowFloat.uasset
+
+## imported packages (6)
+  /Game/Dreadmoor/Animations/Characters/Animations/Fishing/AM_SK_DreadMoreSkeleton_Ready_Casting
+  /Game/Dreadmoor/Animations/Rods/Animations/Simple_Rod/AM_dm_vs_basic_fishing_rod_Ready_Casting
+  /Game/Dreadmoor/Core/Features/Fishing/BP_FishingController
+  /Game/Dreadmoor/Core/Features/Fishing/BP_FishingDynamic_ForceMesh
+  /Game/Dreadmoor/Core/Features/Fishing/BP_FishingFloat
+  /Game/Dreadmoor/Core/Features/WaterFeatures/DeckTentacle/BP_DeckTentacleComponent
+
+## exports (16)
+  [0] STT_Fishing_ThrowFloat_C : BlueprintGeneratedClass (outer None) super=StateTreeTaskBlueprintBase size=783
+  [15] Default__STT_Fishing_ThrowFloat_C : STT_Fishing_ThrowFloat_C (outer None) size=44
+        refs: obj:/Game/Dreadmoor/Animations/Characters/Animations/Fishing/AM_SK_DreadMoreSkeleton_Ready_Casting.AM_SK_DreadMoreSkeleton_Ready_Casting, obj:/Game/Dreadmoor/Animations/Rods/Animations/Simple_Rod/AM_dm_vs_basic_fishing_rod_Ready_Casting.AM_dm_vs_basic_fishing_rod_Ready_Casting, exp:OnBlendOut_A6F6BDC540026F7074B584998671054E
+
+## function ExecuteUbergraph_STT_Fishing_ThrowFloat  flags=0x00808001
+  L0000: goto computed(EntryPoint)
+  L000A: Temp_name_Variable = K2Node_CustomEvent_NotifyName_6
+  L0025: goto L0EC3
+  L002A: Temp_name_Variable = K2Node_CustomEvent_NotifyName_5
+  L0045: goto L0EC3
+  L004A: bind(K2Node_CreateDelegate_OutputDelegate_2, self, 'WaterEntered')
+  L0061: self.Float.self.OnEnteredWater += K2Node_CreateDelegate_OutputDelegate_2
+  L008A: FindLocationForThrow(CallFunc_FindLocationForThrow_Location)
+  L00A1: self.Float.ThrowTo(CallFunc_FindLocationForThrow_Location, self.ArcParam)
+  L00D7: CallFunc_PlayControllerFeedback_ReturnValue = DrdControllerFeedbackLibrary.PlayControllerFeedback(self.Actor.self.PlayerController, 6, 1)
+  L0111: CallFunc_GetGameInstanceSubsystem_ReturnValue = SubsystemBlueprintLibrary.GetGameInstanceSubsystem(self, DrdAnalyticsSubsystem)
+  L012F: CallFunc_K2_GetActorLocation_ReturnValue = self.Actor.Actor.K2_GetActorLocation()
+  L0161: CallFunc_Vector_Distance_ReturnValue = Vector_Distance(CallFunc_FindLocationForThrow_Location, CallFunc_K2_GetActorLocation_ReturnValue)
+  L018F: CallFunc_Divide_DoubleDouble_ReturnValue = Divide_DoubleDouble(CallFunc_Vector_Distance_ReturnValue, 100)
+  L01BD: CallFunc_FishEventAttempt_CastLengthMeters_ImplicitCast = CallFunc_Divide_DoubleDouble_ReturnValue
+  L01DA: CallFunc_GetGameInstanceSubsystem_ReturnValue.DrdAnalyticsSubsystem.FishEventAttempt(self.Actor.self.CurrentPlace, self.Actor.self.FishingBehavior, CallFunc_FishEventAttempt_CastLengthMeters_ImplicitCast)
+  L0241: goto L0EC3
+  L0246: Temp_name_Variable_1 = K2Node_CustomEvent_NotifyName_4
+  L0261: goto L0EC3
+  L0266: Temp_name_Variable_1 = K2Node_CustomEvent_NotifyName_3
+  L0281: goto L0EC3
+  L0286: Temp_name_Variable_1 = K2Node_CustomEvent_NotifyName_2
+  L02A1: goto L0EC3
+  L02A6: Temp_name_Variable_1 = K2Node_CustomEvent_NotifyName_1
+  L02C1: goto L0EC3
+  L02C6: Temp_name_Variable_1 = K2Node_CustomEvent_NotifyName
+  L02E1: goto L0EC3
+  L02E6: self.Actor.self.PowerWidget.GetPower(CallFunc_GetPower_Percent)
+  L0329: self.PowerPercent = CallFunc_GetPower_Percent
+  L0344: Default__CommonUIExtensions.CommonUIExtensions.PopContentFromLayer(self.Actor.self.PowerWidget)
+  L0383: self.Actor.self.PowerWidget = null
+  L03A4: self.Actor.UsePawnControlRotation(false)
+  L03C9: CallFunc_MapRangeClamped_OutRangeA_ImplicitCast = self.MontagePlayRate.Min
+  L03EF: CallFunc_MapRangeClamped_OutRangeB_ImplicitCast = self.MontagePlayRate.Max
+  L0415: CallFunc_MapRangeClamped_ReturnValue = MapRangeClamped(self.PowerPercent, 0, 1, CallFunc_MapRangeClamped_OutRangeA_ImplicitCast, CallFunc_MapRangeClamped_OutRangeB_ImplicitCast)
+  L045E: CallFunc_CreateProxyObjectForPlayMontage_PlayRate_ImplicitCast_1 = CallFunc_MapRangeClamped_ReturnValue
+  L047B: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue = PlayMontageCallbackProxy.CreateProxyObjectForPlayMontage(self.Actor.self.GG_FishermanMix, self.Montage, CallFunc_CreateProxyObjectForPlayMontage_PlayRate_ImplicitCast_1, 0, 'None', true)
+  L04D3: CallFunc_IsValid_ReturnValue_1 = KismetSystemLibrary.IsValid(CallFunc_CreateProxyObjectForPlayMontage_ReturnValue)
+  L04F0: if not (CallFunc_IsValid_ReturnValue_1) goto L063E
+  L04FE: bind(K2Node_CreateDelegate_OutputDelegate_1, self, 'OnCompleted_174A815F4D7EBCEF674B90A57B0D4D58')
+  L0515: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue.self.OnCompleted += K2Node_CreateDelegate_OutputDelegate_1
+  L053E: bind(K2Node_CreateDelegate_OutputDelegate, self, 'OnBlendOut_174A815F4D7EBCEF674B90A57B0D4D58')
+  L0555: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue.self.OnBlendOut += K2Node_CreateDelegate_OutputDelegate
+  L057E: bind(K2Node_CreateDelegate_OutputDelegate_8, self, 'OnInterrupted_174A815F4D7EBCEF674B90A57B0D4D58')
+  L0595: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue.self.OnInterrupted += K2Node_CreateDelegate_OutputDelegate_8
+  L05BE: bind(K2Node_CreateDelegate_OutputDelegate_9, self, 'OnNotifyBegin_174A815F4D7EBCEF674B90A57B0D4D58')
+  L05D5: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue.self.OnNotifyBegin += K2Node_CreateDelegate_OutputDelegate_9
+  L05FE: bind(K2Node_CreateDelegate_OutputDelegate_10, self, 'OnNotifyEnd_174A815F4D7EBCEF674B90A57B0D4D58')
+  L0615: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue.self.OnNotifyEnd += K2Node_CreateDelegate_OutputDelegate_10
+  L063E: CallFunc_MapRangeClamped_OutRangeA_ImplicitCast = self.MontagePlayRate.Min
+  L0664: CallFunc_MapRangeClamped_OutRangeB_ImplicitCast = self.MontagePlayRate.Max
+  L068A: CallFunc_MapRangeClamped_ReturnValue = MapRangeClamped(self.PowerPercent, 0, 1, CallFunc_MapRangeClamped_OutRangeA_ImplicitCast, CallFunc_MapRangeClamped_OutRangeB_ImplicitCast)
+  L06D3: CallFunc_CreateProxyObjectForPlayMontage_PlayRate_ImplicitCast = CallFunc_MapRangeClamped_ReturnValue
+  L06F0: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue_1 = PlayMontageCallbackProxy.CreateProxyObjectForPlayMontage(self.Actor.self.SK_FishingRod, self.RodMontage, CallFunc_CreateProxyObjectForPlayMontage_PlayRate_ImplicitCast, 0, 'None', true)
+  L0748: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(CallFunc_CreateProxyObjectForPlayMontage_ReturnValue_1)
+  L0765: if not (CallFunc_IsValid_ReturnValue) goto L0EC3
+  L0773: bind(K2Node_CreateDelegate_OutputDelegate_7, self, 'OnCompleted_A6F6BDC540026F7074B584998671054E')
+  L078A: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue_1.self.OnCompleted += K2Node_CreateDelegate_OutputDelegate_7
+  L07B3: bind(K2Node_CreateDelegate_OutputDelegate_6, self, 'OnBlendOut_A6F6BDC540026F7074B584998671054E')
+  L07CA: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue_1.self.OnBlendOut += K2Node_CreateDelegate_OutputDelegate_6
+  L07F3: bind(K2Node_CreateDelegate_OutputDelegate_5, self, 'OnInterrupted_A6F6BDC540026F7074B584998671054E')
+  L080A: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue_1.self.OnInterrupted += K2Node_CreateDelegate_OutputDelegate_5
+  L0833: bind(K2Node_CreateDelegate_OutputDelegate_4, self, 'OnNotifyBegin_A6F6BDC540026F7074B584998671054E')
+  L084A: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue_1.self.OnNotifyBegin += K2Node_CreateDelegate_OutputDelegate_4
+  L0873: bind(K2Node_CreateDelegate_OutputDelegate_3, self, 'OnNotifyEnd_A6F6BDC540026F7074B584998671054E')
+  L088A: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue_1.self.OnNotifyEnd += K2Node_CreateDelegate_OutputDelegate_3
+  L08B3: goto L0EC3
+  L08B8: self.Actor.SetState(GameplayTag{'Fishing.State.Idle'})
+  L08F7: CallFunc_K2_GetComponentLocation_ReturnValue = self.Actor.self.FloatSpawn.SceneComponent.K2_GetComponentLocation()
+  L093F: CallFunc_GetControlRotation_ReturnValue = self.Actor.Pawn.GetControlRotation()
+  L0971: BreakRotator(CallFunc_GetControlRotation_ReturnValue, CallFunc_BreakRotator_Roll, CallFunc_BreakRotator_Pitch, CallFunc_BreakRotator_Yaw)
+  L099F: CallFunc_MakeRotator_ReturnValue = MakeRotator(0, 0, CallFunc_BreakRotator_Yaw)
+  L09CE: CallFunc_MakeTransform_ReturnValue = MakeTransform(CallFunc_K2_GetComponentLocation_ReturnValue, CallFunc_MakeRotator_ReturnValue, Vec(1,1,1))
+  L0A15: CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue = GameplayStatics.BeginDeferredActorSpawnFromClass(self, BP_FishingFloat_C, CallFunc_MakeTransform_ReturnValue, 1, null, 1)
+  L0A41: KismetSystemLibrary.SetObjectPropertyByName(CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue, 'StartAttach', self.Actor.self.SK_FishingRod)
+  L0A80: Temp_name_Variable_2 = 'Line_Socket'
+  L0A9F: KismetSystemLibrary.SetNamePropertyByName(CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue, 'StartAttackSocket', Temp_name_Variable_2)
+  L0AC8: Default__KismetSystemLibrary.KismetSystemLibrary.SetStructurePropertyByName(CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue, 'FishingBehavior', self.Actor.self.FishingBehavior)
+  L0B1D: CallFunc_GetSkeletalMeshAsset_ReturnValue = self.Actor.self.Lure_SK.SkeletalMeshComponent.GetSkeletalMeshAsset()
+  L0B5D: KismetSystemLibrary.SetObjectPropertyByName(CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue, 'BaitMesh', CallFunc_GetSkeletalMeshAsset_ReturnValue)
+  L0B86: KismetSystemLibrary.SetObjectPropertyByName(CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue, 'Instigator', self.Actor)
+  L0BAF: CallFunc_K2_GetComponentLocation_ReturnValue = self.Actor.self.FloatSpawn.SceneComponent.K2_GetComponentLocation()
+  L0BF7: CallFunc_GetControlRotation_ReturnValue = self.Actor.Pawn.GetControlRotation()
+  L0C29: BreakRotator(CallFunc_GetControlRotation_ReturnValue, CallFunc_BreakRotator_Roll, CallFunc_BreakRotator_Pitch, CallFunc_BreakRotator_Yaw)
+  L0C57: CallFunc_MakeRotator_ReturnValue = MakeRotator(0, 0, CallFunc_BreakRotator_Yaw)
+  L0C86: CallFunc_MakeTransform_ReturnValue = MakeTransform(CallFunc_K2_GetComponentLocation_ReturnValue, CallFunc_MakeRotator_ReturnValue, Vec(1,1,1))
+  L0CCD: CallFunc_FinishSpawningActor_ReturnValue = GameplayStatics.FinishSpawningActor(CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue, CallFunc_MakeTransform_ReturnValue, 1)
+  L0CF5: self.Float = CallFunc_FinishSpawningActor_ReturnValue
+  L0D08: self.Actor.SetFloat(self.Float)
+  L0D35: CallFunc_MapRangeClamped_OutRangeA_ImplicitCast_1 = self.FloatGravityScale.Min
+  L0D5B: CallFunc_MapRangeClamped_OutRangeB_ImplicitCast_1 = self.FloatGravityScale.Max
+  L0D81: CallFunc_MapRangeClamped_ReturnValue_1 = MapRangeClamped(self.PowerPercent, 0, 1, CallFunc_MapRangeClamped_OutRangeA_ImplicitCast_1, CallFunc_MapRangeClamped_OutRangeB_ImplicitCast_1)
+  L0DCA: K2Node_VariableSet_ProjectileGravityScale_ImplicitCast = CallFunc_MapRangeClamped_ReturnValue_1
+  L0DE7: self.Float.self.ProjectileMovement.self.ProjectileGravityScale = K2Node_VariableSet_ProjectileGravityScale_ImplicitCast
+  L0E2E: goto L004A
+  L0E33: self.Actor.UsePawnControlRotation(true)
+  L0E58: StateTreeTaskBlueprintBase.FinishTask(true)
+  L0E63: goto L0EC3
+  L0E68: Temp_name_Variable = K2Node_CustomEvent_NotifyName_7
+  L0E83: goto L0EC3
+  L0E88: Temp_name_Variable = K2Node_CustomEvent_NotifyName_8
+  L0EA3: goto L08B8
+  L0EA8: Temp_name_Variable = K2Node_CustomEvent_NotifyName_9
+  L0EC3: return
+
+## function FindLocationForThrow  flags=0x0C420000
+  L0000: Location = self.Actor.self.AimTarget
+  L0031: return
+
+## function OnBlendOut_174A815F4D7EBCEF674B90A57B0D4D58  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_NotifyName_6 = NotifyName
+  L0012: STT_Fishing_ThrowFloat_C.ExecuteUbergraph_STT_Fishing_ThrowFloat(10)
+  L0021: return
+
+## function OnBlendOut_A6F6BDC540026F7074B584998671054E  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_NotifyName_1 = NotifyName
+  L0012: STT_Fishing_ThrowFloat_C.ExecuteUbergraph_STT_Fishing_ThrowFloat(678)
+  L0021: return
+
+## function OnCompleted_174A815F4D7EBCEF674B90A57B0D4D58  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_NotifyName_5 = NotifyName
+  L0012: STT_Fishing_ThrowFloat_C.ExecuteUbergraph_STT_Fishing_ThrowFloat(42)
+  L0021: return
+
+## function OnCompleted_A6F6BDC540026F7074B584998671054E  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_NotifyName = NotifyName
+  L0012: STT_Fishing_ThrowFloat_C.ExecuteUbergraph_STT_Fishing_ThrowFloat(710)
+  L0021: return
+
+## function OnInterrupted_174A815F4D7EBCEF674B90A57B0D4D58  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_NotifyName_7 = NotifyName
+  L0012: STT_Fishing_ThrowFloat_C.ExecuteUbergraph_STT_Fishing_ThrowFloat(3688)
+  L0021: return
+
+## function OnInterrupted_A6F6BDC540026F7074B584998671054E  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_NotifyName_2 = NotifyName
+  L0012: STT_Fishing_ThrowFloat_C.ExecuteUbergraph_STT_Fishing_ThrowFloat(646)
+  L0021: return
+
+## function OnNotifyBegin_174A815F4D7EBCEF674B90A57B0D4D58  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_NotifyName_8 = NotifyName
+  L0012: STT_Fishing_ThrowFloat_C.ExecuteUbergraph_STT_Fishing_ThrowFloat(3720)
+  L0021: return
+
+## function OnNotifyBegin_A6F6BDC540026F7074B584998671054E  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_NotifyName_3 = NotifyName
+  L0012: STT_Fishing_ThrowFloat_C.ExecuteUbergraph_STT_Fishing_ThrowFloat(614)
+  L0021: return
+
+## function OnNotifyEnd_174A815F4D7EBCEF674B90A57B0D4D58  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_NotifyName_9 = NotifyName
+  L0012: STT_Fishing_ThrowFloat_C.ExecuteUbergraph_STT_Fishing_ThrowFloat(3752)
+  L0021: return
+
+## function OnNotifyEnd_A6F6BDC540026F7074B584998671054E  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_NotifyName_4 = NotifyName
+  L0012: STT_Fishing_ThrowFloat_C.ExecuteUbergraph_STT_Fishing_ThrowFloat(582)
+  L0021: return
+
+## function ReceiveLatentEnterState  flags=0x08420800
+  L0000: frame.K2Node_Event_Transition = Transition
+  L0012: STT_Fishing_ThrowFloat_C.ExecuteUbergraph_STT_Fishing_ThrowFloat(742)
+  L0021: return
+
+## function WaterEntered  flags=0x0C000000
+  L0000: STT_Fishing_ThrowFloat_C.ExecuteUbergraph_STT_Fishing_ThrowFloat(3635)
+  L000F: return

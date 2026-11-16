@@ -1,0 +1,132 @@
+# /Game/Dreadmoor/Core/Features/Ship/ShipModules/Diving/GAS/GA_DivingInteraction
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/Ship/ShipModules/Diving/GAS/GA_DivingInteraction.uasset
+
+## imported packages (5)
+  /Game/Dreadmoor/Core/Features/Ship/ShipModules/Diving/BP_DivingInteractable
+  /Game/Dreadmoor/Core/Features/UnderwaterFeatures/DiverCharacter/BP_DiverCharacter
+  /Game/Dreadmoor/Core/Features/UnderwaterFeatures/DivingZone/BP_DivingPlace
+  /Game/Dreadmoor/Narrative/Quests/AC_NarrativeNavMarker_QuestTask_CloseRangeFadeOut
+  /Game/Dreadmoor/UI/Core/BPFL_UiFunctions
+
+## exports (8)
+  [0] GA_DivingInteraction_C : BlueprintGeneratedClass (outer None) super=DrdGameplayAbility size=565
+  [7] Default__GA_DivingInteraction_C : GA_DivingInteraction_C (outer None) size=106
+        refs: name:ArrayProperty, name:InitDivningZone, name:BP_DiverCharacter_C, name:GAS.Character.IsInteracting
+
+## function AttachToFloor  flags=0x0C820000
+  L0000: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(Actor)
+  L001D: if not (CallFunc_IsValid_ReturnValue) goto L022D
+  L002B: CallFunc_K2_GetActorLocation_ReturnValue = Actor.Actor.K2_GetActorLocation()
+  L005D: CallFunc_Subtract_VectorVector_ReturnValue = Subtract_VectorVector(CallFunc_K2_GetActorLocation_ReturnValue, Vec(0,0,1000))
+  L009B: CallFunc_LineTraceSingle_ReturnValue = KismetSystemLibrary.LineTraceSingle(self, CallFunc_K2_GetActorLocation_ReturnValue, CallFunc_Subtract_VectorVector_ReturnValue, 0, false, Temp_object_Variable, 0, CallFunc_LineTraceSingle_OutHit, true, LinearColor{1, 0, 0, 1}, LinearColor{0, 1, 0, 1}, 5)
+  L0123: if not (CallFunc_LineTraceSingle_ReturnValue) goto L022D
+  L0131: GameplayStatics.BreakHitResult(CallFunc_LineTraceSingle_OutHit, CallFunc_BreakHitResult_bBlockingHit, CallFunc_BreakHitResult_bInitialOverlap, CallFunc_BreakHitResult_Time, CallFunc_BreakHitResult_Distance, CallFunc_BreakHitResult_Location, CallFunc_BreakHitResult_ImpactPoint, CallFunc_BreakHitResult_Normal, CallFunc_BreakHitResult_ImpactNormal, CallFunc_BreakHitResult_PhysMat, CallFunc_BreakHitResult_HitActor, CallFunc_BreakHitResult_HitComponent, CallFunc_BreakHitResult_HitBoneName, CallFunc_BreakHitResult_BoneName, CallFunc_BreakHitResult_HitItem, CallFunc_BreakHitResult_ElementIndex, CallFunc_BreakHitResult_FaceIndex, CallFunc_BreakHitResult_TraceStart, CallFunc_BreakHitResult_TraceEnd)
+  L01E6: CallFunc_K2_AttachToComponent_ReturnValue = Actor.Actor.K2_AttachToComponent(CallFunc_BreakHitResult_HitComponent, 'None', 1, 1, 1, true)
+  L022D: return
+
+## function EventReceived_718E2B2E44020D099C5F07B418A2CC83  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Payload = Payload
+  L0012: GA_DivingInteraction_C.ExecuteUbergraph_GA_DivingInteraction(2063)
+  L0021: return
+
+## function ExecuteUbergraph_GA_DivingInteraction  flags=0x00808001
+  L0000: push L0962
+  L0005: goto computed(EntryPoint)
+  L000F: self.DivingInteractable = K2Node_Event_EventData.Target
+  L002B: self.PlayerCharacter = K2Node_Event_EventData.Instigator
+  L0047: K2Node_DynamicCast_AsBP_Diving_Interactable = cast<BP_DivingInteractable_C>(K2Node_Event_EventData.Target)
+  L0074: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsBP_Diving_Interactable
+  L0091: if not (K2Node_DynamicCast_bSuccess) pop-flow
+  L009B: K2Node_DynamicCast_AsBP_Diving_Interactable.GetOverllapedDivingData(CallFunc_GetOverllapedDivingData_Success, CallFunc_GetOverllapedDivingData_DataLayer, CallFunc_GetOverllapedDivingData_DiverSpawnPosition, CallFunc_GetOverllapedDivingData_DivingPlace)
+  L00E3: if not (CallFunc_GetOverllapedDivingData_Success) goto L0342
+  L00F1: K2Node_DynamicCast_AsBP_Diving_Interactable.GetOverllapedDivingData(CallFunc_GetOverllapedDivingData_Success, CallFunc_GetOverllapedDivingData_DataLayer, CallFunc_GetOverllapedDivingData_DiverSpawnPosition, CallFunc_GetOverllapedDivingData_DivingPlace)
+  L0139: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(CallFunc_GetOverllapedDivingData_DivingPlace)
+  L0156: if not (CallFunc_IsValid_ReturnValue) goto L01D0
+  L0164: K2Node_DynamicCast_AsBP_Diving_Interactable.GetOverllapedDivingData(CallFunc_GetOverllapedDivingData_Success, CallFunc_GetOverllapedDivingData_DataLayer, CallFunc_GetOverllapedDivingData_DiverSpawnPosition, CallFunc_GetOverllapedDivingData_DivingPlace)
+  L01AC: CallFunc_GetOverllapedDivingData_DivingPlace.InitDivningZone()
+  L01D0: K2Node_DynamicCast_AsBP_Diving_Interactable.GetOverllapedDivingData(CallFunc_GetOverllapedDivingData_Success, CallFunc_GetOverllapedDivingData_DataLayer, CallFunc_GetOverllapedDivingData_DiverSpawnPosition, CallFunc_GetOverllapedDivingData_DivingPlace)
+  L0218: self.Diver Spawn Position = CallFunc_GetOverllapedDivingData_DiverSpawnPosition
+  L0233: K2Node_DynamicCast_AsBP_Diving_Interactable.GetOverllapedDivingData(CallFunc_GetOverllapedDivingData_Success, CallFunc_GetOverllapedDivingData_DataLayer, CallFunc_GetOverllapedDivingData_DiverSpawnPosition, CallFunc_GetOverllapedDivingData_DivingPlace)
+  L027B: self.Data Layer = CallFunc_GetOverllapedDivingData_DataLayer
+  L028E: CallFunc_GetDataLayerManager_ReturnValue = WorldPartitionBlueprintLibrary.GetDataLayerManager(self)
+  L02A3: CallFunc_SetDataLayerRuntimeState_ReturnValue_1 = CallFunc_GetDataLayerManager_ReturnValue.DataLayerManager.SetDataLayerRuntimeState(self.Data Layer, 2, false)
+  L02D9: if not (CallFunc_SetDataLayerRuntimeState_ReturnValue_1) goto L03AC
+  L02E7: bind(K2Node_CreateDelegate_OutputDelegate, self, 'OnLoaded_D611B09D4E550A399CB33D84DFE79FC5')
+  L02FE: KismetSystemLibrary.LoadAssetClass(self, self.DiverCharacterClass, K2Node_CreateDelegate_OutputDelegate, LatentActionInfo{-1, 175953586, 'ExecuteUbergraph_GA_DivingInteraction', self})
+  L0341: pop-flow
+  L0342: Default__BPFL_UiFunctions_C.PlayNotification(Text("NO DIVE PLACE PLACEHOLDER IN  GA_DivingInteraction"), self)
+  L039D: K2_EndAbility()
+  L03AB: pop-flow
+  L03AC: K2_EndAbility()
+  L03BA: pop-flow
+  L03BB: K2_EndAbility()
+  L03C9: pop-flow
+  L03CA: K2_EndAbility()
+  L03D8: pop-flow
+  L03D9: GameplayAbility.K2_OnEndAbility(K2Node_Event_bWasCancelled)
+  L03EC: CallFunc_IsValid_ReturnValue_1 = KismetSystemLibrary.IsValid(self.Data Layer)
+  L0409: if not (CallFunc_IsValid_ReturnValue_1) pop-flow
+  L0413: CallFunc_GetDataLayerManager_ReturnValue_1 = WorldPartitionBlueprintLibrary.GetDataLayerManager(self)
+  L0428: CallFunc_SetDataLayerRuntimeState_ReturnValue = CallFunc_GetDataLayerManager_ReturnValue_1.DataLayerManager.SetDataLayerRuntimeState(self.Data Layer, 0, false)
+  L045E: pop-flow
+  L045F: CallFunc_GetActorInfo_ReturnValue = GameplayAbility.GetActorInfo()
+  L047B: CallFunc_GetActorInfo_ReturnValue.PlayerController.Controller.Possess(self.DiverCharacter)
+  L04AD: CallFunc_WaitGameplayEvent_ReturnValue = AbilityTask_WaitGameplayEvent.WaitGameplayEvent(self, GameplayTag{'GAS.Event.Towing'}, null, false, true)
+  L04E0: CallFunc_IsValid_ReturnValue_3 = KismetSystemLibrary.IsValid(CallFunc_WaitGameplayEvent_ReturnValue)
+  L04FD: if not (CallFunc_IsValid_ReturnValue_3) pop-flow
+  L0507: bind(K2Node_CreateDelegate_OutputDelegate_1, self, 'EventReceived_718E2B2E44020D099C5F07B418A2CC83')
+  L051E: CallFunc_WaitGameplayEvent_ReturnValue.self.EventReceived += K2Node_CreateDelegate_OutputDelegate_1
+  L0547: CallFunc_WaitGameplayEvent_ReturnValue.GameplayTask.ReadyForActivation()
+  L0567: pop-flow
+  L0568: K2Node_DynamicCast_AsPawn = cast<Pawn>(self.PlayerCharacter)
+  L058C: K2Node_DynamicCast_bSuccess_1 = K2Node_DynamicCast_AsPawn
+  L05A9: if not (K2Node_DynamicCast_bSuccess_1) pop-flow
+  L05B3: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L05CD: K2Node_DynamicCast_AsPawn.EnableInput(CallFunc_GetPlayerController_ReturnValue)
+  L05FA: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L0614: CallFunc_GetPlayerController_ReturnValue.Controller.Possess(K2Node_DynamicCast_AsPawn)
+  L063D: K2Node_DynamicCast_AsBP_Diving_Interactable_1 = cast<BP_DivingInteractable_C>(self.DivingInteractable)
+  L0661: K2Node_DynamicCast_bSuccess_3 = K2Node_DynamicCast_AsBP_Diving_Interactable_1
+  L067E: if not (K2Node_DynamicCast_bSuccess_3) goto L0770
+  L068C: K2Node_DynamicCast_AsBP_Diving_Interactable_1.GetOverllapedDivingData(CallFunc_GetOverllapedDivingData_Success_1, CallFunc_GetOverllapedDivingData_DataLayer_1, CallFunc_GetOverllapedDivingData_DiverSpawnPosition_1, CallFunc_GetOverllapedDivingData_DivingPlace_1)
+  L06D4: CallFunc_IsValid_ReturnValue_2 = KismetSystemLibrary.IsValid(CallFunc_GetOverllapedDivingData_DivingPlace_1)
+  L06F1: if not (CallFunc_IsValid_ReturnValue_2) goto L0770
+  L06FF: K2Node_DynamicCast_AsBP_Diving_Interactable_1.GetOverllapedDivingData(CallFunc_GetOverllapedDivingData_Success_1, CallFunc_GetOverllapedDivingData_DataLayer_1, CallFunc_GetOverllapedDivingData_DiverSpawnPosition_1, CallFunc_GetOverllapedDivingData_DivingPlace_1)
+  L0747: CallFunc_GetOverllapedDivingData_DivingPlace_1.ClearDivingZone()
+  L076B: goto L03CA
+  L0770: K2_EndAbility()
+  L077E: pop-flow
+  L077F: K2Node_DynamicCast_AsDrd_Base_Character = cast<DrdBaseCharacter>(self.PlayerCharacter)
+  L07A3: K2Node_DynamicCast_bSuccess_2 = K2Node_DynamicCast_AsDrd_Base_Character
+  L07C0: if not (K2Node_DynamicCast_bSuccess_2) pop-flow
+  L07CA: CallFunc_FinishSpawningActor_ReturnValue.SetDiverOwner(K2Node_DynamicCast_AsDrd_Base_Character)
+  L07F7: self.DiverCharacter = CallFunc_FinishSpawningActor_ReturnValue
+  L080A: goto L045F
+  L080F: Temp_struct_Variable = K2Node_CustomEvent_Payload
+  L082A: goto L0568
+  L082F: Temp_class_Variable = K2Node_CustomEvent_Loaded
+  L0842: K2Node_ClassDynamicCast_AsBP_Diver_Character = classcast<BP_DiverCharacter_C>(Temp_class_Variable)
+  L0866: K2Node_ClassDynamicCast_bSuccess = K2Node_ClassDynamicCast_AsBP_Diver_Character
+  L0883: if not (K2Node_ClassDynamicCast_bSuccess) goto L03BB
+  L0891: CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue = GameplayStatics.BeginDeferredActorSpawnFromClass(self, K2Node_ClassDynamicCast_AsBP_Diver_Character, self.Diver Spawn Position, 2, null, 1)
+  L08BD: CallFunc_GetActorInfo_ReturnValue_1 = GameplayAbility.GetActorInfo()
+  L08D9: CallFunc_K2_GetPawn_ReturnValue = CallFunc_GetActorInfo_ReturnValue_1.PlayerController.Controller.K2_GetPawn()
+  L090C: KismetSystemLibrary.SetObjectPropertyByName(CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue, 'Instigator', CallFunc_K2_GetPawn_ReturnValue)
+  L0935: CallFunc_FinishSpawningActor_ReturnValue = GameplayStatics.FinishSpawningActor(CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue, self.Diver Spawn Position, 1)
+  L095D: goto L077F
+  L0962: return
+
+## function K2_ActivateAbilityFromEvent  flags=0x08480800
+  L0000: frame.K2Node_Event_EventData = EventData
+  L0012: GA_DivingInteraction_C.ExecuteUbergraph_GA_DivingInteraction(15)
+  L0021: return
+
+## function K2_OnEndAbility  flags=0x08080800
+  L0000: frame.K2Node_Event_bWasCancelled = bWasCancelled
+  L0012: GA_DivingInteraction_C.ExecuteUbergraph_GA_DivingInteraction(985)
+  L0021: return
+
+## function OnLoaded_D611B09D4E550A399CB33D84DFE79FC5  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Loaded = Loaded
+  L0012: GA_DivingInteraction_C.ExecuteUbergraph_GA_DivingInteraction(2095)
+  L0021: return

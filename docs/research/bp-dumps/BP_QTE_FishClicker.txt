@@ -1,0 +1,66 @@
+# /Game/Dreadmoor/Core/Features/QTE/Fishing/BP_QTE_FishClicker
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/QTE/Fishing/BP_QTE_FishClicker.uasset
+
+## imported packages (3)
+  /Game/Dreadmoor/Core/Features/QTE/Fishing/WBP_QTE_FishClicker
+  /Game/Dreadmoor/Core/Features/QTE/QuickTap/WBP_QTE_QuickTap
+  /Game/Dreadmoor/UI/Fishing/WBP_FishingQTE
+
+## exports (8)
+  [0] BP_QTE_FishClicker_C : BlueprintGeneratedClass (outer None) super=DrdQteController size=404
+  [1] Default__BP_QTE_FishClicker_C : BP_QTE_FishClicker_C (outer None) size=8
+
+## function Cleanup  flags=0x08020800
+  L0000: BP_QTE_FishClicker_C.ExecuteUbergraph_BP_QTE_FishClicker(605)
+  L000F: return
+
+## function ExecuteUbergraph_BP_QTE_FishClicker  flags=0x00808001
+  L0000: goto computed(EntryPoint)
+  L000A: DrdQteController.Init()
+  L0014: Default__BlueprintInstancedStructLibrary.BlueprintInstancedStructLibrary.GetInstancedStructValue(CallFunc_GetInstancedStructValue_ExecResult, self.Payload, CallFunc_GetInstancedStructValue_Value)
+  L004F: K2Node_SwitchEnum_CmpSuccess = NotEqual_ByteByte(CallFunc_GetInstancedStructValue_ExecResult, 0)
+  L006E: if not (K2Node_SwitchEnum_CmpSuccess) goto L00AE
+  L007C: K2Node_SwitchEnum_CmpSuccess = NotEqual_ByteByte(CallFunc_GetInstancedStructValue_ExecResult, 1)
+  L009B: if not (K2Node_SwitchEnum_CmpSuccess) goto L00D2
+  L00A9: goto L02FF
+  L00AE: self.WeightIndex = CallFunc_GetInstancedStructValue_Value.ProfileIndex
+  L00D2: CallFunc_GetLocalPlayerFromController_ReturnValue = Default__CommonUIExtensions.CommonUIExtensions.GetLocalPlayerFromController(self.PlayerController)
+  L0105: CallFunc_PushContentToLayer_ForPlayer_ReturnValue = Default__CommonUIExtensions.CommonUIExtensions.PushContentToLayer_ForPlayer(CallFunc_GetLocalPlayerFromController_ReturnValue, GameplayTag{'UI.Layer.QTE'}, WBP_QTE_FishClicker_C)
+  L015C: K2Node_DynamicCast_AsWBP_QTE_Fish_Clicker = cast<WBP_QTE_FishClicker_C>(CallFunc_PushContentToLayer_ForPlayer_ReturnValue)
+  L0180: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsWBP_QTE_Fish_Clicker
+  L019D: if not (K2Node_DynamicCast_bSuccess) goto L02FF
+  L01AB: K2Node_DynamicCast_AsWBP_QTE_Fish_Clicker.SetWeightIndex(self.WeightIndex)
+  L01D8: bind(K2Node_CreateDelegate_OutputDelegate, self, 'Finished')
+  L01EF: K2Node_DynamicCast_AsWBP_QTE_Fish_Clicker.self.OnFinished += K2Node_CreateDelegate_OutputDelegate
+  L0218: bind(K2Node_CreateDelegate_OutputDelegate_1, self, 'ValueChanged')
+  L022F: K2Node_DynamicCast_AsWBP_QTE_Fish_Clicker.self.OnValueChanged += K2Node_CreateDelegate_OutputDelegate_1
+  L0258: goto L02FF
+  L025D: DrdQteController.Cleanup()
+  L0267: goto L02FF
+  L026C: self.OnQteFinished.Broadcast(K2Node_CustomEvent_Result)
+  L0288: goto L02FF
+  L028D: K2Node_DynamicCast_AsWBP_QTE_Fish_Clicker.FinishQTE(false)
+  L02B2: goto L02FF
+  L02B7: DrdQteController.ForceFinish()
+  L02C1: goto L028D
+  L02C6: K2Node_CallDelegate_Value_ImplicitCast = K2Node_CustomEvent_Value
+  L02E3: self.OnQteValueChanged.Broadcast(K2Node_CallDelegate_Value_ImplicitCast)
+  L02FF: return
+
+## function Finished  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Result = Result
+  L0012: BP_QTE_FishClicker_C.ExecuteUbergraph_BP_QTE_FishClicker(620)
+  L0021: return
+
+## function ForceFinish  flags=0x08020800
+  L0000: BP_QTE_FishClicker_C.ExecuteUbergraph_BP_QTE_FishClicker(695)
+  L000F: return
+
+## function Init  flags=0x08020800
+  L0000: BP_QTE_FishClicker_C.ExecuteUbergraph_BP_QTE_FishClicker(10)
+  L000F: return
+
+## function ValueChanged  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Value = Value
+  L0012: BP_QTE_FishClicker_C.ExecuteUbergraph_BP_QTE_FishClicker(710)
+  L0021: return

@@ -1,0 +1,424 @@
+# /Game/Dreadmoor/Core/Features/HandToolBase/BP_HandToolActor_Base
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/HandToolBase/BP_HandToolActor_Base.uasset
+
+## imported packages (8)
+  /Engine/BasicShapes/BasicShapeMaterial
+  /Engine/BasicShapes/Cube
+  /Game/Dreadmoor/Art/StaticMesh/Characters/PlayersCharacter/ABP/I_AnimData
+  /Game/Dreadmoor/Audio/Attenuation/ATT_DropObjects
+  /Game/Dreadmoor/Core/Features/HandToolBase/GA_HandTool_Carry
+  /Game/Dreadmoor/InventoryFramework/Components/BP_GearTransitionComponent
+  /Game/Dreadmoor/Localization/ST_GameplayTags
+  /Game/Dreadmoor/UI/Common/WBP_CUI_InteractionInfo
+
+## exports (41)
+  [0] Inventory Component : AC_Inventory (outer Default__BP_HandToolActor_Base_C) size=11
+        refs: exp:Default__BP_HandToolActor_Base_C
+  [1] BP_HandToolActor_Base_C : BlueprintGeneratedClass (outer None) super=A_ItemActor size=1896
+  [2] Default__BP_HandToolActor_Base_C : BP_HandToolActor_Base_C (outer None) size=146
+        refs: name:None, name:ABP_FuelNozzleLayer_C, obj:/Game/Dreadmoor/Core/Features/HandToolBase/GA_HandTool_Carry.GA_HandTool_Carry_C, name:Cane, exp:BndEvt__BP_HandToolActor_Base_RootMesh_K2Node_ComponentBoundEvent_0_ComponentHitSignature__DelegateSignature, name:WBP_HandToolSimple_C, exp:Default__BP_HandToolActor_Base_C
+  [3] ComponentDelegateBinding_0 : ComponentDelegateBinding (outer BP_HandToolActor_Base_C) size=36
+        refs: name:RootMesh, name:OnComponentHit, exp:OnInterrupted_3C34A94A4484FC659AADA9A4D427E94A
+  [4] DrdActorTag_GEN_VARIABLE : DrdActorTagComponent (outer BP_HandToolActor_Base_C) size=10
+  [5] DrdInteractable_GEN_VARIABLE : DrdInteractableComponent (outer BP_HandToolActor_Base_C) size=113
+        refs: exp:Default__BP_HandToolActor_Base_C, name:GA_HandTool_Pickup_C, exp:DrdActorTag_GEN_VARIABLE, exp:OnInterrupted_9D6D290B4210F4A39BF0BD98BF216798, obj:/Game/Dreadmoor/UI/Common/WBP_CUI_InteractionInfo.WBP_CUI_InteractionInfo_C, name:CallFunc_VSize_ReturnValue
+  [34] DefaultSceneRoot_GEN_VARIABLE : SceneComponent (outer BP_HandToolActor_Base_C) size=10
+  [35] SCS_Node_0 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SceneComponent, exp:DefaultSceneRoot_GEN_VARIABLE, name:DefaultSceneRoot
+  [36] SCS_Node_1 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:RootMesh_GEN_VARIABLE, name:RootMesh
+  [37] SCS_Node_2 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Dreadmoor.DrdActorTagComponent, exp:DrdActorTag_GEN_VARIABLE, name:DrdActorTag
+  [38] SCS_Node_5 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Dreadmoor.DrdInteractableComponent, exp:DrdInteractable_GEN_VARIABLE, name:DrdInteractable
+  [39] SimpleConstructionScript_0 : SimpleConstructionScript (outer BP_HandToolActor_Base_C) size=42
+        refs: exp:Default__BP_HandToolActor_Base_C, exp:SCS_Node_5, exp:SCS_Node_1, exp:SCS_Node_2, name:CallFunc_BreakHitResult_Location
+  [40] RootMesh_GEN_VARIABLE : StaticMeshComponent (outer BP_HandToolActor_Base_C) size=129
+        refs: obj:/Engine/BasicShapes/Cube.<7a0de0d40eda6c16>, obj:/Engine/BasicShapes/BasicShapeMaterial.<0c7bc1162118fbb9>, name:Custom, exp:DrdActorTag_GEN_VARIABLE, name:Camera, name:Pawn, name:Vehicle, name:Destructible, name:Visibility, name:InteractableOutline
+
+## function BndEvt__BP_HandToolActor_Base_RootMesh_K2Node_ComponentBoundEvent_0_ComponentHitSignature__DelegateSignature  flags=0x08400000
+  L0000: frame.K2Node_ComponentBoundEvent_HitComponent = HitComponent
+  L0012: frame.K2Node_ComponentBoundEvent_OtherActor = OtherActor
+  L0024: frame.K2Node_ComponentBoundEvent_OtherComp = OtherComp
+  L0036: frame.K2Node_ComponentBoundEvent_NormalImpulse = NormalImpulse
+  L0048: frame.K2Node_ComponentBoundEvent_Hit = Hit
+  L005A: BP_HandToolActor_Base_C.ExecuteUbergraph_BP_HandToolActor_Base(4842)
+  L0069: return
+
+## function CancelStopCarryAbilityIfPresent  flags=0x0C000000
+  L0000: BP_HandToolActor_Base_C.ExecuteUbergraph_BP_HandToolActor_Base(4622)
+  L000F: return
+
+## function CommitEquip  flags=0x0C000000
+  L0000: BP_HandToolActor_Base_C.ExecuteUbergraph_BP_HandToolActor_Base(5318)
+  L000F: return
+
+## function DropTool  flags=0x0C000000
+  L0000: BP_HandToolActor_Base_C.ExecuteUbergraph_BP_HandToolActor_Base(2319)
+  L000F: return
+
+## function ExecuteUbergraph_BP_HandToolActor_Base  flags=0x00808001
+  L0000: push L1774
+  L0005: goto computed(EntryPoint)
+  L000F: CallFunc_EqualEqual_VectorVector_ReturnValue = EqualEqual_VectorVector(self.BaseScale, self.AttachedScale, 0.001)
+  L003A: if not (CallFunc_EqualEqual_VectorVector_ReturnValue) goto L0073
+  L0048: self.BaseScale = Vec(1,1,1)
+  L0073: CallFunc_GetPlayerPawn_ReturnValue = GameplayStatics.GetPlayerPawn(self, 0)
+  L008D: TakeTool(CallFunc_GetPlayerPawn_ReturnValue)
+  L00A4: pop-flow
+  L00A5: K2Node_MakeStruct_DrdObjectId.Tag = GameplayTag{'GameEntities.Player.MainChar'}
+  L00DB: K2Node_MakeStruct_DrdObjectId.Guid = Guid{0, 0, 0, 0}
+  L0118: K2Node_GetActorFromRefsSubsystem_HasPropertyResult = DrdActorRefsSubsystem.IsActorWithIdOfClassRegistered(self, K2Node_MakeStruct_DrdObjectId, Actor)
+  L013F: if not (K2Node_GetActorFromRefsSubsystem_HasPropertyResult) pop-flow
+  L0149: CallFunc_GetAbilitySystemComponent_ReturnValue = AbilitySystemBlueprintLibrary.GetAbilitySystemComponent(DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId, Actor))
+  L017A: bind(K2Node_CreateDelegate_OutputDelegate_6, self, 'InWaterTagChanged')
+  L0191: CallFunc_BindEventWrapperToGameplayTagChanged_ReturnValue = AbilitySystemBlueprintLibrary.BindEventWrapperToGameplayTagChanged(CallFunc_GetAbilitySystemComponent_ReturnValue, GameplayTag{'GAS.Character.IsInWater'}, K2Node_CreateDelegate_OutputDelegate_6, true, 0)
+  L01DD: self.IsInWaterTagListnerHandle = CallFunc_BindEventWrapperToGameplayTagChanged_ReturnValue
+  L01F8: pop-flow
+  L01F9: Temp_name_Variable = K2Node_CustomEvent_NotifyName_4
+  L0214: pop-flow
+  L0215: Temp_name_Variable = K2Node_CustomEvent_NotifyName_3
+  L0230: CallFunc_EqualEqual_NameName_ReturnValue = EqualEqual_NameName(Temp_name_Variable, 'Action')
+  L025A: if not (CallFunc_EqualEqual_NameName_ReturnValue) pop-flow
+  L0264: OnAttachToCharacter(false)
+  L0273: pop-flow
+  L0274: Temp_name_Variable = K2Node_CustomEvent_NotifyName_2
+  L028F: if not (self.bHandle) goto L029E
+  L029D: pop-flow
+  L029E: if not (self.bAttachedToCharacter) pop-flow
+  L02A8: OnAttachToCharacter(false)
+  L02B7: pop-flow
+  L02B8: Temp_name_Variable = K2Node_CustomEvent_NotifyName_1
+  L02D3: pop-flow
+  L02D4: Temp_name_Variable = K2Node_CustomEvent_NotifyName
+  L02EF: goto L028F
+  L02F4: Temp_object_Variable = K2Node_CustomEvent_Loaded_1
+  L0307: K2Node_DynamicCast_AsAnim_Montage = cast<AnimMontage>(Temp_object_Variable)
+  L032B: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsAnim_Montage
+  L0348: if not (K2Node_DynamicCast_bSuccess) pop-flow
+  L0352: self.TakeMontagePreLoaded = K2Node_DynamicCast_AsAnim_Montage
+  L0365: bind(K2Node_CreateDelegate_OutputDelegate_9, self, 'OnLoaded_6E27866C4C1DC4B22326AA91B39A4468')
+  L037C: KismetSystemLibrary.LoadAsset(self, self.ReleaseMontage, K2Node_CreateDelegate_OutputDelegate_9, LatentActionInfo{-1, 695829069, 'ExecuteUbergraph_BP_HandToolActor_Base', self})
+  L03BF: pop-flow
+  L03C0: bind(K2Node_CreateDelegate_OutputDelegate_10, self, 'OnLoaded_7D4E7A134FEE49E550370E8C50EEFCEB')
+  L03D7: KismetSystemLibrary.LoadAsset(self, self.TakeMontage, K2Node_CreateDelegate_OutputDelegate_10, LatentActionInfo{-1, -2036188370, 'ExecuteUbergraph_BP_HandToolActor_Base', self})
+  L041A: pop-flow
+  L041B: Temp_object_Variable_1 = K2Node_CustomEvent_Loaded
+  L042E: K2Node_DynamicCast_AsAnim_Montage_1 = cast<AnimMontage>(Temp_object_Variable_1)
+  L0452: K2Node_DynamicCast_bSuccess_1 = K2Node_DynamicCast_AsAnim_Montage_1
+  L046F: if not (K2Node_DynamicCast_bSuccess_1) pop-flow
+  L0479: self.ReleaseMontagePreLoaded = K2Node_DynamicCast_AsAnim_Montage_1
+  L048C: pop-flow
+  L048D: if not (self.bAttachedToCharacter) goto L051F
+  L049B: GetInteractorMesh(CallFunc_GetInteractorMesh_Mesh_3)
+  L04B2: CallFunc_K2_AttachToComponent_ReturnValue = self.RootMesh.SceneComponent.K2_AttachToComponent(CallFunc_GetInteractorMesh_Mesh_3, self.AttachSocketName, 2, 2, 1, true)
+  L04F5: self.RootMesh.SceneComponent.SetWorldScale3D(self.AttachedScale)
+  L051E: pop-flow
+  L051F: self.RootMesh.SceneComponent.K2_DetachFromComponent(1, 1, 1, true)
+  L0546: self.RootMesh.SetCollisionResponseToChannel(2, 0)
+  L056E: self.RootMesh.SetCollisionEnabled(3)
+  L0594: self.RootMesh.SetSimulatePhysics(true)
+  L05B9: self.RootMesh.SceneComponent.SetWorldScale3D(self.BaseScale)
+  L05E2: self.DrdInteractable.DrdInteractableComponent.SetForceDisableInteraction(false)
+  L0603: pop-flow
+  L0604: pop-flow
+  L0605: pop-flow
+  L0606: self.InteractingCharacter = K2Node_CustomEvent_Interactor
+  L0619: self.bHandle = true
+  L0624: CallFunc_GetGameInstanceSubsystem_ReturnValue = SubsystemBlueprintLibrary.GetGameInstanceSubsystem(self, Drd2DSoundsSubsystem)
+  L0642: CallFunc_PlayAsyncLoadingSound_ReturnValue_1 = CallFunc_GetGameInstanceSubsystem_ReturnValue.Drd2DSoundsSubsystem.PlayAsyncLoadingSound(self.SoundTake)
+  L067D: GetInteractorMesh(CallFunc_GetInteractorMesh_Mesh)
+  L0694: CallFunc_GetAnimInstance_ReturnValue = CallFunc_GetInteractorMesh_Mesh.SkeletalMeshComponent.GetAnimInstance()
+  L06BE: K2Node_DynamicCast_AsI_Anim_Data = iface<I_AnimData_C>(CallFunc_GetAnimInstance_ReturnValue)
+  L06E2: K2Node_DynamicCast_bSuccess_2 = K2Node_DynamicCast_AsI_Anim_Data
+  L06FF: if not (K2Node_DynamicCast_bSuccess_2) goto L073B
+  L070D: K2Node_DynamicCast_AsI_Anim_Data.AnimDataData(self.AnimData)
+  L073B: GetInteractorMesh(CallFunc_GetInteractorMesh_Mesh)
+  L0752: GetTakeMontage(CallFunc_GetTakeMontage_Montage)
+  L0769: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue_1 = PlayMontageCallbackProxy.CreateProxyObjectForPlayMontage(CallFunc_GetInteractorMesh_Mesh, CallFunc_GetTakeMontage_Montage, 2, 0, 'None', true)
+  L07A7: CallFunc_IsValid_ReturnValue_6 = KismetSystemLibrary.IsValid(CallFunc_CreateProxyObjectForPlayMontage_ReturnValue_1)
+  L07C4: if not (CallFunc_IsValid_ReturnValue_6) pop-flow
+  L07CE: bind(K2Node_CreateDelegate_OutputDelegate_11, self, 'OnCompleted_9D6D290B4210F4A39BF0BD98BF216798')
+  L07E5: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue_1.self.OnCompleted += K2Node_CreateDelegate_OutputDelegate_11
+  L080E: bind(K2Node_CreateDelegate_OutputDelegate_12, self, 'OnBlendOut_9D6D290B4210F4A39BF0BD98BF216798')
+  L0825: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue_1.self.OnBlendOut += K2Node_CreateDelegate_OutputDelegate_12
+  L084E: bind(K2Node_CreateDelegate_OutputDelegate_13, self, 'OnInterrupted_9D6D290B4210F4A39BF0BD98BF216798')
+  L0865: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue_1.self.OnInterrupted += K2Node_CreateDelegate_OutputDelegate_13
+  L088E: bind(K2Node_CreateDelegate_OutputDelegate_14, self, 'OnNotifyBegin_9D6D290B4210F4A39BF0BD98BF216798')
+  L08A5: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue_1.self.OnNotifyBegin += K2Node_CreateDelegate_OutputDelegate_14
+  L08CE: bind(K2Node_CreateDelegate_OutputDelegate, self, 'OnNotifyEnd_9D6D290B4210F4A39BF0BD98BF216798')
+  L08E5: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue_1.self.OnNotifyEnd += K2Node_CreateDelegate_OutputDelegate
+  L090E: pop-flow
+  L090F: self.bHandle = false
+  L091A: push L0D88
+  L091F: push L0D79
+  L0924: push L0BE2
+  L0929: GetInteractorMesh(CallFunc_GetInteractorMesh_Mesh_2)
+  L0940: CallFunc_GetAnimInstance_ReturnValue_1 = CallFunc_GetInteractorMesh_Mesh_2.SkeletalMeshComponent.GetAnimInstance()
+  L096A: K2Node_DynamicCast_AsI_Anim_Data_1 = iface<I_AnimData_C>(CallFunc_GetAnimInstance_ReturnValue_1)
+  L098E: K2Node_DynamicCast_bSuccess_3 = K2Node_DynamicCast_AsI_Anim_Data_1
+  L09AB: if not (K2Node_DynamicCast_bSuccess_3) goto L09FA
+  L09B9: K2Node_DynamicCast_AsI_Anim_Data_1.AnimDataData(DrdAnimData{soft("None"), soft("None")})
+  L09FA: CallFunc_IsValid_ReturnValue_3 = KismetSystemLibrary.IsValid(self.ReleaseMontagePreLoaded)
+  L0A17: if not (CallFunc_IsValid_ReturnValue_3) goto L0DE2
+  L0A25: GetInteractorMesh(CallFunc_GetInteractorMesh_Mesh_1)
+  L0A3C: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue = PlayMontageCallbackProxy.CreateProxyObjectForPlayMontage(CallFunc_GetInteractorMesh_Mesh_1, self.ReleaseMontagePreLoaded, 2, 0, 'None', true)
+  L0A7A: CallFunc_IsValid_ReturnValue_4 = KismetSystemLibrary.IsValid(CallFunc_CreateProxyObjectForPlayMontage_ReturnValue)
+  L0A97: if not (CallFunc_IsValid_ReturnValue_4) pop-flow
+  L0AA1: bind(K2Node_CreateDelegate_OutputDelegate_5, self, 'OnCompleted_3C34A94A4484FC659AADA9A4D427E94A')
+  L0AB8: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue.self.OnCompleted += K2Node_CreateDelegate_OutputDelegate_5
+  L0AE1: bind(K2Node_CreateDelegate_OutputDelegate_4, self, 'OnBlendOut_3C34A94A4484FC659AADA9A4D427E94A')
+  L0AF8: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue.self.OnBlendOut += K2Node_CreateDelegate_OutputDelegate_4
+  L0B21: bind(K2Node_CreateDelegate_OutputDelegate_3, self, 'OnInterrupted_3C34A94A4484FC659AADA9A4D427E94A')
+  L0B38: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue.self.OnInterrupted += K2Node_CreateDelegate_OutputDelegate_3
+  L0B61: bind(K2Node_CreateDelegate_OutputDelegate_2, self, 'OnNotifyBegin_3C34A94A4484FC659AADA9A4D427E94A')
+  L0B78: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue.self.OnNotifyBegin += K2Node_CreateDelegate_OutputDelegate_2
+  L0BA1: bind(K2Node_CreateDelegate_OutputDelegate_1, self, 'OnNotifyEnd_3C34A94A4484FC659AADA9A4D427E94A')
+  L0BB8: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue.self.OnNotifyEnd += K2Node_CreateDelegate_OutputDelegate_1
+  L0BE1: pop-flow
+  L0BE2: CallFunc_IsValid_ReturnValue_1 = KismetSystemLibrary.IsValid(self.InteractingCharacter)
+  L0BFF: if not (CallFunc_IsValid_ReturnValue_1) pop-flow
+  L0C09: CallFunc_GetController_ReturnValue_2 = self.InteractingCharacter.Pawn.GetController()
+  L0C33: CallFunc_IsValid_ReturnValue_2 = KismetSystemLibrary.IsValid(CallFunc_GetController_ReturnValue_2)
+  L0C50: if not (CallFunc_IsValid_ReturnValue_2) pop-flow
+  L0C5A: bind(K2Node_CreateDelegate_OutputDelegate_7, self, 'OnSlotChanged_Event')
+  L0C71: CallFunc_GetController_ReturnValue_2 = self.InteractingCharacter.Pawn.GetController()
+  L0C9B: CallFunc_GetComponentByClass_ReturnValue_2 = CallFunc_GetController_ReturnValue_2.Actor.GetComponentByClass(BP_GearTransitionComponent_C)
+  L0CCE: CallFunc_GetComponentByClass_ReturnValue_2.self.OnSlotChanged -= K2Node_CreateDelegate_OutputDelegate_7
+  L0CF7: CallFunc_GetController_ReturnValue_2 = self.InteractingCharacter.Pawn.GetController()
+  L0D21: CallFunc_GetComponentByClass_ReturnValue_2 = CallFunc_GetController_ReturnValue_2.Actor.GetComponentByClass(BP_GearTransitionComponent_C)
+  L0D54: CallFunc_GetComponentByClass_ReturnValue_2.UnequipHandTool()
+  L0D78: pop-flow
+  L0D79: CancelStopCarryAbilityIfPresent()
+  L0D87: pop-flow
+  L0D88: CallFunc_GetGameInstanceSubsystem_ReturnValue_1 = SubsystemBlueprintLibrary.GetGameInstanceSubsystem(self, Drd2DSoundsSubsystem)
+  L0DA6: CallFunc_PlayAsyncLoadingSound_ReturnValue = CallFunc_GetGameInstanceSubsystem_ReturnValue_1.Drd2DSoundsSubsystem.PlayAsyncLoadingSound(self.SoundDrop)
+  L0DE1: pop-flow
+  L0DE2: OnAttachToCharacter(false)
+  L0DF1: pop-flow
+  L0DF2: self.InteractingCharacter = null
+  L0DFD: pop-flow
+  L0DFE: CallFunc_GetAbilitySystemComponent_ReturnValue_2 = AbilitySystemBlueprintLibrary.GetAbilitySystemComponent(self.InteractingCharacter)
+  L0E1B: CallFunc_GetGameplayAbilityFromSpecHandle_ReturnValue = AbilitySystemBlueprintLibrary.GetGameplayAbilityFromSpecHandle(CallFunc_GetAbilitySystemComponent_ReturnValue_2, self.CarryToolAbilitySpec, CallFunc_GetGameplayAbilityFromSpecHandle_bIsInstance)
+  L0E4A: CallFunc_GetGameplayAbilityFromSpecHandle_ReturnValue.K2_EndAbility()
+  L0E6E: goto L0DF2
+  L0E73: CallFunc_GetAbilitySystemComponent_ReturnValue_2 = AbilitySystemBlueprintLibrary.GetAbilitySystemComponent(self.InteractingCharacter)
+  L0E90: CallFunc_GetGameplayAbilityFromSpecHandle_ReturnValue = AbilitySystemBlueprintLibrary.GetGameplayAbilityFromSpecHandle(CallFunc_GetAbilitySystemComponent_ReturnValue_2, self.CarryToolAbilitySpec, CallFunc_GetGameplayAbilityFromSpecHandle_bIsInstance)
+  L0EBF: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(CallFunc_GetGameplayAbilityFromSpecHandle_ReturnValue)
+  L0EDC: if not (CallFunc_IsValid_ReturnValue) goto L0DF2
+  L0EEA: goto L0DFE
+  L0EEF: CallFunc_GetController_ReturnValue = self.InteractingCharacter.Pawn.GetController()
+  L0F19: CallFunc_GetComponentByClass_ReturnValue = CallFunc_GetController_ReturnValue.Actor.GetComponentByClass(BP_GearTransitionComponent_C)
+  L0F4C: CallFunc_GetComponentByClass_ReturnValue.EquipHandTool(self.TemplateItem, self)
+  L0F7A: CallFunc_GetAbilitySystemComponent_ReturnValue_1 = AbilitySystemBlueprintLibrary.GetAbilitySystemComponent(self.InteractingCharacter)
+  L0F97: CallFunc_K2_GiveAbilityAndActivateOnce_ReturnValue = CallFunc_GetAbilitySystemComponent_ReturnValue_1.AbilitySystemComponent.K2_GiveAbilityAndActivateOnce(self.CarryToolAbilityClass, 0, 3)
+  L0FDC: self.CarryToolAbilitySpec = CallFunc_K2_GiveAbilityAndActivateOnce_ReturnValue
+  L0FF7: CallFunc_GetController_ReturnValue_1 = self.InteractingCharacter.Pawn.GetController()
+  L1021: CallFunc_GetComponentByClass_ReturnValue_1 = CallFunc_GetController_ReturnValue_1.Actor.GetComponentByClass(BP_GearTransitionComponent_C)
+  L1054: bind(K2Node_CreateDelegate_OutputDelegate_8, self, 'OnSlotChanged_Event')
+  L106B: CallFunc_GetComponentByClass_ReturnValue_1.self.OnSlotChanged += K2Node_CreateDelegate_OutputDelegate_8
+  L1094: pop-flow
+  L1095: DropTool()
+  L10A3: pop-flow
+  L10A4: self.bAttachedToCharacter = K2Node_CustomEvent_bAttach
+  L10B7: goto L048D
+  L10BC: OnAttachToCharacter(true)
+  L10CB: pop-flow
+  L10CC: Actor.ReceiveBeginPlay()
+  L10D6: push L118B
+  L10DB: CallFunc_K2_GetComponentScale_ReturnValue = self.RootMesh.SceneComponent.K2_GetComponentScale()
+  L110D: self.BaseScale = CallFunc_K2_GetComponentScale_ReturnValue
+  L1128: self.DrdInteractable.DrdInteractableComponent.SetInteractionDescription(self.DrdInteractable.self.ActionDisplayName, self.TemplateItem.self.ItemName)
+  L1186: goto L03C0
+  L118B: KismetSystemLibrary.DelayUntilNextTick(self, LatentActionInfo{L00A5, 565888101, 'ExecuteUbergraph_BP_HandToolActor_Base', self})
+  L11BC: pop-flow
+  L11BD: self.RootMesh.SetCollisionEnabled(0)
+  L11E3: pop-flow
+  L11E4: self.RootMesh.SetSimulatePhysics(false)
+  L1209: goto L11BD
+  L120E: CallFunc_IsValid_ReturnValue_5 = KismetSystemLibrary.IsValid(self.InteractingCharacter)
+  L122B: if not (CallFunc_IsValid_ReturnValue_5) pop-flow
+  L1235: goto L0E73
+  L123A: Actor.ReceiveEndPlay(K2Node_Event_EndPlayReason)
+  L124D: push L128F
+  L1252: K2Node_SwitchEnum_CmpSuccess = NotEqual_ByteByte(K2Node_Event_EndPlayReason, 0)
+  L1271: if not (K2Node_SwitchEnum_CmpSuccess) goto L1280
+  L127F: pop-flow
+  L1280: CancelStopCarryAbilityIfPresent()
+  L128E: pop-flow
+  L128F: AbilitySystemBlueprintLibrary.UnbindAllGameplayTagChangedEventWrappersForHandle(self.IsInWaterTagListnerHandle)
+  L12A2: pop-flow
+  L12A3: CallFunc_EqualEqual_NameName_ReturnValue_1 = EqualEqual_NameName(Temp_name_Variable_1, 'Action')
+  L12CD: if not (CallFunc_EqualEqual_NameName_ReturnValue_1) pop-flow
+  L12D7: CommitEquip()
+  L12E5: goto L10BC
+  L12EA: CallFunc_VSize_ReturnValue = VSize(K2Node_ComponentBoundEvent_NormalImpulse)
+  L130F: CallFunc_Greater_DoubleDouble_ReturnValue = Greater_DoubleDouble(CallFunc_VSize_ReturnValue, self.DropHitImpluseToPlaySound)
+  L1335: if not (CallFunc_Greater_DoubleDouble_ReturnValue) pop-flow
+  L133F: GameplayStatics.BreakHitResult(K2Node_ComponentBoundEvent_Hit, CallFunc_BreakHitResult_bBlockingHit, CallFunc_BreakHitResult_bInitialOverlap, CallFunc_BreakHitResult_Time, CallFunc_BreakHitResult_Distance, CallFunc_BreakHitResult_Location, CallFunc_BreakHitResult_ImpactPoint, CallFunc_BreakHitResult_Normal, CallFunc_BreakHitResult_ImpactNormal, CallFunc_BreakHitResult_PhysMat, CallFunc_BreakHitResult_HitActor, CallFunc_BreakHitResult_HitComponent, CallFunc_BreakHitResult_HitBoneName, CallFunc_BreakHitResult_BoneName, CallFunc_BreakHitResult_HitItem, CallFunc_BreakHitResult_ElementIndex, CallFunc_BreakHitResult_FaceIndex, CallFunc_BreakHitResult_TraceStart, CallFunc_BreakHitResult_TraceEnd)
+  L13F4: GameplayStatics.PlaySoundAtLocation(self, self.SoundDropHit, CallFunc_BreakHitResult_ImpactPoint, Rot(0,0,0), 1, 1, 0, ATT_DropObjects, null, null, null)
+  L1445: pop-flow
+  L1446: if not (self.bHandle) pop-flow
+  L1450: KismetSystemLibrary.DelayUntilNextTick(self, LatentActionInfo{L000F, 1017621561, 'ExecuteUbergraph_BP_HandToolActor_Base', self})
+  L1481: pop-flow
+  L1482: OnAttachToCharacter(true)
+  L1491: goto L11E4
+  L1496: if not (self.bHandle) pop-flow
+  L14A0: if not (self.bAttachedToCharacter) goto L14B3
+  L14AE: goto L11E4
+  L14B3: CommitEquip()
+  L14C1: goto L1482
+  L14C6: goto L0EEF
+  L14CB: Temp_softclass_Variable = soft("")
+  L14E0: Temp_softclass_Variable_1 = soft("/Game/Dreadmoor/Core/Features/HandToolBase/GA_HandTool_Pickup.GA_HandTool_Pickup_C")
+  L1547: CallFunc_Greater_IntInt_ReturnValue = Greater_IntInt(K2Node_CustomEvent_TagCount, 0)
+  L1569: Temp_bool_Variable = CallFunc_Greater_IntInt_ReturnValue
+  L157C: self.DrdInteractable.DrdInteractableComponent.SetCurrentInteractAbility(switch(Temp_bool_Variable){false: Temp_softclass_Variable_1; true: Temp_softclass_Variable; default: K2Node_Select_Default})
+  L15D1: pop-flow
+  L15D2: Temp_name_Variable_1 = K2Node_CustomEvent_NotifyName_5
+  L15ED: CallFunc_GetController_ReturnValue_3 = self.InteractingCharacter.Pawn.GetController()
+  L1617: CallFunc_GetComponentByClass_ReturnValue_3 = CallFunc_GetController_ReturnValue_3.Actor.GetComponentByClass(BP_GearTransitionComponent_C)
+  L164A: CallFunc_IsValid_ReturnValue_7 = KismetSystemLibrary.IsValid(CallFunc_GetComponentByClass_ReturnValue_3)
+  L1667: if not (CallFunc_IsValid_ReturnValue_7) goto L1496
+  L1675: CallFunc_GetController_ReturnValue_3 = self.InteractingCharacter.Pawn.GetController()
+  L169F: CallFunc_GetComponentByClass_ReturnValue_3 = CallFunc_GetController_ReturnValue_3.Actor.GetComponentByClass(BP_GearTransitionComponent_C)
+  L16D2: CallFunc_GetComponentByClass_ReturnValue_3.SetPickupHandToolInProcess(null)
+  L16F7: goto L1496
+  L16FC: Temp_name_Variable_1 = K2Node_CustomEvent_NotifyName_6
+  L1717: pop-flow
+  L1718: Temp_name_Variable_1 = K2Node_CustomEvent_NotifyName_7
+  L1733: goto L15ED
+  L1738: Temp_name_Variable_1 = K2Node_CustomEvent_NotifyName_8
+  L1753: goto L12A3
+  L1758: Temp_name_Variable_1 = K2Node_CustomEvent_NotifyName_9
+  L1773: pop-flow
+  L1774: return
+
+## function GetInteractorMesh  flags=0x1C420000
+  L0000: K2Node_DynamicCast_AsCharacter = cast<Character>(self.InteractingCharacter)
+  L0024: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsCharacter
+  L0041: if not (K2Node_DynamicCast_bSuccess) goto L0078
+  L004F: Mesh = K2Node_DynamicCast_AsCharacter.self.Mesh
+  L0078: return
+
+## function GetTakeMontage  flags=0x1C420000
+  L0000: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(self.TakeMontagePreLoaded)
+  L001D: if not (CallFunc_IsValid_ReturnValue) goto L0043
+  L002B: Montage = self.TakeMontagePreLoaded
+  L003E: goto L010D
+  L0043: CallFunc_IsValidSoftObjectReference_ReturnValue = KismetSystemLibrary.IsValidSoftObjectReference(self.TakeMontage)
+  L0060: if not (CallFunc_IsValidSoftObjectReference_ReturnValue) goto L00F2
+  L006E: CallFunc_LoadAsset_Blocking_ReturnValue = KismetSystemLibrary.LoadAsset_Blocking(self.TakeMontage)
+  L008B: K2Node_DynamicCast_AsAnim_Montage = cast<AnimMontage>(CallFunc_LoadAsset_Blocking_ReturnValue)
+  L00AF: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsAnim_Montage
+  L00CC: if not (K2Node_DynamicCast_bSuccess) goto L0102
+  L00DA: Montage = K2Node_DynamicCast_AsAnim_Montage
+  L00ED: goto L010D
+  L00F2: Montage = null
+  L00FD: goto L010D
+  L0102: Montage = null
+  L010D: return
+
+## function InWaterTagChanged  flags=0x0C400000
+  L0000: frame.K2Node_CustomEvent_Tag = Tag
+  L0012: frame.K2Node_CustomEvent_TagCount = TagCount
+  L0024: BP_HandToolActor_Base_C.ExecuteUbergraph_BP_HandToolActor_Base(5323)
+  L0033: return
+
+## function OnAttachToCharacter  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_bAttach = bAttach
+  L0012: BP_HandToolActor_Base_C.ExecuteUbergraph_BP_HandToolActor_Base(4260)
+  L0021: return
+
+## function OnBlendOut_3C34A94A4484FC659AADA9A4D427E94A  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_NotifyName_1 = NotifyName
+  L0012: BP_HandToolActor_Base_C.ExecuteUbergraph_BP_HandToolActor_Base(696)
+  L0021: return
+
+## function OnBlendOut_9D6D290B4210F4A39BF0BD98BF216798  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_NotifyName_6 = NotifyName
+  L0012: BP_HandToolActor_Base_C.ExecuteUbergraph_BP_HandToolActor_Base(5884)
+  L0021: return
+
+## function OnCompleted_3C34A94A4484FC659AADA9A4D427E94A  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_NotifyName = NotifyName
+  L0012: BP_HandToolActor_Base_C.ExecuteUbergraph_BP_HandToolActor_Base(724)
+  L0021: return
+
+## function OnCompleted_9D6D290B4210F4A39BF0BD98BF216798  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_NotifyName_5 = NotifyName
+  L0012: BP_HandToolActor_Base_C.ExecuteUbergraph_BP_HandToolActor_Base(5586)
+  L0021: return
+
+## function OnInterrupted_3C34A94A4484FC659AADA9A4D427E94A  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_NotifyName_2 = NotifyName
+  L0012: BP_HandToolActor_Base_C.ExecuteUbergraph_BP_HandToolActor_Base(628)
+  L0021: return
+
+## function OnInterrupted_9D6D290B4210F4A39BF0BD98BF216798  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_NotifyName_7 = NotifyName
+  L0012: BP_HandToolActor_Base_C.ExecuteUbergraph_BP_HandToolActor_Base(5912)
+  L0021: return
+
+## function OnLoaded_6E27866C4C1DC4B22326AA91B39A4468  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Loaded = Loaded
+  L0012: BP_HandToolActor_Base_C.ExecuteUbergraph_BP_HandToolActor_Base(1051)
+  L0021: return
+
+## function OnLoaded_7D4E7A134FEE49E550370E8C50EEFCEB  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Loaded_1 = Loaded
+  L0012: BP_HandToolActor_Base_C.ExecuteUbergraph_BP_HandToolActor_Base(756)
+  L0021: return
+
+## function OnNotifyBegin_3C34A94A4484FC659AADA9A4D427E94A  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_NotifyName_3 = NotifyName
+  L0012: BP_HandToolActor_Base_C.ExecuteUbergraph_BP_HandToolActor_Base(533)
+  L0021: return
+
+## function OnNotifyBegin_9D6D290B4210F4A39BF0BD98BF216798  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_NotifyName_8 = NotifyName
+  L0012: BP_HandToolActor_Base_C.ExecuteUbergraph_BP_HandToolActor_Base(5944)
+  L0021: return
+
+## function OnNotifyEnd_3C34A94A4484FC659AADA9A4D427E94A  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_NotifyName_4 = NotifyName
+  L0012: BP_HandToolActor_Base_C.ExecuteUbergraph_BP_HandToolActor_Base(505)
+  L0021: return
+
+## function OnNotifyEnd_9D6D290B4210F4A39BF0BD98BF216798  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_NotifyName_9 = NotifyName
+  L0012: BP_HandToolActor_Base_C.ExecuteUbergraph_BP_HandToolActor_Base(5976)
+  L0021: return
+
+## function OnPreSave  flags=0x0C020800
+  L0000: BP_HandToolActor_Base_C.ExecuteUbergraph_BP_HandToolActor_Base(1540)
+  L000F: return
+
+## function OnSlotChanged_Event  flags=0x0C400000
+  L0000: frame.K2Node_CustomEvent_Identifier = Identifier
+  L0012: frame.K2Node_CustomEvent_Item = Item
+  L0024: frame.K2Node_CustomEvent_Slot = Slot
+  L0036: BP_HandToolActor_Base_C.ExecuteUbergraph_BP_HandToolActor_Base(4245)
+  L0045: return
+
+## function PostLoadInitialization  flags=0x0C020800
+  L0000: BP_HandToolActor_Base_C.ExecuteUbergraph_BP_HandToolActor_Base(5190)
+  L000F: return
+
+## function PostLoadInitializationBlank  flags=0x0C020800
+  L0000: BP_HandToolActor_Base_C.ExecuteUbergraph_BP_HandToolActor_Base(1541)
+  L000F: return
+
+## function ReceiveBeginPlay  flags=0x08080800
+  L0000: BP_HandToolActor_Base_C.ExecuteUbergraph_BP_HandToolActor_Base(4300)
+  L000F: return
+
+## function ReceiveEndPlay  flags=0x08080800
+  L0000: frame.K2Node_Event_EndPlayReason = EndPlayReason
+  L0012: BP_HandToolActor_Base_C.ExecuteUbergraph_BP_HandToolActor_Base(4666)
+  L0021: return
+
+## function TakeTool  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Interactor = Interactor
+  L0012: BP_HandToolActor_Base_C.ExecuteUbergraph_BP_HandToolActor_Base(1542)
+  L0021: return

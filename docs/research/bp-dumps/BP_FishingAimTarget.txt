@@ -1,0 +1,29 @@
+# /Game/Dreadmoor/Core/Features/Fishing/BP_FishingAimTarget
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/Fishing/BP_FishingAimTarget.uasset
+
+## imported packages (2)
+  /Engine/BasicShapes/Plane
+  /Game/Dreadmoor/Core/Features/Fishing/Materials/M_FishingAimTarget
+
+## exports (9)
+  [0] BP_FishingAimTarget_C : BlueprintGeneratedClass (outer None) super=DrdFishingAimTarget size=299
+  [1] Default__BP_FishingAimTarget_C : BP_FishingAimTarget_C (outer None) size=8
+  [4] DefaultSceneRoot_GEN_VARIABLE : SceneComponent (outer BP_FishingAimTarget_C) size=10
+  [5] SCS_Node_0 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Engine.SceneComponent, exp:DefaultSceneRoot_GEN_VARIABLE, exp:SCS_Node_2, name:DefaultSceneRoot
+  [6] SCS_Node_2 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:Plane_GEN_VARIABLE, name:Plane
+  [7] SimpleConstructionScript_0 : SimpleConstructionScript (outer BP_FishingAimTarget_C) size=30
+        refs: exp:SCS_Node_0, exp:SCS_Node_2, name:EntryPoint
+  [8] Plane_GEN_VARIABLE : StaticMeshComponent (outer BP_FishingAimTarget_C) size=79
+        refs: obj:/Engine/BasicShapes/Plane.<7f216a5c4b3d25b7>, obj:/Game/Dreadmoor/Core/Features/Fishing/Materials/M_FishingAimTarget.M_FishingAimTarget, name:NoCollision, name:Visibility, name:Camera
+
+## function ExecuteUbergraph_BP_FishingAimTarget  flags=0x00008001
+  L0000: goto computed(EntryPoint)
+  L000A: Actor.ReceiveActorBeginOverlap(K2Node_Event_OtherActor)
+  L001D: return
+
+## function ReceiveActorBeginOverlap  flags=0x08020800
+  L0000: frame.K2Node_Event_OtherActor = OtherActor
+  L0012: BP_FishingAimTarget_C.ExecuteUbergraph_BP_FishingAimTarget(10)
+  L0021: return

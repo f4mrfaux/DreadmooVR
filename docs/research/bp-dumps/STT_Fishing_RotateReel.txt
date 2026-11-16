@@ -1,0 +1,57 @@
+# /Game/Dreadmoor/Core/Features/Fishing/StateTree/STT_Fishing_RotateReel
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/Fishing/StateTree/STT_Fishing_RotateReel.uasset
+
+## imported packages (3)
+  /Game/Dreadmoor/Audio/SFX/Fishing/SCUE_Fishing_Spinning
+  /Game/Dreadmoor/Core/Features/Fishing/BP_FishingController
+  /Game/Dreadmoor/Core/Features/WaterFeatures/DeckTentacle/BP_DeckTentacleComponent
+
+## exports (6)
+  [0] STT_Fishing_RotateReel_C : BlueprintGeneratedClass (outer None) super=StateTreeTaskBlueprintBase size=325
+  [5] Default__STT_Fishing_RotateReel_C : STT_Fishing_RotateReel_C (outer None) size=8
+
+## function ExecuteUbergraph_STT_Fishing_RotateReel  flags=0x00808001
+  L0000: goto computed(EntryPoint)
+  L000A: StateTreeTaskBlueprintBase.ReceiveLatentEnterState(K2Node_Event_Transition_1)
+  L001D: CallFunc_SpawnSound2D_ReturnValue = Default__GameplayStatics.GameplayStatics.SpawnSound2D(self, SCUE_Fishing_Spinning, 0, 1, 0, null, false, true)
+  L0063: self.Reel = CallFunc_SpawnSound2D_ReturnValue
+  L0076: self.Reel.AudioComponent.SetUISound(false)
+  L0097: goto L030F
+  L009C: self.Reel.Stop()
+  L00C0: goto L030F
+  L00C5: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(self.Reel)
+  L00E2: if not (CallFunc_IsValid_ReturnValue) goto L030F
+  L00F0: CallFunc_SelectFloat_ReturnValue = SelectFloat(1, 0, self.Actor.self.bMousePressed)
+  L013D: CallFunc_FInterpTo_Current_ImplicitCast = self.Reel.self.VolumeMultiplier
+  L0170: CallFunc_FInterpTo_DeltaTime_ImplicitCast = K2Node_Event_DeltaTime
+  L018D: CallFunc_FInterpTo_ReturnValue = FInterpTo(CallFunc_FInterpTo_Current_ImplicitCast, CallFunc_SelectFloat_ReturnValue, CallFunc_FInterpTo_DeltaTime_ImplicitCast, 5)
+  L01CD: CallFunc_SetVolumeMultiplier_NewVolumeMultiplier_ImplicitCast = CallFunc_FInterpTo_ReturnValue
+  L01EA: self.Reel.AudioComponent.SetVolumeMultiplier(CallFunc_SetVolumeMultiplier_NewVolumeMultiplier_ImplicitCast)
+  L0213: self.Reel.AudioComponent.SetVolumeMultiplier(CallFunc_SetVolumeMultiplier_NewVolumeMultiplier_ImplicitCast)
+  L023C: goto L030F
+  L0241: CallFunc_IsValid_ReturnValue_1 = KismetSystemLibrary.IsValid(self.Reel)
+  L025E: if not (CallFunc_IsValid_ReturnValue_1) goto L030F
+  L026C: goto L009C
+  L0271: StateTreeTaskBlueprintBase.ReceiveExitState(K2Node_Event_Transition)
+  L0284: goto L0241
+  L0289: StateTreeTaskBlueprintBase.ReceiveLatentTick(K2Node_Event_DeltaTime)
+  L029C: if not (self.Actor.self.bMousePressed) goto L00C5
+  L02C0: CallFunc_RotateReel_Delta_ImplicitCast = K2Node_Event_DeltaTime
+  L02DD: self.Actor.RotateReel(CallFunc_RotateReel_Delta_ImplicitCast)
+  L030A: goto L00C5
+  L030F: return
+
+## function ReceiveExitState  flags=0x08420800
+  L0000: frame.K2Node_Event_Transition = Transition
+  L0012: STT_Fishing_RotateReel_C.ExecuteUbergraph_STT_Fishing_RotateReel(625)
+  L0021: return
+
+## function ReceiveLatentEnterState  flags=0x08420800
+  L0000: frame.K2Node_Event_Transition_1 = Transition
+  L0012: STT_Fishing_RotateReel_C.ExecuteUbergraph_STT_Fishing_RotateReel(10)
+  L0021: return
+
+## function ReceiveLatentTick  flags=0x08020800
+  L0000: frame.K2Node_Event_DeltaTime = DeltaTime
+  L0012: STT_Fishing_RotateReel_C.ExecuteUbergraph_STT_Fishing_RotateReel(649)
+  L0021: return

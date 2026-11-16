@@ -1,0 +1,1100 @@
+# /Game/Dreadmoor/UI/Fishing/WBP_FishingStruggle
+# file: Dreadmoor/Content/Dreadmoor/UI/Fishing/WBP_FishingStruggle.uasset
+
+## imported packages (52)
+  /Game/Dreadmoor/Core/Features/Fishing/BP_FishingController
+  /Game/Dreadmoor/Core/Features/WaterFeatures/DeckTentacle/BP_DeckTentacleComponent
+  /Game/Dreadmoor/Core/Input/Fishing/IA_Fishing_Cast
+  /Game/Dreadmoor/Core/Input/Fishing/IA_Fishing_Fight_Keyboard_Left
+  /Game/Dreadmoor/Core/Input/Fishing/IA_Fishing_Fight_Keyboard_Right
+  /Game/Dreadmoor/Localization/ST_UI
+  /Game/Dreadmoor/UI/Atlases/HotKeys/Frames/KeyGamepadStickLeft_RL
+  /Game/Dreadmoor/UI/Atlases/HotKeys/Frames/KeyGamepadStickRight_RL
+  /Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_AbilitySkillFishingLine001
+  /Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_AbilitySkillRodFishing001
+  /Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_FishCategoryBg001
+  /Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_FishStamina002_Active
+  /Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_FishStamina002_Default
+  /Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_FishStamina002_Minimum
+  /Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcArrowIndication001_Green
+  /Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcFishDistance003_Default
+  /Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcFishRodDirection001_Default
+  /Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcFishRodDirection001_NoOk
+  /Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcFishRodDirection001_Ok
+  /Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcFishingLCoil001
+  /Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcFishingLine002_Active
+  /Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcFishingLine002_Default
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_CircularWaveBg004
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_FishPwrBg001
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_IcAimPowerThrowIndicator001
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_IcFishRodDirectionArrow001_Default
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_IcFishRodDirectionArrow001_NoOk
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_IcFishRodDirectionArrow001_Ok
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_KeyCMB002
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_KeyMouseLeftRight002
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_PrbLineTensionBg001_01
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_PrbLineTensionBg001_02
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_PrbLineTensionBg001_Glow
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_PrbLineTensionBg001_GlowOk
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_PrbLineTensionBg002_Glow
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_PrbLineTensionIndicator001_Mask
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_PrbStaminaFishBg001
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_PrbStaminaFishBg002_Glow
+  /Game/Dreadmoor/UI/Common/WBP_InputHint
+  /Game/Dreadmoor/UI/Common/WBP_InputHintCirculated
+  /Game/Dreadmoor/UI/Fishing/WBP_Fishing_Slot
+  /Game/Dreadmoor/UI/Fishing/WBP_Fishing_Slots
+  /Game/Dreadmoor/UI/Fonts/Font_NotoSans
+  /Game/Dreadmoor/UI/Materials/MI_UI_RadialBar_FishStamina
+  /Game/Dreadmoor/UI/Materials/MI_UI_RadialBar_FishStaminaLag
+  /Game/Dreadmoor/UI/Materials/MT_FontBlurredOutline
+  /Game/Dreadmoor/UI/Textures/FishingQTE/T_Fishing_Struggle_Mockup
+  /Game/Dreadmoor/UI/Textures/T_BgFishingLine001
+  /Game/Dreadmoor/UI/Textures/T_PrbStaminaFishFull001
+  /Game/Dreadmoor/UI/Textures/T_PrbStaminaFishFull002
+  /Game/Dreadmoor/UI/Textures/T_PrbStaminaFishFull003_Mask
+  /Game/EasyOptionsMenu/EasyGameUI/Utilities/BPI_EGUI_HUDInterface
+
+## exports (297)
+  [0] CanvasPanel_24 : CanvasPanel (outer WidgetTree) size=34
+        refs: exp:CanvasPanelSlot_3, exp:CanvasPanelSlot_2, exp:CanvasPanelSlot_13, exp:CanvasPanelSlot_11, exp:CanvasPanelSlot_6, name:ArgumentValueGender
+  [1] CanvasPanel_Immersive : CanvasPanel (outer WidgetTree) size=29
+        refs: exp:CanvasPanelSlot_11, exp:CanvasPanelSlot_0, exp:CanvasPanelSlot_2, exp:CanvasPanelSlot_3
+  [2] CanvasPanelSlot_11 : CanvasPanelSlot (outer CanvasPanel_24) size=39
+        refs: exp:CanvasPanelSlot_11, exp:Image_2
+  [3] CanvasPanelSlot_13 : CanvasPanelSlot (outer CanvasPanel_24) size=79
+        refs: exp:CanvasPanelSlot_2, exp:Image_2, exp:SizeBox_1, name:HorizontalBoxSlot
+  [4] CanvasPanelSlot_2 : CanvasPanelSlot (outer CanvasPanel_24) size=39
+        refs: exp:CanvasPanelSlot_11, exp:Image_2, name:CatchDistance
+  [5] CanvasPanelSlot_3 : CanvasPanelSlot (outer CanvasPanel_24) size=69
+        refs: exp:CanvasPanelSlot_2, exp:Image_2, exp:SizeBox_1, name:CallFunc_NotEqual_ByteByte_ReturnValue
+  [6] CanvasPanelSlot_6 : CanvasPanelSlot (outer CanvasPanel_24) size=75
+        refs: exp:CanvasPanelSlot_2, exp:Image_2, exp:SizeBox_1, name:Temp_bool_Variable
+  [7] CanvasPanelSlot_7 : CanvasPanelSlot (outer CanvasPanel_24) size=75
+        refs: exp:CanvasPanelSlot_2, exp:Image_2, name:CallFunc_Greater_IntInt_ReturnValue, exp:SizeBox_1, name:MovieSceneByteTrack
+  [8] CanvasPanelSlot_0 : CanvasPanelSlot (outer CanvasPanel_Immersive) size=75
+        refs: exp:CanvasPanelSlot_2, exp:Image_2, name:CallFunc_Format_ReturnValue
+  [9] CanvasPanelSlot_2 : CanvasPanelSlot (outer CanvasPanel_Immersive) size=75
+        refs: exp:CanvasPanelSlot_2, exp:Image_2, name:Pull_INST
+  [10] CanvasPanelSlot_3 : CanvasPanelSlot (outer CanvasPanel_Immersive) size=75
+        refs: exp:CanvasPanelSlot_2, exp:Image_2, name:Temp_byte_Variable
+  [40] HorizontalBox_0 : HorizontalBox (outer WidgetTree) size=34
+        refs: exp:CanvasPanelSlot_2, exp:HorizontalBoxSlot_1, exp:HorizontalBoxSlot_3, exp:HorizontalBoxSlot_5, exp:HorizontalBoxSlot_4, exp:HorizontalBoxSlot_2, name:Image_Tension_Back_Bad
+  [41] HorizontalBox_1 : HorizontalBox (outer WidgetTree) size=22
+        refs: exp:HorizontalBoxSlot_2, exp:HorizontalBoxSlot_3, name:StaminaAppearance_INST
+  [42] HorizontalBox_Block : HorizontalBox (outer WidgetTree) size=37
+        refs: exp:CanvasPanelSlot_2, exp:HorizontalBoxSlot_0, exp:HorizontalBoxSlot_4, exp:HorizontalBoxSlot_7, exp:HorizontalBoxSlot_3, exp:HorizontalBoxSlot_5, exp:CanvasPanelSlot_0
+  [43] HorizontalBox_PullHint : HorizontalBox (outer WidgetTree) size=32
+        refs: exp:CanvasPanelSlot_11, exp:HorizontalBoxSlot_0, exp:HorizontalBoxSlot_4, exp:HorizontalBoxSlot_3, exp:VerticalBoxSlot_1, exp:SizeBox_1
+  [44] HorizontalBoxSlot_1 : HorizontalBoxSlot (outer HorizontalBox_0) size=14
+        refs: exp:HorizontalBox_0, name:SizeBoxSlot
+  [45] HorizontalBoxSlot_2 : HorizontalBoxSlot (outer HorizontalBox_0) size=16
+        refs: exp:HorizontalBox_0, name:MovieSceneByteSection
+  [46] HorizontalBoxSlot_3 : HorizontalBoxSlot (outer HorizontalBox_0) size=16
+        refs: exp:HorizontalBox_0, name:Danger_INST
+  [47] HorizontalBoxSlot_4 : HorizontalBoxSlot (outer HorizontalBox_0) size=16
+        refs: exp:HorizontalBox_0, name:CallFunc_Greater_IntInt_ReturnValue
+  [48] HorizontalBoxSlot_5 : HorizontalBoxSlot (outer HorizontalBox_0) size=16
+        refs: exp:HorizontalBox_0, name:MovieScene2DTransformTrack
+  [49] HorizontalBoxSlot_2 : HorizontalBoxSlot (outer HorizontalBox_1) size=14
+        refs: exp:HorizontalBox_1, name:SizeBox
+  [50] HorizontalBoxSlot_3 : HorizontalBoxSlot (outer HorizontalBox_1) size=14
+        refs: exp:HorizontalBox_1, name:PanelSlot
+  [51] HorizontalBoxSlot_0 : HorizontalBoxSlot (outer HorizontalBox_Block) size=14
+        refs: exp:HorizontalBox_Block, name:TensionThreshold
+  [52] HorizontalBoxSlot_3 : HorizontalBoxSlot (outer HorizontalBox_Block) size=14
+        refs: exp:HorizontalBox_Block, name:TextProperty
+  [53] HorizontalBoxSlot_4 : HorizontalBoxSlot (outer HorizontalBox_Block) size=15
+        refs: exp:HorizontalBox_Block, name:TextBlock_Distance
+  [54] HorizontalBoxSlot_5 : HorizontalBoxSlot (outer HorizontalBox_Block) size=15
+        refs: exp:HorizontalBox_Block, name:Tick
+  [55] HorizontalBoxSlot_7 : HorizontalBoxSlot (outer HorizontalBox_Block) size=14
+        refs: exp:HorizontalBox_Block, name:Image_Tension_Back_Good
+  [56] HorizontalBoxSlot_0 : HorizontalBoxSlot (outer HorizontalBox_PullHint) size=15
+        refs: exp:HorizontalBox_PullHint, name:EaseInFunction
+  [57] HorizontalBoxSlot_3 : HorizontalBoxSlot (outer HorizontalBox_PullHint) size=15
+        refs: exp:HorizontalBox_PullHint, name:MovieScene2DTransformSection
+  [58] HorizontalBoxSlot_4 : HorizontalBoxSlot (outer HorizontalBox_PullHint) size=14
+        refs: exp:HorizontalBox_PullHint, name:Spacer
+  [59] Image : Image (outer WidgetTree) size=32
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_FishCategoryBg001.SPR_FishCategoryBg001, name:UpdateStaminaLag
+  [60] Image_1 : Image (outer WidgetTree) size=32
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_FishCategoryBg001.SPR_FishCategoryBg001, name:WBP_InputHintCirculated_Pull
+  [61] Image_136 : Image (outer WidgetTree) size=29
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_KeyMouseLeftRight002.SPR_KeyMouseLeftRight002, name:Stamina_INST
+  [62] Image_2 : Image (outer WidgetTree) size=32
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_KeyCMB002.SPR_KeyCMB002, exp:HorizontalBoxSlot_4
+  [63] Image_5 : Image (outer WidgetTree) size=52
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_FishPwrBg001.SPR_FishPwrBg001, exp:OverlaySlot_2, name:AbilitySystem, exp:Image_5
+  [64] Image_94 : Image (outer WidgetTree) size=32
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcFishDistance003_Default.SPR_IcFishDistance003_Default, name:UberGraphFrame
+  [65] Image_Coil : Image (outer WidgetTree) size=32
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcFishingLCoil001.SPR_IcFishingLCoil001, name:UpdateFishingSettings
+  [66] Image_Danger_Wave_1 : Image (outer WidgetTree) size=52
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_PrbLineTensionBg002_Glow.SPR_PrbLineTensionBg002_Glow, exp:OverlaySlot_2, exp:CanvasPanelSlot_11, name:CallFunc_GreaterEqual_DoubleDouble_ReturnValue, exp:SizeBox_0
+  [67] Image_Danger_Wave_2 : Image (outer WidgetTree) size=52
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_PrbLineTensionBg002_Glow.SPR_PrbLineTensionBg002_Glow, exp:OverlaySlot_3, exp:CanvasPanelSlot_11, name:CallFunc_GreaterEqual_DoubleDouble_ReturnValue, exp:SizeBox_0
+  [68] Image_Direction : Image (outer WidgetTree) size=29
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcFishRodDirection001_Default.SPR_IcFishRodDirection001_Default, name:UpdateDirection
+  [69] Image_Direction_Left : Image (outer WidgetTree) size=49
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_IcFishRodDirectionArrow001_Default.SPR_IcFishRodDirectionArrow001_Default, exp:WidgetSwitcherSlot_2, exp:CanvasPanelSlot_11, exp:MovieSceneColorSection_0, exp:Image_5
+  [70] Image_Direction_Right : Image (outer WidgetTree) size=65
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_IcFishRodDirectionArrow001_Default.SPR_IcFishRodDirectionArrow001_Default, exp:WidgetSwitcherSlot_4, exp:CanvasPanelSlot_2, exp:Image_5, exp:MovieSceneColorSection_0, exp:Image_2
+  [71] Image_Mockup : Image (outer WidgetTree) size=35
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Textures/FishingQTE/T_Fishing_Struggle_Mockup.T_Fishing_Struggle_Mockup, exp:CanvasPanelSlot_3, exp:SizeBox_0
+  [72] Image_Reel : Image (outer WidgetTree) size=29
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcFishingLine002_Default.SPR_IcFishingLine002_Default, name:WaveImage2
+  [73] Image_Stamina : Image (outer WidgetTree) size=65
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Materials/MI_UI_RadialBar_FishStamina.MI_UI_RadialBar_FishStamina, exp:OverlaySlot_2, exp:CanvasPanelSlot_2, name:CallFunc_GreaterEqual_DoubleDouble_ReturnValue, exp:Image_2
+  [74] Image_Stamina_Back : Image (outer WidgetTree) size=29
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_PrbStaminaFishBg001.SPR_PrbStaminaFishBg001, name:UpdateInputType
+  [75] Image_Stamina_Icon : Image (outer WidgetTree) size=29
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_FishStamina002_Default.SPR_FishStamina002_Default, name:UpdateStamina
+  [76] Image_Stamina_Lag : Image (outer WidgetTree) size=65
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Materials/MI_UI_RadialBar_FishStaminaLag.MI_UI_RadialBar_FishStaminaLag, exp:OverlaySlot_3, exp:CanvasPanelSlot_2, name:CallFunc_GreaterEqual_DoubleDouble_ReturnValue, exp:Image_2
+  [77] Image_Stamina_Thumb : Image (outer WidgetTree) size=58
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_IcAimPowerThrowIndicator001.SPR_IcAimPowerThrowIndicator001, exp:OverlaySlot_4, exp:CanvasPanelSlot_11, exp:MovieSceneColorSection_0, exp:Image_Coil
+  [78] Image_StaminaReducingIcon : Image (outer WidgetTree) size=58
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcArrowIndication001_Green.SPR_IcArrowIndication001_Green, exp:OverlaySlot_5, name:AbilitySystem
+  [79] Image_Tension : Image (outer WidgetTree) size=49
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_PrbLineTensionBg001_02.SPR_PrbLineTensionBg001_02, exp:OverlaySlot_1, exp:CanvasPanelSlot_11, name:CallFunc_GreaterEqual_DoubleDouble_ReturnValue
+  [80] Image_Tension_Back : Image (outer WidgetTree) size=32
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_PrbLineTensionBg001_01.SPR_PrbLineTensionBg001_01, exp:WidgetSwitcherSlot_0
+  [81] Image_Tension_Back_Bad : Image (outer WidgetTree) size=52
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_PrbLineTensionBg001_Glow.SPR_PrbLineTensionBg001_Glow, exp:WidgetSwitcherSlot_1, exp:CanvasPanelSlot_11, exp:Image_2
+  [82] Image_Tension_Back_Good : Image (outer WidgetTree) size=52
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_PrbLineTensionBg001_GlowOk.SPR_PrbLineTensionBg001_GlowOk, exp:WidgetSwitcherSlot_2, exp:CanvasPanelSlot_11, exp:Image_2
+  [83] Image_Tension_Thumb : Image (outer WidgetTree) size=49
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_PrbLineTensionIndicator001_Mask.SPR_PrbLineTensionIndicator001_Mask, exp:OverlaySlot_3, exp:Image_5
+  [84] Image_TenstionRestoreIcon : Image (outer WidgetTree) size=58
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcArrowIndication001_Green.SPR_IcArrowIndication001_Green, exp:OverlaySlot_1, name:AbilitySystem
+  [85] Image_TenstionVignette : Image (outer WidgetTree) size=32
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Textures/T_BgFishingLine001.T_BgFishingLine001, exp:CanvasPanelSlot_2
+  [86] Wave_Stamina_1 : Image (outer WidgetTree) size=32
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_CircularWaveBg004.SPR_CircularWaveBg004, name:UpdateTenstionRestoring
+  [87] Wave_Stamina_2 : Image (outer WidgetTree) size=32
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_CircularWaveBg004.SPR_CircularWaveBg004, name:Value
+  [88] Wave_Tenstion_1 : Image (outer WidgetTree) size=32
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_CircularWaveBg004.SPR_CircularWaveBg004, name:WidgetSwitcher_TensionBack
+  [89] Wave_Tenstion_2 : Image (outer WidgetTree) size=32
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_CircularWaveBg004.SPR_CircularWaveBg004, name:CanvasPanel
+  [90] WaveImage1 : Image (outer WidgetTree) size=32
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_CircularWaveBg004.SPR_CircularWaveBg004, name:UpdateDistance
+  [91] WaveImage2 : Image (outer WidgetTree) size=32
+        refs: exp:SizeBoxSlot_0, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_CircularWaveBg004.SPR_CircularWaveBg004, name:UpdateDrag
+  [92] Danger : MovieScene (outer Danger_INST) size=483
+        refs: exp:CanvasPanelSlot_13, exp:RefreshControlHint, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_PrbLineTensionBg001_01.SPR_PrbLineTensionBg001_01, exp:SwitchExhausted, exp:MovieSceneColorTrack_2, exp:MovieScene2DTransformTrack_5, exp:SizeBox_0, exp:MovieScene2DTransformTrack_3, exp:MovieScene2DTransformTrack_4, exp:MovieSceneColorTrack_3, exp:CanvasPanelSlot_2, exp:MovieScene2DTransformTrack_0, exp:Stamina_INST, exp:Image_Stamina_Icon
+  [93] Pull : MovieScene (outer Pull_INST) size=324
+        refs: exp:CanvasPanelSlot_11, exp:CanvasPanelSlot_13, exp:CanvasPanelSlot_3, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_PrbLineTensionBg001_01.SPR_PrbLineTensionBg001_01, exp:MovieScene2DTransformTrack_3, exp:MovieSceneColorTrack_2, exp:MovieSceneColorTrack_3, exp:MovieScene2DTransformTrack_4, exp:SizeBox_0, exp:MovieScene2DTransformTrack_1, exp:OverlaySlot_3, exp:RefreshControlHint, exp:EaseOutFunction
+  [94] Reducing : MovieScene (outer Reducing_INST) size=252
+        refs: exp:CanvasPanelSlot_13, exp:BP_OnDeactivated, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_PrbLineTensionBg001_01.SPR_PrbLineTensionBg001_01, exp:MovieScene2DTransformTrack_0, exp:MovieSceneColorTrack_0, exp:MovieSceneColorTrack_1, exp:MovieScene2DTransformTrack_1, exp:Stamina_INST, exp:RefreshControlHint, exp:Overlay_StaminaWaves
+  [95] Restoring : MovieScene (outer Restoring_INST) size=266
+        refs: exp:CanvasPanelSlot_13, exp:ExecuteUbergraph_WBP_FishingStruggle, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_PrbLineTensionBg001_01.SPR_PrbLineTensionBg001_01, exp:SetupVisibility, exp:MovieSceneColorTrack_1, exp:MovieScene2DTransformTrack_1, exp:MovieScene2DTransformTrack_0, exp:MovieSceneColorTrack_0, exp:Stamina_INST, exp:RefreshControlHint, exp:Image_Stamina_Lag
+  [96] Stamina : MovieScene (outer Stamina_INST) size=158
+        refs: exp:SizeBoxSlot_0, exp:CanvasPanelSlot_13, exp:RefreshControlHint, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_PrbLineTensionBg001_01.SPR_PrbLineTensionBg001_01, exp:SizeBox_0, exp:MovieScene2DTransformTrack_0, exp:OverlaySlot_3, exp:MovieScene2DTransformTrack_5
+  [97] StaminaAppearance : MovieScene (outer StaminaAppearance_INST) size=570
+        refs: exp:CanvasPanelSlot_2, exp:CanvasPanelSlot_13, exp:BP_OnDeactivated, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_PrbLineTensionBg001_01.SPR_PrbLineTensionBg001_01, exp:SetupVisibility, exp:RefreshControlHint, exp:IsSameDirection, exp:MovieSceneColorTrack_0, exp:MovieScene2DTransformTrack_3, exp:SizeBox_0, exp:MovieSceneByteTrack_0, exp:MovieScene2DTransformTrack_1, exp:MovieScene2DTransformTrack_2, exp:MovieSceneColorTrack_1, exp:MovieScene2DTransformTrack_0, exp:Stamina_INST, exp:FishExhaustionChanged
+  [98] MovieScene2DTransformSection_0 : MovieScene2DTransformSection (outer MovieScene2DTransformTrack_0) size=1114
+        refs: exp:CanvasPanelSlot_13, exp:UpdateDirection, name:HorizontalBox, name:bDrag, name:SetActiveWidgetIndex, name:CallFunc_GreaterEqual_DoubleDouble_ReturnValue, name:CallFunc_Greater_IntInt_ReturnValue, exp:EaseInFunction, exp:EaseOutFunction, exp:CanvasPanelSlot_7
+  [99] MovieScene2DTransformSection_0 : MovieScene2DTransformSection (outer MovieScene2DTransformTrack_3) size=1082
+        refs: exp:CanvasPanelSlot_13, exp:UpdateDirection, name:HorizontalBox, name:ArgumentValueFloat, exp:CanvasPanelSlot_6, name:CallFunc_Greater_IntInt_ReturnValue, exp:EaseInFunction, exp:EaseOutFunction, exp:Image_Coil
+  [100] MovieScene2DTransformSection_0 : MovieScene2DTransformSection (outer MovieScene2DTransformTrack_4) size=252
+        refs: exp:CanvasPanelSlot_13, exp:UpdateDirection, name:CallFunc_Greater_IntInt_ReturnValue, name:HorizontalBox, exp:EaseInFunction, exp:EaseOutFunction, exp:Image_136
+  [101] MovieScene2DTransformSection_0 : MovieScene2DTransformSection (outer MovieScene2DTransformTrack_5) size=252
+        refs: exp:CanvasPanelSlot_13, exp:UpdateDirection, name:CallFunc_Greater_IntInt_ReturnValue, name:HorizontalBox, exp:EaseInFunction, exp:EaseOutFunction
+  [102] MovieScene2DTransformSection_0 : MovieScene2DTransformSection (outer MovieScene2DTransformTrack_1) size=570
+        refs: exp:CanvasPanelSlot_13, exp:UpdateDirection, name:HorizontalBox, name:CallFunc_GetSettingValue_bOut, name:CallFunc_Greater_IntInt_ReturnValue, exp:EaseInFunction, exp:EaseOutFunction, exp:OverlaySlot_0
+  [103] MovieScene2DTransformSection_0 : MovieScene2DTransformSection (outer MovieScene2DTransformTrack_3) size=252
+        refs: exp:CanvasPanelSlot_13, exp:UpdateDirection, name:CallFunc_Greater_IntInt_ReturnValue, name:HorizontalBox, exp:EaseInFunction, exp:EaseOutFunction
+  [104] MovieScene2DTransformSection_0 : MovieScene2DTransformSection (outer MovieScene2DTransformTrack_4) size=252
+        refs: exp:CanvasPanelSlot_13, exp:UpdateDirection, name:CallFunc_Greater_IntInt_ReturnValue, name:HorizontalBox, exp:EaseInFunction, exp:EaseOutFunction, exp:Wave_Stamina_1
+  [105] MovieScene2DTransformSection_0 : MovieScene2DTransformSection (outer MovieScene2DTransformTrack_0) size=252
+        refs: exp:CanvasPanelSlot_13, exp:UpdateDirection, name:CallFunc_Greater_IntInt_ReturnValue, name:HorizontalBox, exp:EaseInFunction, exp:EaseOutFunction, exp:UpdateQTEStamina
+  [106] MovieScene2DTransformSection_0 : MovieScene2DTransformSection (outer MovieScene2DTransformTrack_1) size=252
+        refs: exp:CanvasPanelSlot_13, exp:UpdateDirection, name:CallFunc_Greater_IntInt_ReturnValue, name:HorizontalBox, exp:EaseInFunction, exp:EaseOutFunction
+  [107] MovieScene2DTransformSection_0 : MovieScene2DTransformSection (outer MovieScene2DTransformTrack_0) size=252
+        refs: exp:CanvasPanelSlot_13, exp:UpdateDirection, name:CallFunc_Greater_IntInt_ReturnValue, name:HorizontalBox, exp:EaseInFunction, exp:EaseOutFunction, exp:UpdateQTEStamina
+  [108] MovieScene2DTransformSection_0 : MovieScene2DTransformSection (outer MovieScene2DTransformTrack_1) size=252
+        refs: exp:CanvasPanelSlot_13, exp:UpdateDirection, name:CallFunc_Greater_IntInt_ReturnValue, name:HorizontalBox, exp:EaseInFunction, exp:EaseOutFunction
+  [109] MovieScene2DTransformSection_0 : MovieScene2DTransformSection (outer MovieScene2DTransformTrack_0) size=2778
+        refs: exp:CanvasPanelSlot_13, name:ArrayProperty, exp:UpdateDirection, exp:CanvasPanelSlot_3, exp:Image_94, name:ReelTime, name:RefreshControlHint, name:Reducing, name:CallFunc_GetOwningPlayer_ReturnValue, name:CallFunc_GetOwningPlayerPawn_ReturnValue, name:CallFunc_GetSettingValue_bOut, name:HorizontalBox, exp:Image_Coil, name:CallFunc_Greater_IntInt_ReturnValue, exp:EaseInFunction, exp:EaseOutFunction, exp:MovieScene2DTransformSection_0
+  [110] MovieScene2DTransformSection_0 : MovieScene2DTransformSection (outer MovieScene2DTransformTrack_0) size=986
+        refs: exp:CanvasPanelSlot_13, name:AbilitySystem, exp:UpdateDirection, name:HorizontalBox, exp:CanvasPanelSlot_11, name:CallFunc_Greater_IntInt_ReturnValue, exp:EaseInFunction, exp:EaseOutFunction, exp:FishExhaustionChanged
+  [111] MovieScene2DTransformSection_0 : MovieScene2DTransformSection (outer MovieScene2DTransformTrack_1) size=986
+        refs: exp:CanvasPanelSlot_13, name:AbilitySystem, exp:UpdateDirection, exp:CanvasPanelSlot_11, name:SetBrushFromAtlasInterface, name:HorizontalBox, name:CallFunc_Greater_IntInt_ReturnValue, exp:EaseInFunction, exp:EaseOutFunction, exp:UpdateTenstion
+  [112] MovieScene2DTransformSection_0 : MovieScene2DTransformSection (outer MovieScene2DTransformTrack_2) size=252
+        refs: exp:CanvasPanelSlot_13, exp:UpdateDirection, name:CallFunc_Greater_IntInt_ReturnValue, name:HorizontalBox, exp:EaseInFunction, exp:EaseOutFunction, exp:RefreshControlHint
+  [113] MovieScene2DTransformSection_0 : MovieScene2DTransformSection (outer MovieScene2DTransformTrack_3) size=252
+        refs: exp:CanvasPanelSlot_13, exp:UpdateDirection, name:CallFunc_Greater_IntInt_ReturnValue, name:HorizontalBox, exp:EaseInFunction, exp:EaseOutFunction, exp:HorizontalBoxSlot_4
+  [114] MovieScene2DTransformTrack_0 : MovieScene2DTransformTrack (outer Danger) size=102
+        refs: name:RenderTransform, exp:SizeBox_1, exp:MovieScene2DTransformSection_0, exp:SizeBoxSlot_0, exp:Spacer_72, exp:Stamina_INST, exp:MovieScene2DTransformTrack_0
+  [115] MovieScene2DTransformTrack_3 : MovieScene2DTransformTrack (outer Danger) size=102
+        refs: name:RenderTransform, exp:SizeBox_1, exp:MovieScene2DTransformSection_0, exp:SizeBoxSlot_0, exp:Spacer_72, exp:Stamina_INST, exp:OverlaySlot_2
+  [116] MovieScene2DTransformTrack_4 : MovieScene2DTransformTrack (outer Danger) size=102
+        refs: name:RenderTransform, exp:SizeBox_1, exp:MovieScene2DTransformSection_0, exp:SizeBoxSlot_0, exp:Spacer_72, exp:Stamina_INST
+  [117] MovieScene2DTransformTrack_5 : MovieScene2DTransformTrack (outer Danger) size=102
+        refs: name:RenderTransform, exp:SizeBox_1, exp:MovieScene2DTransformSection_0, exp:SizeBoxSlot_0, exp:Spacer_72, exp:Stamina_INST, exp:CompiledData
+  [118] MovieScene2DTransformTrack_1 : MovieScene2DTransformTrack (outer Pull) size=102
+        refs: name:RenderTransform, exp:SizeBox_1, exp:MovieScene2DTransformSection_0, exp:SizeBoxSlot_0, exp:Spacer_72, exp:OverlaySlot_3, exp:EaseInFunction
+  [119] MovieScene2DTransformTrack_3 : MovieScene2DTransformTrack (outer Pull) size=102
+        refs: name:RenderTransform, exp:SizeBox_1, exp:MovieScene2DTransformSection_0, exp:SizeBoxSlot_0, exp:Spacer_72, exp:MovieSceneColorTrack_2, exp:Reducing
+  [120] MovieScene2DTransformTrack_4 : MovieScene2DTransformTrack (outer Pull) size=102
+        refs: name:RenderTransform, exp:SizeBox_1, exp:MovieScene2DTransformSection_0, exp:SizeBoxSlot_0, exp:Spacer_72, exp:OverlaySlot_3, exp:MovieScene2DTransformTrack_0
+  [121] MovieScene2DTransformTrack_0 : MovieScene2DTransformTrack (outer Reducing) size=102
+        refs: name:RenderTransform, exp:SizeBox_1, exp:MovieScene2DTransformSection_0, exp:SizeBoxSlot_0, exp:Spacer_72, exp:OverlaySlot_0, exp:CanvasPanelSlot_13
+  [122] MovieScene2DTransformTrack_1 : MovieScene2DTransformTrack (outer Reducing) size=102
+        refs: name:RenderTransform, exp:SizeBox_1, exp:MovieScene2DTransformSection_0, exp:SizeBoxSlot_0, exp:Spacer_72, exp:Stamina_INST, exp:MovieSceneColorTrack_3
+  [123] MovieScene2DTransformTrack_0 : MovieScene2DTransformTrack (outer Restoring) size=102
+        refs: name:RenderTransform, exp:SizeBox_1, exp:MovieScene2DTransformSection_0, exp:SizeBoxSlot_0, exp:Spacer_72, exp:OverlaySlot_0, exp:MovieScene2DTransformTrack_3
+  [124] MovieScene2DTransformTrack_1 : MovieScene2DTransformTrack (outer Restoring) size=102
+        refs: name:RenderTransform, exp:SizeBox_1, exp:MovieScene2DTransformSection_0, exp:SizeBoxSlot_0, exp:Spacer_72, exp:Stamina_INST, exp:EaseInFunction
+  [125] MovieScene2DTransformTrack_0 : MovieScene2DTransformTrack (outer Stamina) size=102
+        refs: name:RenderTransform, exp:SizeBox_1, exp:MovieScene2DTransformSection_0, exp:SizeBoxSlot_0, exp:Spacer_72, exp:OverlaySlot_3, exp:Image_Mockup
+  [126] MovieScene2DTransformTrack_0 : MovieScene2DTransformTrack (outer StaminaAppearance) size=102
+        refs: name:RenderTransform, exp:SizeBox_1, exp:MovieScene2DTransformSection_0, exp:SizeBoxSlot_0, exp:Spacer_72, exp:Stamina_INST, exp:MovieSceneColorSection_0
+  [127] MovieScene2DTransformTrack_1 : MovieScene2DTransformTrack (outer StaminaAppearance) size=102
+        refs: name:RenderTransform, exp:SizeBox_1, exp:MovieScene2DTransformSection_0, exp:SizeBoxSlot_0, exp:Spacer_72, exp:Stamina_INST, exp:UnbindStickLayoutHint
+  [128] MovieScene2DTransformTrack_2 : MovieScene2DTransformTrack (outer StaminaAppearance) size=102
+        refs: name:RenderTransform, exp:SizeBox_1, exp:MovieScene2DTransformSection_0, exp:SizeBoxSlot_0, exp:Spacer_72, exp:OverlaySlot_0, exp:WaveImage1
+  [129] MovieScene2DTransformTrack_3 : MovieScene2DTransformTrack (outer StaminaAppearance) size=102
+        refs: name:RenderTransform, exp:SizeBox_1, exp:MovieScene2DTransformSection_0, exp:SizeBoxSlot_0, exp:Spacer_72, exp:Stamina_INST, exp:EaseOutFunction
+  [130] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [131] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [132] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [133] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [134] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [135] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [136] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [137] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [138] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+        refs: exp:SizeBox_1
+  [139] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+        refs: exp:SizeBox_1
+  [140] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+        refs: exp:SizeBox_1
+  [141] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+        refs: exp:SizeBox_1
+  [142] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [143] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [144] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [145] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [146] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [147] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [148] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+        refs: exp:SizeBox_1
+  [149] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+        refs: exp:SizeBox_1
+  [150] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+        refs: exp:SizeBox_1
+  [151] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+        refs: exp:SizeBox_1
+  [152] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [153] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [154] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [155] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [156] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+        refs: exp:SizeBox_1
+  [157] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+        refs: exp:SizeBox_1
+  [158] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+        refs: exp:SizeBox_1
+  [159] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+        refs: exp:SizeBox_1
+  [160] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [161] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [162] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [163] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [164] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+        refs: exp:SizeBox_1
+  [165] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+        refs: exp:SizeBox_1
+  [166] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+        refs: exp:SizeBox_1
+  [167] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+        refs: exp:SizeBox_1
+  [168] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [169] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [170] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [171] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [172] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [173] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [174] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [175] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [176] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [177] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+        refs: exp:SizeBox_1
+  [178] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneByteSection_0) size=6
+        refs: exp:SizeBox_1
+  [179] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneByteSection_0) size=6
+        refs: exp:SizeBox_1
+  [180] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+        refs: exp:SizeBox_1
+  [181] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+        refs: exp:SizeBox_1
+  [182] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+        refs: exp:SizeBox_1
+  [183] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+        refs: exp:SizeBox_1
+  [184] MovieSceneByteSection_0 : MovieSceneByteSection (outer MovieSceneByteTrack_0) size=74
+        refs: obj:/Script/UMG.ESlateVisibility, exp:EaseInFunction, exp:EaseOutFunction, exp:OverlaySlot_0
+  [185] MovieSceneByteTrack_0 : MovieSceneByteTrack (outer StaminaAppearance) size=108
+        refs: obj:/Script/UMG.ESlateVisibility, name:Visibility, exp:SizeBox_1, exp:MovieSceneByteSection_0, exp:SizeBoxSlot_0, exp:Spacer_72, exp:VerticalBoxSlot_1, exp:MovieSceneColorSection_0
+  [186] MovieSceneColorSection_0 : MovieSceneColorSection (outer MovieSceneColorTrack_2) size=360
+        refs: name:ArgumentName, name:bReelIn, name:HorizontalBox, exp:CanvasPanelSlot_13, exp:UpdateDirection, name:CallFunc_Greater_IntInt_ReturnValue, exp:SizeBox_0, exp:CanvasPanelSlot_11, exp:EaseInFunction, exp:EaseOutFunction, exp:HorizontalBoxSlot_0
+  [187] MovieSceneColorSection_0 : MovieSceneColorSection (outer MovieSceneColorTrack_3) size=360
+        refs: name:ArgumentName, name:bReelIn, name:HorizontalBox, exp:CanvasPanelSlot_13, exp:UpdateDirection, name:CallFunc_Greater_IntInt_ReturnValue, exp:SizeBox_0, name:AbilitySystem, exp:CanvasPanelSlot_11, exp:EaseInFunction, exp:EaseOutFunction, exp:IsSameDirection
+  [188] MovieSceneColorSection_0 : MovieSceneColorSection (outer MovieSceneColorTrack_2) size=360
+        refs: name:ArgumentName, name:bReelIn, name:HorizontalBox, exp:CanvasPanelSlot_13, exp:UpdateDirection, name:CallFunc_Greater_IntInt_ReturnValue, exp:SizeBox_0, name:AbilitySystem, exp:CanvasPanelSlot_11, exp:EaseInFunction, exp:EaseOutFunction, exp:FishExhaustionChanged
+  [189] MovieSceneColorSection_0 : MovieSceneColorSection (outer MovieSceneColorTrack_3) size=360
+        refs: name:ArgumentName, name:bReelIn, name:HorizontalBox, exp:CanvasPanelSlot_13, exp:UpdateDirection, name:CallFunc_Greater_IntInt_ReturnValue, exp:SizeBox_0, exp:CanvasPanelSlot_11, exp:EaseInFunction, exp:EaseOutFunction, exp:MovieSceneColorTrack_1
+  [190] MovieSceneColorSection_0 : MovieSceneColorSection (outer MovieSceneColorTrack_0) size=360
+        refs: name:ArgumentName, name:bReelIn, name:HorizontalBox, exp:CanvasPanelSlot_13, exp:UpdateDirection, name:CallFunc_Greater_IntInt_ReturnValue, exp:SizeBox_0, name:AbilitySystem, exp:CanvasPanelSlot_11, exp:EaseInFunction, exp:EaseOutFunction, exp:HorizontalBoxSlot_1
+  [191] MovieSceneColorSection_0 : MovieSceneColorSection (outer MovieSceneColorTrack_1) size=360
+        refs: name:ArgumentName, name:bReelIn, name:HorizontalBox, exp:CanvasPanelSlot_13, exp:UpdateDirection, name:CallFunc_Greater_IntInt_ReturnValue, exp:SizeBox_0, exp:CanvasPanelSlot_11, exp:EaseInFunction, exp:EaseOutFunction, exp:Wave_Tenstion_2
+  [192] MovieSceneColorSection_0 : MovieSceneColorSection (outer MovieSceneColorTrack_0) size=360
+        refs: name:ArgumentName, name:bReelIn, name:HorizontalBox, exp:CanvasPanelSlot_13, exp:UpdateDirection, name:CallFunc_Greater_IntInt_ReturnValue, exp:SizeBox_0, name:AbilitySystem, exp:CanvasPanelSlot_11, exp:EaseInFunction, exp:EaseOutFunction, exp:HorizontalBoxSlot_1
+  [193] MovieSceneColorSection_0 : MovieSceneColorSection (outer MovieSceneColorTrack_1) size=360
+        refs: name:ArgumentName, name:bReelIn, name:HorizontalBox, exp:CanvasPanelSlot_13, exp:UpdateDirection, name:CallFunc_Greater_IntInt_ReturnValue, exp:SizeBox_0, exp:CanvasPanelSlot_11, exp:EaseInFunction, exp:EaseOutFunction, exp:Wave_Tenstion_2
+  [194] MovieSceneColorSection_0 : MovieSceneColorSection (outer MovieSceneColorTrack_0) size=360
+        refs: name:ArgumentName, name:bReelIn, name:HorizontalBox, exp:CanvasPanelSlot_13, exp:UpdateDirection, name:CallFunc_Greater_IntInt_ReturnValue, exp:SizeBox_0, exp:CanvasPanelSlot_11, exp:EaseInFunction, exp:EaseOutFunction, exp:Image_94
+  [195] MovieSceneColorSection_0 : MovieSceneColorSection (outer MovieSceneColorTrack_1) size=360
+        refs: name:ArgumentName, name:bReelIn, name:HorizontalBox, exp:CanvasPanelSlot_13, exp:UpdateDirection, name:CallFunc_Greater_IntInt_ReturnValue, exp:SizeBox_0, name:AbilitySystem, exp:CanvasPanelSlot_11, exp:EaseInFunction, exp:EaseOutFunction, exp:MovieScene2DTransformSection_0
+  [196] MovieSceneColorTrack_2 : MovieSceneColorTrack (outer Danger) size=102
+        refs: name:ColorAndOpacity, exp:SizeBox_1, exp:MovieSceneColorSection_0, exp:SizeBoxSlot_0, exp:Spacer_72, exp:Stamina_INST, exp:EaseOutFunction
+  [197] MovieSceneColorTrack_3 : MovieSceneColorTrack (outer Danger) size=102
+        refs: name:ColorAndOpacity, exp:SizeBox_1, exp:MovieSceneColorSection_0, exp:SizeBoxSlot_0, exp:Spacer_72, exp:Stamina_INST, exp:GetSettingValue
+  [198] MovieSceneColorTrack_2 : MovieSceneColorTrack (outer Pull) size=102
+        refs: name:ColorAndOpacity, exp:SizeBox_1, exp:MovieSceneColorSection_0, exp:SizeBoxSlot_0, exp:Spacer_72, exp:MovieSceneColorTrack_2, exp:CompiledData
+  [199] MovieSceneColorTrack_3 : MovieSceneColorTrack (outer Pull) size=102
+        refs: name:ColorAndOpacity, exp:SizeBox_1, exp:MovieSceneColorSection_0, exp:SizeBoxSlot_0, exp:Spacer_72, exp:OverlaySlot_3, exp:Overlay_TenstionIcon
+  [200] MovieSceneColorTrack_0 : MovieSceneColorTrack (outer Reducing) size=102
+        refs: name:ColorAndOpacity, exp:SizeBox_1, exp:MovieSceneColorSection_0, exp:SizeBoxSlot_0, exp:Spacer_72, exp:OverlaySlot_0, exp:SetupVisibility
+  [201] MovieSceneColorTrack_1 : MovieSceneColorTrack (outer Reducing) size=102
+        refs: name:ColorAndOpacity, exp:SizeBox_1, exp:MovieSceneColorSection_0, exp:SizeBoxSlot_0, exp:Spacer_72, exp:Stamina_INST, exp:OverlaySlot_4
+  [202] MovieSceneColorTrack_0 : MovieSceneColorTrack (outer Restoring) size=102
+        refs: name:ColorAndOpacity, exp:SizeBox_1, exp:MovieSceneColorSection_0, exp:SizeBoxSlot_0, exp:Spacer_72, exp:OverlaySlot_0
+  [203] MovieSceneColorTrack_1 : MovieSceneColorTrack (outer Restoring) size=102
+        refs: name:ColorAndOpacity, exp:SizeBox_1, exp:MovieSceneColorSection_0, exp:SizeBoxSlot_0, exp:Spacer_72, exp:Stamina_INST, exp:HorizontalBoxSlot_3
+  [204] MovieSceneColorTrack_0 : MovieSceneColorTrack (outer StaminaAppearance) size=102
+        refs: name:ColorAndOpacity, exp:SizeBox_1, exp:MovieSceneColorSection_0, exp:SizeBoxSlot_0, exp:Spacer_72, exp:Stamina_INST, exp:MovieScene2DTransformTrack_4
+  [205] MovieSceneColorTrack_1 : MovieSceneColorTrack (outer StaminaAppearance) size=102
+        refs: name:ColorAndOpacity, exp:SizeBox_1, exp:MovieSceneColorSection_0, exp:SizeBoxSlot_0, exp:Spacer_72, exp:OverlaySlot_0, exp:HorizontalBoxSlot_1
+  [206] CompiledData : MovieSceneCompiledData (outer Danger_INST) size=440
+        refs: obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_PrbLineTensionBg001_GlowOk.SPR_PrbLineTensionBg001_GlowOk, exp:PanelSlot_0, exp:SizeBox_0, name:HorizontalBox, name:Default__WBP_FishingStruggle_C, exp:CanvasPanelSlot_2, name:ArgumentValueDouble, exp:CanvasPanelSlot_11, exp:CanvasPanelSlot_13, exp:CanvasPanelSlot_3, exp:MovieSceneColorSection_0, exp:MovieScene2DTransformSection_0, exp:Stamina_INST, exp:CanvasPanelSlot_7
+  [207] CompiledData : MovieSceneCompiledData (outer Pull_INST) size=466
+        refs: obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_PrbLineTensionBg001_GlowOk.SPR_PrbLineTensionBg001_GlowOk, exp:PanelSlot_0, exp:CanvasPanelSlot_11, exp:MovieSceneColorTrack_2, name:AbilitySystem, exp:CanvasPanelSlot_2, exp:CanvasPanelSlot_7, exp:SizeBox_0, name:ArgumentValueInt, exp:CanvasPanelSlot_13, exp:MovieScene2DTransformSection_0, exp:MovieSceneColorSection_0, exp:OverlaySlot_3
+  [208] CompiledData : MovieSceneCompiledData (outer Reducing_INST) size=373
+        refs: obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_PrbLineTensionBg001_GlowOk.SPR_PrbLineTensionBg001_GlowOk, exp:PanelSlot_0, exp:SizeBox_0, exp:OverlaySlot_0, exp:CanvasPanelSlot_13, name:ArgumentValueDouble, exp:CanvasPanelSlot_11, exp:MovieScene2DTransformSection_0, exp:MovieSceneColorSection_0, exp:Stamina_INST, exp:CanvasPanelSlot_7
+  [209] CompiledData : MovieSceneCompiledData (outer Restoring_INST) size=369
+        refs: obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_PrbLineTensionBg001_GlowOk.SPR_PrbLineTensionBg001_GlowOk, exp:PanelSlot_0, exp:SizeBox_0, name:HorizontalBox, name:WaveImage2, name:ArgumentName, exp:CanvasPanelSlot_11, exp:CanvasPanelSlot_13, exp:MovieSceneColorSection_0, exp:MovieScene2DTransformSection_0, exp:OverlaySlot_0, exp:Stamina_INST, exp:CanvasPanelSlot_7
+  [210] CompiledData : MovieSceneCompiledData (outer Stamina_INST) size=195
+        refs: obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_PrbLineTensionBg001_GlowOk.SPR_PrbLineTensionBg001_GlowOk, exp:PanelSlot_0, exp:SizeBox_0, name:HorizontalBox, exp:MovieScene2DTransformSection_0, exp:OverlaySlot_3, exp:CanvasPanelSlot_7
+  [211] CompiledData : MovieSceneCompiledData (outer StaminaAppearance_INST) size=597
+        refs: obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_PrbLineTensionBg001_GlowOk.SPR_PrbLineTensionBg001_GlowOk, exp:PanelSlot_0, name:AbilitySystem, exp:SizeBox_0, exp:CanvasPanelSlot_11, exp:CanvasPanelSlot_13, name:HorizontalBox, name:MovieSceneColorTrack, name:ArgumentName, exp:CanvasPanelSlot_2, exp:CanvasPanelSlot_6, name:ArgumentValueInt, exp:CanvasPanelSlot_3, exp:MovieSceneColorSection_0, exp:MovieScene2DTransformSection_0, exp:MovieSceneByteSection_0, exp:OverlaySlot_0, exp:VerticalBoxSlot_1, exp:Stamina_INST, exp:CanvasPanelSlot_7
+  [212] NamedSlot_Reaction : NamedSlot (outer WidgetTree) size=18
+        refs: exp:Spacer_72, exp:PanelSlot_0, name:ArgumentValueFloat
+  [213] Overlay_Distance : Overlay (outer WidgetTree) size=29
+        refs: exp:CanvasPanelSlot_11, exp:OverlaySlot_2, exp:OverlaySlot_0, exp:OverlaySlot_3, exp:CanvasPanelSlot_3
+  [214] Overlay_Fight : Overlay (outer WidgetTree) size=45
+        refs: exp:OverlaySlot_3, exp:OverlaySlot_0, exp:WidgetSwitcherSlot_4, name:AbilitySystem
+  [215] Overlay_Pull : Overlay (outer WidgetTree) size=29
+        refs: exp:CanvasPanelSlot_11, exp:OverlaySlot_0, exp:OverlaySlot_1, exp:OverlaySlot_2, exp:WidgetSwitcherSlot_3
+  [216] Overlay_StaminaBar : Overlay (outer WidgetTree) size=33
+        refs: exp:CanvasPanelSlot_13, exp:OverlaySlot_0, exp:OverlaySlot_3, exp:OverlaySlot_2, exp:OverlaySlot_4, exp:HorizontalBoxSlot_0
+  [217] Overlay_StaminaIcon : Overlay (outer WidgetTree) size=53
+        refs: exp:CanvasPanelSlot_13, exp:OverlaySlot_2, exp:OverlaySlot_4, exp:OverlaySlot_0, exp:OverlaySlot_5, exp:HorizontalBoxSlot_4, exp:CanvasPanelSlot_11, name:SetActiveWidgetIndex, exp:SizeBox_0
+  [218] Overlay_StaminaWaves : Overlay (outer WidgetTree) size=28
+        refs: exp:OverlaySlot_0, exp:OverlaySlot_1, exp:OverlaySlot_4, exp:SizeBox_1
+  [219] Overlay_Tenstion_Block : Overlay (outer WidgetTree) size=33
+        refs: exp:CanvasPanelSlot_13, exp:OverlaySlot_0, exp:OverlaySlot_1, exp:OverlaySlot_2, exp:OverlaySlot_3, exp:HorizontalBoxSlot_3
+  [220] Overlay_Tenstion_Images : Overlay (outer WidgetTree) size=34
+        refs: exp:CanvasPanelSlot_2, exp:OverlaySlot_2, exp:OverlaySlot_10, exp:OverlaySlot_1, exp:OverlaySlot_0, exp:OverlaySlot_6, name:WidgetSwitcher_Fight
+  [221] Overlay_TenstionIcon : Overlay (outer WidgetTree) size=45
+        refs: exp:OverlaySlot_3, exp:OverlaySlot_0, exp:HorizontalBoxSlot_5, exp:CanvasPanelSlot_11, name:SetActiveWidgetIndex, exp:SizeBox_0
+  [222] Overlay_TenstionWaves : Overlay (outer WidgetTree) size=28
+        refs: exp:OverlaySlot_0, exp:OverlaySlot_1, exp:OverlaySlot_10, exp:SizeBox_1
+  [223] OverlaySlot_0 : OverlaySlot (outer Overlay_Distance) size=16
+        refs: exp:Overlay_Distance, name:CallFunc_IsAnimationPlaying_ReturnValue
+  [224] OverlaySlot_2 : OverlaySlot (outer Overlay_Distance) size=15
+        refs: exp:Overlay_Distance, name:CallFunc_GreaterEqual_DoubleDouble_ReturnValue
+  [225] OverlaySlot_3 : OverlaySlot (outer Overlay_Distance) size=16
+        refs: exp:Overlay_Distance, name:HorizontalBox
+  [226] OverlaySlot_0 : OverlaySlot (outer Overlay_Fight) size=14
+        refs: exp:Overlay_Fight, name:Reducing_INST
+  [227] OverlaySlot_3 : OverlaySlot (outer Overlay_Fight) size=16
+        refs: exp:Overlay_Fight, name:CallFunc_MapRangeClamped_ReturnValue
+  [228] OverlaySlot_0 : OverlaySlot (outer Overlay_Pull) size=16
+        refs: exp:Overlay_Pull, name:Config
+  [229] OverlaySlot_1 : OverlaySlot (outer Overlay_Pull) size=16
+        refs: exp:Overlay_Pull, name:Danger
+  [230] OverlaySlot_2 : OverlaySlot (outer Overlay_Pull) size=16
+        refs: exp:Overlay_Pull, name:CallFunc_IsSameDirection_bOut
+  [231] OverlaySlot_0 : OverlaySlot (outer Overlay_StaminaBar) size=14
+        refs: exp:Overlay_StaminaBar, name:CallFunc_SelectColor_ReturnValue
+  [232] OverlaySlot_2 : OverlaySlot (outer Overlay_StaminaBar) size=15
+        refs: exp:Overlay_StaminaBar, name:CallFunc_PlayAsyncLoadingSound_ReturnValue
+  [233] OverlaySlot_3 : OverlaySlot (outer Overlay_StaminaBar) size=15
+        refs: exp:Overlay_StaminaBar, name:CallFunc_SetAnimationCurrentTime_InTime_ImplicitCast
+  [234] OverlaySlot_4 : OverlaySlot (outer Overlay_StaminaBar) size=16
+        refs: exp:Overlay_StaminaBar, name:CallFunc_SetBrushFromAtlasInterface_AtlasRegion_CastInput
+  [235] OverlaySlot_0 : OverlaySlot (outer Overlay_StaminaIcon) size=16
+        refs: exp:Overlay_StaminaIcon, name:CallFunc_SelectInt_ReturnValue
+  [236] OverlaySlot_2 : OverlaySlot (outer Overlay_StaminaIcon) size=16
+        refs: exp:Overlay_StaminaIcon, name:CallFunc_GetTenstionPercent_Percent
+  [237] OverlaySlot_4 : OverlaySlot (outer Overlay_StaminaIcon) size=16
+        refs: exp:Overlay_StaminaIcon, name:TextBlock_Drag
+  [238] OverlaySlot_5 : OverlaySlot (outer Overlay_StaminaIcon) size=16
+        refs: exp:Overlay_StaminaIcon, name:CallFunc_SetRenderOpacity_InOpacity_ImplicitCast
+  [239] OverlaySlot_0 : OverlaySlot (outer Overlay_StaminaWaves) size=14
+        refs: exp:Overlay_StaminaWaves, name:ClearChildren
+  [240] OverlaySlot_1 : OverlaySlot (outer Overlay_StaminaWaves) size=16
+        refs: exp:Overlay_StaminaWaves, name:ColorAndOpacity
+  [241] OverlaySlot_0 : OverlaySlot (outer Overlay_Tenstion_Block) size=14
+        refs: exp:Overlay_Tenstion_Block, name:Restoring_INST
+  [242] OverlaySlot_1 : OverlaySlot (outer Overlay_Tenstion_Block) size=15
+        refs: exp:Overlay_Tenstion_Block, name:CallFunc_SetRenderTransformAngle_Angle_ImplicitCast
+  [243] OverlaySlot_2 : OverlaySlot (outer Overlay_Tenstion_Block) size=15
+        refs: exp:Overlay_Tenstion_Block, name:CallFunc_IsValid_ReturnValue
+  [244] OverlaySlot_3 : OverlaySlot (outer Overlay_Tenstion_Block) size=15
+        refs: exp:Overlay_Tenstion_Block, name:CallFunc_Less_DoubleDouble_ReturnValue
+  [245] OverlaySlot_0 : OverlaySlot (outer Overlay_Tenstion_Images) size=16
+        refs: exp:Overlay_Tenstion_Images, name:CallFunc_PlayAnimation_ReturnValue
+  [246] OverlaySlot_1 : OverlaySlot (outer Overlay_Tenstion_Images) size=16
+        refs: exp:Overlay_Tenstion_Images, name:CanvasPanel_Immersive
+  [247] OverlaySlot_10 : OverlaySlot (outer Overlay_Tenstion_Images) size=16
+        refs: exp:Overlay_Tenstion_Images, name:Type
+  [248] OverlaySlot_2 : OverlaySlot (outer Overlay_Tenstion_Images) size=16
+        refs: exp:Overlay_Tenstion_Images, name:CallFunc_GetUserSettings_UserSettings
+  [249] OverlaySlot_6 : OverlaySlot (outer Overlay_Tenstion_Images) size=16
+        refs: exp:Overlay_Tenstion_Images, name:Image_Mockup
+  [250] OverlaySlot_0 : OverlaySlot (outer Overlay_TenstionIcon) size=14
+        refs: exp:Overlay_TenstionIcon, name:TextureParam
+  [251] OverlaySlot_3 : OverlaySlot (outer Overlay_TenstionIcon) size=16
+        refs: exp:Overlay_TenstionIcon, name:CallFunc_UpdateStaminaLag_Delta_ImplicitCast
+  [252] OverlaySlot_0 : OverlaySlot (outer Overlay_TenstionWaves) size=14
+        refs: exp:Overlay_TenstionWaves, name:ColorUseRule
+  [253] OverlaySlot_1 : OverlaySlot (outer Overlay_TenstionWaves) size=16
+        refs: exp:Overlay_TenstionWaves, name:CondensedBold
+  [254] PanelSlot_0 : PanelSlot (outer NamedSlot_Reaction) size=14
+        refs: exp:NamedSlot_Reaction, name:CompiledData
+  [255] SizeBox_0 : SizeBox (outer WidgetTree) size=32
+        refs: exp:SizeBox_1, exp:SizeBoxSlot_0, name:UnderlyingType
+  [256] SizeBox_1 : SizeBox (outer WidgetTree) size=27
+        refs: exp:SizeBox_1, exp:SizeBoxSlot_0, name:ArgumentName
+  [257] SizeBox_105 : SizeBox (outer WidgetTree) size=24
+        refs: name:WidgetSwitcher_Control
+  [258] SizeBoxSlot_0 : SizeBoxSlot (outer SizeBox_0) size=15
+        refs: exp:SizeBox_0, name:EaseOutFunction
+  [259] SizeBoxSlot_0 : SizeBoxSlot (outer SizeBox_1) size=14
+        refs: exp:SizeBox_1, name:CallFunc_EqualEqual_ByteByte_ReturnValue
+  [260] Spacer_72 : Spacer (outer WidgetTree) size=26
+        refs: exp:Image_5, name:CallFunc_GetMovementStick_ReturnValue
+  [261] TextBlock : TextBlock (outer WidgetTree) size=103
+        refs: exp:CanvasPanelSlot_11, exp:ExecuteUbergraph_WBP_FishingStruggle, obj:/Game/Dreadmoor/UI/Fonts/Font_NotoSans.Font_NotoSans, exp:BindStickLayoutHint, obj:/Game/Dreadmoor/UI/Materials/MT_FontBlurredOutline.MT_FontBlurredOutline, name:CondensedBold, name:CallFunc_GetOwningPlayerPawn_ReturnValue
+  [262] TextBlock_136 : TextBlock (outer WidgetTree) size=103
+        refs: exp:CanvasPanelSlot_11, exp:ExecuteUbergraph_WBP_FishingStruggle, obj:/Game/Dreadmoor/UI/Fonts/Font_NotoSans.Font_NotoSans, exp:BindStickLayoutHint, obj:/Game/Dreadmoor/UI/Materials/MT_FontBlurredOutline.MT_FontBlurredOutline, name:CondensedBold, name:CallFunc_GetFishStaminaPercent_Percent
+  [263] TextBlock_166 : TextBlock (outer WidgetTree) size=92
+        refs: exp:CanvasPanelSlot_11, exp:CanvasPanelSlot_2, obj:/Game/Dreadmoor/UI/Fonts/Font_NotoSans.Font_NotoSans, exp:BindStickLayoutHint, obj:/Game/Dreadmoor/UI/Materials/MT_FontBlurredOutline.MT_FontBlurredOutline, name:CondensedBold, name:CallFunc_GetOwningPlayer_ReturnValue
+  [264] TextBlock_Distance : TextBlock (outer WidgetTree) size=111
+        refs: exp:CanvasPanelSlot_2, obj:/Game/Dreadmoor/UI/Fonts/Font_NotoSans.Font_NotoSans, exp:BindStickLayoutHint, obj:/Game/Dreadmoor/UI/Materials/MT_FontBlurredOutline.MT_FontBlurredOutline, name:CondensedBold, exp:SizeBoxSlot_0, name:AbilitySystem
+  [265] TextBlock_Drag : TextBlock (outer WidgetTree) size=98
+        refs: exp:CanvasPanelSlot_11, exp:CanvasPanelSlot_2, obj:/Game/Dreadmoor/UI/Fonts/Font_NotoSans.Font_NotoSans, exp:BindStickLayoutHint, obj:/Game/Dreadmoor/UI/Materials/MT_FontBlurredOutline.MT_FontBlurredOutline, name:CondensedBold, exp:HorizontalBoxSlot_2, exp:SizeBox_1
+  [266] VerticalBox_0 : VerticalBox (outer WidgetTree) size=22
+        refs: exp:VerticalBoxSlot_0, exp:VerticalBoxSlot_1, name:ArgumentValueGender
+  [267] VerticalBoxSlot_0 : VerticalBoxSlot (outer VerticalBox_0) size=17
+        refs: exp:VerticalBox_0, name:Overlay_Tenstion_Images
+  [268] VerticalBoxSlot_1 : VerticalBoxSlot (outer VerticalBox_0) size=23
+        refs: exp:VerticalBox_0, name:CallFunc_GetCurrentInputType_ReturnValue
+  [269] WBP_Fishing_Slot : WBP_Fishing_Slot_C (outer WidgetTree) size=19
+        refs: exp:PanelSlot_0, exp:SizeBox_0
+  [270] WBP_Fishing_Slots : WBP_Fishing_Slots_C (outer WidgetTree) size=10
+        refs: name:MovieSceneColorSection
+  [271] Default__WBP_FishingStruggle_C : WBP_FishingStruggle_C (outer None) size=105
+        refs: exp:Image_2, exp:CanvasPanelSlot_6, name:GAS.State.Fishing.Tension.Restoring, name:GAS.State.Fishing.Stamina.Reducing, obj:/Game/Dreadmoor/UI/Atlases/HotKeys/Frames/KeyGamepadStickLeft_RL.KeyGamepadStickLeft_RL, obj:/Game/Dreadmoor/UI/Atlases/HotKeys/Frames/KeyGamepadStickRight_RL.KeyGamepadStickRight_RL, obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_KeyMouseLeftRight002.SPR_KeyMouseLeftRight002
+  [272] WBP_InputHintRight : WBP_InputHint_C (outer WidgetTree) size=19
+        refs: obj:/Game/Dreadmoor/Core/Input/Fishing/IA_Fishing_Fight_Keyboard_Right.IA_Fishing_Fight_Keyboard_Right, name:CallFunc_GetGameplayTagCount_ReturnValue
+  [273] WBP_InuptHintLeft : WBP_InputHint_C (outer WidgetTree) size=19
+        refs: obj:/Game/Dreadmoor/Core/Input/Fishing/IA_Fishing_Fight_Keyboard_Left.IA_Fishing_Fight_Keyboard_Left, name:CallFunc_GetGameInstanceSubsystem_ReturnValue
+  [274] WBP_InputHintCirculated : WBP_InputHintCirculated_C (outer WidgetTree) size=40
+        refs: exp:CanvasPanelSlot_11, exp:CanvasPanelSlot_6, obj:/Game/Dreadmoor/Core/Input/Fishing/IA_Fishing_Cast.IA_Fishing_Cast, name:CallFunc_GetDistanceToFish_Distance
+  [275] WBP_InputHintCirculated_Pull : WBP_InputHintCirculated_C (outer WidgetTree) size=16
+        refs: obj:/Game/Dreadmoor/Core/Input/Fishing/IA_Fishing_Cast.IA_Fishing_Cast, name:CallFunc_GetSettingValue_bOut
+  [276] Danger_INST : WidgetAnimation (outer WBP_FishingStruggle_C) size=201
+        refs: exp:Danger, exp:CanvasPanelSlot_13, name:Overlay_Tenstion_Block, name:Image_Tension_Back_Good, name:Image_TenstionVignette, exp:MovieScene2DTransformTrack_3, exp:CanvasPanelSlot_11, exp:CanvasPanelSlot_6, exp:CompiledData
+  [277] Pull_INST : WidgetAnimation (outer WBP_FishingStruggle_C) size=161
+        refs: exp:Pull, exp:CanvasPanelSlot_11, name:Image_Coil, name:Image_Tension_Back_Good, name:WaveImage2, name:WaveImage1, exp:CanvasPanelSlot_2, exp:CompiledData, exp:OverlaySlot_3
+  [278] Reducing_INST : WidgetAnimation (outer WBP_FishingStruggle_C) size=127
+        refs: exp:Reducing, exp:OverlaySlot_1, name:Image_Tension_Back_Good, exp:CanvasPanelSlot_11, exp:CanvasPanelSlot_0, exp:CompiledData, exp:Overlay_TenstionWaves
+  [279] Restoring_INST : WidgetAnimation (outer WBP_FishingStruggle_C) size=128
+        refs: exp:Restoring, exp:OverlaySlot_2, name:Image_Tension_Back_Good, exp:CanvasPanelSlot_11, exp:CanvasPanelSlot_2, exp:CompiledData, exp:HorizontalBoxSlot_4
+  [280] Stamina_INST : WidgetAnimation (outer WBP_FishingStruggle_C) size=88
+        refs: exp:Stamina, name:Image_Stamina_Thumb, name:Image_Tension_Back_Good, exp:CanvasPanelSlot_7, exp:CompiledData
+  [281] StaminaAppearance_INST : WidgetAnimation (outer WBP_FishingStruggle_C) size=250
+        refs: exp:StaminaAppearance, exp:CanvasPanelSlot_2, name:Overlay_StaminaBar, name:Image_Tension_Back_Good, name:Overlay_StaminaIcon, exp:OverlaySlot_1, exp:CanvasPanelSlot_11, name:Overlay_StaminaWaves, exp:GetSettingValue, exp:CompiledData, exp:CanvasPanelSlot_7
+  [282] WBP_FishingStruggle_C : WidgetBlueprintGeneratedClass (outer None) super=CommonActivatableWidget size=5289
+        refs: exp:WidgetTree, exp:CanvasPanelSlot_3, exp:Stamina_INST, exp:Pull_INST, exp:Danger_INST, exp:Restoring_INST, exp:Reducing_INST, exp:StaminaAppearance_INST, name:NamedSlot_Reaction, name:bGamepad, exp:Image, name:MouseControlHint, name:MovementStickRightHint, name:MovementStickLeftHint, name:GamepadSettings, name:TagsToListen, name:TagEventHandler, name:StaminaMID, name:Meters, name:LagStamina, name:LagStaminaTarget, name:FishDirection, name:bTensionDanger, name:TensionThreshold, name:FishingController, name:StaminaAppearance, name:Reducing, name:Restoring, name:Danger, name:Pull, name:Stamina, name:CanvasPanel_Immersive, name:HorizontalBox_Block, name:HorizontalBox_PullHint, exp:MovieScene2DTransformTrack_5, exp:CanvasPanelSlot_11, exp:EaseInFunction, exp:MovieScene2DTransformTrack_3, name:Image_Direction, name:Image_Direction_Left, name:Image_Direction_Right, name:Image_Reel, name:Image_Stamina, name:Image_Stamina_Back, name:Image_Stamina_Icon, name:Image_Stamina_Lag, name:Image_StaminaReducingIcon, name:Image_Tension, name:Image_Tension_Thumb, name:Image_TenstionRestoreIcon, name:Image_TenstionVignette, name:Overlay_Distance, name:Overlay_Fight, name:Overlay_Pull, name:Overlay_StaminaBar, name:Overlay_StaminaIcon, name:Overlay_StaminaWaves, name:Overlay_Tenstion_Block, name:Overlay_TenstionIcon, name:Overlay_TenstionWaves
+  [283] WidgetSwitcher_Control : WidgetSwitcher (outer WidgetTree) size=22
+        refs: exp:WidgetSwitcherSlot_0, exp:WidgetSwitcherSlot_1, name:CallFunc_GetField_OutValue
+  [284] WidgetSwitcher_Fight : WidgetSwitcher (outer WidgetTree) size=22
+        refs: exp:WidgetSwitcherSlot_4, exp:WidgetSwitcherSlot_3, name:ArgumentValueType
+  [285] WidgetSwitcher_Side : WidgetSwitcher (outer WidgetTree) size=22
+        refs: exp:WidgetSwitcherSlot_2, exp:WidgetSwitcherSlot_4, name:UpdateAnimationSpeed
+  [286] WidgetSwitcher_TensionBack : WidgetSwitcher (outer WidgetTree) size=46
+        refs: exp:CanvasPanelSlot_11, exp:WidgetSwitcherSlot_0, exp:WidgetSwitcherSlot_1, exp:WidgetSwitcherSlot_2, exp:OverlaySlot_0, name:CallFunc_GreaterEqual_DoubleDouble_ReturnValue
+  [287] WidgetSwitcherSlot_0 : WidgetSwitcherSlot (outer WidgetSwitcher_Control) size=14
+        refs: exp:WidgetSwitcher_Control, name:CallFunc_Greater_DoubleDouble_ReturnValue
+  [288] WidgetSwitcherSlot_1 : WidgetSwitcherSlot (outer WidgetSwitcher_Control) size=14
+        refs: exp:WidgetSwitcher_Control, name:CallFunc_FInterpTo_ReturnValue
+  [289] WidgetSwitcherSlot_3 : WidgetSwitcherSlot (outer WidgetSwitcher_Fight) size=14
+        refs: exp:WidgetSwitcher_Fight, name:Temp_object_Variable
+  [290] WidgetSwitcherSlot_4 : WidgetSwitcherSlot (outer WidgetSwitcher_Fight) size=14
+        refs: exp:WidgetSwitcher_Fight, name:Temp_interface_Variable
+  [291] WidgetSwitcherSlot_2 : WidgetSwitcherSlot (outer WidgetSwitcher_Side) size=16
+        refs: exp:WidgetSwitcher_Side, name:CallFunc_Multiply_DoubleDouble_ReturnValue
+  [292] WidgetSwitcherSlot_4 : WidgetSwitcherSlot (outer WidgetSwitcher_Side) size=16
+        refs: exp:WidgetSwitcher_Side, name:CallFunc_NearlyEqual_FloatFloat_ReturnValue
+  [293] WidgetSwitcherSlot_0 : WidgetSwitcherSlot (outer WidgetSwitcher_TensionBack) size=14
+        refs: exp:WidgetSwitcher_TensionBack, name:CallFunc_SetScalarParameterValue_Value_ImplicitCast
+  [294] WidgetSwitcherSlot_1 : WidgetSwitcherSlot (outer WidgetSwitcher_TensionBack) size=14
+        refs: exp:WidgetSwitcher_TensionBack, name:CallFunc_Subtract_DoubleDouble_B_ImplicitCast
+  [295] WidgetSwitcherSlot_2 : WidgetSwitcherSlot (outer WidgetSwitcher_TensionBack) size=14
+        refs: exp:WidgetSwitcher_TensionBack, name:CallFunc_Subtract_DoubleDouble_ReturnValue
+  [296] WidgetTree : WidgetTree (outer WBP_FishingStruggle_C) size=10
+        refs: name:Image_Tension_Back
+
+## function BindStickLayoutHint  flags=0x0C020000
+  L0000: CallFunc_GetOwningPlayer_ReturnValue = GetOwningPlayer()
+  L0018: CallFunc_GetLocalPlayerSubSystemFromPlayerController_ReturnValue = SubsystemBlueprintLibrary.GetLocalPlayerSubSystemFromPlayerController(CallFunc_GetOwningPlayer_ReturnValue, DrdGamepadSettingsSubsystem)
+  L003E: K2Node_DynamicCast_AsDrd_Gamepad_Settings_Subsystem = cast<DrdGamepadSettingsSubsystem>(CallFunc_GetLocalPlayerSubSystemFromPlayerController_ReturnValue)
+  L0062: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsDrd_Gamepad_Settings_Subsystem
+  L007F: if not (K2Node_DynamicCast_bSuccess) goto L00E0
+  L008D: self.GamepadSettings = K2Node_DynamicCast_AsDrd_Gamepad_Settings_Subsystem
+  L00A0: bind(K2Node_CreateDelegate_OutputDelegate, self, 'RefreshControlHint')
+  L00B7: self.GamepadSettings.self.OnStickLayoutChanged += K2Node_CreateDelegate_OutputDelegate
+  L00E0: return
+
+## function BP_GetDesiredInputConfig  flags=0x4CC80800
+  L0000: K2Node_MakeStruct_UIInputConfig.bIgnoreMoveInput = false
+  L0014: K2Node_MakeStruct_UIInputConfig.bIgnoreLookInput = false
+  L0028: K2Node_MakeStruct_UIInputConfig.InputMode = 2
+  L0045: K2Node_MakeStruct_UIInputConfig.MouseCaptureMode = 1
+  L0062: K2Node_MakeStruct_UIInputConfig.MouseLockMode = 1
+  L007F: K2Node_MakeStruct_UIInputConfig.bHideCursorDuringViewportCapture = true
+  L0093: ReturnValue = K2Node_MakeStruct_UIInputConfig
+  L00AE: return ReturnValue
+
+## function BP_OnActivated  flags=0x08080800
+  L0000: WBP_FishingStruggle_C.ExecuteUbergraph_WBP_FishingStruggle(1100)
+  L000F: return
+
+## function BP_OnDeactivated  flags=0x08080800
+  L0000: WBP_FishingStruggle_C.ExecuteUbergraph_WBP_FishingStruggle(1475)
+  L000F: return
+
+## function ExecuteUbergraph_WBP_FishingStruggle  flags=0x00808001
+  L0000: push L05EF
+  L0005: goto computed(EntryPoint)
+  L000F: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(self.FishingController)
+  L002C: if not (CallFunc_IsValid_ReturnValue) pop-flow
+  L0036: UpdateStamina()
+  L0044: UpdateTenstion()
+  L0052: UpdateDirection()
+  L0060: CallFunc_UpdateStaminaLag_Delta_ImplicitCast = K2Node_Event_InDeltaTime
+  L007D: UpdateStaminaLag(CallFunc_UpdateStaminaLag_Delta_ImplicitCast)
+  L0094: UpdateReelInput()
+  L00A2: UpdateDistance()
+  L00B0: UpdateAnimationSpeed()
+  L00BE: pop-flow
+  L00BF: bind(K2Node_CreateDelegate_OutputDelegate, self, 'FishExhaustionChanged')
+  L00D6: self.FishingController.self.OnFishExhaustionChanged += K2Node_CreateDelegate_OutputDelegate
+  L00FF: UpdateStamina()
+  L010D: UpdateTenstion()
+  L011B: CallFunc_PlayAnimation_ReturnValue = UserWidget.PlayAnimation(self.Stamina, 0, 0, 0, 0, false)
+  L0152: UpdateQTEStamina()
+  L0160: UpdateTenstionRestoring()
+  L016E: UpdateStaminaReducing()
+  L017C: bind(K2Node_CreateDelegate_OutputDelegate_3, self, 'UpdateInputType')
+  L0193: CallFunc_GetLocalPlayerSubsystem_ReturnValue = SubsystemBlueprintLibrary.GetLocalPlayerSubsystem(self, CommonInputSubsystem)
+  L01B1: CallFunc_GetLocalPlayerSubsystem_ReturnValue.self.OnInputMethodChanged += K2Node_CreateDelegate_OutputDelegate_3
+  L01DA: CallFunc_GetLocalPlayerSubsystem_ReturnValue = SubsystemBlueprintLibrary.GetLocalPlayerSubsystem(self, CommonInputSubsystem)
+  L01F8: CallFunc_GetCurrentInputType_ReturnValue = CallFunc_GetLocalPlayerSubsystem_ReturnValue.CommonInputSubsystem.GetCurrentInputType()
+  L022A: UpdateInputType(CallFunc_GetCurrentInputType_ReturnValue)
+  L0241: UpdateFishingSettings()
+  L024F: pop-flow
+  L0250: UpdateDrag(self.FishingController.self.bDrag)
+  L027D: bind(K2Node_CreateDelegate_OutputDelegate_1, self, 'UpdateDrag')
+  L0294: self.FishingController.self.OnDragChanged += K2Node_CreateDelegate_OutputDelegate_1
+  L02BD: bind(K2Node_CreateDelegate_OutputDelegate_2, self, 'UpdateSettings')
+  L02D4: self.FishingController.self.OnSettingsUpdated += K2Node_CreateDelegate_OutputDelegate_2
+  L02FD: UpdateDirection()
+  L030B: self.Overlay_Tenstion_Block.Widget.SetRenderTranslation(Vector2D{0, 0})
+  L034B: goto L00BF
+  L0350: SwitchExhausted(self.FishingController.self.bFishExhausted)
+  L037D: goto L0250
+  L0382: push L039F
+  L0387: SwitchExhausted(K2Node_CustomEvent_bExhausted)
+  L039E: pop-flow
+  L039F: if not (K2Node_CustomEvent_bExhausted) pop-flow
+  L03A9: CallFunc_GetGameInstanceSubsystem_ReturnValue = SubsystemBlueprintLibrary.GetGameInstanceSubsystem(self, Drd2DSoundsSubsystem)
+  L03C7: CallFunc_PlayAsyncLoadingSound_ReturnValue = CallFunc_GetGameInstanceSubsystem_ReturnValue.Drd2DSoundsSubsystem.PlayAsyncLoadingSound(soft("/Game/Dreadmoor/Audio/SFX/Fishing/SCUE_Fish_Stamina_Down.SCUE_Fish_Stamina_Down"))
+  L044B: pop-flow
+  L044C: CommonActivatableWidget.BP_OnActivated()
+  L0456: BindStickLayoutHint()
+  L0464: self.NamedSlot_Reaction.ClearChildren()
+  L0488: CallFunc_GetDynamicMaterial_ReturnValue = self.Image_Stamina.Image.GetDynamicMaterial()
+  L04B2: self.StaminaMID = CallFunc_GetDynamicMaterial_ReturnValue
+  L04C5: CallFunc_GetOwningPlayerPawn_ReturnValue = UserWidget.GetOwningPlayerPawn()
+  L04D9: K2Node_DynamicCast_AsBP_Fishing_Controller = cast<BP_FishingController_C>(CallFunc_GetOwningPlayerPawn_ReturnValue)
+  L04FD: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsBP_Fishing_Controller
+  L051A: if not (K2Node_DynamicCast_bSuccess) pop-flow
+  L0524: self.FishingController = K2Node_DynamicCast_AsBP_Fishing_Controller
+  L0537: bind(K2Node_CreateDelegate_OutputDelegate_4, self, 'TagsChanged')
+  L054E: CallFunc_BindEventWrapperToAnyOfGameplayTagsChanged_ReturnValue = AbilitySystemBlueprintLibrary.BindEventWrapperToAnyOfGameplayTagsChanged(self.FishingController.self.AbilitySystem, self.TagsToListen, K2Node_CreateDelegate_OutputDelegate_4, true, 0)
+  L059E: self.TagEventHandler = CallFunc_BindEventWrapperToAnyOfGameplayTagsChanged_ReturnValue
+  L05B9: goto L0350
+  L05BE: goto L000F
+  L05C3: CommonActivatableWidget.BP_OnDeactivated()
+  L05CD: AbilitySystemBlueprintLibrary.UnbindAllGameplayTagChangedEventWrappersForHandle(self.TagEventHandler)
+  L05E0: UnbindStickLayoutHint()
+  L05EE: pop-flow
+  L05EF: return
+
+## function FishExhaustionChanged  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_bExhausted = bExhausted
+  L0012: WBP_FishingStruggle_C.ExecuteUbergraph_WBP_FishingStruggle(898)
+  L0021: return
+
+## function GetSettingValue  flags=0x1CC20000
+  L0000: CallFunc_GetOwningPlayer_ReturnValue = GetOwningPlayer()
+  L0018: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(CallFunc_GetOwningPlayer_ReturnValue)
+  L0035: if not (CallFunc_IsValid_ReturnValue) goto L01DA
+  L0043: CallFunc_GetOwningPlayer_ReturnValue = GetOwningPlayer()
+  L005B: CallFunc_GetHUD_ReturnValue = CallFunc_GetOwningPlayer_ReturnValue.PlayerController.GetHUD()
+  L0085: CallFunc_IsValid_ReturnValue_1 = KismetSystemLibrary.IsValid(CallFunc_GetHUD_ReturnValue)
+  L00A2: if not (CallFunc_IsValid_ReturnValue_1) goto L01DA
+  L00B0: CallFunc_GetOwningPlayer_ReturnValue = GetOwningPlayer()
+  L00C8: CallFunc_GetHUD_ReturnValue = CallFunc_GetOwningPlayer_ReturnValue.PlayerController.GetHUD()
+  L00F2: K2Node_DynamicCast_AsBPI_EGUI_HUDInterface = iface<BPI_EGUI_HUDInterface_C>(CallFunc_GetHUD_ReturnValue)
+  L0116: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsBPI_EGUI_HUDInterface
+  L0133: if not (K2Node_DynamicCast_bSuccess) goto L01EA
+  L0141: K2Node_DynamicCast_AsBPI_EGUI_HUDInterface.GetUserSettings(CallFunc_GetUserSettings_UserSettings)
+  L016F: CallFunc_GetField_ReturnValue = Default__JsonBlueprintFunctionLibrary.JsonBlueprintFunctionLibrary.GetField(CallFunc_GetUserSettings_UserSettings, Option, CallFunc_GetField_OutValue)
+  L01B4: if not (CallFunc_GetField_ReturnValue) goto L01DA
+  L01C2: bOut = CallFunc_GetField_OutValue
+  L01D5: goto L0211
+  L01DA: bOut = false
+  L01E5: goto L0211
+  L01EA: CallFunc_GetUserSettings_UserSettings = JsonObjectWrapper{""}
+  L020C: goto L016F
+  L0211: return
+
+## function IsSameDirection  flags=0x1C420000
+  L0000: self.FishingController.IsSameDirection(CallFunc_IsSameDirection_bOut)
+  L002D: CallFunc_Abs_ReturnValue = Abs(self.FishingController.self.StruggleX)
+  L0068: CallFunc_Greater_DoubleDouble_ReturnValue = Greater_DoubleDouble(CallFunc_Abs_ReturnValue, 0.2)
+  L008E: CallFunc_BooleanAND_ReturnValue = BooleanAND(CallFunc_IsSameDirection_bOut, CallFunc_Greater_DoubleDouble_ReturnValue)
+  L00B4: bOut = CallFunc_BooleanAND_ReturnValue
+  L00C7: return
+
+## function RefreshControlHint  flags=0x0C020000
+  L0000: if not (self.bGamepad) goto L00CA
+  L000E: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(self.GamepadSettings)
+  L002B: if not (CallFunc_IsValid_ReturnValue) goto L0121
+  L0039: CallFunc_GetMovementStick_ReturnValue = self.GamepadSettings.DrdGamepadSettingsSubsystem.GetMovementStick()
+  L006B: K2Node_SwitchEnum_CmpSuccess = NotEqual_ByteByte(CallFunc_GetMovementStick_ReturnValue, 0)
+  L008A: if not (K2Node_SwitchEnum_CmpSuccess) goto L0121
+  L0098: K2Node_SwitchEnum_CmpSuccess = NotEqual_ByteByte(CallFunc_GetMovementStick_ReturnValue, 1)
+  L00B7: if not (K2Node_SwitchEnum_CmpSuccess) goto L0178
+  L00C5: goto L01CA
+  L00CA: CallFunc_SetBrushFromAtlasInterface_AtlasRegion_CastInput_2 = iface<SlateTextureAtlasInterface>(self.MouseControlHint)
+  L00EE: self.Image_136.SetBrushFromAtlasInterface(CallFunc_SetBrushFromAtlasInterface_AtlasRegion_CastInput_2, false)
+  L011C: goto L01CA
+  L0121: CallFunc_SetBrushFromAtlasInterface_AtlasRegion_CastInput = iface<SlateTextureAtlasInterface>(self.MovementStickLeftHint)
+  L0145: self.Image_136.SetBrushFromAtlasInterface(CallFunc_SetBrushFromAtlasInterface_AtlasRegion_CastInput, false)
+  L0173: goto L01CA
+  L0178: CallFunc_SetBrushFromAtlasInterface_AtlasRegion_CastInput_1 = iface<SlateTextureAtlasInterface>(self.MovementStickRightHint)
+  L019C: self.Image_136.SetBrushFromAtlasInterface(CallFunc_SetBrushFromAtlasInterface_AtlasRegion_CastInput_1, false)
+  L01CA: return
+
+## function SetupVisibility  flags=0x0C020000
+  L0000: Temp_bool_Variable_1 = bStamina
+  L0013: Temp_byte_Variable_3 = 4
+  L0027: Temp_byte_Variable_4 = 2
+  L003B: self.Overlay_StaminaBar.SetVisibility(switch(Temp_bool_Variable_1){false: Temp_byte_Variable_4; true: Temp_byte_Variable_3; default: K2Node_Select_Default_1})
+  L0094: self.Overlay_StaminaIcon.SetVisibility(switch(Temp_bool_Variable_1){false: Temp_byte_Variable_4; true: Temp_byte_Variable_3; default: K2Node_Select_Default_1})
+  L00ED: Temp_bool_Variable = bTenstion
+  L0100: Temp_byte_Variable_1 = 4
+  L0114: Temp_byte_Variable_2 = 2
+  L0128: self.Overlay_Tenstion_Block.SetVisibility(switch(Temp_bool_Variable){false: Temp_byte_Variable_2; true: Temp_byte_Variable_1; default: K2Node_Select_Default})
+  L0181: self.Overlay_TenstionIcon.SetVisibility(switch(Temp_bool_Variable){false: Temp_byte_Variable_2; true: Temp_byte_Variable_1; default: K2Node_Select_Default})
+  L01DA: Temp_byte_Variable = 2
+  L01EE: Temp_byte_Variable_5 = 4
+  L0202: Temp_bool_Variable_2 = bReelIn
+  L0215: self.WBP_InputHintCirculated.SetVisibility(switch(Temp_bool_Variable_2){false: Temp_byte_Variable; true: Temp_byte_Variable_5; default: K2Node_Select_Default_2})
+  L026E: return
+
+## function ShowAbilityReaction  flags=0x0C020000
+  L0000: self.NamedSlot_Reaction.ClearChildren()
+  L0024: CallFunc_Create_ReturnValue = Default__WidgetBlueprintLibrary.WidgetBlueprintLibrary.Create(self, WBP_Fishing_Slot_C, null)
+  L0059: KismetSystemLibrary.SetObjectPropertyByName(CallFunc_Create_ReturnValue, 'Icon', Icon)
+  L0082: KismetSystemLibrary.SetBoolPropertyByName(CallFunc_Create_ReturnValue, 'bActive', true)
+  L00A3: KismetSystemLibrary.SetBoolPropertyByName(CallFunc_Create_ReturnValue, 'bShowOnce', true)
+  L00C4: CallFunc_AddChild_ReturnValue = self.NamedSlot_Reaction.PanelWidget.AddChild(CallFunc_Create_ReturnValue)
+  L00F7: return
+
+## function SwitchExhausted  flags=0x0C820000
+  L0000: if not (bExhausted) goto L0168
+  L000E: self.HorizontalBox_Block.Widget.SetRenderOpacity(0.5)
+  L0033: CallFunc_PlayAnimation_ReturnValue = UserWidget.PlayAnimation(self.Pull, 0, 0, 0, 1, false)
+  L006A: self.WidgetSwitcher_Fight.SetActiveWidgetIndex(1)
+  L0093: self.Image_Stamina_Lag.SetVisibility(1)
+  L00B9: self.HorizontalBox_PullHint.SetVisibility(0)
+  L00DF: self.LagStaminaTarget = 0
+  L00FA: self.LagStamina = 0
+  L0115: self.Image_Stamina_Icon.SetBrushFromAtlasInterface(iface<SlateTextureAtlasInterface>(SPR_FishStamina002_Minimum), false)
+  L014C: UpdateStaminaLag(0)
+  L0163: goto L02C6
+  L0168: self.HorizontalBox_Block.Widget.SetRenderOpacity(1)
+  L018D: UserWidget.StopAnimation(self.Pull)
+  L01A0: self.WidgetSwitcher_Fight.SetActiveWidgetIndex(0)
+  L01C9: self.FishingController.GetFishStaminaPercent(CallFunc_GetFishStaminaPercent_Percent)
+  L01F6: self.LagStaminaTarget = CallFunc_GetFishStaminaPercent_Percent
+  L0211: self.LagStamina = self.LagStaminaTarget
+  L022C: UpdateStaminaLag(0)
+  L0243: self.Image_Stamina_Lag.SetVisibility(0)
+  L0269: self.HorizontalBox_PullHint.SetVisibility(1)
+  L028F: self.Image_Stamina_Icon.SetBrushFromAtlasInterface(iface<SlateTextureAtlasInterface>(SPR_FishStamina002_Default), false)
+  L02C6: return
+
+## function TagsChanged  flags=0x0C420000
+  L0000: GameplayTagsK2Node_SwitchGameplayTag_CmpSuccess = BlueprintGameplayTagLibrary.NotEqual_TagTag(Tag, "GAS.State.Fishing.Tension.Restoring")
+  L0042: if not (GameplayTagsK2Node_SwitchGameplayTag_CmpSuccess) goto L00A4
+  L0050: GameplayTagsK2Node_SwitchGameplayTag_CmpSuccess = BlueprintGameplayTagLibrary.NotEqual_TagTag(Tag, "GAS.State.Fishing.Stamina.Reducing")
+  L0091: if not (GameplayTagsK2Node_SwitchGameplayTag_CmpSuccess) goto L00FE
+  L009F: goto L0153
+  L00A4: UpdateTenstionRestoring()
+  L00B2: CallFunc_Greater_IntInt_ReturnValue_1 = Greater_IntInt(TagCount, 0)
+  L00D4: if not (CallFunc_Greater_IntInt_ReturnValue_1) goto L0153
+  L00E2: ShowAbilityReaction(SPR_AbilitySkillFishingLine001)
+  L00F9: goto L0153
+  L00FE: UpdateStaminaReducing()
+  L010C: CallFunc_Greater_IntInt_ReturnValue = Greater_IntInt(TagCount, 0)
+  L012E: if not (CallFunc_Greater_IntInt_ReturnValue) goto L0153
+  L013C: ShowAbilityReaction(SPR_AbilitySkillRodFishing001)
+  L0153: return
+
+## function Tick  flags=0x08020808
+  L0000: frame.K2Node_Event_MyGeometry = MyGeometry
+  L0012: frame.K2Node_Event_InDeltaTime = InDeltaTime
+  L0024: WBP_FishingStruggle_C.ExecuteUbergraph_WBP_FishingStruggle(1470)
+  L0033: return
+
+## function UnbindStickLayoutHint  flags=0x0C020000
+  L0000: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(self.GamepadSettings)
+  L001D: if not (CallFunc_IsValid_ReturnValue) goto L006B
+  L002B: bind(K2Node_CreateDelegate_OutputDelegate, self, 'RefreshControlHint')
+  L0042: self.GamepadSettings.self.OnStickLayoutChanged -= K2Node_CreateDelegate_OutputDelegate
+  L006B: self.GamepadSettings = null
+  L0076: return
+
+## function UpdateAnimationSpeed  flags=0x0C020000
+  L0000: CallFunc_IsAnimationPlaying_ReturnValue = UserWidget.IsAnimationPlaying(self.Pull)
+  L001D: if not (CallFunc_IsAnimationPlaying_ReturnValue) goto L0064
+  L002B: CallFunc_GetGlobalTimeDilation_ReturnValue = GameplayStatics.GetGlobalTimeDilation(self)
+  L0048: UserWidget.SetPlaybackSpeed(self.Pull, CallFunc_GetGlobalTimeDilation_ReturnValue)
+  L0064: return
+
+## function UpdateDirection  flags=0x0C020000
+  L0000: push L033F
+  L0005: L_SameDirection = false
+  L0010: IsSameDirection(CallFunc_IsSameDirection_bOut)
+  L0027: L_SameDirection = CallFunc_IsSameDirection_bOut
+  L003A: push L017A
+  L003F: CallFunc_NotEqual_ByteByte_ReturnValue = NotEqual_ByteByte(self.FishingController.self.FishDirection, self.FishDirection)
+  L007B: if not (CallFunc_NotEqual_ByteByte_ReturnValue) pop-flow
+  L0085: self.FishDirection = self.FishingController.self.FishDirection
+  L00B6: CallFunc_EqualEqual_ByteByte_ReturnValue = EqualEqual_ByteByte(self.FishDirection, 1)
+  L00D5: CallFunc_SelectInt_ReturnValue = SelectInt(0, 1, CallFunc_EqualEqual_ByteByte_ReturnValue)
+  L0104: self.WidgetSwitcher_Side.SetActiveWidgetIndex(CallFunc_SelectInt_ReturnValue)
+  L0131: self.FishingController.GetFishStaminaPercent(CallFunc_GetFishStaminaPercent_Percent)
+  L015E: self.LagStaminaTarget = CallFunc_GetFishStaminaPercent_Percent
+  L0179: pop-flow
+  L017A: Temp_interface_Variable_1 = iface<SlateTextureAtlasInterface>(SPR_IcFishRodDirection001_Ok)
+  L019E: Temp_interface_Variable_2 = iface<SlateTextureAtlasInterface>(SPR_IcFishRodDirection001_NoOk)
+  L01C2: Temp_bool_Variable = L_SameDirection
+  L01D5: self.Image_Direction.SetBrushFromAtlasInterface(switch(Temp_bool_Variable){false: Temp_interface_Variable_2; true: Temp_interface_Variable_1; default: K2Node_Select_Default}, false)
+  L022F: Temp_interface_Variable = iface<SlateTextureAtlasInterface>(SPR_IcFishRodDirectionArrow001_NoOk)
+  L0253: Temp_interface_Variable_3 = iface<SlateTextureAtlasInterface>(SPR_IcFishRodDirectionArrow001_Ok)
+  L0277: Temp_bool_Variable_1 = L_SameDirection
+  L028A: self.Image_Direction_Left.SetBrushFromAtlasInterface(switch(Temp_bool_Variable_1){false: Temp_interface_Variable; true: Temp_interface_Variable_3; default: K2Node_Select_Default_1}, false)
+  L02E4: self.Image_Direction_Right.SetBrushFromAtlasInterface(switch(Temp_bool_Variable_1){false: Temp_interface_Variable; true: Temp_interface_Variable_3; default: K2Node_Select_Default_1}, false)
+  L033E: pop-flow
+  L033F: return
+
+## function UpdateDistance  flags=0x0C820000
+  L0000: K2Node_MakeStruct_FormatArgumentData.ArgumentName = "2"
+  L001E: K2Node_MakeStruct_FormatArgumentData.ArgumentValueType = 4
+  L003B: K2Node_MakeStruct_FormatArgumentData.ArgumentValue = self.Meters
+  L005F: K2Node_MakeStruct_FormatArgumentData.ArgumentValueInt = 0
+  L0083: K2Node_MakeStruct_FormatArgumentData.ArgumentValueFloat = 0
+  L00A3: K2Node_MakeStruct_FormatArgumentData.ArgumentValueDouble = 0
+  L00C7: K2Node_MakeStruct_FormatArgumentData.ArgumentValueGender = 0
+  L00E4: self.FishingController.GetDistanceToFish(CallFunc_GetDistanceToFish_Distance)
+  L0111: CallFunc_Subtract_DoubleDouble_B_ImplicitCast = self.FishingController.self.Config.CatchDistance
+  L014D: CallFunc_Subtract_DoubleDouble_ReturnValue = Subtract_DoubleDouble(CallFunc_GetDistanceToFish_Distance, CallFunc_Subtract_DoubleDouble_B_ImplicitCast)
+  L017B: CallFunc_Abs_ReturnValue = Abs(CallFunc_Subtract_DoubleDouble_ReturnValue)
+  L01A0: CallFunc_Multiply_DoubleDouble_ReturnValue = Multiply_DoubleDouble(CallFunc_Abs_ReturnValue, 0.01)
+  L01CE: CallFunc_Conv_DoubleToText_ReturnValue = KismetTextLibrary.Conv_DoubleToText(CallFunc_Multiply_DoubleDouble_ReturnValue, 3, false, true, 1, 324, 0, 0)
+  L020B: K2Node_MakeStruct_FormatArgumentData_1.ArgumentName = "1"
+  L0229: K2Node_MakeStruct_FormatArgumentData_1.ArgumentValueType = 4
+  L0246: K2Node_MakeStruct_FormatArgumentData_1.ArgumentValue = CallFunc_Conv_DoubleToText_ReturnValue
+  L026A: K2Node_MakeStruct_FormatArgumentData_1.ArgumentValueInt = 0
+  L028E: K2Node_MakeStruct_FormatArgumentData_1.ArgumentValueFloat = 0
+  L02AE: K2Node_MakeStruct_FormatArgumentData_1.ArgumentValueDouble = 0
+  L02D2: K2Node_MakeStruct_FormatArgumentData_1.ArgumentValueGender = 0
+  L02EF: K2Node_MakeArray_Array = [K2Node_MakeStruct_FormatArgumentData_1, K2Node_MakeStruct_FormatArgumentData]
+  L030C: CallFunc_Format_ReturnValue = KismetTextLibrary.Format(Text("{1} {2}"), K2Node_MakeArray_Array)
+  L033C: self.TextBlock_Distance.SetText(CallFunc_Format_ReturnValue)
+  L0369: CallFunc_SelectColor_ReturnValue = SelectColor(LinearColor{0.215861, 0.527115, 0.351533, 1}, LinearColor{0.552012, 0.552012, 0.577581, 1}, self.FishingController.self.bFishExhausted)
+  L03E8: K2Node_MakeStruct_SlateColor.SpecifiedColor = CallFunc_SelectColor_ReturnValue
+  L040C: K2Node_MakeStruct_SlateColor.ColorUseRule = 0
+  L0429: self.TextBlock_Distance.TextBlock.SetColorAndOpacity(K2Node_MakeStruct_SlateColor)
+  L0452: return
+
+## function UpdateDrag  flags=0x0C820000
+  L0000: CallFunc_SelectColor_ReturnValue = SelectColor(LinearColor{0.217391, 1, 0.217391, 1}, LinearColor{0.552012, 0.552012, 0.577581, 1}, bDrag)
+  L0069: K2Node_MakeStruct_SlateColor.SpecifiedColor = CallFunc_SelectColor_ReturnValue
+  L008D: K2Node_MakeStruct_SlateColor.ColorUseRule = 0
+  L00AA: self.TextBlock_Drag.TextBlock.SetColorAndOpacity(K2Node_MakeStruct_SlateColor)
+  L00D3: return
+
+## function UpdateFishingSettings  flags=0x0C020000
+  L0000: push L0369
+  L0005: push L02AD
+  L000A: push L01F2
+  L000F: push L00D3
+  L0014: Temp_byte_Variable_6 = 2
+  L0028: Temp_byte_Variable_7 = 4
+  L003C: GetSettingValue("Immersive Fishing", CallFunc_GetSettingValue_bOut_3)
+  L0066: Temp_bool_Variable_2 = CallFunc_GetSettingValue_bOut_3
+  L0079: self.CanvasPanel_Immersive.SetVisibility(switch(Temp_bool_Variable_2){false: Temp_byte_Variable_7; true: Temp_byte_Variable_6; default: K2Node_Select_Default_3})
+  L00D2: pop-flow
+  L00D3: Temp_byte_Variable_4 = 4
+  L00E7: Temp_byte_Variable_5 = 2
+  L00FB: GetSettingValue("Fish Struggle Indicators", CallFunc_GetSettingValue_bOut_2)
+  L012C: Temp_bool_Variable_1 = CallFunc_GetSettingValue_bOut_2
+  L013F: self.HorizontalBox_Block.SetVisibility(switch(Temp_bool_Variable_1){false: Temp_byte_Variable_5; true: Temp_byte_Variable_4; default: K2Node_Select_Default_2})
+  L0198: self.Overlay_Pull.SetVisibility(switch(Temp_bool_Variable_1){false: Temp_byte_Variable_5; true: Temp_byte_Variable_4; default: K2Node_Select_Default_2})
+  L01F1: pop-flow
+  L01F2: Temp_byte_Variable_2 = 4
+  L0206: Temp_byte_Variable_3 = 2
+  L021A: GetSettingValue("Fish Distance", CallFunc_GetSettingValue_bOut_1)
+  L0240: Temp_bool_Variable = CallFunc_GetSettingValue_bOut_1
+  L0253: self.Overlay_Distance.SetVisibility(switch(Temp_bool_Variable){false: Temp_byte_Variable_3; true: Temp_byte_Variable_2; default: K2Node_Select_Default_1})
+  L02AC: pop-flow
+  L02AD: Temp_byte_Variable = 4
+  L02C1: Temp_byte_Variable_1 = 2
+  L02D5: GetSettingValue("Guided Fishing", CallFunc_GetSettingValue_bOut)
+  L02FC: Temp_bool_Variable_3 = CallFunc_GetSettingValue_bOut
+  L030F: self.Overlay_Fight.SetVisibility(switch(Temp_bool_Variable_3){false: Temp_byte_Variable_1; true: Temp_byte_Variable; default: K2Node_Select_Default})
+  L0368: pop-flow
+  L0369: return
+
+## function UpdateInputType  flags=0x0C020000
+  L0000: CallFunc_EqualEqual_ByteByte_ReturnValue = EqualEqual_ByteByte(Type, 1)
+  L001F: self.bGamepad = CallFunc_EqualEqual_ByteByte_ReturnValue
+  L0032: RefreshControlHint()
+  L0040: UpdateSettings()
+  L004E: return
+
+## function UpdateQTEStamina  flags=0x0C020000
+  L0000: if not (self.FishingController.self.bFishExhausted) goto L0029
+  L0024: goto L01CC
+  L0029: self.FishingController.GetFishStaminaPercent(CallFunc_GetFishStaminaPercent_Percent_1)
+  L0056: CallFunc_Less_DoubleDouble_ReturnValue = Less_DoubleDouble(CallFunc_GetFishStaminaPercent_Percent_1, self.FishingController.self.FishPreQteStaminaPercent)
+  L0092: if not (CallFunc_Less_DoubleDouble_ReturnValue) goto L01CC
+  L00A0: self.FishingController.GetFishStaminaPercent(CallFunc_GetFishStaminaPercent_Percent)
+  L00CD: self.LagStaminaTarget = CallFunc_GetFishStaminaPercent_Percent
+  L00E8: CallFunc_GetDynamicMaterial_ReturnValue = self.Image_Stamina_Lag.Image.GetDynamicMaterial()
+  L0112: self.LagStamina = self.FishingController.self.FishPreQteStaminaPercent
+  L0143: CallFunc_SetScalarParameterValue_Value_ImplicitCast = self.LagStamina
+  L0160: CallFunc_GetDynamicMaterial_ReturnValue.MaterialInstanceDynamic.SetScalarParameterValue('Value', CallFunc_SetScalarParameterValue_Value_ImplicitCast)
+  L0196: CallFunc_GetDynamicMaterial_ReturnValue.MaterialInstanceDynamic.SetTextureParameterValue('TextureParam', T_PrbStaminaFishFull003_Mask)
+  L01CC: return
+
+## function UpdateReelInput  flags=0x0C020000
+  L0000: self.WBP_InputHintCirculated.SetCircleValue(self.FishingController.self.ReelTime)
+  L0043: self.WBP_InputHintCirculated_Pull.SetCircleValue(self.FishingController.self.ReelTime)
+  L0086: return
+
+## function UpdateSettings  flags=0x0C020000
+  L0000: if not (self.bGamepad) goto L003C
+  L000E: self.WidgetSwitcher_Control.SetActiveWidgetIndex(0)
+  L0037: goto L00CF
+  L003C: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(self.FishingController)
+  L0059: if not (CallFunc_IsValid_ReturnValue) goto L00CF
+  L0067: CallFunc_Conv_BoolToInt_ReturnValue = Conv_BoolToInt(self.FishingController.self.bKeyboardSetting)
+  L00A2: self.WidgetSwitcher_Control.SetActiveWidgetIndex(CallFunc_Conv_BoolToInt_ReturnValue)
+  L00CF: return
+
+## function UpdateStamina  flags=0x0C020000
+  L0000: self.FishingController.GetFishStaminaPercent(CallFunc_GetFishStaminaPercent_Percent)
+  L002D: CallFunc_SetScalarParameterValue_Value_ImplicitCast = CallFunc_GetFishStaminaPercent_Percent
+  L004A: self.StaminaMID.MaterialInstanceDynamic.SetScalarParameterValue('Value', CallFunc_SetScalarParameterValue_Value_ImplicitCast)
+  L0080: self.FishingController.GetFishStaminaPercent(CallFunc_GetFishStaminaPercent_Percent)
+  L00AD: CallFunc_SetAnimationCurrentTime_InTime_ImplicitCast = CallFunc_GetFishStaminaPercent_Percent
+  L00CA: UserWidget.SetAnimationCurrentTime(self.Stamina, CallFunc_SetAnimationCurrentTime_InTime_ImplicitCast)
+  L00E6: return
+
+## function UpdateStaminaLag  flags=0x0C020000
+  L0000: CallFunc_GetDynamicMaterial_ReturnValue = self.Image_Stamina_Lag.Image.GetDynamicMaterial()
+  L002A: CallFunc_FInterpTo_ReturnValue = FInterpTo(self.LagStamina, self.LagStaminaTarget, Delta, 5)
+  L006A: self.LagStamina = CallFunc_FInterpTo_ReturnValue
+  L0085: CallFunc_SetScalarParameterValue_Value_ImplicitCast = self.LagStamina
+  L00A2: CallFunc_GetDynamicMaterial_ReturnValue.MaterialInstanceDynamic.SetScalarParameterValue('Value', CallFunc_SetScalarParameterValue_Value_ImplicitCast)
+  L00D8: CallFunc_NearlyEqual_FloatFloat_ReturnValue = NearlyEqual_FloatFloat(self.LagStamina, self.LagStaminaTarget, 0.001)
+  L0107: if not (CallFunc_NearlyEqual_FloatFloat_ReturnValue) goto L014B
+  L0115: CallFunc_GetDynamicMaterial_ReturnValue.MaterialInstanceDynamic.SetTextureParameterValue('TextureParam', T_PrbStaminaFishFull002)
+  L014B: return
+
+## function UpdateStaminaReducing  flags=0x0C820000
+  L0000: Temp_interface_Variable_2 = iface<SlateTextureAtlasInterface>(SPR_FishStamina002_Minimum)
+  L0024: Temp_interface_Variable_3 = iface<SlateTextureAtlasInterface>(SPR_FishStamina002_Default)
+  L0048: Temp_interface_Variable_4 = iface<SlateTextureAtlasInterface>(SPR_FishStamina002_Active)
+  L006C: CallFunc_GetGameplayTagCount_ReturnValue = self.FishingController.self.AbilitySystem.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GAS.State.Fishing.Stamina.Reducing'})
+  L00CF: CallFunc_Greater_IntInt_ReturnValue = Greater_IntInt(CallFunc_GetGameplayTagCount_ReturnValue, 0)
+  L00F1: Temp_bool_Variable_4 = CallFunc_Greater_IntInt_ReturnValue
+  L0104: Temp_bool_Variable_3 = self.FishingController.self.bFishExhausted
+  L012D: self.Image_Stamina_Icon.SetBrushFromAtlasInterface(switch(Temp_bool_Variable_4){false: switch(Temp_bool_Variable_3){false: Temp_interface_Variable_3; true: Temp_interface_Variable_2; default: K2Node_Select_Default_5}; true: Temp_interface_Variable_4; default: K2Node_Select_Default_6}, false)
+  L01B3: Temp_interface_Variable = iface<SlateTextureAtlasInterface>(SPR_PrbStaminaFishBg002_Glow)
+  L01D7: Temp_interface_Variable_1 = iface<SlateTextureAtlasInterface>(SPR_PrbStaminaFishBg001)
+  L01FB: CallFunc_GetGameplayTagCount_ReturnValue = self.FishingController.self.AbilitySystem.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GAS.State.Fishing.Stamina.Reducing'})
+  L025E: CallFunc_Greater_IntInt_ReturnValue = Greater_IntInt(CallFunc_GetGameplayTagCount_ReturnValue, 0)
+  L0280: Temp_bool_Variable_2 = CallFunc_Greater_IntInt_ReturnValue
+  L0293: self.Image_Stamina_Back.SetBrushFromAtlasInterface(switch(Temp_bool_Variable_2){false: Temp_interface_Variable_1; true: Temp_interface_Variable; default: K2Node_Select_Default_4}, false)
+  L02ED: Temp_byte_Variable = 1
+  L0301: Temp_byte_Variable_1 = 0
+  L0315: Temp_byte_Variable_2 = 1
+  L0329: CallFunc_GetGameplayTagCount_ReturnValue = self.FishingController.self.AbilitySystem.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GAS.State.Fishing.Stamina.Reducing'})
+  L038C: Temp_bool_Variable = self.FishingController.self.bFishExhausted
+  L03B5: CallFunc_Greater_IntInt_ReturnValue = Greater_IntInt(CallFunc_GetGameplayTagCount_ReturnValue, 0)
+  L03D7: Temp_bool_Variable_1 = CallFunc_Greater_IntInt_ReturnValue
+  L03EA: self.Image_Stamina_Lag.SetVisibility(switch(Temp_bool_Variable_1){false: switch(Temp_bool_Variable){false: Temp_byte_Variable_1; true: Temp_byte_Variable; default: K2Node_Select_Default}; true: Temp_byte_Variable_2; default: K2Node_Select_Default_3})
+  L046F: Temp_object_Variable = T_PrbStaminaFishFull003_Mask
+  L0482: Temp_object_Variable_1 = T_PrbStaminaFishFull001
+  L0495: CallFunc_GetGameplayTagCount_ReturnValue = self.FishingController.self.AbilitySystem.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GAS.State.Fishing.Stamina.Reducing'})
+  L04F8: CallFunc_Greater_IntInt_ReturnValue = Greater_IntInt(CallFunc_GetGameplayTagCount_ReturnValue, 0)
+  L051A: Temp_bool_Variable_5 = CallFunc_Greater_IntInt_ReturnValue
+  L052D: self.StaminaMID.MaterialInstanceDynamic.SetTextureParameterValue('TextureParam', switch(Temp_bool_Variable_5){false: Temp_object_Variable_1; true: Temp_object_Variable; default: K2Node_Select_Default_2})
+  L058F: Temp_byte_Variable_3 = 1
+  L05A3: Temp_byte_Variable_4 = 0
+  L05B7: CallFunc_GetGameplayTagCount_ReturnValue = self.FishingController.self.AbilitySystem.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GAS.State.Fishing.Stamina.Reducing'})
+  L061A: CallFunc_Greater_IntInt_ReturnValue = Greater_IntInt(CallFunc_GetGameplayTagCount_ReturnValue, 0)
+  L063C: Temp_bool_Variable_6 = CallFunc_Greater_IntInt_ReturnValue
+  L064F: self.Overlay_StaminaWaves.SetVisibility(switch(Temp_bool_Variable_6){false: Temp_byte_Variable_3; true: Temp_byte_Variable_4; default: K2Node_Select_Default_1})
+  L06A8: self.Image_StaminaReducingIcon.SetVisibility(switch(Temp_bool_Variable_6){false: Temp_byte_Variable_3; true: Temp_byte_Variable_4; default: K2Node_Select_Default_1})
+  L0701: CallFunc_GetGameplayTagCount_ReturnValue = self.FishingController.self.AbilitySystem.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GAS.State.Fishing.Stamina.Reducing'})
+  L0764: CallFunc_Greater_IntInt_ReturnValue = Greater_IntInt(CallFunc_GetGameplayTagCount_ReturnValue, 0)
+  L0786: if not (CallFunc_Greater_IntInt_ReturnValue) goto L07D0
+  L0794: CallFunc_PlayAnimation_ReturnValue = UserWidget.PlayAnimation(self.Reducing, 0, 0, 0, 1, false)
+  L07CB: goto L07E3
+  L07D0: UserWidget.StopAnimation(self.Reducing)
+  L07E3: return
+
+## function UpdateTenstion  flags=0x0C820000
+  L0000: L_Value = 0
+  L001B: self.FishingController.GetTenstionPercent(CallFunc_GetTenstionPercent_Percent)
+  L0048: L_Value = CallFunc_GetTenstionPercent_Percent
+  L0063: CallFunc_MapRangeClamped_ReturnValue = MapRangeClamped(L_Value, 0, 1, 67, -67)
+  L00AC: CallFunc_SetRenderTransformAngle_Angle_ImplicitCast = CallFunc_MapRangeClamped_ReturnValue
+  L00C9: self.Image_Tension_Thumb.Widget.SetRenderTransformAngle(CallFunc_SetRenderTransformAngle_Angle_ImplicitCast)
+  L00F2: CallFunc_GreaterEqual_DoubleDouble_ReturnValue = GreaterEqual_DoubleDouble(L_Value, self.TensionThreshold)
+  L0118: if not (CallFunc_GreaterEqual_DoubleDouble_ReturnValue) goto L01C8
+  L0126: CallFunc_MapRangeClamped_ReturnValue_1 = MapRangeClamped(L_Value, self.TensionThreshold, 1, 0, 1.5)
+  L016F: CallFunc_SetRenderOpacity_InOpacity_ImplicitCast = CallFunc_MapRangeClamped_ReturnValue_1
+  L018C: self.Image_TenstionVignette.Widget.SetRenderOpacity(CallFunc_SetRenderOpacity_InOpacity_ImplicitCast)
+  L01B5: if not (self.bTensionDanger) goto L0460
+  L01C3: goto L04D0
+  L01C8: if not (self.bTensionDanger) goto L04D0
+  L01D6: self.bTensionDanger = false
+  L01E1: UserWidget.StopAnimation(self.Danger)
+  L01F4: self.Overlay_Tenstion_Block.Widget.SetRenderTranslation(Vector2D{0, 0})
+  L0234: CallFunc_GetGameplayTagCount_ReturnValue = self.FishingController.self.AbilitySystem.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GAS.State.Fishing.Tension.Restoring'})
+  L0297: CallFunc_Greater_IntInt_ReturnValue = Greater_IntInt(CallFunc_GetGameplayTagCount_ReturnValue, 0)
+  L02B9: CallFunc_SelectInt_ReturnValue = SelectInt(2, 0, CallFunc_Greater_IntInt_ReturnValue)
+  L02E8: self.WidgetSwitcher_TensionBack.SetActiveWidgetIndex(CallFunc_SelectInt_ReturnValue)
+  L0315: Temp_byte_Variable = 4
+  L0329: Temp_byte_Variable_1 = 1
+  L033D: Temp_bool_Variable = self.bTensionDanger
+  L0350: self.Image_TenstionVignette.SetVisibility(switch(Temp_bool_Variable){false: Temp_byte_Variable_1; true: Temp_byte_Variable; default: K2Node_Select_Default})
+  L03A9: self.Image_Danger_Wave_1.SetVisibility(switch(Temp_bool_Variable){false: Temp_byte_Variable_1; true: Temp_byte_Variable; default: K2Node_Select_Default})
+  L0402: self.Image_Danger_Wave_2.SetVisibility(switch(Temp_bool_Variable){false: Temp_byte_Variable_1; true: Temp_byte_Variable; default: K2Node_Select_Default})
+  L045B: goto L04D0
+  L0460: self.bTensionDanger = true
+  L046B: CallFunc_PlayAnimation_ReturnValue = UserWidget.PlayAnimation(self.Danger, 0, 0, 0, 1, false)
+  L04A2: self.WidgetSwitcher_TensionBack.SetActiveWidgetIndex(1)
+  L04CB: goto L0315
+  L04D0: return
+
+## function UpdateTenstionRestoring  flags=0x0C820000
+  L0000: Temp_byte_Variable = 0
+  L0014: Temp_byte_Variable_1 = 1
+  L0028: CallFunc_GetGameplayTagCount_ReturnValue = self.FishingController.self.AbilitySystem.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GAS.State.Fishing.Tension.Restoring'})
+  L008B: CallFunc_Greater_IntInt_ReturnValue = Greater_IntInt(CallFunc_GetGameplayTagCount_ReturnValue, 0)
+  L00AD: Temp_bool_Variable_1 = CallFunc_Greater_IntInt_ReturnValue
+  L00C0: self.Image_TenstionRestoreIcon.SetVisibility(switch(Temp_bool_Variable_1){false: Temp_byte_Variable_1; true: Temp_byte_Variable; default: K2Node_Select_Default_2})
+  L0119: Temp_interface_Variable = iface<SlateTextureAtlasInterface>(SPR_IcFishingLine002_Active)
+  L013D: Temp_interface_Variable_1 = iface<SlateTextureAtlasInterface>(SPR_IcFishingLine002_Default)
+  L0161: CallFunc_GetGameplayTagCount_ReturnValue = self.FishingController.self.AbilitySystem.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GAS.State.Fishing.Tension.Restoring'})
+  L01C4: CallFunc_Greater_IntInt_ReturnValue = Greater_IntInt(CallFunc_GetGameplayTagCount_ReturnValue, 0)
+  L01E6: Temp_bool_Variable = CallFunc_Greater_IntInt_ReturnValue
+  L01F9: self.Image_Reel.SetBrushFromAtlasInterface(switch(Temp_bool_Variable){false: Temp_interface_Variable_1; true: Temp_interface_Variable; default: K2Node_Select_Default_1}, false)
+  L0253: CallFunc_SelectInt_ReturnValue = SelectInt(1, 0, self.bTensionDanger)
+  L0282: CallFunc_GetGameplayTagCount_ReturnValue = self.FishingController.self.AbilitySystem.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GAS.State.Fishing.Tension.Restoring'})
+  L02E5: CallFunc_Greater_IntInt_ReturnValue = Greater_IntInt(CallFunc_GetGameplayTagCount_ReturnValue, 0)
+  L0307: CallFunc_SelectInt_ReturnValue_1 = SelectInt(2, CallFunc_SelectInt_ReturnValue, CallFunc_Greater_IntInt_ReturnValue)
+  L033A: self.WidgetSwitcher_TensionBack.SetActiveWidgetIndex(CallFunc_SelectInt_ReturnValue_1)
+  L0367: Temp_byte_Variable_2 = 1
+  L037B: Temp_byte_Variable_3 = 0
+  L038F: CallFunc_GetGameplayTagCount_ReturnValue = self.FishingController.self.AbilitySystem.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GAS.State.Fishing.Tension.Restoring'})
+  L03F2: CallFunc_Greater_IntInt_ReturnValue = Greater_IntInt(CallFunc_GetGameplayTagCount_ReturnValue, 0)
+  L0414: Temp_bool_Variable_2 = CallFunc_Greater_IntInt_ReturnValue
+  L0427: self.Overlay_TenstionWaves.SetVisibility(switch(Temp_bool_Variable_2){false: Temp_byte_Variable_2; true: Temp_byte_Variable_3; default: K2Node_Select_Default})
+  L0480: CallFunc_GetGameplayTagCount_ReturnValue = self.FishingController.self.AbilitySystem.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GAS.State.Fishing.Tension.Restoring'})
+  L04E3: CallFunc_Greater_IntInt_ReturnValue = Greater_IntInt(CallFunc_GetGameplayTagCount_ReturnValue, 0)
+  L0505: if not (CallFunc_Greater_IntInt_ReturnValue) goto L054F
+  L0513: CallFunc_PlayAnimation_ReturnValue = UserWidget.PlayAnimation(self.Restoring, 0, 0, 0, 1, false)
+  L054A: goto L0562
+  L054F: UserWidget.StopAnimation(self.Restoring)
+  L0562: return

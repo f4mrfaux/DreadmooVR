@@ -1,0 +1,99 @@
+# /Game/Dreadmoor/Core/Features/CraftTable/GA_CraftInteraction
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/CraftTable/GA_CraftInteraction.uasset
+
+## imported packages (1)
+  /Game/Dreadmoor/Core/Libraries/BPFL_MIscFunctions
+
+## exports (6)
+  [0] GA_CraftInteraction_C : BlueprintGeneratedClass (outer None) super=DrdGameplayAbility size=427
+  [5] Default__GA_CraftInteraction_C : GA_CraftInteraction_C (outer None) size=54
+        refs: name:ArrayProperty, name:BP_CraftController_C, name:GAS.Character.IsInteracting, name:UI.RecipePin.Allowed
+
+## function EventReceived_EF0AF5D648B2DBDDCEBFAD84B1E781DA  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Payload = Payload
+  L0012: GA_CraftInteraction_C.ExecuteUbergraph_GA_CraftInteraction(2310)
+  L0021: return
+
+## function ExecuteUbergraph_GA_CraftInteraction  flags=0x00808001
+  L0000: push L0926
+  L0005: goto computed(EntryPoint)
+  L000F: CallFunc_GetActorInfo_ReturnValue_1 = GameplayAbility.GetActorInfo()
+  L002B: CallFunc_GetActorInfo_ReturnValue_1.PlayerController.Controller.Possess(CallFunc_FinishSpawningActor_ReturnValue)
+  L005D: CallFunc_WaitGameplayEvent_ReturnValue = AbilityTask_WaitGameplayEvent.WaitGameplayEvent(self, GameplayTag{'GAS.Event.Craft.End'}, null, false, true)
+  L0090: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(CallFunc_WaitGameplayEvent_ReturnValue)
+  L00AD: if not (CallFunc_IsValid_ReturnValue) pop-flow
+  L00B7: bind(K2Node_CreateDelegate_OutputDelegate_1, self, 'EventReceived_EF0AF5D648B2DBDDCEBFAD84B1E781DA')
+  L00CE: CallFunc_WaitGameplayEvent_ReturnValue.self.EventReceived += K2Node_CreateDelegate_OutputDelegate_1
+  L00F7: CallFunc_WaitGameplayEvent_ReturnValue.GameplayTask.ReadyForActivation()
+  L0117: pop-flow
+  L0118: CallFunc_GetActorInfo_ReturnValue_3 = GameplayAbility.GetActorInfo()
+  L0134: K2Node_DynamicCast_AsPawn = cast<Pawn>(CallFunc_GetActorInfo_ReturnValue_3.OwnerActor)
+  L0161: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsPawn
+  L017E: if not (K2Node_DynamicCast_bSuccess) pop-flow
+  L0188: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L01A2: CallFunc_GetPlayerController_ReturnValue.Controller.Possess(K2Node_DynamicCast_AsPawn)
+  L01CB: CallFunc_GetActorInfo_ReturnValue_3 = GameplayAbility.GetActorInfo()
+  L01E7: Default__BPFL_MIscFunctions_C.RestoreAttachedActors(CallFunc_GetActorInfo_ReturnValue_3.OwnerActor, self.HiddenAttachedActors, self)
+  L0227: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Clear(self.HiddenAttachedActors)
+  L0250: CallFunc_GetPlayerController_ReturnValue_2 = GameplayStatics.GetPlayerController(self, 0)
+  L026A: CallFunc_GetPlayerController_ReturnValue_2.SetControlRotation(self.ControlRotationOnBeforeInteract)
+  L0297: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L02B1: CallFunc_GetPlayerController_ReturnValue.self.bEnableClickEvents = false
+  L02D2: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L02EC: CallFunc_GetPlayerController_ReturnValue.self.bEnableMouseOverEvents = false
+  L030D: CallFunc_GetActorInfo_ReturnValue_4 = GameplayAbility.GetActorInfo()
+  L0329: CallFunc_GetActorInfo_ReturnValue_4.OwnerActor.EnableInput(CallFunc_GetActorInfo_ReturnValue_4.PlayerController)
+  L0368: K2_EndAbility()
+  L0376: pop-flow
+  L0377: CallFunc_GetActorInfo_ReturnValue = GameplayAbility.GetActorInfo()
+  L0393: CallFunc_GetActorInfo_ReturnValue.OwnerActor.DisableInput(CallFunc_GetActorInfo_ReturnValue.PlayerController)
+  L03D2: CallFunc_GetActorInfo_ReturnValue = GameplayAbility.GetActorInfo()
+  L03EE: CallFunc_GetActorInfo_ReturnValue.OwnerActor.SetActorHiddenInGame(true)
+  L041C: CallFunc_GetActorInfo_ReturnValue = GameplayAbility.GetActorInfo()
+  L0438: Default__BPFL_MIscFunctions_C.HideAttachedActors(CallFunc_GetActorInfo_ReturnValue.OwnerActor, self, CallFunc_HideAttachedActors_HiddenActors)
+  L0478: self.HiddenAttachedActors = CallFunc_HideAttachedActors_HiddenActors
+  L0493: CallFunc_GetActorInfo_ReturnValue = GameplayAbility.GetActorInfo()
+  L04AF: CallFunc_GetActorInfo_ReturnValue.PlayerController.self.bEnableClickEvents = true
+  L04D9: CallFunc_GetActorInfo_ReturnValue = GameplayAbility.GetActorInfo()
+  L04F5: CallFunc_GetActorInfo_ReturnValue.PlayerController.self.bEnableMouseOverEvents = true
+  L051F: bind(K2Node_CreateDelegate_OutputDelegate, self, 'OnLoaded_42F987E142D60C2A2DF21186F745CE45')
+  L0536: KismetSystemLibrary.LoadAssetClass(self, self.CraftControllerClass, K2Node_CreateDelegate_OutputDelegate, LatentActionInfo{-1, 1986898365, 'ExecuteUbergraph_GA_CraftInteraction', self})
+  L0579: pop-flow
+  L057A: Temp_class_Variable = K2Node_CustomEvent_Loaded
+  L058D: CallFunc_Conv_SoftClassReferenceToClass_ReturnValue = KismetSystemLibrary.Conv_SoftClassReferenceToClass(self.CraftControllerClass)
+  L05AA: CallFunc_GetTransform_ReturnValue = K2Node_Event_EventData.Target.Actor.GetTransform()
+  L05E5: K2Node_ClassDynamicCast_AsPawn = classcast<Pawn>(CallFunc_Conv_SoftClassReferenceToClass_ReturnValue)
+  L0609: K2Node_ClassDynamicCast_bSuccess = K2Node_ClassDynamicCast_AsPawn
+  L0626: CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue = GameplayStatics.BeginDeferredActorSpawnFromClass(self, K2Node_ClassDynamicCast_AsPawn, CallFunc_GetTransform_ReturnValue, 1, null, 1)
+  L0652: CallFunc_GetActorInfo_ReturnValue = GameplayAbility.GetActorInfo()
+  L066E: CallFunc_K2_GetPawn_ReturnValue = CallFunc_GetActorInfo_ReturnValue.PlayerController.Controller.K2_GetPawn()
+  L06A1: KismetSystemLibrary.SetObjectPropertyByName(CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue, 'Instigator', CallFunc_K2_GetPawn_ReturnValue)
+  L06CA: CallFunc_GetTransform_ReturnValue = K2Node_Event_EventData.Target.Actor.GetTransform()
+  L0705: CallFunc_FinishSpawningActor_ReturnValue = GameplayStatics.FinishSpawningActor(CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue, CallFunc_GetTransform_ReturnValue, 1)
+  L072D: CallFunc_GetPlayerController_ReturnValue_1 = GameplayStatics.GetPlayerController(self, 0)
+  L0747: CallFunc_GetControlRotation_ReturnValue = CallFunc_GetPlayerController_ReturnValue_1.GetControlRotation()
+  L077D: self.ControlRotationOnBeforeInteract = CallFunc_GetControlRotation_ReturnValue
+  L0798: Default__BPFL_MIscFunctions_C.UpdateAllCamerasFOVToSettingsValue(CallFunc_FinishSpawningActor_ReturnValue, self)
+  L07C6: CallFunc_GetPlayerController_ReturnValue_1 = GameplayStatics.GetPlayerController(self, 0)
+  L07E0: CallFunc_GetPlayerController_ReturnValue_1.SetViewTargetWithBlend(CallFunc_FinishSpawningActor_ReturnValue, 0.5, 1, 0, false)
+  L081A: KismetSystemLibrary.Delay(self, 0.5, LatentActionInfo{L000F, -1825752171, 'ExecuteUbergraph_GA_CraftInteraction', self})
+  L0850: pop-flow
+  L0851: KismetSystemLibrary.Delay(self, 0.5, LatentActionInfo{L0118, 563512075, 'ExecuteUbergraph_GA_CraftInteraction', self})
+  L0887: pop-flow
+  L0888: CallFunc_GetPlayerController_ReturnValue_2 = GameplayStatics.GetPlayerController(self, 0)
+  L08A2: CallFunc_GetActorInfo_ReturnValue_2 = GameplayAbility.GetActorInfo()
+  L08BE: CallFunc_GetPlayerController_ReturnValue_2.SetViewTargetWithBlend(CallFunc_GetActorInfo_ReturnValue_2.OwnerActor, 0.5, 1, 0, true)
+  L0901: goto L0851
+  L0906: Temp_struct_Variable = K2Node_CustomEvent_Payload
+  L0921: goto L0888
+  L0926: return
+
+## function K2_ActivateAbilityFromEvent  flags=0x08480800
+  L0000: frame.K2Node_Event_EventData = EventData
+  L0012: GA_CraftInteraction_C.ExecuteUbergraph_GA_CraftInteraction(887)
+  L0021: return
+
+## function OnLoaded_42F987E142D60C2A2DF21186F745CE45  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Loaded = Loaded
+  L0012: GA_CraftInteraction_C.ExecuteUbergraph_GA_CraftInteraction(1402)
+  L0021: return

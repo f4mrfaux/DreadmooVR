@@ -1,0 +1,49 @@
+# /Game/Dreadmoor/Core/Features/Ship/Riding/GA_ShipReleaseControl
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/Ship/Riding/GA_ShipReleaseControl.uasset
+
+## imported packages (0)
+
+## exports (5)
+  [0] GA_ShipReleaseControl_C : BlueprintGeneratedClass (outer None) super=DrdGameplayAbility size=258
+  [4] Default__GA_ShipReleaseControl_C : GA_ShipReleaseControl_C (outer None) size=28
+        refs: name:GameEntityStatuses.Ship.ReleaseControlBlocked
+
+## function ExecuteUbergraph_GA_ShipReleaseControl  flags=0x00808001
+  L0000: goto computed(EntryPoint)
+  L000A: CallFunc_K2_CommitAbility_ReturnValue = K2_CommitAbility()
+  L0022: if not (CallFunc_K2_CommitAbility_ReturnValue) goto L038A
+  L0030: CallFunc_GetAvatarActorFromActorInfo_ReturnValue = GameplayAbility.GetAvatarActorFromActorInfo()
+  L0044: K2Node_DynamicCast_AsDrd_Ship_Base = cast<DrdShipBase>(CallFunc_GetAvatarActorFromActorInfo_ReturnValue)
+  L0068: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsDrd_Ship_Base
+  L0085: if not (K2Node_DynamicCast_bSuccess) goto L038A
+  L0093: self.As Drd Ship Base = K2Node_DynamicCast_AsDrd_Ship_Base
+  L00A6: CallFunc_GetWorldSubsystem_ReturnValue = SubsystemBlueprintLibrary.GetWorldSubsystem(self, DrdActorRefsSubsystem)
+  L00C4: CallFunc_GetActorByTag_ReturnValue = DrdActorRefsSubsystem.GetActorByTag(self, GameplayTag{'GameEntities.Player.MainChar'}, CallFunc_GetActorByTag_OutActor)
+  L00FD: K2Node_DynamicCast_AsDrd_Player_Character = cast<DrdPlayerCharacter>(CallFunc_GetActorByTag_OutActor)
+  L0121: K2Node_DynamicCast_bSuccess_1 = K2Node_DynamicCast_AsDrd_Player_Character
+  L013E: if not (K2Node_DynamicCast_bSuccess_1) goto L038A
+  L014C: K2Node_DynamicCast_AsDrd_Player_Character.Actor.K2_DetachFromActor(1, 1, 1)
+  L0172: CallFunc_GetCharacterTranformOnUnpossess_ReturnValue = self.As Drd Ship Base.GetCharacterTranformOnUnpossess()
+  L01A8: CallFunc_K2_SetActorTransform_ReturnValue = K2Node_DynamicCast_AsDrd_Player_Character.Actor.K2_SetActorTransform(CallFunc_GetCharacterTranformOnUnpossess_ReturnValue, false, CallFunc_K2_SetActorTransform_SweepHitResult, true)
+  L01E6: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L0200: CallFunc_GetPlayerController_ReturnValue.Controller.Possess(K2Node_DynamicCast_AsDrd_Player_Character)
+  L0229: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L0243: CallFunc_GetControlRotation_ReturnValue = CallFunc_GetPlayerController_ReturnValue.GetControlRotation()
+  L0279: BreakRotator(CallFunc_GetControlRotation_ReturnValue, CallFunc_BreakRotator_Roll, CallFunc_BreakRotator_Pitch, CallFunc_BreakRotator_Yaw)
+  L02A7: CallFunc_MakeRotator_ReturnValue = MakeRotator(0, 0, CallFunc_BreakRotator_Yaw)
+  L02D6: CallFunc_GetPlayerController_ReturnValue.SetControlRotation(CallFunc_MakeRotator_ReturnValue)
+  L0303: K2Node_MakeStruct_GameplayEventData.Instigator = self.As Drd Ship Base
+  L031F: K2Node_MakeStruct_GameplayEventData.Target = K2Node_DynamicCast_AsDrd_Player_Character
+  L033B: AbilitySystemBlueprintLibrary.SendGameplayEventToActor(K2Node_DynamicCast_AsDrd_Player_Character, GameplayTag{'GAS.Event.RidingShip.End'}, K2Node_MakeStruct_GameplayEventData)
+  L0372: K2_EndAbility()
+  L0380: goto L038A
+  L0385: goto L000A
+  L038A: return
+
+## function K2_ActivateAbility  flags=0x0C080800
+  L0000: OnActivate()
+  L000E: return
+
+## function OnActivate  flags=0x0C000000
+  L0000: GA_ShipReleaseControl_C.ExecuteUbergraph_GA_ShipReleaseControl(901)
+  L000F: return

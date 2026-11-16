@@ -1,0 +1,21 @@
+# /Game/Dreadmoor/Core/Features/Fishing/StateTree/STT_Fishing_InputIndex
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/Fishing/StateTree/STT_Fishing_InputIndex.uasset
+
+## imported packages (2)
+  /Game/Dreadmoor/Core/Features/Fishing/BP_FishingController
+  /Game/Dreadmoor/Core/Features/WaterFeatures/DeckTentacle/BP_DeckTentacleComponent
+
+## exports (4)
+  [0] STT_Fishing_InputIndex_C : BlueprintGeneratedClass (outer None) super=StateTreeTaskBlueprintBase size=289
+  [3] Default__STT_Fishing_InputIndex_C : STT_Fishing_InputIndex_C (outer None) size=8
+
+## function ExecuteUbergraph_STT_Fishing_InputIndex  flags=0x00808001
+  L0000: goto computed(EntryPoint)
+  L000A: StateTreeTaskBlueprintBase.ReceiveLatentEnterState(K2Node_Event_Transition)
+  L001D: self.Actor.ChangeInputIndex(self.Index)
+  L004A: return
+
+## function ReceiveLatentEnterState  flags=0x08420800
+  L0000: frame.K2Node_Event_Transition = Transition
+  L0012: STT_Fishing_InputIndex_C.ExecuteUbergraph_STT_Fishing_InputIndex(10)
+  L0021: return

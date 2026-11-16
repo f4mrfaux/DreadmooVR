@@ -1,0 +1,1676 @@
+# /Game/Dreadmoor/Core/Features/PlayerCharacter/BP_PlayerCharacter
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/PlayerCharacter/BP_PlayerCharacter.uasset
+
+## imported packages (80)
+  /Engine/EngineMaterials/DefaultPhysicalMaterial
+  /Game/3rdParty/Bubble_VFX/VFX/NS_UnderwaterBubble
+  /Game/3rdParty/TFPMovement/Audio/Character/Footsteps/SoundCue/Footsteps_Cue
+  /Game/3rdParty/TFPMovement/Demo/Character/ABP_V03
+  /Game/3rdParty/TFPMovement/Demo/Character/Animations/Action/Montages/AS_MediumLand_Forward_Montage
+  /Game/3rdParty/TFPMovement/Demo/Character/Animations/Action/Montages/AS_Running_Slide_UE_Montage
+  /Game/3rdParty/TFPMovement/Maps/PhysicalMaterials/01_Carpet_Footsteps_Mat
+  /Game/3rdParty/TFPMovement/Maps/PhysicalMaterials/02_Conrete_Footsteps_Mat
+  /Game/3rdParty/TFPMovement/Maps/PhysicalMaterials/03_Grass_Footsteps_Mat
+  /Game/3rdParty/TFPMovement/Maps/PhysicalMaterials/04_Gravel_Footsteps_Mat
+  /Game/3rdParty/TFPMovement/Maps/PhysicalMaterials/05_Ground_Footsteps_Mat
+  /Game/3rdParty/TFPMovement/Maps/PhysicalMaterials/06_Metal_Footsteps_Mat
+  /Game/3rdParty/TFPMovement/Maps/PhysicalMaterials/07_Plastic_Footsteps_Mat
+  /Game/3rdParty/TFPMovement/Maps/PhysicalMaterials/08_Sand_Footsteps_Mat
+  /Game/3rdParty/TFPMovement/Maps/PhysicalMaterials/09_Water_Footsteps_Mat
+  /Game/3rdParty/TFPMovement/Maps/PhysicalMaterials/10_Wood_Footsteps_Mat
+  /Game/3rdParty/TFPMovement/Maps/PhysicalMaterials/11_Mud_Footsteps_Mat
+  /Game/3rdParty/TFPMovement/Maps/PhysicalMaterials/12_SoftSnow_Footsteps_Mat
+  /Game/3rdParty/TFPMovement/Maps/PhysicalMaterials/13_HardSnow_Footsteps_Mat
+  /Game/3rdParty/TFPMovement/Maps/PhysicalMaterials/14_Leaves_Footsteps_Mat
+  /Game/3rdParty/TFPMovement/Maps/PhysicalMaterials/15_Rock_Footsteps_Mat
+  /Game/3rdParty/TFPMovement/Player/Blueprint/Effects/Headbob/BP_Idle
+  /Game/3rdParty/TFPMovement/Player/Blueprint/Effects/Headbob/BP_Jump
+  /Game/3rdParty/TFPMovement/Player/Blueprint/Effects/Headbob/BP_JumpEnd
+  /Game/3rdParty/TFPMovement/Player/Blueprint/Effects/Headbob/BP_Sprint
+  /Game/3rdParty/TFPMovement/Player/Blueprint/Effects/Headbob/BP_Walk
+  /Game/Dreadmoor/Animations/Characters/New/Materials/MI_Main_Hero_Character_Face
+  /Game/Dreadmoor/Animations/Characters/New/dm_demo_NewProtagonist
+  /Game/Dreadmoor/Art/StaticMesh/Characters/PlayersCharacter/ABP/I_AnimData
+  /Game/Dreadmoor/Art/Textures/IES/IES_file/IES_Dreadmoor_FlashLight
+  /Game/Dreadmoor/Art/VFX/Materials/MaterialParameterCollection/MPC_ScreenDroplet
+  /Game/Dreadmoor/Art/VFX/Materials/PostProcess/PPI_Screen_Droplets_GameFade
+  /Game/Dreadmoor/Art/VFX/Niagara/Water/NS_DayPeacefulFish_Selectable
+  /Game/Dreadmoor/Art/VFX/Niagara/Water/NS_SmallSplash
+  /Game/Dreadmoor/Audio/BP_Audio/BP_AC_MusicDucking
+  /Game/Dreadmoor/Audio/Music/Zones/BP_AC_MusicZones
+  /Game/Dreadmoor/Audio/SFX/Action/Water_Splash/SCUE_Splash_Big
+  /Game/Dreadmoor/Audio/SFX/Player/Breathing/Breathing_High/MSS_Breathing_Core
+  /Game/Dreadmoor/Audio/SFX/Player/Tools/SCUE_Flashlight_Turn_Off
+  /Game/Dreadmoor/Audio/SFX/Player/Tools/SCUE_Flashlight_Turn_On
+  /Game/Dreadmoor/Audio/VO/Utilities/BPFL_VOMonologues
+  /Game/Dreadmoor/Core/BP_DrdPlayerController
+  /Game/Dreadmoor/Core/Features/ActionPlayer/BP_ActionPlayer
+  /Game/Dreadmoor/Core/Features/Dictophone/GA_PlayTape
+  /Game/Dreadmoor/Core/Features/Hook/Animation/BPI_AnimWeapon
+  /Game/Dreadmoor/Core/Features/Hook/Harpoon/BP_HarpoonEquipment
+  /Game/Dreadmoor/Core/Features/InteractableContainers/Destructible/BP_Destructible_Base
+  /Game/Dreadmoor/Core/Features/PlayerCharacter/CurveDefaultAlphaSmooth
+  /Game/Dreadmoor/Core/Features/PlayerCharacter/GAS/GA_Cancelaction
+  /Game/Dreadmoor/Core/Features/PlayerCharacter/GAS/GA_CharacterSprint
+  /Game/Dreadmoor/Core/Features/PlayerCharacter/GAS/GA_PlayerCharacter_HitReact
+  /Game/Dreadmoor/Core/Features/PlayerCharacter/GAS/GE_InitHealth
+  /Game/Dreadmoor/Core/Features/PlayerCharacter/GAS/GE_InitStamina
+  /Game/Dreadmoor/Core/Features/PlayerCharacter/GAS/GE_StaminaRegen
+  /Game/Dreadmoor/Core/Features/PlayerCharacter/IBP_CameraActions
+  /Game/Dreadmoor/Core/Features/UpgradeDock/Components/BP_SlotTracerComponent
+  /Game/Dreadmoor/Core/Features/WaterFeatures/AmbientFish/EQS/EQS_AmbientFishPoint
+  /Game/Dreadmoor/Core/Input/Character/IA_CharLight
+  /Game/Dreadmoor/Core/Input/Character/IA_Interact
+  /Game/Dreadmoor/Core/Input/Character/IA_Jump
+  /Game/Dreadmoor/Core/Input/Character/IA_Look
+  /Game/Dreadmoor/Core/Input/Character/IA_Move
+  /Game/Dreadmoor/Core/Input/Character/IA_PrimaryUse
+  /Game/Dreadmoor/Core/Input/Character/IA_SecondaryUse
+  /Game/Dreadmoor/Core/Input/Character/IA_Sprint
+  /Game/Dreadmoor/Core/Input/Character/IA_StopRecord
+  /Game/Dreadmoor/Core/Input/Character/IMC_CharacterMapping
+  /Game/Dreadmoor/Dev/Testing/Outliner/PP_Outliner_Inst
+  /Game/Dreadmoor/InventoryFramework/Components/BP_GearTransitionComponent
+  /Game/Dreadmoor/InventoryFramework/Components/BP_HandObjectsVisibilityComponent
+  /Game/Dreadmoor/InventoryFramework/Components/BP_InventoryComponent
+  /Game/Dreadmoor/InventoryFramework/Items/Weapon/Sickle/IDA_Sickle
+  /Game/Dreadmoor/Localization/ST_Dialogs
+  /Game/Dreadmoor/Localization/ST_UI
+  /Game/Dreadmoor/UI/BPFL_UiFuncitons
+  /Game/Dreadmoor/UI/DeathScreen/WBP_FadeOut_DeathScreen
+  /Game/Dreadmoor/UI/Notifications/WBP_PlayerLoosePhrase_Notifcation
+  /Game/Dreadmoor/UI/UI_Utils/BP_UiCallbacks
+  /Game/EasyOptionsMenu/EasyGameUI/Utilities/BPI_EGUI_HUDInterface
+  /InventoryFrameworkPlugin/Core/Components/BP_AC_EquipmentHelper
+
+## exports (135)
+  [0] AbilityComponentInitializer_GEN_VARIABLE : AbilityComponentInitializer (outer BP_PlayerCharacter_C) size=50
+        refs: name:Player, exp:AC_FootSteps_GEN_VARIABLE, obj:/Game/Dreadmoor/Core/Features/PlayerCharacter/GAS/GA_CharacterSprint.GA_CharacterSprint_C, obj:/Game/Dreadmoor/Core/Features/PlayerCharacter/GAS/GA_Cancelaction.GA_Cancelaction_C, obj:/Game/Dreadmoor/Core/Features/PlayerCharacter/GAS/GA_PlayerCharacter_HitReact.GA_PlayerCharacter_HitReact_C, obj:/Game/Dreadmoor/Core/Features/Dictophone/GA_PlayTape.GA_PlayTape_C, obj:/Game/Dreadmoor/Core/Features/PlayerCharacter/GAS/GE_InitStamina.GE_InitStamina_C, obj:/Game/Dreadmoor/Core/Features/PlayerCharacter/GAS/GE_StaminaRegen.GE_StaminaRegen_C
+  [1] AbilitySystemComp : AbilitySystemComponent (outer Default__BP_PlayerCharacter_C) size=10
+        refs: name:DialogueCameraTargetLocation
+  [2] AC_GASHelper_GEN_VARIABLE : AC_GASHelper (outer BP_PlayerCharacter_C) size=10
+        refs: name:CamY
+  [3] AC_FootSteps_GEN_VARIABLE : AudioComponent (outer BP_PlayerCharacter_C) size=67
+        refs: obj:/Game/3rdParty/TFPMovement/Audio/Character/Footsteps/SoundCue/Footsteps_Cue.Footsteps_Cue, name:bActive, name:CallFunc_CalcDialogTransforms_ActorTransform
+  [4] AC_SpeakerAudio_GEN_VARIABLE : AudioComponent (outer BP_PlayerCharacter_C) size=81
+        refs: obj:/Game/3rdParty/TFPMovement/Audio/Character/Footsteps/SoundCue/Footsteps_Cue.Footsteps_Cue, name:bActive, name:SpeakerAudio
+  [5] AC_SpeakerAudio_Overlap_GEN_VARIABLE : AudioComponent (outer BP_PlayerCharacter_C) size=81
+        refs: obj:/Game/3rdParty/TFPMovement/Audio/Character/Footsteps/SoundCue/Footsteps_Cue.Footsteps_Cue, name:bActive, name:SpeakerAudio_Overlap
+  [6] MSS_Breathing_Core_GEN_VARIABLE : AudioComponent (outer BP_PlayerCharacter_C) size=14
+        refs: obj:/Game/Dreadmoor/Audio/SFX/Player/Breathing/Breathing_High/MSS_Breathing_Core.MSS_Breathing_Core
+  [7] BP_PlayerCharacter_C : BlueprintGeneratedClass (outer None) super=DrdPlayerCharacter size=5468
+  [8] BP_ActionPlayer_GEN_VARIABLE : BP_ActionPlayer_C (outer BP_PlayerCharacter_C) size=10
+        refs: name:Custom
+  [9] Default__BP_PlayerCharacter_C : BP_PlayerCharacter_C (outer None) size=628
+        refs: obj:/Game/Dreadmoor/Core/Features/PlayerCharacter/CurveDefaultAlphaSmooth.CurveDefaultAlphaSmooth, name:OnBlendOut_A80BA0F4449E0102515C6FB09A6F8FAC, name:CallFunc_CalcDialogTransforms_ActorTransform, exp:OnLanded, exp:OnLoaded_EE6C614F4EF6F101811ACAB6DD671431, name:CallFunc_SpawnSystemAtLocation_ReturnValue, exp:DrdPlayerInteraction_GEN_VARIABLE, name:SCUE_VO_Radio, exp:WaterAmbientFx, name:PlayerPhrases_Q_V4_Main_01_Awakening_NoAxe, exp:PlayerCharSet, obj:/Game/Dreadmoor/Core/Input/Character/IMC_CharacterMapping.IMC_CharacterMapping, obj:/Game/Dreadmoor/Core/Input/Character/IA_Move.IA_Move, obj:/Game/Dreadmoor/Core/Input/Character/IA_Jump.IA_Jump, obj:/Game/Dreadmoor/Core/Input/Character/IA_Sprint.IA_Sprint, obj:/Game/Dreadmoor/Core/Input/Character/IA_PrimaryUse.IA_PrimaryUse, obj:/Game/Dreadmoor/Core/Input/Character/IA_SecondaryUse.IA_SecondaryUse, exp:HealthSet, exp:CharacterMesh0, exp:CharMoveComp, exp:CollisionCylinder, exp:OnNotifyEnd_A80BA0F4449E0102515C6FB09A6F8FAC, name:AudioZoneListener
+  [10] BP_SlotTracerComponent_GEN_VARIABLE : BP_SlotTracerComponent_C (outer BP_PlayerCharacter_C) size=10
+        refs: name:ClassProperty
+  [11] Camera_GEN_VARIABLE : CameraComponent (outer BP_PlayerCharacter_C) size=136
+        refs: exp:OnNotifyEnd_A80BA0F4449E0102515C6FB09A6F8FAC, obj:/Game/Dreadmoor/Dev/Testing/Outliner/PP_Outliner_Inst.PP_Outliner_Inst, obj:/Game/Dreadmoor/Art/VFX/Materials/PostProcess/PPI_Screen_Droplets_GameFade.PPI_Screen_Droplets_GameFade, obj:/Game/3rdParty/TFPMovement/Demo/Character/Animations/Action/Montages/AS_MediumLand_Forward_Montage.AS_MediumLand_Forward_Montage, name:AudioZoneListener
+  [12] CollisionCylinder : CapsuleComponent (outer Default__BP_PlayerCharacter_C) size=79
+        refs: obj:/Script/NavigationSystem.NavArea_Obstacle, name:Custom, name:Visibility, name:Camera, name:PlayerCapsule
+  [13] DrdActorTag_GEN_VARIABLE : DrdActorTagComponent (outer BP_PlayerCharacter_C) size=38
+        refs: name:GameEntities.Player.MainChar, name:CallFunc_FClamp_ReturnValue
+  [14] HealthSet : DrdAttributeSetHealth (outer Default__BP_PlayerCharacter_C) size=6
+  [15] PlayerCharSet : DrdAttributeSetPlayerCharacter (outer Default__BP_PlayerCharacter_C) size=6
+  [16] CharMoveComp : DrdCharacterMovementComponent (outer Default__BP_PlayerCharacter_C) size=61
+        refs: obj:/Script/CoreUObject.Default__Function, exp:OnPlayerDeath__DelegateSignature, name:CallFunc_SetScalarParameterValue_ParameterValue_ImplicitCast
+  [17] DrdLevelSequencePlayer_GEN_VARIABLE : DrdLevelSequencePlayerComponent (outer BP_PlayerCharacter_C) size=167
+        refs: exp:AC_GASHelper_GEN_VARIABLE, name:Quest7_EnterTraderHouse, name:UpdateCamera, name:LS_Quest7_EnterTraderHouse, name:AudioZoneListener, name:WaterDeath, name:LS_WaterDeath, name:CallFunc_SetFloatParameter_InFloat_ImplicitCast
+  [18] DrdPlayerInteraction_GEN_VARIABLE : DrdPlayerInteractionComponent (outer BP_PlayerCharacter_C) size=20
+        refs: obj:/Game/Dreadmoor/Core/Input/Character/IA_Interact.IA_Interact
+  [19] WaterAmbientFx : DrdWaterAmbientFxComponent (outer Default__BP_PlayerCharacter_C) size=794
+        refs: obj:/Game/Dreadmoor/Core/Features/WaterFeatures/AmbientFish/EQS/EQS_AmbientFishPoint.EQS_AmbientFishPoint, obj:/Game/Dreadmoor/Art/VFX/Niagara/Water/NS_DayPeacefulFish_Selectable.NS_DayPeacefulFish_Selectable, exp:DrdLevelSequencePlayer_GEN_VARIABLE, exp:BP_ActionPlayer_GEN_VARIABLE, name:SM_dm_vs_fish05, exp:PlayerCharSet, name:MI_Fish_WPO_05, exp:AC_SpeakerAudio_GEN_VARIABLE, name:SM_dm_vs_fish01, exp:Camera_GEN_VARIABLE, name:MI_Fish_WPO_01, exp:BP_PlayerCharacter_C, name:SM_dm_vs_fish04, exp:HealthSet, name:MI_Fish_WPO_04, exp:MSS_Breathing_Core_GEN_VARIABLE, name:SM_dm_vs_fish03, exp:DrdActorTag_GEN_VARIABLE, name:MI_Fish_WPO_03, exp:AC_SpeakerAudio_Overlap_GEN_VARIABLE, name:SM_dm_vs_fish02, exp:CollisionCylinder, name:MI_Fish_WPO_02, exp:AC_FootSteps_GEN_VARIABLE, exp:BP_SlotTracerComponent_GEN_VARIABLE, exp:CharMoveComp, exp:DrdPlayerInteraction_GEN_VARIABLE, exp:WaterAmbientFx, exp:EnhancedInputActionDelegateBinding_0, exp:ActivateCharacter, exp:AfterPush_32AF51974C7DF3E70F023CB60DF2B32B, exp:AnimDataData, exp:ApplyLandingSurfaceAudio, exp:BeforePush_32AF51974C7DF3E70F023CB60DF2B32B, exp:BindOnSlotChanged, name:FieldOfView
+  [20] EnhancedInputActionDelegateBinding_0 : EnhancedInputActionDelegateBinding (outer BP_PlayerCharacter_C) size=100
+        refs: exp:AC_SpeakerAudio_Overlap_GEN_VARIABLE, obj:/Game/Dreadmoor/Core/Input/Character/IA_Move.IA_Move, obj:/Game/Dreadmoor/Core/Input/Character/IA_Look.IA_Look, exp:AC_SpeakerAudio_GEN_VARIABLE, obj:/Game/Dreadmoor/Core/Input/Character/IA_Jump.IA_Jump, exp:AC_FootSteps_GEN_VARIABLE, obj:/Game/Dreadmoor/Core/Input/Character/IA_CharLight.IA_CharLight, exp:AC_GASHelper_GEN_VARIABLE, obj:/Game/Dreadmoor/Core/Input/Character/IA_StopRecord.IA_StopRecord, obj:/Game/Dreadmoor/Core/Input/Character/IA_PrimaryUse.IA_PrimaryUse, name:NotifyName
+  [110] InputKeyDelegateBinding_0 : InputKeyDelegateBinding (outer BP_PlayerCharacter_C) size=70
+  [111] NavigationMarker_GEN_VARIABLE : NavigationMarkerComponent (outer BP_PlayerCharacter_C) size=93
+        refs: exp:AC_GASHelper_GEN_VARIABLE, exp:DestroyTagListenerHandles, exp:BP_SlotTracerComponent_GEN_VARIABLE, exp:DisableFlashlight, name:SPR_IcCompassHighlightedMarkHero001, exp:OnLoaded_EE6C614F4EF6F101811ACAB6DD671431, name:ResetSlot
+  [112] NS_UnderwaterBubble_GEN_VARIABLE : NiagaraComponent (outer BP_PlayerCharacter_C) size=49
+        refs: obj:/Game/3rdParty/Bubble_VFX/VFX/NS_UnderwaterBubble.NS_UnderwaterBubble, name:CallFunc_Subtract_VectorVector_ReturnValue, name:bActive, name:CallFunc_GetTagFragmentFromItemAsset_ReturnValue
+  [113] DefaultSceneRoot_GEN_VARIABLE : SceneComponent (outer BP_PlayerCharacter_C) size=10
+        refs: name:DeltaTime
+  [114] Sound_GEN_VARIABLE : SceneComponent (outer BP_PlayerCharacter_C) size=10
+        refs: name:DeltaTime
+  [115] SCS_Node_0 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SceneComponent, exp:DefaultSceneRoot_GEN_VARIABLE, name:DefaultSceneRoot
+  [116] SCS_Node_1 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.AudioComponent, exp:AC_FootSteps_GEN_VARIABLE, name:AC_FootSteps
+  [117] SCS_Node_10 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.AudioComponent, exp:AC_SpeakerAudio_Overlap_GEN_VARIABLE, name:AC_SpeakerAudio_Overlap
+  [118] SCS_Node_11 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/NarrativeNavigator.NavigationMarkerComponent, exp:NavigationMarker_GEN_VARIABLE, name:NavigationMarker
+  [119] SCS_Node_12 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Game/Dreadmoor/Core/Features/UpgradeDock/Components/BP_SlotTracerComponent.BP_SlotTracerComponent_C, exp:BP_SlotTracerComponent_GEN_VARIABLE, name:BP_SlotTracerComponent
+  [120] SCS_Node_13 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Dreadmoor.DrdPlayerInteractionComponent, exp:DrdPlayerInteraction_GEN_VARIABLE, name:DrdPlayerInteraction
+  [121] SCS_Node_14 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Niagara.NiagaraComponent, exp:NS_UnderwaterBubble_GEN_VARIABLE, name:NS_UnderwaterBubble
+  [122] SCS_Node_15 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Game/Dreadmoor/Core/Features/ActionPlayer/BP_ActionPlayer.BP_ActionPlayer_C, exp:BP_ActionPlayer_GEN_VARIABLE, name:BP_ActionPlayer
+  [123] SCS_Node_16 : SCS_Node (outer SimpleConstructionScript_0) size=53
+        refs: obj:/Script/Engine.AudioComponent, exp:MSS_Breathing_Core_GEN_VARIABLE, name:CollisionCylinder, name:MSS_Breathing_Core
+  [124] SCS_Node_2 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Dreadmoor.DrdLevelSequencePlayerComponent, exp:DrdLevelSequencePlayer_GEN_VARIABLE, name:DrdLevelSequencePlayer
+  [125] SCS_Node_3 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/IFP_GAS.AC_GASHelper, exp:AC_GASHelper_GEN_VARIABLE, name:AC_GASHelper
+  [126] SCS_Node_4 : SCS_Node (outer SimpleConstructionScript_0) size=61
+        refs: obj:/Script/Engine.SpotLightComponent, exp:SpotLight_GEN_VARIABLE, name:head, name:CharacterMesh0, name:SpotLight
+  [127] SCS_Node_5 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Dreadmoor.AbilityComponentInitializer, name:AbilityComponentInitializer
+  [128] SCS_Node_6 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Dreadmoor.DrdActorTagComponent, exp:DrdActorTag_GEN_VARIABLE, name:DrdActorTag
+  [129] SCS_Node_7 : SCS_Node (outer SimpleConstructionScript_0) size=69
+        refs: obj:/Script/Engine.CameraComponent, exp:Camera_GEN_VARIABLE, name:head, name:CharacterMesh0, exp:SCS_Node_14, name:Camera
+  [130] SCS_Node_8 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.AudioComponent, exp:AC_SpeakerAudio_GEN_VARIABLE, name:AC_SpeakerAudio
+  [131] SCS_Node_9 : SCS_Node (outer SimpleConstructionScript_0) size=69
+        refs: obj:/Script/Engine.SceneComponent, exp:Sound_GEN_VARIABLE, name:CharacterMesh0, exp:AC_GASHelper_GEN_VARIABLE, exp:SCS_Node_1, exp:SCS_Node_8, exp:SCS_Node_10, name:Sound
+  [132] SimpleConstructionScript_0 : SimpleConstructionScript (outer BP_PlayerCharacter_C) size=130
+        refs: exp:Camera_GEN_VARIABLE, exp:SCS_Node_9, exp:SCS_Node_4, exp:SCS_Node_6, exp:SCS_Node_11, exp:SCS_Node_5, exp:SCS_Node_13, exp:SCS_Node_3, exp:SCS_Node_7, exp:SCS_Node_2, exp:SCS_Node_16, exp:SCS_Node_15, exp:SCS_Node_12, exp:PlayerCharSet, exp:SCS_Node_1, exp:SCS_Node_8, exp:SCS_Node_14, exp:SCS_Node_10, name:CallFunc_BreakHitResult_TraceStart
+  [133] CharacterMesh0 : SkeletalMeshComponent (outer Default__BP_PlayerCharacter_C) size=122
+        refs: obj:/Game/3rdParty/TFPMovement/Demo/Character/ABP_V03.ABP_V03_C, obj:/Game/Dreadmoor/Animations/Characters/New/dm_demo_NewProtagonist.dm_demo_NewProtagonist, obj:/Game/Dreadmoor/Animations/Characters/New/Materials/MI_Main_Hero_Character_Face.MI_Main_Hero_Character_Face, exp:CollisionCylinder, name:CallFunc_GetTagFragmentFromItemAsset_ReturnValue, name:PlayerMesh
+  [134] SpotLight_GEN_VARIABLE : SpotLightComponent (outer BP_PlayerCharacter_C) size=93
+        refs: obj:/Game/Dreadmoor/Art/Textures/IES/IES_file/IES_Dreadmoor_FlashLight.IES_Dreadmoor_FlashLight, name:ArrayProperty
+
+## function ActivateCharacter  flags=0x0C020000
+  L0000: CallFunc_Not_PreBool_ReturnValue = Not_PreBool(bActive)
+  L001D: SetActorHiddenInGame(CallFunc_Not_PreBool_ReturnValue)
+  L0034: CallFunc_SelectName_ReturnValue = SelectName('Pawn', 'OverlapAllDynamic', bActive)
+  L0073: self.CapsuleComponent.SetCollisionProfileName(CallFunc_SelectName_ReturnValue, true)
+  L00A1: self.CapsuleComponent.SetCollisionResponseToChannel(15, 2)
+  L00C9: Temp_byte_Variable = 0
+  L00DD: Temp_byte_Variable_3 = 1
+  L00F1: Temp_bool_Variable_1 = bActive
+  L0104: self.Mesh.SetCollisionEnabled(switch(Temp_bool_Variable_1){false: Temp_byte_Variable; true: Temp_byte_Variable_3; default: K2Node_Select_Default_1})
+  L015D: Temp_bool_Variable = bActive
+  L0170: Temp_byte_Variable_1 = 1
+  L0184: Temp_byte_Variable_2 = 0
+  L0198: self.CharacterMovement.SetMovementMode(switch(Temp_bool_Variable){false: Temp_byte_Variable_2; true: Temp_byte_Variable_1; default: K2Node_Select_Default}, 0)
+  L01F3: return
+
+## function AfterPush_32AF51974C7DF3E70F023CB60DF2B32B  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_UserWidget_1 = UserWidget
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(20750)
+  L0021: return
+
+## function AnimDataData  flags=0x0C020000
+  L0000: frame.K2Node_Event_AnimData = AnimData
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(8762)
+  L0021: return
+
+## function ApplyLandingSurfaceAudio  flags=0x0C000000
+  L0000: frame.LandingAudio_ApplyLandingSurfaceAudio_SurfaceHit = SurfaceHit
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(18298)
+  L0021: return
+
+## function BeforePush_32AF51974C7DF3E70F023CB60DF2B32B  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_UserWidget = UserWidget
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(20730)
+  L0021: return
+
+## function BindOnSlotChanged  flags=0x0C020000
+  L0000: bind(K2Node_CreateDelegate_OutputDelegate, self, 'SlotChanged')
+  L0017: CallFunc_GetController_ReturnValue = Pawn.GetController()
+  L002B: CallFunc_GetComponentByClass_ReturnValue = CallFunc_GetController_ReturnValue.Actor.GetComponentByClass(BP_GearTransitionComponent_C)
+  L005E: CallFunc_GetComponentByClass_ReturnValue.self.OnSlotChanged += K2Node_CreateDelegate_OutputDelegate
+  L0087: return
+
+## function CalcDialogTransforms  flags=0x0CC20000
+  L0000: CallFunc_GetRelativeTransform_ReturnValue = self.Mesh.SceneComponent.GetRelativeTransform()
+  L0032: CallFunc_GetSocketTransform_ReturnValue = self.Mesh.GetSocketTransform('head', 2)
+  L0077: BreakTransform(CallFunc_GetRelativeTransform_ReturnValue, CallFunc_BreakTransform_Location_3, CallFunc_BreakTransform_Rotation_3, CallFunc_BreakTransform_Scale_3)
+  L00A5: CallFunc_ComposeTransforms_ReturnValue_1 = ComposeTransforms(self.CameraInitialRelativeTransform, CallFunc_GetSocketTransform_ReturnValue)
+  L00D3: CallFunc_MakeTransform_ReturnValue_2 = MakeTransform(self.MeshZLag_DefaultMeshLocation, CallFunc_BreakTransform_Rotation_3, CallFunc_BreakTransform_Scale_3)
+  L010A: CallFunc_ComposeTransforms_ReturnValue_2 = ComposeTransforms(CallFunc_ComposeTransforms_ReturnValue_1, CallFunc_MakeTransform_ReturnValue_2)
+  L0138: loc_CamInActor = CallFunc_ComposeTransforms_ReturnValue_2
+  L0153: BreakTransform(Target, CallFunc_BreakTransform_Location_1, CallFunc_BreakTransform_Rotation_1, CallFunc_BreakTransform_Scale_1)
+  L0181: BreakRotator(CallFunc_BreakTransform_Rotation_1, CallFunc_BreakRotator_Roll, CallFunc_BreakRotator_Pitch, CallFunc_BreakRotator_Yaw)
+  L01AF: CallFunc_MakeRotator_ReturnValue = MakeRotator(0, 0, CallFunc_BreakRotator_Yaw)
+  L01DE: loc_TargetYaw = CallFunc_MakeRotator_ReturnValue
+  L01F9: BreakTransform(Target, CallFunc_BreakTransform_Location_1, CallFunc_BreakTransform_Rotation_1, CallFunc_BreakTransform_Scale_1)
+  L0227: loc_TargetRot = CallFunc_BreakTransform_Rotation_1
+  L0242: BreakTransform(loc_CamInActor, CallFunc_BreakTransform_Location, CallFunc_BreakTransform_Rotation, CallFunc_BreakTransform_Scale)
+  L0270: BreakVector(CallFunc_BreakTransform_Location, CallFunc_BreakVector_X, CallFunc_BreakVector_Y, CallFunc_BreakVector_Z)
+  L029E: CallFunc_MakeVector_ReturnValue = MakeVector(CallFunc_BreakVector_X, CallFunc_BreakVector_Y, 0)
+  L02D5: CallFunc_GreaterGreater_VectorRotator_ReturnValue = GreaterGreater_VectorRotator(CallFunc_MakeVector_ReturnValue, loc_TargetYaw)
+  L0303: BreakTransform(Target, CallFunc_BreakTransform_Location_1, CallFunc_BreakTransform_Rotation_1, CallFunc_BreakTransform_Scale_1)
+  L0331: CallFunc_Subtract_VectorVector_ReturnValue_2 = Subtract_VectorVector(CallFunc_BreakTransform_Location_1, CallFunc_GreaterGreater_VectorRotator_ReturnValue)
+  L035F: loc_DesiredLoc = CallFunc_Subtract_VectorVector_ReturnValue_2
+  L037A: BreakTransform(loc_CamInActor, CallFunc_BreakTransform_Location, CallFunc_BreakTransform_Rotation, CallFunc_BreakTransform_Scale)
+  L03A8: BreakVector(CallFunc_BreakTransform_Location, CallFunc_BreakVector_X, CallFunc_BreakVector_Y, CallFunc_BreakVector_Z)
+  L03D6: BreakTransform(Target, CallFunc_BreakTransform_Location_1, CallFunc_BreakTransform_Rotation_1, CallFunc_BreakTransform_Scale_1)
+  L0404: BreakVector(CallFunc_BreakTransform_Location_1, CallFunc_BreakVector_X_5, CallFunc_BreakVector_Y_5, CallFunc_BreakVector_Z_5)
+  L0432: CallFunc_Subtract_DoubleDouble_ReturnValue = Subtract_DoubleDouble(CallFunc_BreakVector_Z_5, CallFunc_BreakVector_Z)
+  L0460: loc_FallbackZ = CallFunc_Subtract_DoubleDouble_ReturnValue
+  L047B: CallFunc_GetScaledCapsuleRadius_ReturnValue = self.CapsuleComponent.CapsuleComponent.GetScaledCapsuleRadius()
+  L04AD: K2Node_VariableSet_loc_CapsuleRadius_ImplicitCast = CallFunc_GetScaledCapsuleRadius_ReturnValue
+  L04CA: loc_CapsuleRadius = K2Node_VariableSet_loc_CapsuleRadius_ImplicitCast
+  L04E5: CallFunc_GetScaledCapsuleHalfHeight_ReturnValue = self.CapsuleComponent.CapsuleComponent.GetScaledCapsuleHalfHeight()
+  L0517: K2Node_VariableSet_loc_CapsuleHalfHeight_ImplicitCast = CallFunc_GetScaledCapsuleHalfHeight_ReturnValue
+  L0534: loc_CapsuleHalfHeight = K2Node_VariableSet_loc_CapsuleHalfHeight_ImplicitCast
+  L054F: CallFunc_Add_DoubleDouble_ReturnValue = Add_DoubleDouble(loc_FallbackZ, 45)
+  L057D: BreakVector(loc_DesiredLoc, CallFunc_BreakVector_X_3, CallFunc_BreakVector_Y_3, CallFunc_BreakVector_Z_3)
+  L05AB: CallFunc_MakeVector_ReturnValue_2 = MakeVector(CallFunc_BreakVector_X_3, CallFunc_BreakVector_Y_3, CallFunc_Add_DoubleDouble_ReturnValue)
+  L05E2: loc_SweepEnd = CallFunc_MakeVector_ReturnValue_2
+  L05FD: CallFunc_Add_DoubleDouble_ReturnValue = Add_DoubleDouble(loc_FallbackZ, 45)
+  L062B: CallFunc_GetForwardVector_ReturnValue = GetForwardVector(loc_TargetYaw)
+  L0650: CallFunc_Multiply_VectorFloat_ReturnValue = Multiply_VectorFloat(CallFunc_GetForwardVector_ReturnValue, self.DialogApproachDistance)
+  L067E: CallFunc_Subtract_VectorVector_ReturnValue_1 = Subtract_VectorVector(loc_DesiredLoc, CallFunc_Multiply_VectorFloat_ReturnValue)
+  L06AC: BreakVector(CallFunc_Subtract_VectorVector_ReturnValue_1, CallFunc_BreakVector_X_4, CallFunc_BreakVector_Y_4, CallFunc_BreakVector_Z_4)
+  L06DA: CallFunc_MakeVector_ReturnValue_3 = MakeVector(CallFunc_BreakVector_X_4, CallFunc_BreakVector_Y_4, CallFunc_Add_DoubleDouble_ReturnValue)
+  L0711: CallFunc_CapsuleTraceSingleByProfile_Radius_ImplicitCast_2 = loc_CapsuleRadius
+  L072E: CallFunc_CapsuleTraceSingleByProfile_HalfHeight_ImplicitCast_2 = loc_CapsuleHalfHeight
+  L074B: CallFunc_CapsuleTraceSingleByProfile_ReturnValue_1 = KismetSystemLibrary.CapsuleTraceSingleByProfile(self, CallFunc_MakeVector_ReturnValue_3, loc_SweepEnd, CallFunc_CapsuleTraceSingleByProfile_Radius_ImplicitCast_2, CallFunc_CapsuleTraceSingleByProfile_HalfHeight_ImplicitCast_2, 'Pawn', false, Temp_object_Variable, 0, CallFunc_CapsuleTraceSingleByProfile_OutHit_1, true, LinearColor{1, 0, 0, 1}, LinearColor{0, 1, 0, 1}, 15)
+  L07F0: CallFunc_K2_GetActorLocation_ReturnValue = Actor.K2_GetActorLocation()
+  L080C: BreakVector(CallFunc_K2_GetActorLocation_ReturnValue, CallFunc_BreakVector_X_6, CallFunc_BreakVector_Y_6, CallFunc_BreakVector_Z_6)
+  L083A: CallFunc_Add_DoubleDouble_ReturnValue_1 = Add_DoubleDouble(CallFunc_BreakVector_Z_6, 45)
+  L0868: CallFunc_MakeVector_ReturnValue_4 = MakeVector(CallFunc_BreakVector_X_6, CallFunc_BreakVector_Y_6, CallFunc_Add_DoubleDouble_ReturnValue_1)
+  L089F: CallFunc_CapsuleTraceSingleByProfile_Radius_ImplicitCast_1 = loc_CapsuleRadius
+  L08BC: CallFunc_CapsuleTraceSingleByProfile_HalfHeight_ImplicitCast_1 = loc_CapsuleHalfHeight
+  L08D9: CallFunc_CapsuleTraceSingleByProfile_ReturnValue_2 = KismetSystemLibrary.CapsuleTraceSingleByProfile(self, CallFunc_MakeVector_ReturnValue_4, loc_SweepEnd, CallFunc_CapsuleTraceSingleByProfile_Radius_ImplicitCast_1, CallFunc_CapsuleTraceSingleByProfile_HalfHeight_ImplicitCast_1, 'Pawn', false, Temp_object_Variable_2, 0, CallFunc_CapsuleTraceSingleByProfile_OutHit_2, true, LinearColor{1, 0, 0, 1}, LinearColor{0, 1, 0, 1}, 5)
+  L097E: GameplayStatics.BreakHitResult(CallFunc_CapsuleTraceSingleByProfile_OutHit_1, CallFunc_BreakHitResult_bBlockingHit_1, CallFunc_BreakHitResult_bInitialOverlap_1, CallFunc_BreakHitResult_Time_1, CallFunc_BreakHitResult_Distance_1, CallFunc_BreakHitResult_Location_1, CallFunc_BreakHitResult_ImpactPoint_1, CallFunc_BreakHitResult_Normal_1, CallFunc_BreakHitResult_ImpactNormal_1, CallFunc_BreakHitResult_PhysMat_1, CallFunc_BreakHitResult_HitActor_1, CallFunc_BreakHitResult_HitComponent_1, CallFunc_BreakHitResult_HitBoneName_1, CallFunc_BreakHitResult_BoneName_1, CallFunc_BreakHitResult_HitItem_1, CallFunc_BreakHitResult_ElementIndex_1, CallFunc_BreakHitResult_FaceIndex_1, CallFunc_BreakHitResult_TraceStart_1, CallFunc_BreakHitResult_TraceEnd_1)
+  L0A33: CallFunc_Multiply_VectorFloat_ReturnValue_1 = Multiply_VectorFloat(CallFunc_BreakHitResult_Normal_1, 1)
+  L0A61: CallFunc_Add_VectorVector_ReturnValue_1 = Add_VectorVector(CallFunc_BreakHitResult_Location_1, CallFunc_Multiply_VectorFloat_ReturnValue_1)
+  L0A8F: CallFunc_SelectVector_ReturnValue_1 = SelectVector(CallFunc_Add_VectorVector_ReturnValue_1, loc_SweepEnd, CallFunc_CapsuleTraceSingleByProfile_ReturnValue_1)
+  L0AC6: GameplayStatics.BreakHitResult(CallFunc_CapsuleTraceSingleByProfile_OutHit_2, CallFunc_BreakHitResult_bBlockingHit_2, CallFunc_BreakHitResult_bInitialOverlap_2, CallFunc_BreakHitResult_Time_2, CallFunc_BreakHitResult_Distance_2, CallFunc_BreakHitResult_Location_2, CallFunc_BreakHitResult_ImpactPoint_2, CallFunc_BreakHitResult_Normal_2, CallFunc_BreakHitResult_ImpactNormal_2, CallFunc_BreakHitResult_PhysMat_2, CallFunc_BreakHitResult_HitActor_2, CallFunc_BreakHitResult_HitComponent_2, CallFunc_BreakHitResult_HitBoneName_2, CallFunc_BreakHitResult_BoneName_2, CallFunc_BreakHitResult_HitItem_2, CallFunc_BreakHitResult_ElementIndex_2, CallFunc_BreakHitResult_FaceIndex_2, CallFunc_BreakHitResult_TraceStart_2, CallFunc_BreakHitResult_TraceEnd_2)
+  L0B7B: CallFunc_Multiply_VectorFloat_ReturnValue_2 = Multiply_VectorFloat(CallFunc_BreakHitResult_Normal_2, 1)
+  L0BA9: CallFunc_Add_VectorVector_ReturnValue_2 = Add_VectorVector(CallFunc_BreakHitResult_Location_2, CallFunc_Multiply_VectorFloat_ReturnValue_2)
+  L0BD7: CallFunc_SelectVector_ReturnValue_3 = SelectVector(CallFunc_Add_VectorVector_ReturnValue_2, loc_SweepEnd, CallFunc_CapsuleTraceSingleByProfile_ReturnValue_2)
+  L0C0E: CallFunc_SelectVector_ReturnValue_4 = SelectVector(CallFunc_SelectVector_ReturnValue_3, CallFunc_SelectVector_ReturnValue_1, CallFunc_BreakHitResult_bInitialOverlap_1)
+  L0C45: loc_WallPoint = CallFunc_SelectVector_ReturnValue_4
+  L0C60: CallFunc_Subtract_VectorVector_ReturnValue = Subtract_VectorVector(loc_WallPoint, Vec(0,0,300))
+  L0C9E: CallFunc_CapsuleTraceSingleByProfile_Radius_ImplicitCast = loc_CapsuleRadius
+  L0CBB: CallFunc_CapsuleTraceSingleByProfile_HalfHeight_ImplicitCast = loc_CapsuleHalfHeight
+  L0CD8: CallFunc_CapsuleTraceSingleByProfile_ReturnValue = KismetSystemLibrary.CapsuleTraceSingleByProfile(self, loc_WallPoint, CallFunc_Subtract_VectorVector_ReturnValue, CallFunc_CapsuleTraceSingleByProfile_Radius_ImplicitCast, CallFunc_CapsuleTraceSingleByProfile_HalfHeight_ImplicitCast, 'Pawn', false, Temp_object_Variable_1, 0, CallFunc_CapsuleTraceSingleByProfile_OutHit, true, LinearColor{1, 0, 0, 1}, LinearColor{0, 1, 0, 1}, 15)
+  L0D7D: BreakVector(loc_WallPoint, CallFunc_BreakVector_X_2, CallFunc_BreakVector_Y_2, CallFunc_BreakVector_Z_2)
+  L0DAB: GameplayStatics.BreakHitResult(CallFunc_CapsuleTraceSingleByProfile_OutHit, CallFunc_BreakHitResult_bBlockingHit, CallFunc_BreakHitResult_bInitialOverlap, CallFunc_BreakHitResult_Time, CallFunc_BreakHitResult_Distance, CallFunc_BreakHitResult_Location, CallFunc_BreakHitResult_ImpactPoint, CallFunc_BreakHitResult_Normal, CallFunc_BreakHitResult_ImpactNormal, CallFunc_BreakHitResult_PhysMat, CallFunc_BreakHitResult_HitActor, CallFunc_BreakHitResult_HitComponent, CallFunc_BreakHitResult_HitBoneName, CallFunc_BreakHitResult_BoneName, CallFunc_BreakHitResult_HitItem, CallFunc_BreakHitResult_ElementIndex, CallFunc_BreakHitResult_FaceIndex, CallFunc_BreakHitResult_TraceStart, CallFunc_BreakHitResult_TraceEnd)
+  L0E60: CallFunc_MakeVector_ReturnValue_1 = MakeVector(CallFunc_BreakVector_X_2, CallFunc_BreakVector_Y_2, loc_FallbackZ)
+  L0E97: CallFunc_SelectVector_ReturnValue = SelectVector(CallFunc_BreakHitResult_Location, CallFunc_MakeVector_ReturnValue_1, CallFunc_CapsuleTraceSingleByProfile_ReturnValue)
+  L0ECE: loc_GroundLoc = CallFunc_SelectVector_ReturnValue
+  L0EE9: CallFunc_Add_VectorVector_ReturnValue = Add_VectorVector(loc_GroundLoc, Vec(0,0,45))
+  L0F27: BreakVector(CallFunc_Add_VectorVector_ReturnValue, CallFunc_BreakVector_X_1, CallFunc_BreakVector_Y_1, CallFunc_BreakVector_Z_1)
+  L0F55: self.CharacterMovement.K2_FindFloor(CallFunc_Add_VectorVector_ReturnValue, CallFunc_K2_FindFloor_FloorResult)
+  L0F8B: CallFunc_Subtract_DoubleDouble_B_ImplicitCast = CallFunc_K2_FindFloor_FloorResult.FloorDist
+  L0FB1: CallFunc_Subtract_DoubleDouble_ReturnValue_1 = Subtract_DoubleDouble(CallFunc_BreakVector_Z_1, CallFunc_Subtract_DoubleDouble_B_ImplicitCast)
+  L0FDF: CallFunc_Add_DoubleDouble_ReturnValue_2 = Add_DoubleDouble(CallFunc_Subtract_DoubleDouble_ReturnValue_1, 2.15)
+  L100D: CallFunc_MakeVector_ReturnValue_5 = MakeVector(CallFunc_BreakVector_X_1, CallFunc_BreakVector_Y_1, CallFunc_Add_DoubleDouble_ReturnValue_2)
+  L1044: CallFunc_SelectVector_ReturnValue_2 = SelectVector(CallFunc_MakeVector_ReturnValue_5, loc_GroundLoc, CallFunc_K2_FindFloor_FloorResult.bWalkableFloor)
+  L1084: CallFunc_MakeTransform_ReturnValue = MakeTransform(CallFunc_SelectVector_ReturnValue_2, loc_TargetYaw, Vec(1,1,1))
+  L10CB: CallFunc_ComposeTransforms_ReturnValue = ComposeTransforms(loc_CamInActor, CallFunc_MakeTransform_ReturnValue)
+  L10F9: BreakTransform(CallFunc_ComposeTransforms_ReturnValue, CallFunc_BreakTransform_Location_2, CallFunc_BreakTransform_Rotation_2, CallFunc_BreakTransform_Scale_2)
+  L1127: CallFunc_MakeTransform_ReturnValue_1 = MakeTransform(CallFunc_BreakTransform_Location_2, loc_TargetRot, Vec(1,1,1))
+  L116E: ActorTransform = CallFunc_MakeTransform_ReturnValue
+  L1189: CameraWorldTransform = CallFunc_MakeTransform_ReturnValue_1
+  L11A4: return
+
+## function CheckIsUnderwater  flags=0x0C000000
+  L0000: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(9712)
+  L000F: return
+
+## function CustomEvent  flags=0x0C000000
+  L0000: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(9707)
+  L000F: return
+
+## function CustomEvent_0  flags=0x0C400000
+  L0000: frame.K2Node_CustomEvent_Tag_2 = Tag
+  L0012: frame.K2Node_CustomEvent_TagCount_2 = TagCount
+  L0024: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(9840)
+  L0033: return
+
+## function DestroyTagListenerHandles  flags=0x0C020000
+  L0000: AbilitySystemBlueprintLibrary.UnbindAllGameplayTagChangedEventWrappersForHandle(self.IsSprintingTagListenerHandle)
+  L0013: AbilitySystemBlueprintLibrary.UnbindAllGameplayTagChangedEventWrappersForHandle(self.IsInteractingTagListenerHandle)
+  L0026: AbilitySystemBlueprintLibrary.UnbindAllGameplayTagChangedEventWrappersForHandle(self.IsInWaterTagListnerHandle)
+  L0039: return
+
+## function DisableFlashlight  flags=0x0C000000
+  L0000: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(14753)
+  L000F: return
+
+## function ExecuteUbergraph_BP_PlayerCharacter  flags=0x00808001
+  L0000: push L5126
+  L0005: goto computed(EntryPoint)
+  L000F: Temp_bool_IsClosed_Variable_1 = false
+  L001A: Temp_bool_Has_Been_Initd_Variable_1 = true
+  L0025: pop-flow
+  L0026: Server Enable/Disable Input function(false)
+  L0035: ServerSetPawnControl(true)
+  L0044: pop-flow
+  L0045: Actor.FlushNetDormancy()
+  L004F: CallFunc_GetController_ReturnValue = Pawn.GetController()
+  L0063: CallFunc_GetControlRotation_ReturnValue = CallFunc_GetController_ReturnValue.GetControlRotation()
+  L0099: self.ControlRotationRep = CallFunc_GetControlRotation_ReturnValue
+  L00B4: NetPushModelHelpers.MarkPropertyDirtyFromRepIndex(self, 26, 'ControlRotationRep')
+  L00D1: pop-flow
+  L00D2: Actor.FlushNetDormancy()
+  L00DC: self.LeanValue = K2Node_CustomEvent_LeanValue
+  L00F7: NetPushModelHelpers.MarkPropertyDirtyFromRepIndex(self, 27, 'LeanValue')
+  L0114: pop-flow
+  L0115: Actor.FlushNetDormancy()
+  L011F: self.LeanLeftArm = K2Node_CustomEvent_LeanLeftArm
+  L013A: NetPushModelHelpers.MarkPropertyDirtyFromRepIndex(self, 28, 'LeanLeftArm')
+  L0157: pop-flow
+  L0158: Actor.FlushNetDormancy()
+  L0162: self.LeanRightArm = K2Node_CustomEvent_LeanRightArm
+  L017D: NetPushModelHelpers.MarkPropertyDirtyFromRepIndex(self, 29, 'LeanRightArm')
+  L019A: pop-flow
+  L019B: CallFunc_SetFieldOfView_InFieldOfView_ImplicitCast_1 = self.FOW_TargetValue
+  L01B8: self.Camera.SetFieldOfView(CallFunc_SetFieldOfView_InFieldOfView_ImplicitCast_1)
+  L01E5: pop-flow
+  L01E6: Temp_object_Variable = K2Node_CustomEvent_DrdTempTick
+  L01F9: Temp_real_Variable_1 = K2Node_CustomEvent_Time
+  L0214: Temp_real_Variable = K2Node_CustomEvent_Relative
+  L022F: CallFunc_Lerp_Alpha_ImplicitCast = Temp_real_Variable
+  L024C: CallFunc_Lerp_ReturnValue = Lerp(self.FOV_PrevValue, self.FOW_TargetValue, CallFunc_Lerp_Alpha_ImplicitCast)
+  L0283: CallFunc_SetFieldOfView_InFieldOfView_ImplicitCast = CallFunc_Lerp_ReturnValue
+  L02A0: self.Camera.SetFieldOfView(CallFunc_SetFieldOfView_InFieldOfView_ImplicitCast)
+  L02CD: pop-flow
+  L02CE: CallFunc_Conv_InputActionValueToBool_ReturnValue = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_1)
+  L02EB: Temp_bool_Variable = CallFunc_Conv_InputActionValueToBool_ReturnValue
+  L02FE: Temp_real_Variable_3 = K2Node_EnhancedInputActionEvent_ElapsedTime_1
+  L031B: Temp_real_Variable_3 = Temp_real_Variable_3
+  L0336: Temp_real_Variable_2 = K2Node_EnhancedInputActionEvent_TriggeredTime_1
+  L0353: Temp_real_Variable_2 = Temp_real_Variable_2
+  L036E: Temp_object_Variable_1 = K2Node_EnhancedInputActionEvent_SourceAction_1
+  L0381: TraceDestructibleObjectForNotification()
+  L038F: pop-flow
+  L0390: CallFunc_GetGameInstanceSubsystem_ReturnValue = SubsystemBlueprintLibrary.GetGameInstanceSubsystem(self, DrdSaveSlotsSubsystem)
+  L03AE: CallFunc_LoadLatestSave_ReturnValue = CallFunc_GetGameInstanceSubsystem_ReturnValue.DrdSaveSlotsSubsystem.LoadLatestSave()
+  L03D8: pop-flow
+  L03D9: if not (self.bFlashlightIsOn) goto L04B4
+  L03E7: CallFunc_SpawnSoundAttached_ReturnValue = GameplayStatics.SpawnSoundAttached(SCUE_Flashlight_Turn_Off, self.CapsuleComponent, 'None', Vec(0,0,0), Rot(0,0,0), 0, false, 1, 1, 0, null, null, true)
+  L0461: self.SpotLight.LightComponent.SetIntensity(0)
+  L0486: self.bFlashlightIsOn = false
+  L0491: self.SpotLight.SceneComponent.SetVisibility(false, false)
+  L04B3: pop-flow
+  L04B4: CallFunc_SpawnSoundAttached_ReturnValue_1 = GameplayStatics.SpawnSoundAttached(SCUE_Flashlight_Turn_On, self.CapsuleComponent, 'None', Vec(0,0,0), Rot(0,0,0), 0, false, 1, 1, 0, null, null, true)
+  L052E: self.SpotLight.LightComponent.SetIntensity(85)
+  L0553: self.bFlashlightIsOn = true
+  L055E: self.SpotLight.SceneComponent.SetVisibility(true, false)
+  L0580: pop-flow
+  L0581: CallFunc_Conv_InputActionValueToBool_ReturnValue_1 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue)
+  L059E: Temp_bool_Variable_1 = CallFunc_Conv_InputActionValueToBool_ReturnValue_1
+  L05B1: Temp_real_Variable_5 = K2Node_EnhancedInputActionEvent_ElapsedTime
+  L05CE: Temp_real_Variable_5 = Temp_real_Variable_5
+  L05E9: Temp_real_Variable_4 = K2Node_EnhancedInputActionEvent_TriggeredTime
+  L0606: Temp_real_Variable_4 = Temp_real_Variable_4
+  L0621: Temp_object_Variable_2 = K2Node_EnhancedInputActionEvent_SourceAction
+  L0634: CallFunc_GetWorldSubsystem_ReturnValue = SubsystemBlueprintLibrary.GetWorldSubsystem(self, DrdJournalSubsystem)
+  L0652: CallFunc_IsTapePlaying_ReturnValue = CallFunc_GetWorldSubsystem_ReturnValue.DrdJournalSubsystem.IsTapePlaying()
+  L067C: if not (CallFunc_IsTapePlaying_ReturnValue) pop-flow
+  L0686: CallFunc_GetWorldSubsystem_ReturnValue_1 = SubsystemBlueprintLibrary.GetWorldSubsystem(self, DrdJournalSubsystem)
+  L06A4: CallFunc_GetWorldSubsystem_ReturnValue_1.DrdJournalSubsystem.StopTape()
+  L06C4: pop-flow
+  L06C5: Temp_struct_Variable = K2Node_InputKeyEvent_Key_1
+  L06E0: self.IsSprintingForward? = false
+  L06EB: pop-flow
+  L06EC: Temp_struct_Variable = K2Node_InputKeyEvent_Key
+  L0707: self.IsSprintingForward? = true
+  L0712: pop-flow
+  L0713: CallFunc_GetWorldSubsystem_ReturnValue_2 = SubsystemBlueprintLibrary.GetWorldSubsystem(self, DrdConfigsSubsystem)
+  L0731: CallFunc_GetCharacterConfig_ReturnValue = CallFunc_GetWorldSubsystem_ReturnValue_2.DrdConfigsSubsystem.GetCharacterConfig()
+  L0763: CallFunc_DrdTempTick_ReturnValue = DrdTempTick.DrdTempTick(self, CallFunc_GetCharacterConfig_ReturnValue.AimingTransitTime)
+  L078A: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(CallFunc_DrdTempTick_ReturnValue)
+  L07A7: if not (CallFunc_IsValid_ReturnValue) pop-flow
+  L07B1: bind(K2Node_CreateDelegate_OutputDelegate_2, self, 'OnTick_8ACE41AE4121130C73688D8059B8A57E')
+  L07C8: CallFunc_DrdTempTick_ReturnValue.self.OnTick += K2Node_CreateDelegate_OutputDelegate_2
+  L07F1: bind(K2Node_CreateDelegate_OutputDelegate_1, self, 'OnFinish_8ACE41AE4121130C73688D8059B8A57E')
+  L0808: CallFunc_DrdTempTick_ReturnValue.self.OnFinish += K2Node_CreateDelegate_OutputDelegate_1
+  L0831: CallFunc_DrdTempTick_ReturnValue.Activate()
+  L0855: pop-flow
+  L0856: CallFunc_GetWorldSubsystem_ReturnValue_3 = SubsystemBlueprintLibrary.GetWorldSubsystem(self, DrdConfigsSubsystem)
+  L0874: CallFunc_GetCharacterConfig_ReturnValue_1 = CallFunc_GetWorldSubsystem_ReturnValue_3.DrdConfigsSubsystem.GetCharacterConfig()
+  L08A6: CallFunc_TrunsitToNewFOW_FOW_ImplicitCast = CallFunc_GetCharacterConfig_ReturnValue_1.AimingFOV
+  L08CC: TrunsitToNewFOW(CallFunc_TrunsitToNewFOW_FOW_ImplicitCast)
+  L08E3: pop-flow
+  L08E4: if not (self.IsReloading) goto L0A13
+  L08F2: CallFunc_GetPlayerController_ReturnValue_7 = GameplayStatics.GetPlayerController(self, 0)
+  L090C: CallFunc_GetHUD_ReturnValue = CallFunc_GetPlayerController_ReturnValue_7.PlayerController.GetHUD()
+  L0936: K2Node_DynamicCast_AsBPI_EGUI_HUDInterface = iface<BPI_EGUI_HUDInterface_C>(CallFunc_GetHUD_ReturnValue)
+  L095A: K2Node_DynamicCast_bSuccess_10 = K2Node_DynamicCast_AsBPI_EGUI_HUDInterface
+  L0977: if not (K2Node_DynamicCast_bSuccess_10) goto L0A43
+  L0985: K2Node_DynamicCast_AsBPI_EGUI_HUDInterface.GetUserSettings(CallFunc_GetUserSettings_UserSettings)
+  L09B3: CallFunc_GetField_ReturnValue = Default__JsonBlueprintFunctionLibrary.JsonBlueprintFunctionLibrary.GetField(CallFunc_GetUserSettings_UserSettings, "Camera FOV", CallFunc_GetField_OutValue)
+  L09FB: TrunsitToNewFOW(CallFunc_GetField_OutValue)
+  L0A12: pop-flow
+  L0A13: CallFunc_Not_PreBool_ReturnValue = Not_PreBool(self.IsAiming)
+  L0A30: if not (CallFunc_Not_PreBool_ReturnValue) goto L0856
+  L0A3E: goto L08F2
+  L0A43: CallFunc_GetUserSettings_UserSettings = JsonObjectWrapper{""}
+  L0A65: goto L09B3
+  L0A6A: CallFunc_Conv_InputActionValueToBool_ReturnValue_2 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_2)
+  L0A87: Temp_bool_Variable_2 = CallFunc_Conv_InputActionValueToBool_ReturnValue_2
+  L0A9A: Temp_real_Variable_6 = K2Node_EnhancedInputActionEvent_ElapsedTime_2
+  L0AB7: Temp_real_Variable_6 = Temp_real_Variable_6
+  L0AD2: Temp_real_Variable_7 = K2Node_EnhancedInputActionEvent_TriggeredTime_2
+  L0AEF: Temp_real_Variable_7 = Temp_real_Variable_7
+  L0B0A: Temp_object_Variable_4 = K2Node_EnhancedInputActionEvent_SourceAction_2
+  L0B1D: goto L03D9
+  L0B22: K2Node_MakeStruct_DrdObjectId.Tag = GameplayTag{'GameEntities.Player.MainChar'}
+  L0B58: K2Node_MakeStruct_DrdObjectId.Guid = Guid{0, 0, 0, 0}
+  L0B95: K2Node_GetActorFromRefsSubsystem_HasPropertyResult = DrdActorRefsSubsystem.IsActorWithIdOfClassRegistered(self, K2Node_MakeStruct_DrdObjectId, Actor)
+  L0BBC: if not (K2Node_GetActorFromRefsSubsystem_HasPropertyResult) goto L0D1C
+  L0BCA: CallFunc_GetComponentByTag_ReturnValue = FL_InventoryFramework.GetComponentByTag(DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId, Actor), 'SpeakerAudio', CallFunc_GetComponentByTag_Component, CallFunc_GetComponentByTag_AttachedActor, false)
+  L0C1B: if not (CallFunc_GetComponentByTag_ReturnValue) goto L0D1C
+  L0C29: K2Node_DynamicCast_AsAudio_Component = cast<AudioComponent>(CallFunc_GetComponentByTag_Component)
+  L0C4D: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsAudio_Component
+  L0C6A: if not (K2Node_DynamicCast_bSuccess) goto L0D1C
+  L0C78: bind(K2Node_CreateDelegate_OutputDelegate, self, 'OnLoaded_EE6C614F4EF6F101811ACAB6DD671431')
+  L0C8F: CallFunc_ResolveMonologueAudio_ReturnValue = Default__BPFL_VOMonologues_C.ResolveMonologueAudio(Temp_text_Variable, K2Node_CustomEvent_SoundToPlay, self)
+  L0CD8: KismetSystemLibrary.LoadAsset(self, CallFunc_ResolveMonologueAudio_ReturnValue, K2Node_CreateDelegate_OutputDelegate, LatentActionInfo{-1, 746683607, 'ExecuteUbergraph_BP_PlayerCharacter', self})
+  L0D1B: pop-flow
+  L0D1C: CallFunc_GetPlayerController_ReturnValue_3 = GameplayStatics.GetPlayerController(self, 0)
+  L0D36: K2Node_DynamicCast_AsBP_Drd_Player_Controller = cast<BP_DrdPlayerController_C>(CallFunc_GetPlayerController_ReturnValue_3)
+  L0D5A: K2Node_DynamicCast_bSuccess_4 = K2Node_DynamicCast_AsBP_Drd_Player_Controller
+  L0D77: if not (K2Node_DynamicCast_bSuccess_4) pop-flow
+  L0D81: CallFunc_PushContentToLayerForPlayer_ReturnValue = Default__AsyncAction_PushContentToLayerForPlayer.AsyncAction_PushContentToLayerForPlayer.PushContentToLayerForPlayer(K2Node_DynamicCast_AsBP_Drd_Player_Controller, soft("/Game/Dreadmoor/UI/Notifications/WBP_PlayerLoosePhrase_Notifcation.WBP_PlayerLoosePhrase_Notifcation_C"), GameplayTag{'UI.Layer.NotificationAtBottom'}, false)
+  L0E39: CallFunc_IsValid_ReturnValue_7 = KismetSystemLibrary.IsValid(CallFunc_PushContentToLayerForPlayer_ReturnValue)
+  L0E56: if not (CallFunc_IsValid_ReturnValue_7) pop-flow
+  L0E60: bind(K2Node_CreateDelegate_OutputDelegate_15, self, 'BeforePush_32AF51974C7DF3E70F023CB60DF2B32B')
+  L0E77: CallFunc_PushContentToLayerForPlayer_ReturnValue.self.BeforePush += K2Node_CreateDelegate_OutputDelegate_15
+  L0EA0: bind(K2Node_CreateDelegate_OutputDelegate_16, self, 'AfterPush_32AF51974C7DF3E70F023CB60DF2B32B')
+  L0EB7: CallFunc_PushContentToLayerForPlayer_ReturnValue.self.AfterPush += K2Node_CreateDelegate_OutputDelegate_16
+  L0EE0: CallFunc_PushContentToLayerForPlayer_ReturnValue.Activate()
+  L0F04: pop-flow
+  L0F05: K2Node_DynamicCast_AsAudio_Component.Play(0)
+  L0F2E: goto L0D1C
+  L0F33: K2Node_DynamicCast_AsAudio_Component.Play(0)
+  L0F5C: goto L0D1C
+  L0F61: Temp_bool_Has_Been_Initd_Variable = true
+  L0F6C: pop-flow
+  L0F6D: Temp_bool_Has_Been_Initd_Variable = true
+  L0F78: if not (false) pop-flow
+  L0F7A: Temp_bool_IsClosed_Variable = true
+  L0F85: pop-flow
+  L0F86: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L0FA0: CallFunc_GetComponentByClass_ReturnValue = CallFunc_GetPlayerController_ReturnValue.Actor.GetComponentByClass(BP_GearTransitionComponent_C)
+  L0FD3: CallFunc_GetComponentByClass_ReturnValue.HideHandToolItem(true)
+  L0FF8: pop-flow
+  L0FF9: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L1013: CallFunc_GetComponentByClass_ReturnValue = CallFunc_GetPlayerController_ReturnValue.Actor.GetComponentByClass(BP_GearTransitionComponent_C)
+  L1046: CallFunc_GetComponentByClass_ReturnValue.UnequipAny()
+  L106A: if not (false) pop-flow
+  L106C: goto L0F86
+  L1071: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L108B: CallFunc_GetComponentByClass_ReturnValue = CallFunc_GetPlayerController_ReturnValue.Actor.GetComponentByClass(BP_GearTransitionComponent_C)
+  L10BE: CallFunc_GetComponentByClass_ReturnValue.self.ActiveSlotBeforeInteract = 0
+  L10EB: if not (true) goto L106A
+  L10F1: goto L0FF9
+  L10F6: if not (Temp_bool_Has_Been_Initd_Variable) goto L0F6D
+  L1104: pop-flow
+  L1105: if not (false) goto L10EB
+  L110B: goto L1071
+  L1110: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L112A: CallFunc_GetComponentByClass_ReturnValue = CallFunc_GetPlayerController_ReturnValue.Actor.GetComponentByClass(BP_GearTransitionComponent_C)
+  L115D: CallFunc_GetComponentByClass_ReturnValue.GetHandTool(CallFunc_GetHandTool_DataAsset, CallFunc_GetHandTool_HandToolActor)
+  L1193: CallFunc_IsValid_ReturnValue_1 = KismetSystemLibrary.IsValid(CallFunc_GetHandTool_HandToolActor)
+  L11B0: if not (CallFunc_IsValid_ReturnValue_1) goto L0FF9
+  L11BE: goto L1105
+  L11C3: CallFunc_IsValid_ReturnValue_2 = KismetSystemLibrary.IsValid(self.CameraMotionTask)
+  L11E0: if not (CallFunc_IsValid_ReturnValue_2) goto L120F
+  L11EE: self.CameraMotionTask.DrdTempTick.FinishTask(false)
+  L120F: CallFunc_DrdTempTick_Duration_ImplicitCast = K2Node_Event_Duration
+  L122C: CallFunc_DrdTempTick_ReturnValue_2 = DrdTempTick.DrdTempTick(self, CallFunc_DrdTempTick_Duration_ImplicitCast)
+  L124A: CallFunc_IsValid_ReturnValue_9 = KismetSystemLibrary.IsValid(CallFunc_DrdTempTick_ReturnValue_2)
+  L1267: if not (CallFunc_IsValid_ReturnValue_9) goto L1319
+  L1275: bind(K2Node_CreateDelegate_OutputDelegate_7, self, 'OnTick_36E298BC4E6C496CAA0069ABA8D2FE5F')
+  L128C: CallFunc_DrdTempTick_ReturnValue_2.self.OnTick += K2Node_CreateDelegate_OutputDelegate_7
+  L12B5: bind(K2Node_CreateDelegate_OutputDelegate_10, self, 'OnFinish_36E298BC4E6C496CAA0069ABA8D2FE5F')
+  L12CC: CallFunc_DrdTempTick_ReturnValue_2.self.OnFinish += K2Node_CreateDelegate_OutputDelegate_10
+  L12F5: CallFunc_DrdTempTick_ReturnValue_2.Activate()
+  L1319: self.CameraMotionTask = Temp_object_Variable_6
+  L132C: pop-flow
+  L132D: CallFunc_IsValid_ReturnValue_3 = KismetSystemLibrary.IsValid(self.CameraMotionTask)
+  L134A: if not (CallFunc_IsValid_ReturnValue_3) goto L1379
+  L1358: self.CameraMotionTask.DrdTempTick.FinishTask(false)
+  L1379: CallFunc_GetPlayerController_ReturnValue_6 = GameplayStatics.GetPlayerController(self, 0)
+  L1393: CallFunc_BlendAfterPreparation_BlendTime_ImplicitCast = K2Node_Event_Time
+  L13B0: NarrativePovBlendModifier.BlendAfterPreparation(CallFunc_GetPlayerController_ReturnValue_6, 0.0001, CallFunc_BlendAfterPreparation_BlendTime_ImplicitCast)
+  L13D1: CallFunc_DrdTempTick_ReturnValue_1 = DrdTempTick.DrdTempTick(self, 0.0001)
+  L13EB: CallFunc_IsValid_ReturnValue_4 = KismetSystemLibrary.IsValid(CallFunc_DrdTempTick_ReturnValue_1)
+  L1408: if not (CallFunc_IsValid_ReturnValue_4) goto L14BA
+  L1416: bind(K2Node_CreateDelegate_OutputDelegate_4, self, 'OnTick_C64DF1BE4C58D81EC7AB0B9BDDB2FA8A')
+  L142D: CallFunc_DrdTempTick_ReturnValue_1.self.OnTick += K2Node_CreateDelegate_OutputDelegate_4
+  L1456: bind(K2Node_CreateDelegate_OutputDelegate_5, self, 'OnFinish_C64DF1BE4C58D81EC7AB0B9BDDB2FA8A')
+  L146D: CallFunc_DrdTempTick_ReturnValue_1.self.OnFinish += K2Node_CreateDelegate_OutputDelegate_5
+  L1496: CallFunc_DrdTempTick_ReturnValue_1.Activate()
+  L14BA: self.CameraMotionTask = Temp_object_Variable_5
+  L14CD: pop-flow
+  L14CE: Temp_object_Variable_5 = K2Node_CustomEvent_DrdTempTick_1
+  L14E1: Temp_real_Variable_8 = K2Node_CustomEvent_Time_1
+  L14FC: Temp_real_Variable_9 = K2Node_CustomEvent_Relative_1
+  L1517: pop-flow
+  L1518: pop-flow
+  L1519: if not (K2Node_CustomEvent_Enable) pop-flow
+  L1523: push L1550
+  L1528: if not (Temp_bool_Has_Been_Initd_Variable_1) goto L1537
+  L1536: pop-flow
+  L1537: Temp_bool_Has_Been_Initd_Variable_1 = true
+  L1542: if not (false) pop-flow
+  L1544: Temp_bool_IsClosed_Variable_1 = true
+  L154F: pop-flow
+  L1550: if not (Temp_bool_IsClosed_Variable_1) goto L155F
+  L155E: pop-flow
+  L155F: Temp_bool_IsClosed_Variable_1 = true
+  L156A: ServerPlayMontage(AS_Running_Slide_UE_Montage, 1, 0)
+  L158B: KismetSystemLibrary.Delay(self, 1, LatentActionInfo{L000F, -2085769942, 'ExecuteUbergraph_BP_PlayerCharacter', self})
+  L15C1: pop-flow
+  L15C2: if not (K2Node_CustomEvent_Activate_6) pop-flow
+  L15CC: BreakVector(self.CharacterMovement.self.Velocity, CallFunc_BreakVector_X, CallFunc_BreakVector_Y, CallFunc_BreakVector_Z)
+  L1610: CallFunc_Abs_ReturnValue = Abs(CallFunc_BreakVector_Z)
+  L1635: CallFunc_InRange_FloatFloat_ReturnValue = InRange_FloatFloat(CallFunc_Abs_ReturnValue, 650, 5000, true, true)
+  L1666: if not (CallFunc_InRange_FloatFloat_ReturnValue) pop-flow
+  L1670: Server Enable/Disable Input function(true)
+  L167F: ServerSetPawnControl(false)
+  L168E: ServerPlayMontage(AS_MediumLand_Forward_Montage, 1, 0)
+  L16AF: KismetSystemLibrary.Delay(self, 1.35, LatentActionInfo{L0026, -427010275, 'ExecuteUbergraph_BP_PlayerCharacter', self})
+  L16E5: pop-flow
+  L16E6: MulticastPlayMontage(K2Node_CustomEvent_MontageToPlay_1, K2Node_CustomEvent_PlayRate_1, K2Node_CustomEvent_StartingPosition_1)
+  L170F: pop-flow
+  L1710: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue = PlayMontageCallbackProxy.CreateProxyObjectForPlayMontage(self.Mesh, K2Node_CustomEvent_MontageToPlay, K2Node_CustomEvent_PlayRate, K2Node_CustomEvent_StartingPosition, 'None', true)
+  L1756: CallFunc_IsValid_ReturnValue_5 = KismetSystemLibrary.IsValid(CallFunc_CreateProxyObjectForPlayMontage_ReturnValue)
+  L1773: if not (CallFunc_IsValid_ReturnValue_5) pop-flow
+  L177D: bind(K2Node_CreateDelegate_OutputDelegate_6, self, 'OnCompleted_A80BA0F4449E0102515C6FB09A6F8FAC')
+  L1794: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue.self.OnCompleted += K2Node_CreateDelegate_OutputDelegate_6
+  L17BD: bind(K2Node_CreateDelegate_OutputDelegate_8, self, 'OnBlendOut_A80BA0F4449E0102515C6FB09A6F8FAC')
+  L17D4: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue.self.OnBlendOut += K2Node_CreateDelegate_OutputDelegate_8
+  L17FD: bind(K2Node_CreateDelegate_OutputDelegate_9, self, 'OnInterrupted_A80BA0F4449E0102515C6FB09A6F8FAC')
+  L1814: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue.self.OnInterrupted += K2Node_CreateDelegate_OutputDelegate_9
+  L183D: bind(K2Node_CreateDelegate_OutputDelegate_13, self, 'OnNotifyBegin_A80BA0F4449E0102515C6FB09A6F8FAC')
+  L1854: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue.self.OnNotifyBegin += K2Node_CreateDelegate_OutputDelegate_13
+  L187D: bind(K2Node_CreateDelegate_OutputDelegate_17, self, 'OnNotifyEnd_A80BA0F4449E0102515C6FB09A6F8FAC')
+  L1894: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue.self.OnNotifyEnd += K2Node_CreateDelegate_OutputDelegate_17
+  L18BD: pop-flow
+  L18BE: MulticastInputs(K2Node_CustomEvent_Disable_Input_1)
+  L18D5: pop-flow
+  L18D6: CallFunc_GetPlayerController_ReturnValue_1 = GameplayStatics.GetPlayerController(self, 0)
+  L18F0: EnableInput(CallFunc_GetPlayerController_ReturnValue_1)
+  L1907: pop-flow
+  L1908: CallFunc_GetPlayerController_ReturnValue_1 = GameplayStatics.GetPlayerController(self, 0)
+  L1922: DisableInput(CallFunc_GetPlayerController_ReturnValue_1)
+  L1939: pop-flow
+  L193A: if not (K2Node_CustomEvent_Enable_Pawn_Control_1) goto L196A
+  L1948: self.Camera.self.bUsePawnControlRotation = true
+  L1969: pop-flow
+  L196A: self.Camera.self.bUsePawnControlRotation = false
+  L198B: pop-flow
+  L198C: MulticastPawnControl(K2Node_CustomEvent_Enable_Pawn_Control)
+  L19A3: pop-flow
+  L19A4: if not (K2Node_CustomEvent_Disable_Input) goto L18D6
+  L19B2: goto L1908
+  L19B7: CallFunc_HasAuthority_ReturnValue = Actor.HasAuthority()
+  L19CB: CallFunc_IsLocallyControlled_ReturnValue = IsLocallyControlled()
+  L19E3: CallFunc_BooleanOR_ReturnValue = BooleanOR(CallFunc_HasAuthority_ReturnValue, CallFunc_IsLocallyControlled_ReturnValue)
+  L1A09: if not (CallFunc_BooleanOR_ReturnValue) pop-flow
+  L1A13: goto L0045
+  L1A18: MulticastLean(K2Node_CustomEvent_LeanValue_1)
+  L1A2F: pop-flow
+  L1A30: MulticastLeaningLeftArm(K2Node_CustomEvent_LeanLeftArm_1)
+  L1A47: pop-flow
+  L1A48: MulticastLeaningRightArm(K2Node_CustomEvent_LeanRightArm_1)
+  L1A5F: pop-flow
+  L1A60: goto L00D2
+  L1A65: goto L0115
+  L1A6A: goto L0158
+  L1A6F: if not (K2Node_CustomEvent_Activate_5) pop-flow
+  L1A79: if not (true) pop-flow
+  L1A7B: CallFunc_CanJump_ReturnValue = Character.CanJump()
+  L1A8F: CallFunc_GetVelocity_ReturnValue = GetVelocity()
+  L1AAF: CallFunc_VSize_ReturnValue = VSize(CallFunc_GetVelocity_ReturnValue)
+  L1AD4: CallFunc_Greater_DoubleDouble_ReturnValue = Greater_DoubleDouble(CallFunc_VSize_ReturnValue, 0)
+  L1AFA: CallFunc_BooleanAND_ReturnValue = BooleanAND(CallFunc_Greater_DoubleDouble_ReturnValue, CallFunc_CanJump_ReturnValue)
+  L1B20: if not (CallFunc_BooleanAND_ReturnValue) goto L1C77
+  L1B2E: CallFunc_GetVelocity_ReturnValue = GetVelocity()
+  L1B4E: CallFunc_VSize_ReturnValue = VSize(CallFunc_GetVelocity_ReturnValue)
+  L1B73: CallFunc_Less_DoubleDouble_ReturnValue = Less_DoubleDouble(CallFunc_VSize_ReturnValue, 370)
+  L1B99: if not (CallFunc_Less_DoubleDouble_ReturnValue) goto L1C0F
+  L1BA7: CallFunc_GetPlayerController_ReturnValue_2 = GameplayStatics.GetPlayerController(self, 0)
+  L1BC1: CallFunc_GetPlayerController_ReturnValue_2.ClientStartCameraShake(BP_Walk_C, 1, 0, Rot(0,0,0))
+  L1C0E: pop-flow
+  L1C0F: CallFunc_GetPlayerController_ReturnValue_2 = GameplayStatics.GetPlayerController(self, 0)
+  L1C29: CallFunc_GetPlayerController_ReturnValue_2.ClientStartCameraShake(BP_Sprint_C, 1, 0, Rot(0,0,0))
+  L1C76: pop-flow
+  L1C77: CallFunc_GetPlayerController_ReturnValue_2 = GameplayStatics.GetPlayerController(self, 0)
+  L1C91: CallFunc_GetPlayerController_ReturnValue_2.ClientStartCameraShake(BP_Idle_C, 1, 0, Rot(0,0,0))
+  L1CDE: pop-flow
+  L1CDF: OnEnterCameraFinished()
+  L1CED: pop-flow
+  L1CEE: OwnClientHeadbob(K2Node_CustomEvent_Activate_4)
+  L1D05: pop-flow
+  L1D06: if not (K2Node_CustomEvent_Activate_3) pop-flow
+  L1D10: CallFunc_GetPlayerCameraManager_ReturnValue = GameplayStatics.GetPlayerCameraManager(self, 0)
+  L1D2A: CallFunc_StartCameraShake_ReturnValue = CallFunc_GetPlayerCameraManager_ReturnValue.StartCameraShake(BP_Jump_C, 1, 0, Rot(0,0,0))
+  L1D81: pop-flow
+  L1D82: OwnClientJumpShake(K2Node_CustomEvent_Activate_2)
+  L1D99: pop-flow
+  L1D9A: if not (K2Node_CustomEvent_Activate_1) pop-flow
+  L1DA4: CallFunc_GetPlayerCameraManager_ReturnValue_1 = GameplayStatics.GetPlayerCameraManager(self, 0)
+  L1DBE: CallFunc_StartCameraShake_ReturnValue_1 = CallFunc_GetPlayerCameraManager_ReturnValue_1.StartCameraShake(BP_JumpEnd_C, 1, 0, Rot(0,0,0))
+  L1E15: pop-flow
+  L1E16: OwnClientLandShake(K2Node_CustomEvent_Activate)
+  L1E2D: pop-flow
+  L1E2E: Jump()
+  L1E3C: KismetSystemLibrary.Delay(self, 0.5, LatentActionInfo{-1, 1965007879, 'ExecuteUbergraph_BP_PlayerCharacter', self})
+  L1E72: pop-flow
+  L1E73: StopJumping()
+  L1E81: ServerLandShake(true)
+  L1E90: Temp_bool_IsClosed_Variable = false
+  L1E9B: goto L0F61
+  L1EA0: PlayLandingAudio(K2Node_Event_Hit)
+  L1EB7: goto L1E73
+  L1EBC: if not (self.bIsCrouched) goto L1ECB
+  L1ECA: pop-flow
+  L1ECB: push L1ED5
+  L1ED0: goto L10F6
+  L1ED5: if not (Temp_bool_IsClosed_Variable) goto L1EE4
+  L1EE3: pop-flow
+  L1EE4: Temp_bool_IsClosed_Variable = true
+  L1EEF: ServerJumpShake(true)
+  L1EFE: goto L1E2E
+  L1F03: CallFunc_GetController_ReturnValue_1 = Pawn.GetController()
+  L1F17: CallFunc_IsValid_ReturnValue_6 = KismetSystemLibrary.IsValid(CallFunc_GetController_ReturnValue_1)
+  L1F34: if not (CallFunc_IsValid_ReturnValue_6) pop-flow
+  L1F3E: push L1F8B
+  L1F43: push L1F9A
+  L1F48: ReplicatedControlRotation()
+  L1F56: CallFunc_Not_PreBool_ReturnValue_1 = Not_PreBool(self.IsAiming)
+  L1F73: ServerHeadbob(CallFunc_Not_PreBool_ReturnValue_1)
+  L1F8A: pop-flow
+  L1F8B: PostProcessDrops()
+  L1F99: pop-flow
+  L1F9A: CheckIsUnderwater()
+  L1FA8: CallFunc_UpdateMainMeshZLag_DeltaTime_ImplicitCast = K2Node_Event_DeltaSeconds
+  L1FC5: UpdateMainMeshZLag(CallFunc_UpdateMainMeshZLag_DeltaTime_ImplicitCast)
+  L1FDC: pop-flow
+  L1FDD: Temp_object_Variable_7 = K2Node_CustomEvent_Loaded
+  L1FF0: K2Node_DynamicCast_AsSound_Cue = cast<SoundCue>(Temp_object_Variable_7)
+  L2014: K2Node_DynamicCast_bSuccess_2 = K2Node_DynamicCast_AsSound_Cue
+  L2031: if not (K2Node_DynamicCast_bSuccess_2) goto L206D
+  L203F: K2Node_DynamicCast_AsAudio_Component.AudioComponent.SetSound(K2Node_DynamicCast_AsSound_Cue)
+  L2068: goto L0F33
+  L206D: K2Node_DynamicCast_AsSound_Wave = cast<SoundWave>(Temp_object_Variable_7)
+  L2091: K2Node_DynamicCast_bSuccess_1 = K2Node_DynamicCast_AsSound_Wave
+  L20AE: if not (K2Node_DynamicCast_bSuccess_1) goto L0D1C
+  L20BC: K2Node_DynamicCast_AsAudio_Component.AudioComponent.SetSound(K2Node_DynamicCast_AsSound_Wave)
+  L20E5: CallFunc_Add_DoubleDouble_A_ImplicitCast = K2Node_DynamicCast_AsSound_Wave.self.Duration
+  L2118: CallFunc_Add_DoubleDouble_ReturnValue = Add_DoubleDouble(CallFunc_Add_DoubleDouble_A_ImplicitCast, 1)
+  L2146: Temp_wildcard_Variable = CallFunc_Add_DoubleDouble_ReturnValue
+  L2163: Temp_wildcard_Variable = Temp_wildcard_Variable
+  L217E: goto L0F05
+  L2183: Pawn.ReceivePossessed(K2Node_Event_NewController)
+  L2196: ActivateCharacter(true)
+  L21A5: push L21D2
+  L21AA: if not (Temp_bool_Has_Been_Initd_Variable_2) goto L21B9
+  L21B8: pop-flow
+  L21B9: Temp_bool_Has_Been_Initd_Variable_2 = true
+  L21C4: if not (false) pop-flow
+  L21C6: Temp_bool_IsClosed_Variable_2 = true
+  L21D1: pop-flow
+  L21D2: if not (Temp_bool_IsClosed_Variable_2) goto L21E1
+  L21E0: pop-flow
+  L21E1: Temp_bool_IsClosed_Variable_2 = true
+  L21EC: BindOnSlotChanged()
+  L21FA: pop-flow
+  L21FB: Pawn.ReceiveUnpossessed(K2Node_Event_OldController)
+  L220E: ActivateCharacter(false)
+  L221D: pop-flow
+  L221E: Temp_name_Variable = K2Node_CustomEvent_NotifyName
+  L2239: pop-flow
+  L223A: CallFunc_GetAnimInstance_ReturnValue = self.Mesh.SkeletalMeshComponent.GetAnimInstance()
+  L2264: K2Node_DynamicCast_AsI_Anim_Data = iface<I_AnimData_C>(CallFunc_GetAnimInstance_ReturnValue)
+  L2288: K2Node_DynamicCast_bSuccess_3 = K2Node_DynamicCast_AsI_Anim_Data
+  L22A5: if not (K2Node_DynamicCast_bSuccess_3) pop-flow
+  L22AF: K2Node_DynamicCast_AsI_Anim_Data.AnimDataData(K2Node_Event_AnimData)
+  L22DD: pop-flow
+  L22DE: Actor.ReceiveBeginPlay()
+  L22E8: CallFunc_GetRelativeTransform_ReturnValue = self.Camera.SceneComponent.GetRelativeTransform()
+  L231A: self.CameraInitialRelativeTransform = CallFunc_GetRelativeTransform_ReturnValue
+  L2335: SetSprintListener()
+  L2343: bind(K2Node_CreateDelegate_OutputDelegate_3, self, 'OnIsInteractingChanged')
+  L235A: CallFunc_BindEventWrapperToGameplayTagChanged_ReturnValue = AbilitySystemBlueprintLibrary.BindEventWrapperToGameplayTagChanged(self.AbilitySystemComponent, GameplayTag{'GAS.Character.IsInteracting'}, K2Node_CreateDelegate_OutputDelegate_3, true, 0)
+  L23A6: self.IsInteractingTagListenerHandle = CallFunc_BindEventWrapperToGameplayTagChanged_ReturnValue
+  L23C1: bind(K2Node_CreateDelegate_OutputDelegate_14, self, 'OnIsInWaterChanged')
+  L23D8: CallFunc_BindEventWrapperToGameplayTagChanged_ReturnValue_2 = AbilitySystemBlueprintLibrary.BindEventWrapperToGameplayTagChanged(self.AbilitySystemComponent, GameplayTag{'GAS.Character.IsInWater'}, K2Node_CreateDelegate_OutputDelegate_14, true, 0)
+  L2424: self.IsInWaterTagListnerHandle = CallFunc_BindEventWrapperToGameplayTagChanged_ReturnValue_2
+  L243F: pop-flow
+  L2440: self.bIsUnderwater = true
+  L244B: CallFunc_GetPlayerController_ReturnValue_4 = GameplayStatics.GetPlayerController(self, 0)
+  L2465: CallFunc_GetLocalPlayerFromController_ReturnValue = Default__CommonUIExtensions.CommonUIExtensions.GetLocalPlayerFromController(CallFunc_GetPlayerController_ReturnValue_4)
+  L2498: CallFunc_PushContentToLayer_ForPlayer_ReturnValue = Default__CommonUIExtensions.CommonUIExtensions.PushContentToLayer_ForPlayer(CallFunc_GetLocalPlayerFromController_ReturnValue, GameplayTag{'UI.Layer.QTE'}, WBP_FadeOut_DeathScreen_C)
+  L24EF: K2Node_DynamicCast_AsWBP_Fade_Out_Death_Screen = cast<WBP_FadeOut_DeathScreen_C>(CallFunc_PushContentToLayer_ForPlayer_ReturnValue)
+  L2513: K2Node_DynamicCast_bSuccess_5 = K2Node_DynamicCast_AsWBP_Fade_Out_Death_Screen
+  L2530: if not (K2Node_DynamicCast_bSuccess_5) pop-flow
+  L253A: bind(K2Node_CreateDelegate_OutputDelegate_12, self, 'CustomEvent')
+  L2551: K2Node_DynamicCast_AsWBP_Fade_Out_Death_Screen.self.OnAnyKeyPressedEvent += K2Node_CreateDelegate_OutputDelegate_12
+  L257A: CallFunc_GetController_ReturnValue_2 = Pawn.GetController()
+  L258E: CallFunc_GetComponentByClass_ReturnValue_1 = CallFunc_GetController_ReturnValue_2.Actor.GetComponentByClass(BP_GearTransitionComponent_C)
+  L25C1: CallFunc_GetComponentByClass_ReturnValue_1.TriggerSlot(0)
+  L25EA: pop-flow
+  L25EB: goto L0390
+  L25F0: pop-flow
+  L25F1: bind(K2Node_CreateDelegate_OutputDelegate_11, self, 'CustomEvent_0')
+  L2608: CallFunc_BindEventWrapperToGameplayTagChanged_ReturnValue_1 = AbilitySystemBlueprintLibrary.BindEventWrapperToGameplayTagChanged(self.AbilitySystemComponent, GameplayTag{'GAS.Character.IsSprinting'}, K2Node_CreateDelegate_OutputDelegate_11, true, 0)
+  L2654: self.IsSprintingTagListenerHandle = CallFunc_BindEventWrapperToGameplayTagChanged_ReturnValue_1
+  L266F: pop-flow
+  L2670: CallFunc_EqualEqual_IntInt_ReturnValue = EqualEqual_IntInt(K2Node_CustomEvent_TagCount_2, 0)
+  L2692: CallFunc_SelectFloat_ReturnValue = SelectFloat(0, 1, CallFunc_EqualEqual_IntInt_ReturnValue)
+  L26C9: CallFunc_SetFloatParameter_InFloat_ImplicitCast = CallFunc_SelectFloat_ReturnValue
+  L26E6: self.MSS_Breathing_Core.SetFloatParameter('PawnSpeed', CallFunc_SetFloatParameter_InFloat_ImplicitCast)
+  L2720: pop-flow
+  L2721: if not (K2Node_CustomEvent_Aim) goto L2B24
+  L272F: CallFunc_GetController_ReturnValue_3 = Pawn.GetController()
+  L2743: CallFunc_GetComponentByClass_ReturnValue_2 = CallFunc_GetController_ReturnValue_3.Actor.GetComponentByClass(BP_GearTransitionComponent_C)
+  L2776: CallFunc_IsValid_ReturnValue_8 = KismetSystemLibrary.IsValid(CallFunc_GetComponentByClass_ReturnValue_2.self.CurrentItemInHand.ItemAsset)
+  L27B2: if not (CallFunc_IsValid_ReturnValue_8) pop-flow
+  L27BC: CallFunc_GetController_ReturnValue_3 = Pawn.GetController()
+  L27D0: CallFunc_GetComponentByClass_ReturnValue_2 = CallFunc_GetController_ReturnValue_3.Actor.GetComponentByClass(BP_GearTransitionComponent_C)
+  L2803: CallFunc_GetTagFragmentFromItemAsset_ReturnValue = F_Tags.GetTagFragmentFromItemAsset(CallFunc_GetComponentByClass_ReturnValue_2.self.CurrentItemInHand.ItemAsset, true)
+  L2848: CallFunc_HasTag_ReturnValue = BlueprintGameplayTagLibrary.HasTag(CallFunc_GetTagFragmentFromItemAsset_ReturnValue.Tags, GameplayTag{'IFP.Items.Attributes.Aiming'}, false)
+  L288A: if not (CallFunc_HasTag_ReturnValue) pop-flow
+  L2894: CallFunc_GetAnimInstance_ReturnValue_1 = self.Mesh.SkeletalMeshComponent.GetAnimInstance()
+  L28BE: CallFunc_GetLinkedAnimGraphInstanceByTag_ReturnValue = CallFunc_GetAnimInstance_ReturnValue_1.AnimInstance.GetLinkedAnimGraphInstanceByTag('UpperBody')
+  L28F5: K2Node_DynamicCast_AsBPI_Anim_Weapon = iface<BPI_AnimWeapon_C>(CallFunc_GetLinkedAnimGraphInstanceByTag_ReturnValue)
+  L2919: K2Node_DynamicCast_bSuccess_6 = K2Node_DynamicCast_AsBPI_Anim_Weapon
+  L2936: if not (K2Node_DynamicCast_bSuccess_6) goto L2984
+  L2944: K2Node_DynamicCast_AsBPI_Anim_Weapon.UpdateAimState(GameplayTag{'Anim.Weapon.Aim'})
+  L2984: self.IsAiming = true
+  L298F: CallFunc_MakeLiteralGameplayTagContainer_ReturnValue = BlueprintGameplayTagLibrary.MakeLiteralGameplayTagContainer(GameplayTagContainer{[GameplayTag{'GameEntityStatuses.Player.Aiming'}]})
+  L29E2: CallFunc_AddLooseGameplayTags_ReturnValue = AbilitySystemBlueprintLibrary.AddLooseGameplayTags(self, CallFunc_MakeLiteralGameplayTagContainer_ReturnValue, false)
+  L2A01: CallFunc_GetActorOfClass_ReturnValue_1 = GameplayStatics.GetActorOfClass(self, BP_HarpoonEquipment_C)
+  L2A1F: CallFunc_IsValid_ReturnValue_11 = KismetSystemLibrary.IsValid(CallFunc_GetActorOfClass_ReturnValue_1)
+  L2A3C: if not (CallFunc_IsValid_ReturnValue_11) pop-flow
+  L2A46: CallFunc_GetAnimInstance_ReturnValue_4 = CallFunc_GetActorOfClass_ReturnValue_1.self.SkeletalMesh.SkeletalMeshComponent.GetAnimInstance()
+  L2A86: K2Node_DynamicCast_AsBPI_Anim_Weapon_3 = iface<BPI_AnimWeapon_C>(CallFunc_GetAnimInstance_ReturnValue_4)
+  L2AAA: K2Node_DynamicCast_bSuccess_9 = K2Node_DynamicCast_AsBPI_Anim_Weapon_3
+  L2AC7: if not (K2Node_DynamicCast_bSuccess_9) goto L2B15
+  L2AD5: K2Node_DynamicCast_AsBPI_Anim_Weapon_3.UpdateAimState(GameplayTag{'Anim.Weapon.Aim'})
+  L2B15: UpdateCameraWhenAiming()
+  L2B23: pop-flow
+  L2B24: self.IsAiming = false
+  L2B2F: CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_1 = BlueprintGameplayTagLibrary.MakeLiteralGameplayTagContainer(GameplayTagContainer{[GameplayTag{'GameEntityStatuses.Player.Aiming'}]})
+  L2B82: CallFunc_RemoveLooseGameplayTags_ReturnValue = AbilitySystemBlueprintLibrary.RemoveLooseGameplayTags(self, CallFunc_MakeLiteralGameplayTagContainer_ReturnValue_1, false)
+  L2BA1: CallFunc_GetAnimInstance_ReturnValue_2 = self.Mesh.SkeletalMeshComponent.GetAnimInstance()
+  L2BCB: CallFunc_GetLinkedAnimGraphInstanceByTag_ReturnValue_1 = CallFunc_GetAnimInstance_ReturnValue_2.AnimInstance.GetLinkedAnimGraphInstanceByTag('UpperBody')
+  L2C02: K2Node_DynamicCast_AsBPI_Anim_Weapon_1 = iface<BPI_AnimWeapon_C>(CallFunc_GetLinkedAnimGraphInstanceByTag_ReturnValue_1)
+  L2C26: K2Node_DynamicCast_bSuccess_7 = K2Node_DynamicCast_AsBPI_Anim_Weapon_1
+  L2C43: if not (K2Node_DynamicCast_bSuccess_7) goto L2C91
+  L2C51: K2Node_DynamicCast_AsBPI_Anim_Weapon_1.UpdateAimState(GameplayTag{'Anim.Weapon.Idle'})
+  L2C91: UpdateCameraWhenAiming()
+  L2C9F: CallFunc_GetActorOfClass_ReturnValue = GameplayStatics.GetActorOfClass(self, BP_HarpoonEquipment_C)
+  L2CBD: CallFunc_IsValid_ReturnValue_10 = KismetSystemLibrary.IsValid(CallFunc_GetActorOfClass_ReturnValue)
+  L2CDA: if not (CallFunc_IsValid_ReturnValue_10) pop-flow
+  L2CE4: CallFunc_GetAnimInstance_ReturnValue_3 = CallFunc_GetActorOfClass_ReturnValue.self.SkeletalMesh.SkeletalMeshComponent.GetAnimInstance()
+  L2D24: K2Node_DynamicCast_AsBPI_Anim_Weapon_2 = iface<BPI_AnimWeapon_C>(CallFunc_GetAnimInstance_ReturnValue_3)
+  L2D48: K2Node_DynamicCast_bSuccess_8 = K2Node_DynamicCast_AsBPI_Anim_Weapon_2
+  L2D65: if not (K2Node_DynamicCast_bSuccess_8) pop-flow
+  L2D6F: K2Node_DynamicCast_AsBPI_Anim_Weapon_2.UpdateAimState(GameplayTag{'Anim.Weapon.Idle'})
+  L2DAF: pop-flow
+  L2DB0: if not (self.bDialogueSequenceCameraActive) goto L2DBF
+  L2DBE: pop-flow
+  L2DBF: CallFunc_GetRelativeTransform_ReturnValue_1 = self.Camera.SceneComponent.GetRelativeTransform()
+  L2DF1: self.StartCameraTransform = CallFunc_GetRelativeTransform_ReturnValue_1
+  L2E0C: CallFunc_K2_GetComponentRotation_ReturnValue = self.Camera.SceneComponent.K2_GetComponentRotation()
+  L2E3E: self.ReturnStartCamRot = CallFunc_K2_GetComponentRotation_ReturnValue
+  L2E59: CallFunc_K2_GetComponentRotation_ReturnValue = self.Camera.SceneComponent.K2_GetComponentRotation()
+  L2E8B: BreakRotator(CallFunc_K2_GetComponentRotation_ReturnValue, CallFunc_BreakRotator_Roll, CallFunc_BreakRotator_Pitch, CallFunc_BreakRotator_Yaw)
+  L2EB9: CallFunc_GetControlRotation_ReturnValue_2 = Pawn.GetControlRotation()
+  L2ED5: BreakRotator(CallFunc_GetControlRotation_ReturnValue_2, CallFunc_BreakRotator_Roll_1, CallFunc_BreakRotator_Pitch_1, CallFunc_BreakRotator_Yaw_1)
+  L2F03: CallFunc_MakeRotator_ReturnValue = MakeRotator(0, CallFunc_BreakRotator_Pitch_1, CallFunc_BreakRotator_Yaw)
+  L2F36: self.ReturnTargetCamRot = CallFunc_MakeRotator_ReturnValue
+  L2F51: CallFunc_GetControlRotation_ReturnValue_2 = Pawn.GetControlRotation()
+  L2F6D: self.ReturnStartCtrlRot = CallFunc_GetControlRotation_ReturnValue_2
+  L2F88: goto L11C3
+  L2F8D: if not (self.bDialogueSequenceCameraActive) goto L2F9C
+  L2F9B: pop-flow
+  L2F9C: if not (K2Node_Event_DisableInput) goto L3033
+  L2FAA: CallFunc_GetControlRotation_ReturnValue_1 = Pawn.GetControlRotation()
+  L2FC6: self.SavedControlRotation = CallFunc_GetControlRotation_ReturnValue_1
+  L2FE1: self.Camera.self.bUsePawnControlRotation = false
+  L3002: CallFunc_GetPlayerController_ReturnValue_6 = GameplayStatics.GetPlayerController(self, 0)
+  L301C: DisableInput(CallFunc_GetPlayerController_ReturnValue_6)
+  L3033: CallFunc_K2_GetComponentToWorld_ReturnValue = self.Camera.SceneComponent.K2_GetComponentToWorld()
+  L3065: self.StartCameraTransform = CallFunc_K2_GetComponentToWorld_ReturnValue
+  L3080: self.Camera.SceneComponent.SetAbsolute(false, true, false)
+  L30A3: BreakTransform(self.StartCameraTransform, CallFunc_BreakTransform_Location_5, CallFunc_BreakTransform_Rotation_5, CallFunc_BreakTransform_Scale_5)
+  L30D1: GetLevelDialogueRotation(CallFunc_BreakTransform_Rotation_5, CallFunc_GetLevelDialogueRotation_LevelRotation_5)
+  L30F1: self.Camera.SceneComponent.K2_SetWorldRotation(CallFunc_GetLevelDialogueRotation_LevelRotation_5, false, CallFunc_K2_SetWorldRotation_SweepHitResult_2, false)
+  L3125: SetActorHiddenInGame(true)
+  L3134: BreakTransform(K2Node_Event_NewTransfrom, CallFunc_BreakTransform_Location, CallFunc_BreakTransform_Rotation, CallFunc_BreakTransform_Scale)
+  L3162: GetLevelDialogueRotation(CallFunc_BreakTransform_Rotation, CallFunc_GetLevelDialogueRotation_LevelRotation)
+  L3182: CallFunc_GetController_ReturnValue_9 = Pawn.GetController()
+  L3196: CallFunc_GetController_ReturnValue_9.SetControlRotation(CallFunc_GetLevelDialogueRotation_LevelRotation)
+  L31C3: BreakTransform(K2Node_Event_NewTransfrom, CallFunc_BreakTransform_Location, CallFunc_BreakTransform_Rotation, CallFunc_BreakTransform_Scale)
+  L31F1: self.DialogueCameraTargetLocation = CallFunc_BreakTransform_Location
+  L320C: CalcDialogTransforms(K2Node_Event_NewTransfrom, CallFunc_CalcDialogTransforms_ActorTransform, CallFunc_CalcDialogTransforms_CameraWorldTransform)
+  L3235: self.FinishActorTransform = CallFunc_CalcDialogTransforms_ActorTransform
+  L3250: self.FinishCameraTransform = CallFunc_CalcDialogTransforms_CameraWorldTransform
+  L326B: BreakTransform(self.FinishActorTransform, CallFunc_BreakTransform_Location_4, CallFunc_BreakTransform_Rotation_4, CallFunc_BreakTransform_Scale_4)
+  L3299: CallFunc_K2_SetActorRotation_ReturnValue = Actor.K2_SetActorRotation(CallFunc_BreakTransform_Rotation_4, false)
+  L32B7: goto L132D
+  L32BC: CallFunc_TLerp_ReturnValue = TLerp(self.StartCameraTransform, self.CameraInitialRelativeTransform, Temp_real_Variable_11, 0)
+  L32F5: self.Camera.SceneComponent.K2_SetRelativeTransform(CallFunc_TLerp_ReturnValue, false, CallFunc_K2_SetRelativeTransform_SweepHitResult, false)
+  L3329: CallFunc_RLerp_ReturnValue = RLerp(self.ReturnStartCamRot, self.ReturnTargetCamRot, Temp_real_Variable_11, true)
+  L3361: GetLevelDialogueRotation(CallFunc_RLerp_ReturnValue, CallFunc_GetLevelDialogueRotation_LevelRotation_1)
+  L3381: self.Camera.SceneComponent.K2_SetWorldRotation(CallFunc_GetLevelDialogueRotation_LevelRotation_1, false, CallFunc_K2_SetWorldRotation_SweepHitResult, false)
+  L33B5: CallFunc_RLerp_ReturnValue_1 = RLerp(self.ReturnStartCtrlRot, self.ReturnTargetCamRot, Temp_real_Variable_11, true)
+  L33ED: GetLevelDialogueRotation(CallFunc_RLerp_ReturnValue_1, CallFunc_GetLevelDialogueRotation_LevelRotation_2)
+  L340D: CallFunc_GetController_ReturnValue_6 = Pawn.GetController()
+  L3421: CallFunc_GetController_ReturnValue_6.SetControlRotation(CallFunc_GetLevelDialogueRotation_LevelRotation_2)
+  L344E: pop-flow
+  L344F: CallFunc_GetPlayerController_ReturnValue_5 = GameplayStatics.GetPlayerController(self, 0)
+  L3469: EnableInput(CallFunc_GetPlayerController_ReturnValue_5)
+  L3480: CallFunc_GetController_ReturnValue_4 = Pawn.GetController()
+  L3494: CallFunc_GetController_ReturnValue_4.SetControlRotation(self.ReturnTargetCamRot)
+  L34C1: self.Camera.self.bUsePawnControlRotation = true
+  L34E2: SetActorHiddenInGame(false)
+  L34F1: pop-flow
+  L34F2: Temp_object_Variable_6 = K2Node_CustomEvent_DrdTempTick_2
+  L3505: Temp_real_Variable_10 = K2Node_CustomEvent_Time_2
+  L3520: Temp_real_Variable_11 = K2Node_CustomEvent_Relative_2
+  L353B: goto L32BC
+  L3540: Temp_name_Variable = K2Node_CustomEvent_NotifyName_1
+  L355B: pop-flow
+  L355C: self.Camera.SceneComponent.K2_SetRelativeTransform(self.CameraInitialRelativeTransform, false, CallFunc_K2_SetRelativeTransform_SweepHitResult_1, false)
+  L3590: goto L344F
+  L3595: Temp_name_Variable = K2Node_CustomEvent_NotifyName_2
+  L35B0: pop-flow
+  L35B1: if not (self.bIsDead) goto L35C0
+  L35BF: pop-flow
+  L35C0: self.bIsDead = true
+  L35CB: self.OnPlayerDeath.Broadcast()
+  L35DE: goto L2440
+  L35E3: DrdBaseCharacter.OnHealthChanged(K2Node_Event_OldValue, K2Node_Event_NewValue)
+  L35FF: CallFunc_EqualEqual_DoubleDouble_A_ImplicitCast = K2Node_Event_NewValue
+  L361C: CallFunc_EqualEqual_DoubleDouble_ReturnValue = EqualEqual_DoubleDouble(CallFunc_EqualEqual_DoubleDouble_A_ImplicitCast, 0)
+  L3642: if not (CallFunc_EqualEqual_DoubleDouble_ReturnValue) pop-flow
+  L364C: CallFunc_GetGameplayTagCount_ReturnValue = self.AbilitySystemComponent.AbilitySystemComponent.GetGameplayTagCount(GameplayTag{'GAS.Character.IsInteracting'})
+  L3699: CallFunc_EqualEqual_IntInt_ReturnValue_1 = EqualEqual_IntInt(CallFunc_GetGameplayTagCount_ReturnValue, 0)
+  L36BB: if not (CallFunc_EqualEqual_IntInt_ReturnValue_1) pop-flow
+  L36C5: PerformCharacterDeath()
+  L36D3: pop-flow
+  L36D4: self.Camera.SceneComponent.SetAbsolute(false, false, false)
+  L36F7: goto L355C
+  L36FC: OnIsInteractingTagChanged(K2Node_CustomEvent_TagCount_1)
+  L3713: pop-flow
+  L3714: CallFunc_EqualEqual_IntInt_ReturnValue_2 = EqualEqual_IntInt(K2Node_CustomEvent_Count, 0)
+  L3736: if not (CallFunc_EqualEqual_IntInt_ReturnValue_2) pop-flow
+  L3740: CallFunc_LessEqual_DoubleDouble_A_ImplicitCast = self.AttributeSetHealth.self.Health.CurrentValue
+  L377C: CallFunc_LessEqual_DoubleDouble_ReturnValue = LessEqual_DoubleDouble(CallFunc_LessEqual_DoubleDouble_A_ImplicitCast, 0)
+  L37A2: if not (CallFunc_LessEqual_DoubleDouble_ReturnValue) pop-flow
+  L37AC: PerformCharacterDeath()
+  L37BA: pop-flow
+  L37BB: goto L08E4
+  L37C0: self.FOW_TargetValue = K2Node_CustomEvent_FOW
+  L37DB: K2Node_VariableSet_FOV_PrevValue_ImplicitCast = self.Camera.self.FieldOfView
+  L380E: self.FOV_PrevValue = K2Node_VariableSet_FOV_PrevValue_ImplicitCast
+  L3829: goto L0713
+  L382E: Temp_name_Variable = K2Node_CustomEvent_NotifyName_3
+  L3849: pop-flow
+  L384A: CallFunc_GetInstigator_ReturnValue = Actor.GetInstigator()
+  L385E: CallFunc_GetAbilitySystemComponent_ReturnValue = AbilitySystemBlueprintLibrary.GetAbilitySystemComponent(CallFunc_GetInstigator_ReturnValue)
+  L387B: CallFunc_BP_ApplyGameplayEffectToSelf_ReturnValue = CallFunc_GetAbilitySystemComponent_ReturnValue.AbilitySystemComponent.BP_ApplyGameplayEffectToSelf(GE_InitHealth_C, 0, GameplayEffectContextHandle{})
+  L38C9: DrdSavable.PostLoadInitializationBlank()
+  L38D3: pop-flow
+  L38D4: Actor.ReceiveEndPlay(K2Node_Event_EndPlayReason)
+  L38E7: DestroyTagListenerHandles()
+  L38F5: pop-flow
+  L38F6: Temp_text_Variable = K2Node_CustomEvent_Phrase
+  L3911: Temp_wildcard_Variable = 4
+  L3928: CallFunc_ResolveMonologueAudio_ReturnValue = Default__BPFL_VOMonologues_C.ResolveMonologueAudio(Temp_text_Variable, K2Node_CustomEvent_SoundToPlay, self)
+  L3971: CallFunc_IsValidSoftObjectReference_ReturnValue = KismetSystemLibrary.IsValidSoftObjectReference(CallFunc_ResolveMonologueAudio_ReturnValue)
+  L398E: if not (CallFunc_IsValidSoftObjectReference_ReturnValue) goto L0D1C
+  L399C: goto L0B22
+  L39A1: goto L0461
+  L39A6: Temp_name_Variable = K2Node_CustomEvent_NotifyName_4
+  L39C1: pop-flow
+  L39C2: self.Camera.SceneComponent.K2_SetWorldTransform(self.FinishCameraTransform, false, CallFunc_K2_SetWorldTransform_SweepHitResult, false)
+  L39F6: CallFunc_GetController_ReturnValue_5 = Pawn.GetController()
+  L3A0A: BreakTransform(self.FinishCameraTransform, CallFunc_BreakTransform_Location_3, CallFunc_BreakTransform_Rotation_3, CallFunc_BreakTransform_Scale_3)
+  L3A38: GetLevelDialogueRotation(CallFunc_BreakTransform_Rotation_3, CallFunc_GetLevelDialogueRotation_LevelRotation_4)
+  L3A58: CallFunc_GetController_ReturnValue_5.SetControlRotation(CallFunc_GetLevelDialogueRotation_LevelRotation_4)
+  L3A85: BreakTransform(self.FinishActorTransform, CallFunc_BreakTransform_Location_2, CallFunc_BreakTransform_Rotation_2, CallFunc_BreakTransform_Scale_2)
+  L3AB3: CallFunc_K2_SetActorLocationAndRotation_ReturnValue = Actor.K2_SetActorLocationAndRotation(CallFunc_BreakTransform_Location_2, CallFunc_BreakTransform_Rotation_2, false, CallFunc_K2_SetActorLocationAndRotation_SweepHitResult, true)
+  L3AE4: BreakTransform(self.FinishActorTransform, CallFunc_BreakTransform_Location_2, CallFunc_BreakTransform_Rotation_2, CallFunc_BreakTransform_Scale_2)
+  L3B12: BreakVector(self.MeshZLag_DefaultMeshLocation, CallFunc_BreakVector_X_1, CallFunc_BreakVector_Y_1, CallFunc_BreakVector_Z_1)
+  L3B40: BreakVector(CallFunc_BreakTransform_Location_2, CallFunc_BreakVector_X_2, CallFunc_BreakVector_Y_2, CallFunc_BreakVector_Z_2)
+  L3B6E: CallFunc_Add_DoubleDouble_ReturnValue_1 = Add_DoubleDouble(CallFunc_BreakVector_Z_2, CallFunc_BreakVector_Z_1)
+  L3B9C: self.CameraZLag_LastCamZ = CallFunc_Add_DoubleDouble_ReturnValue_1
+  L3BB7: BreakTransform(self.CameraInitialRelativeTransform, CallFunc_BreakTransform_Location_1, CallFunc_BreakTransform_Rotation_1, CallFunc_BreakTransform_Scale_1)
+  L3BE5: CallFunc_MakeTransform_ReturnValue = MakeTransform(CallFunc_BreakTransform_Location_1, CallFunc_BreakTransform_Rotation_1, CallFunc_BreakTransform_Scale_1)
+  L3C1C: self.Camera.SceneComponent.K2_SetRelativeTransform(CallFunc_MakeTransform_ReturnValue, false, CallFunc_K2_SetRelativeTransform_SweepHitResult_2, false)
+  L3C50: BreakTransform(self.FinishCameraTransform, CallFunc_BreakTransform_Location_3, CallFunc_BreakTransform_Rotation_3, CallFunc_BreakTransform_Scale_3)
+  L3C7E: GetLevelDialogueRotation(CallFunc_BreakTransform_Rotation_3, CallFunc_GetLevelDialogueRotation_LevelRotation_3)
+  L3C9E: self.Camera.SceneComponent.K2_SetWorldRotation(CallFunc_GetLevelDialogueRotation_LevelRotation_3, false, CallFunc_K2_SetWorldRotation_SweepHitResult_1, false)
+  L3CD2: CallFunc_K2_GetComponentLocation_ReturnValue = self.Camera.SceneComponent.K2_GetComponentLocation()
+  L3D04: CallFunc_Subtract_VectorVector_ReturnValue = Subtract_VectorVector(self.DialogueCameraTargetLocation, CallFunc_K2_GetComponentLocation_ReturnValue)
+  L3D32: CallFunc_ProjectVectorOnToPlane_ReturnValue = ProjectVectorOnToPlane(CallFunc_Subtract_VectorVector_ReturnValue, Vec(0,0,1))
+  L3D70: Actor.K2_AddActorWorldOffset(CallFunc_ProjectVectorOnToPlane_ReturnValue, true, CallFunc_K2_AddActorWorldOffset_SweepHitResult, false)
+  L3D8E: push L3E84
+  L3D93: if not (self.Camera.self.bUsePawnControlRotation) pop-flow
+  L3DB3: CallFunc_GetController_ReturnValue_7 = Pawn.GetController()
+  L3DC7: BreakTransform(self.FinishCameraTransform, CallFunc_BreakTransform_Location_3, CallFunc_BreakTransform_Rotation_3, CallFunc_BreakTransform_Scale_3)
+  L3DF5: BreakRotator(CallFunc_BreakTransform_Rotation_3, CallFunc_BreakRotator_Roll_2, CallFunc_BreakRotator_Pitch_2, CallFunc_BreakRotator_Yaw_2)
+  L3E23: CallFunc_MakeRotator_ReturnValue_1 = MakeRotator(0, CallFunc_BreakRotator_Pitch_2, CallFunc_BreakRotator_Yaw_2)
+  L3E56: CallFunc_GetController_ReturnValue_7.SetControlRotation(CallFunc_MakeRotator_ReturnValue_1)
+  L3E83: pop-flow
+  L3E84: CallFunc_K2_GetComponentToWorld_ReturnValue_1 = self.Camera.SceneComponent.K2_GetComponentToWorld()
+  L3EB6: CallFunc_Conv_TransformToString_ReturnValue = KismetStringLibrary.Conv_TransformToString(CallFunc_K2_GetComponentToWorld_ReturnValue_1)
+  L3EDB: CallFunc_Concat_StrStr_ReturnValue = KismetStringLibrary.Concat_StrStr("@@ Camara transform for dialogue ", CallFunc_Conv_TransformToString_ReturnValue)
+  L3F23: KismetSystemLibrary.PrintString(self, CallFunc_Concat_StrStr_ReturnValue, false, true, LinearColor{0, 0.66, 1, 1}, 2, 'None')
+  L3F6D: pop-flow
+  L3F6E: CallFunc_Conv_InputActionValueToBool_ReturnValue_3 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_3)
+  L3F8B: Temp_bool_Variable_3 = CallFunc_Conv_InputActionValueToBool_ReturnValue_3
+  L3F9E: Temp_real_Variable_12 = K2Node_EnhancedInputActionEvent_ElapsedTime_3
+  L3FBB: Temp_real_Variable_12 = Temp_real_Variable_12
+  L3FD6: Temp_real_Variable_13 = K2Node_EnhancedInputActionEvent_TriggeredTime_3
+  L3FF3: Temp_real_Variable_13 = Temp_real_Variable_13
+  L400E: Temp_object_Variable_8 = K2Node_EnhancedInputActionEvent_SourceAction_3
+  L4021: goto L1EBC
+  L4026: CallFunc_Add_DoubleDouble_A_ImplicitCast_1 = Temp_wildcard_Variable
+  L4043: CallFunc_Add_DoubleDouble_ReturnValue_2 = Add_DoubleDouble(CallFunc_Add_DoubleDouble_A_ImplicitCast_1, 1)
+  L4071: CallFunc_Delay_Duration_ImplicitCast = CallFunc_Add_DoubleDouble_ReturnValue_2
+  L408E: KismetSystemLibrary.Delay(self, CallFunc_Delay_Duration_ImplicitCast, LatentActionInfo{-1, 1531989726, 'ExecuteUbergraph_BP_PlayerCharacter', self})
+  L40C8: pop-flow
+  L40C9: PerformCharacterDeath()
+  L40D7: pop-flow
+  L40D8: CallFunc_Greater_IntInt_ReturnValue = Greater_IntInt(K2Node_CustomEvent_TagCount, 0)
+  L40FA: if not (CallFunc_Greater_IntInt_ReturnValue) pop-flow
+  L4104: goto L1110
+  L4109: Character.K2_OnMovementModeChanged(K2Node_Event_PrevMovementMode, K2Node_Event_NewMovementMode, K2Node_Event_PrevCustomMode, K2Node_Event_NewCustomMode)
+  L4137: K2Node_SwitchEnum_CmpSuccess = NotEqual_ByteByte(K2Node_Event_NewMovementMode, 4)
+  L4156: if not (K2Node_SwitchEnum_CmpSuccess) goto L4165
+  L4164: pop-flow
+  L4165: CallFunc_EqualEqual_ByteByte_ReturnValue = EqualEqual_ByteByte(K2Node_Event_PrevMovementMode, 3)
+  L4184: if not (CallFunc_EqualEqual_ByteByte_ReturnValue) pop-flow
+  L418E: CallFunc_K2_GetActorLocation_ReturnValue = Actor.K2_GetActorLocation()
+  L41AA: GameplayStatics.PlaySoundAtLocation(self, SCUE_Splash_Big, CallFunc_K2_GetActorLocation_ReturnValue, Rot(0,0,0), 1, 1, 0, null, null, null, null)
+  L41F3: CallFunc_K2_GetActorLocation_ReturnValue = Actor.K2_GetActorLocation()
+  L420F: CallFunc_SpawnSystemAtLocation_ReturnValue = NiagaraFunctionLibrary.SpawnSystemAtLocation(self, NS_SmallSplash, CallFunc_K2_GetActorLocation_ReturnValue, Rot(0,0,0), Vec(1,1,1), true, true, 1, true)
+  L426D: pop-flow
+  L426E: BreakVector2D(Temp_struct_Variable_1, CallFunc_BreakVector2D_X, CallFunc_BreakVector2D_Y)
+  L4293: CallFunc_AddControllerPitchInput_Val_ImplicitCast = CallFunc_BreakVector2D_Y
+  L42B0: AddControllerPitchInput(CallFunc_AddControllerPitchInput_Val_ImplicitCast)
+  L42C7: pop-flow
+  L42C8: BreakVector2D(Temp_struct_Variable_1, CallFunc_BreakVector2D_X, CallFunc_BreakVector2D_Y)
+  L42ED: CallFunc_AddControllerYawInput_Val_ImplicitCast = CallFunc_BreakVector2D_X
+  L430A: AddControllerYawInput(CallFunc_AddControllerYawInput_Val_ImplicitCast)
+  L4321: goto L426E
+  L4326: CallFunc_GetController_ReturnValue_8 = self.Pawn.GetController()
+  L4348: LandingAudio_Cast_PlayerController_AsPlayer_Controller = cast<PlayerController>(CallFunc_GetController_ReturnValue_8)
+  L436C: LandingAudio_Cast_PlayerController_bSuccess = LandingAudio_Cast_PlayerController_AsPlayer_Controller
+  L4389: if not (LandingAudio_Cast_PlayerController_bSuccess) pop-flow
+  L4393: CallFunc_IsLocalController_ReturnValue = LandingAudio_Cast_PlayerController_AsPlayer_Controller.IsLocalController()
+  L43C1: if not (CallFunc_IsLocalController_ReturnValue) pop-flow
+  L43CB: CallFunc_IsValid_ReturnValue_13 = KismetSystemLibrary.IsValid(self.AC_FootSteps)
+  L43E8: if not (CallFunc_IsValid_ReturnValue_13) pop-flow
+  L43F2: GameplayStatics.BreakHitResult(LandingAudio_PlayLandingAudio_LandingHit, CallFunc_BreakHitResult_bBlockingHit, CallFunc_BreakHitResult_bInitialOverlap, CallFunc_BreakHitResult_Time, CallFunc_BreakHitResult_Distance, CallFunc_BreakHitResult_Location, CallFunc_BreakHitResult_ImpactPoint, CallFunc_BreakHitResult_Normal, CallFunc_BreakHitResult_ImpactNormal, CallFunc_BreakHitResult_PhysMat, CallFunc_BreakHitResult_HitActor, CallFunc_BreakHitResult_HitComponent, CallFunc_BreakHitResult_HitBoneName, CallFunc_BreakHitResult_BoneName, CallFunc_BreakHitResult_HitItem, CallFunc_BreakHitResult_ElementIndex, CallFunc_BreakHitResult_FaceIndex, CallFunc_BreakHitResult_TraceStart, CallFunc_BreakHitResult_TraceEnd)
+  L44A7: if not (CallFunc_BreakHitResult_bBlockingHit) pop-flow
+  L44B1: GameplayStatics.BreakHitResult(LandingAudio_PlayLandingAudio_LandingHit, CallFunc_BreakHitResult_bBlockingHit, CallFunc_BreakHitResult_bInitialOverlap, CallFunc_BreakHitResult_Time, CallFunc_BreakHitResult_Distance, CallFunc_BreakHitResult_Location, CallFunc_BreakHitResult_ImpactPoint, CallFunc_BreakHitResult_Normal, CallFunc_BreakHitResult_ImpactNormal, CallFunc_BreakHitResult_PhysMat, CallFunc_BreakHitResult_HitActor, CallFunc_BreakHitResult_HitComponent, CallFunc_BreakHitResult_HitBoneName, CallFunc_BreakHitResult_BoneName, CallFunc_BreakHitResult_HitItem, CallFunc_BreakHitResult_ElementIndex, CallFunc_BreakHitResult_FaceIndex, CallFunc_BreakHitResult_TraceStart, CallFunc_BreakHitResult_TraceEnd)
+  L4566: CallFunc_IsValid_ReturnValue_12 = KismetSystemLibrary.IsValid(CallFunc_BreakHitResult_PhysMat)
+  L4583: if not (CallFunc_IsValid_ReturnValue_12) goto L45A9
+  L4591: ApplyLandingSurfaceAudio(LandingAudio_PlayLandingAudio_LandingHit)
+  L45A8: pop-flow
+  L45A9: GameplayStatics.BreakHitResult(LandingAudio_PlayLandingAudio_LandingHit, CallFunc_BreakHitResult_bBlockingHit, CallFunc_BreakHitResult_bInitialOverlap, CallFunc_BreakHitResult_Time, CallFunc_BreakHitResult_Distance, CallFunc_BreakHitResult_Location, CallFunc_BreakHitResult_ImpactPoint, CallFunc_BreakHitResult_Normal, CallFunc_BreakHitResult_ImpactNormal, CallFunc_BreakHitResult_PhysMat, CallFunc_BreakHitResult_HitActor, CallFunc_BreakHitResult_HitComponent, CallFunc_BreakHitResult_HitBoneName, CallFunc_BreakHitResult_BoneName, CallFunc_BreakHitResult_HitItem, CallFunc_BreakHitResult_ElementIndex, CallFunc_BreakHitResult_FaceIndex, CallFunc_BreakHitResult_TraceStart, CallFunc_BreakHitResult_TraceEnd)
+  L465E: CallFunc_Add_VectorVector_ReturnValue = Add_VectorVector(CallFunc_BreakHitResult_ImpactPoint, Vec(0,0,-80))
+  L469C: CallFunc_Add_VectorVector_ReturnValue_1 = Add_VectorVector(CallFunc_BreakHitResult_ImpactPoint, Vec(0,0,20))
+  L46DA: CallFunc_LineTraceSingle_ReturnValue = KismetSystemLibrary.LineTraceSingle(self, CallFunc_Add_VectorVector_ReturnValue_1, CallFunc_Add_VectorVector_ReturnValue, 0, false, Temp_object_Variable_3, 0, CallFunc_LineTraceSingle_OutHit, true, LinearColor{1, 0, 0, 1}, LinearColor{0, 1, 0, 1}, 5)
+  L4762: ApplyLandingSurfaceAudio(CallFunc_LineTraceSingle_OutHit)
+  L4779: pop-flow
+  L477A: CallFunc_IsValid_ReturnValue_14 = KismetSystemLibrary.IsValid(self.AC_FootSteps)
+  L4797: if not (CallFunc_IsValid_ReturnValue_14) pop-flow
+  L47A1: CallFunc_GetSurfaceType_ReturnValue = GameplayStatics.GetSurfaceType(LandingAudio_ApplyLandingSurfaceAudio_SurfaceHit)
+  L47C6: GameplayStatics.BreakHitResult(LandingAudio_ApplyLandingSurfaceAudio_SurfaceHit, CallFunc_BreakHitResult_bBlockingHit_1, CallFunc_BreakHitResult_bInitialOverlap_1, CallFunc_BreakHitResult_Time_1, CallFunc_BreakHitResult_Distance_1, CallFunc_BreakHitResult_Location_1, CallFunc_BreakHitResult_ImpactPoint_1, CallFunc_BreakHitResult_Normal_1, CallFunc_BreakHitResult_ImpactNormal_1, CallFunc_BreakHitResult_PhysMat_1, CallFunc_BreakHitResult_HitActor_1, CallFunc_BreakHitResult_HitComponent_1, CallFunc_BreakHitResult_HitBoneName_1, CallFunc_BreakHitResult_BoneName_1, CallFunc_BreakHitResult_HitItem_1, CallFunc_BreakHitResult_ElementIndex_1, CallFunc_BreakHitResult_FaceIndex_1, CallFunc_BreakHitResult_TraceStart_1, CallFunc_BreakHitResult_TraceEnd_1)
+  L487B: CallFunc_Conv_ByteToInt_ReturnValue = Conv_ByteToInt(CallFunc_GetSurfaceType_ReturnValue)
+  L48A0: CallFunc_EqualEqual_IntInt_ReturnValue_3 = EqualEqual_IntInt(CallFunc_Conv_ByteToInt_ReturnValue, 9)
+  L48C2: CallFunc_EqualEqual_IntInt_ReturnValue_4 = EqualEqual_IntInt(CallFunc_Conv_ByteToInt_ReturnValue, 8)
+  L48E4: CallFunc_EqualEqual_IntInt_ReturnValue_5 = EqualEqual_IntInt(CallFunc_Conv_ByteToInt_ReturnValue, 7)
+  L4906: CallFunc_EqualEqual_IntInt_ReturnValue_6 = EqualEqual_IntInt(CallFunc_Conv_ByteToInt_ReturnValue, 6)
+  L4928: CallFunc_EqualEqual_IntInt_ReturnValue_7 = EqualEqual_IntInt(CallFunc_Conv_ByteToInt_ReturnValue, 5)
+  L494A: CallFunc_EqualEqual_IntInt_ReturnValue_8 = EqualEqual_IntInt(CallFunc_Conv_ByteToInt_ReturnValue, 4)
+  L496C: CallFunc_EqualEqual_IntInt_ReturnValue_9 = EqualEqual_IntInt(CallFunc_Conv_ByteToInt_ReturnValue, 3)
+  L498E: CallFunc_EqualEqual_IntInt_ReturnValue_10 = EqualEqual_IntInt(CallFunc_Conv_ByteToInt_ReturnValue, 2)
+  L49B0: CallFunc_EqualEqual_IntInt_ReturnValue_11 = EqualEqual_IntInt(CallFunc_Conv_ByteToInt_ReturnValue, 1)
+  L49D2: LandingAudio_KnownPhysicalMaterials_Array = [null, 01_Carpet_Footsteps_Mat, 02_Conrete_Footsteps_Mat, 03_Grass_Footsteps_Mat, 04_Gravel_Footsteps_Mat, 05_Ground_Footsteps_Mat, 06_Metal_Footsteps_Mat, 07_Plastic_Footsteps_Mat, 08_Sand_Footsteps_Mat, 09_Water_Footsteps_Mat, 10_Wood_Footsteps_Mat, 11_Mud_Footsteps_Mat, 12_SoftSnow_Footsteps_Mat, 13_HardSnow_Footsteps_Mat, 14_Leaves_Footsteps_Mat, 15_Rock_Footsteps_Mat, DefaultPhysicalMaterial]
+  L4A6E: CallFunc_SelectInt_ReturnValue = SelectInt(3, 16, CallFunc_EqualEqual_IntInt_ReturnValue_11)
+  L4A9D: CallFunc_Array_Find_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Find(LandingAudio_KnownPhysicalMaterials_Array, CallFunc_BreakHitResult_PhysMat_1)
+  L4AE1: CallFunc_SelectInt_ReturnValue_1 = SelectInt(10, CallFunc_SelectInt_ReturnValue, CallFunc_EqualEqual_IntInt_ReturnValue_10)
+  L4B14: CallFunc_Greater_IntInt_ReturnValue_1 = Greater_IntInt(CallFunc_Array_Find_ReturnValue, 0)
+  L4B36: CallFunc_SelectInt_ReturnValue_2 = SelectInt(15, CallFunc_SelectInt_ReturnValue_1, CallFunc_EqualEqual_IntInt_ReturnValue_9)
+  L4B69: CallFunc_SelectInt_ReturnValue_3 = SelectInt(9, CallFunc_SelectInt_ReturnValue_2, CallFunc_EqualEqual_IntInt_ReturnValue_8)
+  L4B9C: CallFunc_SelectInt_ReturnValue_4 = SelectInt(6, CallFunc_SelectInt_ReturnValue_3, CallFunc_EqualEqual_IntInt_ReturnValue_7)
+  L4BCF: CallFunc_SelectInt_ReturnValue_5 = SelectInt(1, CallFunc_SelectInt_ReturnValue_4, CallFunc_EqualEqual_IntInt_ReturnValue_6)
+  L4C02: CallFunc_SelectInt_ReturnValue_6 = SelectInt(5, CallFunc_SelectInt_ReturnValue_5, CallFunc_EqualEqual_IntInt_ReturnValue_5)
+  L4C35: CallFunc_SelectInt_ReturnValue_7 = SelectInt(7, CallFunc_SelectInt_ReturnValue_6, CallFunc_EqualEqual_IntInt_ReturnValue_4)
+  L4C68: CallFunc_SelectInt_ReturnValue_8 = SelectInt(16, CallFunc_SelectInt_ReturnValue_7, CallFunc_EqualEqual_IntInt_ReturnValue_3)
+  L4C9B: CallFunc_SelectInt_ReturnValue_9 = SelectInt(CallFunc_Array_Find_ReturnValue, CallFunc_SelectInt_ReturnValue_8, CallFunc_Greater_IntInt_ReturnValue_1)
+  L4CD2: self.LandingSoundSurfaceIndex = CallFunc_SelectInt_ReturnValue_9
+  L4CED: CallFunc_Add_IntInt_ReturnValue = Add_IntInt(self.LandingSoundRequests, 1)
+  L4D17: self.LandingSoundRequests = CallFunc_Add_IntInt_ReturnValue
+  L4D32: self.AC_FootSteps.SetIntParameter('floor', self.LandingSoundSurfaceIndex)
+  L4D6C: self.AC_FootSteps.Play(0)
+  L4D95: pop-flow
+  L4D96: CallFunc_Conv_InputActionValueToAxis2D_ReturnValue = EnhancedInputLibrary.Conv_InputActionValueToAxis2D(K2Node_EnhancedInputActionEvent_ActionValue_4)
+  L4DBB: Temp_struct_Variable_1 = CallFunc_Conv_InputActionValueToAxis2D_ReturnValue
+  L4DD6: Temp_real_Variable_14 = K2Node_EnhancedInputActionEvent_ElapsedTime_4
+  L4DF3: Temp_real_Variable_14 = Temp_real_Variable_14
+  L4E0E: Temp_real_Variable_15 = K2Node_EnhancedInputActionEvent_TriggeredTime_4
+  L4E2B: Temp_real_Variable_15 = Temp_real_Variable_15
+  L4E46: Temp_object_Variable_9 = K2Node_EnhancedInputActionEvent_SourceAction_4
+  L4E59: goto L42C8
+  L4E5E: CallFunc_GetActorForwardVector_ReturnValue = Actor.GetActorForwardVector()
+  L4E7A: BreakVector2D(Temp_struct_Variable_2, CallFunc_BreakVector2D_X_1, CallFunc_BreakVector2D_Y_1)
+  L4E9F: CallFunc_AddMovementInput_ScaleValue_ImplicitCast_1 = CallFunc_BreakVector2D_Y_1
+  L4EBC: AddMovementInput(CallFunc_GetActorForwardVector_ReturnValue, CallFunc_AddMovementInput_ScaleValue_ImplicitCast_1, false)
+  L4EDD: pop-flow
+  L4EDE: CallFunc_GetActorRightVector_ReturnValue = Actor.GetActorRightVector()
+  L4EFA: BreakVector2D(Temp_struct_Variable_2, CallFunc_BreakVector2D_X_1, CallFunc_BreakVector2D_Y_1)
+  L4F1F: CallFunc_AddMovementInput_ScaleValue_ImplicitCast = CallFunc_BreakVector2D_X_1
+  L4F3C: AddMovementInput(CallFunc_GetActorRightVector_ReturnValue, CallFunc_AddMovementInput_ScaleValue_ImplicitCast, false)
+  L4F5D: goto L4E5E
+  L4F62: CallFunc_Conv_InputActionValueToAxis2D_ReturnValue_1 = EnhancedInputLibrary.Conv_InputActionValueToAxis2D(K2Node_EnhancedInputActionEvent_ActionValue_5)
+  L4F87: Temp_struct_Variable_2 = CallFunc_Conv_InputActionValueToAxis2D_ReturnValue_1
+  L4FA2: Temp_real_Variable_16 = K2Node_EnhancedInputActionEvent_ElapsedTime_5
+  L4FBF: Temp_real_Variable_16 = Temp_real_Variable_16
+  L4FDA: Temp_real_Variable_17 = K2Node_EnhancedInputActionEvent_TriggeredTime_5
+  L4FF7: Temp_real_Variable_17 = Temp_real_Variable_17
+  L5012: Temp_object_Variable_10 = K2Node_EnhancedInputActionEvent_SourceAction_5
+  L5025: goto L4EDE
+  L502A: K2Node_DynamicCast_AsWBP_Player_Loose_Phrase_Notifcation = cast<WBP_PlayerLoosePhrase_Notifcation_C>(Temp_object_Variable_11)
+  L504E: K2Node_DynamicCast_bSuccess_11 = K2Node_DynamicCast_AsWBP_Player_Loose_Phrase_Notifcation
+  L506B: if not (K2Node_DynamicCast_bSuccess_11) pop-flow
+  L5075: K2Node_DynamicCast_AsWBP_Player_Loose_Phrase_Notifcation.SetData(Temp_text_Variable, Temp_wildcard_Variable, TextTable("/Game/Dreadmoor/Localization/ST_Dialogs.ST_Dialogs", "PlayerName"))
+  L50F5: goto L4026
+  L50FA: Temp_object_Variable_11 = K2Node_CustomEvent_UserWidget
+  L510D: pop-flow
+  L510E: Temp_object_Variable_11 = K2Node_CustomEvent_UserWidget_1
+  L5121: goto L502A
+  L5126: return
+
+## function GetLevelDialogueRotation  flags=0x1C420000
+  L0000: BreakRotator(ViewRotation, CallFunc_BreakRotator_Roll, CallFunc_BreakRotator_Pitch, CallFunc_BreakRotator_Yaw)
+  L002E: CallFunc_MakeRotator_ReturnValue = MakeRotator(0, CallFunc_BreakRotator_Pitch, CallFunc_BreakRotator_Yaw)
+  L0061: LevelRotation = CallFunc_MakeRotator_ReturnValue
+  L007C: return
+
+## function HardLanding  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Activate_6 = Activate
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(5570)
+  L0021: return
+
+## function InpActEvt_IA_CharLight_K2Node_EnhancedInputActionEvent_2  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_2 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_2 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_2 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_2 = SourceAction
+  L0048: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(2666)
+  L0057: return
+
+## function InpActEvt_IA_Jump_K2Node_EnhancedInputActionEvent_3  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_3 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_3 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_3 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_3 = SourceAction
+  L0048: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(16238)
+  L0057: return
+
+## function InpActEvt_IA_Look_K2Node_EnhancedInputActionEvent_4  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_4 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_4 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_4 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_4 = SourceAction
+  L0048: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(19862)
+  L0057: return
+
+## function InpActEvt_IA_Move_K2Node_EnhancedInputActionEvent_5  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_5 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_5 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_5 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_5 = SourceAction
+  L0048: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(20322)
+  L0057: return
+
+## function InpActEvt_IA_PrimaryUse_K2Node_EnhancedInputActionEvent_1  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_1 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_1 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_1 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_1 = SourceAction
+  L0048: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(718)
+  L0057: return
+
+## function InpActEvt_IA_StopRecord_K2Node_EnhancedInputActionEvent_0  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction = SourceAction
+  L0048: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(1409)
+  L0057: return
+
+## function InpActEvt_W_K2Node_InputKeyEvent_0  flags=0x08000000
+  L0000: frame.K2Node_InputKeyEvent_Key = Key
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(1772)
+  L0021: return
+
+## function InpActEvt_W_K2Node_InputKeyEvent_1  flags=0x08000000
+  L0000: frame.K2Node_InputKeyEvent_Key_1 = Key
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(1733)
+  L0021: return
+
+## function K2_OnMovementModeChanged  flags=0x08020800
+  L0000: frame.K2Node_Event_PrevMovementMode = PrevMovementMode
+  L0012: frame.K2Node_Event_NewMovementMode = NewMovementMode
+  L0024: frame.K2Node_Event_PrevCustomMode = PrevCustomMode
+  L0036: frame.K2Node_Event_NewCustomMode = NewCustomMode
+  L0048: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(16649)
+  L0057: return
+
+## function MulticastInputs  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Disable_Input = Disable Input
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(6564)
+  L0021: return
+
+## function MulticastLean  flags=0x0C0040C0
+  L0000: frame.K2Node_CustomEvent_LeanValue = LeanValue
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(6752)
+  L0021: return
+
+## function MulticastLeaningLeftArm  flags=0x0C0040C0
+  L0000: frame.K2Node_CustomEvent_LeanLeftArm = LeanLeftArm
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(6757)
+  L0021: return
+
+## function MulticastLeaningRightArm  flags=0x0C0040C0
+  L0000: frame.K2Node_CustomEvent_LeanRightArm = LeanRightArm
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(6762)
+  L0021: return
+
+## function MulticastPawnControl  flags=0x0C0040C0
+  L0000: frame.K2Node_CustomEvent_Enable_Pawn_Control_1 = Enable Pawn Control
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(6458)
+  L0021: return
+
+## function MulticastPlayMontage  flags=0x0C0040C0
+  L0000: frame.K2Node_CustomEvent_MontageToPlay = MontageToPlay
+  L0012: frame.K2Node_CustomEvent_PlayRate = PlayRate
+  L0024: frame.K2Node_CustomEvent_StartingPosition = StartingPosition
+  L0036: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(5904)
+  L0045: return
+
+## function OnBlendOut_A80BA0F4449E0102515C6FB09A6F8FAC  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_NotifyName_1 = NotifyName
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(13632)
+  L0021: return
+
+## function OnCompleted_A80BA0F4449E0102515C6FB09A6F8FAC  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_NotifyName = NotifyName
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(8734)
+  L0021: return
+
+## function OnEnterCameraFinished  flags=0x0C000000
+  L0000: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(14786)
+  L000F: return
+
+## function OnFinish_36E298BC4E6C496CAA0069ABA8D2FE5F  flags=0x0C000000
+  L0000: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(14036)
+  L000F: return
+
+## function OnFinish_8ACE41AE4121130C73688D8059B8A57E  flags=0x0C000000
+  L0000: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(411)
+  L000F: return
+
+## function OnFinish_C64DF1BE4C58D81EC7AB0B9BDDB2FA8A  flags=0x0C000000
+  L0000: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(7391)
+  L000F: return
+
+## function OnHealthChanged  flags=0x08080800
+  L0000: frame.K2Node_Event_OldValue = OldValue
+  L0012: frame.K2Node_Event_NewValue = NewValue
+  L0024: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(13795)
+  L0033: return
+
+## function OnInterrupted_A80BA0F4449E0102515C6FB09A6F8FAC  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_NotifyName_2 = NotifyName
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(13717)
+  L0021: return
+
+## function OnIsInteractingChanged  flags=0x0C400000
+  L0000: frame.K2Node_CustomEvent_Tag_1 = Tag
+  L0012: frame.K2Node_CustomEvent_TagCount_1 = TagCount
+  L0024: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(14076)
+  L0033: return
+
+## function OnIsInteractingTagChanged  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Count = Count
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(14100)
+  L0021: return
+
+## function OnIsInWaterChanged  flags=0x0C400000
+  L0000: frame.K2Node_CustomEvent_Tag = Tag
+  L0012: frame.K2Node_CustomEvent_TagCount = TagCount
+  L0024: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(16600)
+  L0033: return
+
+## function OnLanded  flags=0x08420800
+  L0000: frame.K2Node_Event_Hit = Hit
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(7840)
+  L0021: return
+
+## function OnLoaded_EE6C614F4EF6F101811ACAB6DD671431  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Loaded = Loaded
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(8157)
+  L0021: return
+
+## function OnNotifyBegin_A80BA0F4449E0102515C6FB09A6F8FAC  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_NotifyName_3 = NotifyName
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(14382)
+  L0021: return
+
+## function OnNotifyEnd_A80BA0F4449E0102515C6FB09A6F8FAC  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_NotifyName_4 = NotifyName
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(14758)
+  L0021: return
+
+## function OnPlayerDeath__DelegateSignature  flags=0x0C120000
+  L0000: return
+
+## function OnQTEValueChanged__DelegateSignature  flags=0x0C120000
+  L0000: return
+
+## function OnTick_36E298BC4E6C496CAA0069ABA8D2FE5F  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_DrdTempTick_2 = DrdTempTick
+  L0012: frame.K2Node_CustomEvent_Time_2 = Time
+  L0024: frame.K2Node_CustomEvent_Relative_2 = Relative
+  L0036: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(13554)
+  L0045: return
+
+## function OnTick_8ACE41AE4121130C73688D8059B8A57E  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_DrdTempTick = DrdTempTick
+  L0012: frame.K2Node_CustomEvent_Time = Time
+  L0024: frame.K2Node_CustomEvent_Relative = Relative
+  L0036: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(486)
+  L0045: return
+
+## function OnTick_C64DF1BE4C58D81EC7AB0B9BDDB2FA8A  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_DrdTempTick_1 = DrdTempTick
+  L0012: frame.K2Node_CustomEvent_Time_1 = Time
+  L0024: frame.K2Node_CustomEvent_Relative_1 = Relative
+  L0036: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(5326)
+  L0045: return
+
+## function OnWaterDeathFinished  flags=0x08080800
+  L0000: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(16585)
+  L000F: return
+
+## function OwnClientHeadbob  flags=0x0D0000C0
+  L0000: frame.K2Node_CustomEvent_Activate_5 = Activate
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(6767)
+  L0021: return
+
+## function OwnClientJumpShake  flags=0x0D0000C0
+  L0000: frame.K2Node_CustomEvent_Activate_3 = Activate
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(7430)
+  L0021: return
+
+## function OwnClientLandShake  flags=0x0D0000C0
+  L0000: frame.K2Node_CustomEvent_Activate_1 = Activate
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(7578)
+  L0021: return
+
+## function PerformCharacterDeath  flags=0x0C000000
+  L0000: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(13745)
+  L000F: return
+
+## function PlayLandingAudio  flags=0x0C000000
+  L0000: frame.LandingAudio_PlayLandingAudio_LandingHit = LandingHit
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(17190)
+  L0021: return
+
+## function PostLoadInitializationBlank  flags=0x0C020800
+  L0000: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(14410)
+  L000F: return
+
+## function PostProcessDrops  flags=0x0C020000
+  L0000: push L02E4
+  L0005: CallFunc_IsSwimming_ReturnValue = self.CharacterMovement.IsSwimming()
+  L0033: if not (CallFunc_IsSwimming_ReturnValue) goto L01C2
+  L0041: push L01E7
+  L0046: CallFunc_GetGameTimeInSeconds_ReturnValue = KismetSystemLibrary.GetGameTimeInSeconds(self)
+  L0063: CallFunc_Greater_DoubleDouble_ReturnValue = Greater_DoubleDouble(CallFunc_GetGameTimeInSeconds_ReturnValue, 1)
+  L0089: CallFunc_GetPlayerCameraManager_ReturnValue = GameplayStatics.GetPlayerCameraManager(self, 0)
+  L00A3: CallFunc_GetCameraLocation_ReturnValue = CallFunc_GetPlayerCameraManager_ReturnValue.GetCameraLocation()
+  L00D9: BreakVector(CallFunc_GetCameraLocation_ReturnValue, CallFunc_BreakVector_X, CallFunc_BreakVector_Y, CallFunc_BreakVector_Z)
+  L0107: CallFunc_Less_DoubleDouble_ReturnValue = Less_DoubleDouble(CallFunc_BreakVector_Z, 280)
+  L012D: CallFunc_BooleanAND_ReturnValue = BooleanAND(CallFunc_Less_DoubleDouble_ReturnValue, CallFunc_Greater_DoubleDouble_ReturnValue)
+  L0153: if not (CallFunc_BooleanAND_ReturnValue) pop-flow
+  L015D: CallFunc_GetGameTimeInSeconds_ReturnValue_1 = KismetSystemLibrary.GetGameTimeInSeconds(self)
+  L017A: CallFunc_SetScalarParameterValue_ParameterValue_ImplicitCast = CallFunc_GetGameTimeInSeconds_ReturnValue_1
+  L0197: KismetMaterialLibrary.SetScalarParameterValue(self, MPC_ScreenDroplet, 'SurfaceTime', CallFunc_SetScalarParameterValue_ParameterValue_ImplicitCast)
+  L01C1: pop-flow
+  L01C2: self.NS_UnderwaterBubble.Deactivate()
+  L01E6: pop-flow
+  L01E7: CallFunc_GetPlayerCameraManager_ReturnValue = GameplayStatics.GetPlayerCameraManager(self, 0)
+  L0201: CallFunc_GetCameraLocation_ReturnValue = CallFunc_GetPlayerCameraManager_ReturnValue.GetCameraLocation()
+  L0237: BreakVector(CallFunc_GetCameraLocation_ReturnValue, CallFunc_BreakVector_X, CallFunc_BreakVector_Y, CallFunc_BreakVector_Z)
+  L0265: CallFunc_Less_DoubleDouble_ReturnValue_1 = Less_DoubleDouble(CallFunc_BreakVector_Z, 272)
+  L028B: if not (CallFunc_Less_DoubleDouble_ReturnValue_1) goto L02BF
+  L0299: self.NS_UnderwaterBubble.Activate(false)
+  L02BE: pop-flow
+  L02BF: self.NS_UnderwaterBubble.Deactivate()
+  L02E3: pop-flow
+  L02E4: return
+
+## function ReceiveBeginPlay  flags=0x08080800
+  L0000: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(8926)
+  L000F: return
+
+## function ReceiveEndPlay  flags=0x08080800
+  L0000: frame.K2Node_Event_EndPlayReason = EndPlayReason
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(14548)
+  L0021: return
+
+## function ReceivePossessed  flags=0x08020804
+  L0000: frame.K2Node_Event_NewController = NewController
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(8579)
+  L0021: return
+
+## function ReceiveTick  flags=0x08020800
+  L0000: frame.K2Node_Event_DeltaSeconds = DeltaSeconds
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(7939)
+  L0021: return
+
+## function ReceiveUnpossessed  flags=0x08020804
+  L0000: frame.K2Node_Event_OldController = OldController
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(8699)
+  L0021: return
+
+## function ReplicatedControlRotation  flags=0x0C000000
+  L0000: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(6583)
+  L000F: return
+
+## function ResetSlot  flags=0x0C020000
+  L0000: CallFunc_GetGameplayAnimInstance_ReturnValue = DrdCommonFunctionLibrary.GetGameplayAnimInstance(self.Mesh)
+  L001D: K2Node_DynamicCast_AsI_Anim_Data = iface<I_AnimData_C>(CallFunc_GetGameplayAnimInstance_ReturnValue)
+  L0041: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsI_Anim_Data
+  L005E: if not (K2Node_DynamicCast_bSuccess) goto L00AD
+  L006C: K2Node_DynamicCast_AsI_Anim_Data.AnimDataData(DrdAnimData{soft("None"), soft("None")})
+  L00AD: return
+
+## function ReturnCamera  flags=0x0C020000
+  L0000: frame.K2Node_Event_Duration = Duration
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(11696)
+  L0021: return
+
+## function RunLoosePhraseWithSubtitle  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Phrase = Phrase
+  L0012: frame.K2Node_CustomEvent_SoundToPlay = SoundToPlay
+  L0024: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(14582)
+  L0033: return
+
+## function Server Enable/Disable Input function  flags=0x0C2000C0
+  L0000: frame.K2Node_CustomEvent_Disable_Input_1 = Disable Input
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(6334)
+  L0021: return
+
+## function ServerHeadbob  flags=0x0C2000C0
+  L0000: frame.K2Node_CustomEvent_Activate_4 = Activate
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(7406)
+  L0021: return
+
+## function ServerJumpShake  flags=0x0C2000C0
+  L0000: frame.K2Node_CustomEvent_Activate_2 = Activate
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(7554)
+  L0021: return
+
+## function ServerLandShake  flags=0x0C2000C0
+  L0000: frame.K2Node_CustomEvent_Activate = Activate
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(7702)
+  L0021: return
+
+## function ServerLeaning  flags=0x0C2000C0
+  L0000: frame.K2Node_CustomEvent_LeanValue_1 = LeanValue
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(6680)
+  L0021: return
+
+## function ServerLeaningLeftArm  flags=0x0C2000C0
+  L0000: frame.K2Node_CustomEvent_LeanLeftArm_1 = LeanLeftArm
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(6704)
+  L0021: return
+
+## function ServerLeaningRightArm  flags=0x0C2000C0
+  L0000: frame.K2Node_CustomEvent_LeanRightArm_1 = LeanRightArm
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(6728)
+  L0021: return
+
+## function ServerPlayMontage  flags=0x0C2000C0
+  L0000: frame.K2Node_CustomEvent_MontageToPlay_1 = MontageToPlay
+  L0012: frame.K2Node_CustomEvent_PlayRate_1 = PlayRate
+  L0024: frame.K2Node_CustomEvent_StartingPosition_1 = StartingPosition
+  L0036: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(5862)
+  L0045: return
+
+## function ServerSetPawnControl  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Enable_Pawn_Control = Enable Pawn Control
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(6540)
+  L0021: return
+
+## function SetAiming  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Aim = Aim
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(10017)
+  L0021: return
+
+## function SetDialogueSequenceCameraActive  flags=0x0C820800
+  L0000: self.bDialogueSequenceCameraActive = bActive
+  L0013: if not (bActive) goto L00A1
+  L0021: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(self.CameraMotionTask)
+  L003E: if not (CallFunc_IsValid_ReturnValue) goto L006D
+  L004C: self.CameraMotionTask.DrdTempTick.FinishTask(false)
+  L006D: self.Camera.SceneComponent.K2_SetRelativeTransform(self.CameraInitialRelativeTransform, false, CallFunc_K2_SetRelativeTransform_SweepHitResult, false)
+  L00A1: return
+
+## function SetSprintListener  flags=0x0C000000
+  L0000: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(9713)
+  L000F: return
+
+## function Sliding  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Enable = Enable
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(5401)
+  L0021: return
+
+## function SlotChanged  flags=0x0CC20000
+  L0000: push L05B5
+  L0005: self.AbilitySystemComponent.AbilitySystemComponent.ClearAllAbilitiesWithInputID(3)
+  L002A: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(Item.ItemAsset)
+  L0050: if not (CallFunc_IsValid_ReturnValue) goto L0432
+  L005E: CallFunc_GetTraitByClassForItem_ReturnValue = FL_InventoryFramework.GetTraitByClassForItem(Item.ItemAsset, DrdAnimationDataTrait, false)
+  L008E: CallFunc_IsValid_ReturnValue_1 = KismetSystemLibrary.IsValid(CallFunc_GetTraitByClassForItem_ReturnValue)
+  L00AB: if not (CallFunc_IsValid_ReturnValue_1) goto L0441
+  L00B9: CallFunc_GetGameplayAnimInstance_ReturnValue_1 = DrdCommonFunctionLibrary.GetGameplayAnimInstance(self.Mesh)
+  L00D6: K2Node_DynamicCast_AsI_Anim_Data_1 = iface<I_AnimData_C>(CallFunc_GetGameplayAnimInstance_ReturnValue_1)
+  L00FA: K2Node_DynamicCast_bSuccess_1 = K2Node_DynamicCast_AsI_Anim_Data_1
+  L0117: if not (K2Node_DynamicCast_bSuccess_1) goto L0169
+  L0125: K2Node_DynamicCast_AsI_Anim_Data_1.AnimDataData(CallFunc_GetTraitByClassForItem_ReturnValue.self.AnimData)
+  L0169: CallFunc_IsItemValid_ReturnValue = FL_InventoryFramework.IsItemValid(Item)
+  L0186: if not (CallFunc_IsItemValid_ReturnValue) goto L04F3
+  L0194: CallFunc_MakeGameplayTagContainerFromTag_ReturnValue = BlueprintGameplayTagLibrary.MakeGameplayTagContainerFromTag(Item.ItemAsset.self.ItemType)
+  L01D8: self.AC_GASHelper.AC_GASHelper.GrantItemAbilities(Item.ItemAsset, CallFunc_MakeGameplayTagContainerFromTag_ReturnValue)
+  L0213: CallFunc_GetTraitByClassForItem_ReturnValue_1 = FL_InventoryFramework.GetTraitByClassForItem(Item.ItemAsset, IO_GameplayAbilityReferences, false)
+  L0243: CallFunc_IsValid_ReturnValue_2 = KismetSystemLibrary.IsValid(CallFunc_GetTraitByClassForItem_ReturnValue_1)
+  L0260: if not (CallFunc_IsValid_ReturnValue_2) pop-flow
+  L026A: CallFunc_Map_Keys_Keys = []
+  L0275: Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_Keys(CallFunc_GetTraitByClassForItem_ReturnValue_1.self.Abilities, CallFunc_Map_Keys_Keys)
+  L02BD: Temp_int_Loop_Counter_Variable = 0
+  L02D4: Temp_int_Array_Index_Variable = 0
+  L02EB: CallFunc_Array_Length_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(CallFunc_Map_Keys_Keys)
+  L0326: CallFunc_Less_IntInt_ReturnValue = Less_IntInt(Temp_int_Loop_Counter_Variable, CallFunc_Array_Length_ReturnValue)
+  L034C: if not (CallFunc_Less_IntInt_ReturnValue) pop-flow
+  L0356: Temp_int_Array_Index_Variable = Temp_int_Loop_Counter_Variable
+  L0371: push L056B
+  L0376: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_Map_Keys_Keys, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L03B1: CallFunc_LoadClassAsset_Blocking_ReturnValue = KismetSystemLibrary.LoadClassAsset_Blocking(CallFunc_Array_Get_Item)
+  L03CE: K2Node_ClassDynamicCast_AsDrd_Gameplay_Ability = classcast<DrdGameplayAbility>(CallFunc_LoadClassAsset_Blocking_ReturnValue)
+  L03F2: K2Node_ClassDynamicCast_bSuccess = K2Node_ClassDynamicCast_AsDrd_Gameplay_Ability
+  L040F: if not (K2Node_ClassDynamicCast_bSuccess) pop-flow
+  L0419: DrdBaseCharacter.GiveAbility(K2Node_ClassDynamicCast_AsDrd_Gameplay_Ability, 0)
+  L0431: pop-flow
+  L0432: ResetSlot()
+  L0440: pop-flow
+  L0441: CallFunc_GetGameplayAnimInstance_ReturnValue = DrdCommonFunctionLibrary.GetGameplayAnimInstance(self.Mesh)
+  L045E: K2Node_DynamicCast_AsI_Anim_Data = iface<I_AnimData_C>(CallFunc_GetGameplayAnimInstance_ReturnValue)
+  L0482: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsI_Anim_Data
+  L049F: if not (K2Node_DynamicCast_bSuccess) goto L0169
+  L04AD: K2Node_DynamicCast_AsI_Anim_Data.AnimDataData(DrdAnimData{soft("None"), soft("None")})
+  L04EE: goto L0169
+  L04F3: self.AC_GASHelper.AC_GASHelper.RemoveItemAbilities(Item.ItemAsset, GameplayTagContainer{[GameplayTag{'IFP.Items.Type.Weapon.Empty'}]})
+  L055C: ResetSlot()
+  L056A: pop-flow
+  L056B: CallFunc_Add_IntInt_ReturnValue = Add_IntInt(Temp_int_Loop_Counter_Variable, 1)
+  L0595: Temp_int_Loop_Counter_Variable = CallFunc_Add_IntInt_ReturnValue
+  L05B0: goto L02EB
+  L05B5: return
+
+## function TraceDestructibleObjectForNotification  flags=0x0C820000
+  L0000: L_TraceDistance = 220
+  L001B: CallFunc_GetController_ReturnValue = Pawn.GetController()
+  L002F: CallFunc_GetComponentByClass_ReturnValue = CallFunc_GetController_ReturnValue.Actor.GetComponentByClass(BP_GearTransitionComponent_C)
+  L0062: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(CallFunc_GetComponentByClass_ReturnValue.self.CurrentItemInHand.ItemAsset)
+  L009E: if not (CallFunc_IsValid_ReturnValue) goto L0173
+  L00AC: CallFunc_GetController_ReturnValue = Pawn.GetController()
+  L00C0: CallFunc_GetComponentByClass_ReturnValue = CallFunc_GetController_ReturnValue.Actor.GetComponentByClass(BP_GearTransitionComponent_C)
+  L00F3: CallFunc_EqualEqual_GameplayTag_ReturnValue = BlueprintGameplayTagLibrary.EqualEqual_GameplayTag(CallFunc_GetComponentByClass_ReturnValue.self.CurrentItemInHand.ItemAsset.self.ItemType, GameplayTag{'IFP.Items.Type.Weapon.Melee.Sickle'})
+  L0160: if not (CallFunc_EqualEqual_GameplayTag_ReturnValue) goto L0173
+  L016E: goto L071F
+  L0173: CallFunc_Conv_DoubleToVector_ReturnValue = Conv_DoubleToVector(L_TraceDistance)
+  L0198: CallFunc_K2_GetComponentLocation_ReturnValue = self.Camera.SceneComponent.K2_GetComponentLocation()
+  L01CA: CallFunc_GetForwardVector_ReturnValue = self.Camera.SceneComponent.GetForwardVector()
+  L01FC: CallFunc_Multiply_VectorVector_ReturnValue = Multiply_VectorVector(CallFunc_GetForwardVector_ReturnValue, CallFunc_Conv_DoubleToVector_ReturnValue)
+  L022A: CallFunc_Add_VectorVector_ReturnValue = Add_VectorVector(CallFunc_K2_GetComponentLocation_ReturnValue, CallFunc_Multiply_VectorVector_ReturnValue)
+  L0258: CallFunc_LineTraceSingle_ReturnValue = KismetSystemLibrary.LineTraceSingle(self, CallFunc_K2_GetComponentLocation_ReturnValue, CallFunc_Add_VectorVector_ReturnValue, 0, false, Temp_object_Variable, 0, CallFunc_LineTraceSingle_OutHit, true, LinearColor{1, 0, 0, 1}, LinearColor{0, 1, 0, 1}, 5)
+  L02E0: GameplayStatics.BreakHitResult(CallFunc_LineTraceSingle_OutHit, CallFunc_BreakHitResult_bBlockingHit, CallFunc_BreakHitResult_bInitialOverlap, CallFunc_BreakHitResult_Time, CallFunc_BreakHitResult_Distance, CallFunc_BreakHitResult_Location, CallFunc_BreakHitResult_ImpactPoint, CallFunc_BreakHitResult_Normal, CallFunc_BreakHitResult_ImpactNormal, CallFunc_BreakHitResult_PhysMat, CallFunc_BreakHitResult_HitActor, CallFunc_BreakHitResult_HitComponent, CallFunc_BreakHitResult_HitBoneName, CallFunc_BreakHitResult_BoneName, CallFunc_BreakHitResult_HitItem, CallFunc_BreakHitResult_ElementIndex, CallFunc_BreakHitResult_FaceIndex, CallFunc_BreakHitResult_TraceStart, CallFunc_BreakHitResult_TraceEnd)
+  L0395: K2Node_DynamicCast_AsBP_Destructible_Base = cast<BP_Destructible_Base_C>(CallFunc_BreakHitResult_HitActor)
+  L03B9: K2Node_DynamicCast_bSuccess_1 = K2Node_DynamicCast_AsBP_Destructible_Base
+  L03D6: if not (K2Node_DynamicCast_bSuccess_1) goto L071F
+  L03E4: Default__BPFL_UiFuncitons_C.PlayNotification(TextTable("/Game/Dreadmoor/Localization/ST_UI.ST_UI", "UseMeleeWeaponNotification"), self)
+  L0459: if not (self.bIsNoSickleNotificationPlayed) goto L046C
+  L0467: goto L071F
+  L046C: self.bIsNoSickleNotificationPlayed = true
+  L0477: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L0491: K2Node_DynamicCast_AsI_Inventory = iface<I_Inventory>(CallFunc_GetPlayerController_ReturnValue)
+  L04B5: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsI_Inventory
+  L04D2: if not (K2Node_DynamicCast_bSuccess) goto L070F
+  L04E0: K2Node_DynamicCast_AsI_Inventory.GetInventoryComponent(CallFunc_GetInventoryComponent_Component)
+  L050E: K2Node_MakeArray_Array = [S_ContainerSettings{-1, GameplayTag{'None'}, 0, 0, 0, IntPoint{1, 1}, GameplayTagContainer{[]}, [], S_CompatibilitySettings{GameplayTagContainer{[]}, GameplayTagContainer{[]}, GameplayTagContainer{[]}, [], []}, [], IntPoint{-1, -1}, [], [], [], map[], S_UniqueID{0, null}, [], null}]
+  L0696: CallFunc_GetItemCount_ReturnValue = CallFunc_GetInventoryComponent_Component.AC_Inventory.GetItemCount(IDA_Sickle, K2Node_MakeArray_Array)
+  L06DA: CallFunc_EqualEqual_IntInt_ReturnValue = EqualEqual_IntInt(CallFunc_GetItemCount_ReturnValue, 0)
+  L06FC: if not (CallFunc_EqualEqual_IntInt_ReturnValue) goto L071F
+  L070A: goto L071F
+  L070F: CallFunc_GetInventoryComponent_Component = null
+  L071A: goto L050E
+  L071F: return
+
+## function TrunsitToNewFOW  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_FOW = FOW
+  L0012: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(14272)
+  L0021: return
+
+## function TryStopCurrentMontage  flags=0x0C020000
+  L0000: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(5400)
+  L000F: return
+
+## function UpdateCamera  flags=0x0C020000
+  L0000: frame.K2Node_Event_NewTransfrom = NewTransfrom
+  L0012: frame.K2Node_Event_Time = Time
+  L0024: frame.K2Node_Event_DisableInput = DisableInput
+  L0036: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(12173)
+  L0045: return
+
+## function UpdateCameraWhenAiming  flags=0x0C000000
+  L0000: BP_PlayerCharacter_C.ExecuteUbergraph_BP_PlayerCharacter(14267)
+  L000F: return
+
+## function UpdateCameraZLag  flags=0x0C820000
+  L0000: push L0557
+  L0005: CurrentSocketZ = 0
+  L0020: CamX = 0
+  L003B: CamY = 0
+  L0056: push L036C
+  L005B: CallFunc_GetSocketTransform_ReturnValue = self.Mesh.GetSocketTransform('head', 0)
+  L00A0: CallFunc_TransformLocation_ReturnValue = TransformLocation(CallFunc_GetSocketTransform_ReturnValue, self.CameraZLag_DefaultCamLocation)
+  L00CE: BreakVector(CallFunc_TransformLocation_ReturnValue, CallFunc_BreakVector_X, CallFunc_BreakVector_Y, CallFunc_BreakVector_Z)
+  L00FC: CamX = CallFunc_BreakVector_X
+  L0117: CallFunc_GetSocketTransform_ReturnValue = self.Mesh.GetSocketTransform('head', 0)
+  L015C: CallFunc_TransformLocation_ReturnValue = TransformLocation(CallFunc_GetSocketTransform_ReturnValue, self.CameraZLag_DefaultCamLocation)
+  L018A: BreakVector(CallFunc_TransformLocation_ReturnValue, CallFunc_BreakVector_X, CallFunc_BreakVector_Y, CallFunc_BreakVector_Z)
+  L01B8: CamY = CallFunc_BreakVector_Y
+  L01D3: CallFunc_GetSocketTransform_ReturnValue = self.Mesh.GetSocketTransform('head', 0)
+  L0218: CallFunc_TransformLocation_ReturnValue = TransformLocation(CallFunc_GetSocketTransform_ReturnValue, self.CameraZLag_DefaultCamLocation)
+  L0246: BreakVector(CallFunc_TransformLocation_ReturnValue, CallFunc_BreakVector_X, CallFunc_BreakVector_Y, CallFunc_BreakVector_Z)
+  L0274: CurrentSocketZ = CallFunc_BreakVector_Z
+  L028F: CallFunc_Multiply_DoubleDouble_ReturnValue_1 = Multiply_DoubleDouble(self.CameraZLag_MaxDist, -1)
+  L02BD: CallFunc_Subtract_DoubleDouble_ReturnValue_1 = Subtract_DoubleDouble(self.CameraZLag_LastCamZ, CurrentSocketZ)
+  L02EB: CallFunc_FClamp_ReturnValue = FClamp(CallFunc_Subtract_DoubleDouble_ReturnValue_1, CallFunc_Multiply_DoubleDouble_ReturnValue_1, self.CameraZLag_MaxDist)
+  L0322: CallFunc_Add_DoubleDouble_ReturnValue = Add_DoubleDouble(CurrentSocketZ, CallFunc_FClamp_ReturnValue)
+  L0350: self.CameraZLag_LastCamZ = CallFunc_Add_DoubleDouble_ReturnValue
+  L036B: pop-flow
+  L036C: CallFunc_Subtract_DoubleDouble_ReturnValue = Subtract_DoubleDouble(self.CameraZLag_LastCamZ, CurrentSocketZ)
+  L039A: CallFunc_Abs_ReturnValue = Abs(CallFunc_Subtract_DoubleDouble_ReturnValue)
+  L03BF: CallFunc_Divide_DoubleDouble_ReturnValue = Divide_DoubleDouble(self.CameraZLag_MaxDist, CallFunc_Abs_ReturnValue)
+  L03ED: CallFunc_GetFloatValue_InTime_ImplicitCast = CallFunc_Divide_DoubleDouble_ReturnValue
+  L040A: CallFunc_GetFloatValue_ReturnValue = self.CameraZLag_LagCurve.CurveFloat.GetFloatValue(CallFunc_GetFloatValue_InTime_ImplicitCast)
+  L0445: CallFunc_Multiply_DoubleDouble_A_ImplicitCast = CallFunc_GetFloatValue_ReturnValue
+  L0462: CallFunc_Multiply_DoubleDouble_ReturnValue = Multiply_DoubleDouble(CallFunc_Multiply_DoubleDouble_A_ImplicitCast, self.CameraZLag_LagCurveValueMult)
+  L0490: CallFunc_FInterpTo_ReturnValue = FInterpTo(self.CameraZLag_LastCamZ, CurrentSocketZ, DeltaTime, CallFunc_Multiply_DoubleDouble_ReturnValue)
+  L04D0: self.CameraZLag_LastCamZ = CallFunc_FInterpTo_ReturnValue
+  L04EB: CallFunc_MakeVector_ReturnValue = MakeVector(CamX, CamY, self.CameraZLag_LastCamZ)
+  L0522: self.Camera.SceneComponent.K2_SetWorldLocation(CallFunc_MakeVector_ReturnValue, false, CallFunc_K2_SetWorldLocation_SweepHitResult, false)
+  L0556: pop-flow
+  L0557: return
+
+## function UpdateMainMeshZLag  flags=0x0C820000
+  L0000: push L05E1
+  L0005: CurrentSocketZ = 0
+  L0020: CamX = 0
+  L003B: CamY = 0
+  L0056: push L0333
+  L005B: CallFunc_K2_GetComponentToWorld_ReturnValue = self.CapsuleComponent.SceneComponent.K2_GetComponentToWorld()
+  L008D: CallFunc_TransformLocation_ReturnValue = TransformLocation(CallFunc_K2_GetComponentToWorld_ReturnValue, self.MeshZLag_DefaultMeshLocation)
+  L00BB: BreakVector(CallFunc_TransformLocation_ReturnValue, CallFunc_BreakVector_X, CallFunc_BreakVector_Y, CallFunc_BreakVector_Z)
+  L00E9: CamX = CallFunc_BreakVector_X
+  L0104: CallFunc_K2_GetComponentToWorld_ReturnValue = self.CapsuleComponent.SceneComponent.K2_GetComponentToWorld()
+  L0136: CallFunc_TransformLocation_ReturnValue = TransformLocation(CallFunc_K2_GetComponentToWorld_ReturnValue, self.MeshZLag_DefaultMeshLocation)
+  L0164: BreakVector(CallFunc_TransformLocation_ReturnValue, CallFunc_BreakVector_X, CallFunc_BreakVector_Y, CallFunc_BreakVector_Z)
+  L0192: CamY = CallFunc_BreakVector_Y
+  L01AD: CallFunc_K2_GetComponentToWorld_ReturnValue = self.CapsuleComponent.SceneComponent.K2_GetComponentToWorld()
+  L01DF: CallFunc_TransformLocation_ReturnValue = TransformLocation(CallFunc_K2_GetComponentToWorld_ReturnValue, self.MeshZLag_DefaultMeshLocation)
+  L020D: BreakVector(CallFunc_TransformLocation_ReturnValue, CallFunc_BreakVector_X, CallFunc_BreakVector_Y, CallFunc_BreakVector_Z)
+  L023B: CurrentSocketZ = CallFunc_BreakVector_Z
+  L0256: CallFunc_Multiply_DoubleDouble_ReturnValue_1 = Multiply_DoubleDouble(self.CameraZLag_MaxDist, -1)
+  L0284: CallFunc_Subtract_DoubleDouble_ReturnValue_1 = Subtract_DoubleDouble(self.CameraZLag_LastCamZ, CurrentSocketZ)
+  L02B2: CallFunc_FClamp_ReturnValue = FClamp(CallFunc_Subtract_DoubleDouble_ReturnValue_1, CallFunc_Multiply_DoubleDouble_ReturnValue_1, self.CameraZLag_MaxDist)
+  L02E9: CallFunc_Add_DoubleDouble_ReturnValue = Add_DoubleDouble(CurrentSocketZ, CallFunc_FClamp_ReturnValue)
+  L0317: self.CameraZLag_LastCamZ = CallFunc_Add_DoubleDouble_ReturnValue
+  L0332: pop-flow
+  L0333: if not (self.BP_ActionPlayer.self.ActionProcess) goto L0373
+  L0357: self.CameraZLag_LastCamZ = CurrentSocketZ
+  L0372: pop-flow
+  L0373: CallFunc_Subtract_DoubleDouble_ReturnValue = Subtract_DoubleDouble(self.CameraZLag_LastCamZ, CurrentSocketZ)
+  L03A1: CallFunc_Abs_ReturnValue = Abs(CallFunc_Subtract_DoubleDouble_ReturnValue)
+  L03C6: CallFunc_NotEqual_DoubleDouble_ReturnValue = NotEqual_DoubleDouble(CallFunc_Abs_ReturnValue, 0)
+  L03EC: if not (CallFunc_NotEqual_DoubleDouble_ReturnValue) pop-flow
+  L03F6: CallFunc_Subtract_DoubleDouble_ReturnValue = Subtract_DoubleDouble(self.CameraZLag_LastCamZ, CurrentSocketZ)
+  L0424: CallFunc_Abs_ReturnValue = Abs(CallFunc_Subtract_DoubleDouble_ReturnValue)
+  L0449: CallFunc_Divide_DoubleDouble_ReturnValue = Divide_DoubleDouble(self.CameraZLag_MaxDist, CallFunc_Abs_ReturnValue)
+  L0477: CallFunc_GetFloatValue_InTime_ImplicitCast = CallFunc_Divide_DoubleDouble_ReturnValue
+  L0494: CallFunc_GetFloatValue_ReturnValue = self.CameraZLag_LagCurve.CurveFloat.GetFloatValue(CallFunc_GetFloatValue_InTime_ImplicitCast)
+  L04CF: CallFunc_Multiply_DoubleDouble_A_ImplicitCast = CallFunc_GetFloatValue_ReturnValue
+  L04EC: CallFunc_Multiply_DoubleDouble_ReturnValue = Multiply_DoubleDouble(CallFunc_Multiply_DoubleDouble_A_ImplicitCast, self.CameraZLag_LagCurveValueMult)
+  L051A: CallFunc_FInterpTo_ReturnValue = FInterpTo(self.CameraZLag_LastCamZ, CurrentSocketZ, DeltaTime, CallFunc_Multiply_DoubleDouble_ReturnValue)
+  L055A: self.CameraZLag_LastCamZ = CallFunc_FInterpTo_ReturnValue
+  L0575: CallFunc_MakeVector_ReturnValue = MakeVector(CamX, CamY, self.CameraZLag_LastCamZ)
+  L05AC: self.Mesh.SceneComponent.K2_SetWorldLocation(CallFunc_MakeVector_ReturnValue, false, CallFunc_K2_SetWorldLocation_SweepHitResult, false)
+  L05E0: pop-flow
+  L05E1: return
+
+## function UpdateQTEValue  flags=0x0C020000
+  L0000: self.QTEValue = Value
+  L001B: self.OnQTEValueChanged.Broadcast(self.QTEValue)
+  L0037: return

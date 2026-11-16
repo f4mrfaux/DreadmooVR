@@ -1,0 +1,384 @@
+# /Game/Dreadmoor/Core/Features/QTE/Fishing/WBP_QTE_FishClicker
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/QTE/Fishing/WBP_QTE_FishClicker.uasset
+
+## imported packages (17)
+  /Game/Dreadmoor/Audio/SFX/Fishing/SWAVE_Fishing_Alert_UI
+  /Game/Dreadmoor/Audio/SFX/QTE/QTE_2/SCUE_QTE_Damb
+  /Game/Dreadmoor/Core/Input/QTE/IA_QTE_LMB
+  /Game/Dreadmoor/Core/Input/QTE/IMC_QTE
+  /Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcAttention001_Hover
+  /Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcAttention001_Lose
+  /Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcAttention001_Win
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_CircularWaveBg002
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_CircularWaveBg003
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_CircularWaveBg004
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_FishingQtePrbBg001
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_FishingQtePrbBg002
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_FishingQtePrbBg003
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_FishingQtePrbBg004
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_PrbFishingQteSegmenIndicator001
+  /Game/Dreadmoor/UI/Common/WBP_InputHint
+  /Game/Dreadmoor/UI/Materials/MI_UI_RadialBar_QTE_FishClicker
+
+## exports (127)
+  [0] CanvasPanel_20 : CanvasPanel (outer WidgetTree) size=18
+        refs: name:bActive
+  [1] CanvasPanelSlot_1 : CanvasPanelSlot (outer CanvasPanel_20) size=75
+        refs: exp:BP_OnActivated, exp:EaseOutFunction, name:WaveImage2
+  [2] CanvasPanelSlot_8 : CanvasPanelSlot (outer CanvasPanel_20) size=75
+        refs: exp:BP_OnActivated, exp:EaseOutFunction, name:WaveImageMouse1
+  [3] EnhancedInputActionDelegateBinding_0 : EnhancedInputActionDelegateBinding (outer WBP_QTE_FishClicker_C) size=25
+        refs: obj:/Game/Dreadmoor/Core/Input/QTE/IA_QTE_LMB.IA_QTE_LMB, exp:EaseOutFunction, name:ActionValue
+  [19] Image_Anchor : Image (outer WidgetTree) size=74
+        refs: obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_PrbFishingQteSegmenIndicator001.SPR_PrbFishingQteSegmenIndicator001, exp:OverlaySlot_9, exp:CanvasPanelSlot_8, exp:EaseOutFunction
+  [20] Image_Back : Image (outer WidgetTree) size=32
+        refs: obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_FishingQtePrbBg001.SPR_FishingQtePrbBg001, name:WaveImageMouse2
+  [21] Image_BarFill : Image (outer WidgetTree) size=49
+        refs: obj:/Game/Dreadmoor/UI/Materials/MI_UI_RadialBar_QTE_FishClicker.MI_UI_RadialBar_QTE_FishClicker, exp:OverlaySlot_1, name:bActive
+  [22] Image_Glow : Image (outer WidgetTree) size=52
+        refs: obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_FishingQtePrbBg004.SPR_FishingQtePrbBg004, exp:OverlaySlot_5, name:bActive
+  [23] Image_Net : Image (outer WidgetTree) size=49
+        refs: obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_FishingQtePrbBg002.SPR_FishingQtePrbBg002, exp:OverlaySlot_4, name:bActive
+  [24] Image_Result : Image (outer WidgetTree) size=29
+        refs: obj:/Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcAttention001_Hover.SPR_IcAttention001_Hover, name:MovieScene2DTransformTrack
+  [25] WaveImage1 : Image (outer WidgetTree) size=29
+        refs: obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_CircularWaveBg003.SPR_CircularWaveBg003, name:Image_Back
+  [26] WaveImage2 : Image (outer WidgetTree) size=29
+        refs: obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_CircularWaveBg003.SPR_CircularWaveBg003, name:MovieScene2DTransformSection
+  [27] WaveImageMouse1 : Image (outer WidgetTree) size=49
+        refs: obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_CircularWaveBg002.SPR_CircularWaveBg002, exp:OverlaySlot_6, name:bActive
+  [28] WaveImageMouse2 : Image (outer WidgetTree) size=49
+        refs: obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_CircularWaveBg002.SPR_CircularWaveBg002, exp:OverlaySlot_7, name:bActive
+  [29] BounceAnim : MovieScene (outer BounceAnim_INST) size=146
+        refs: exp:EnhancedInputActionDelegateBinding_0, exp:Tick, exp:MovieScene2DTransformTrack_1, exp:MovieScene2DTransformTrack_0, exp:Image_Anchor
+  [30] Done : MovieScene (outer Done_INST) size=421
+        refs: exp:EnhancedInputActionDelegateBinding_0, exp:UpdateBar, exp:StopQTE, exp:OnValueChanged__DelegateSignature, exp:MovieSceneFloatTrack_0, exp:MovieSceneFloatTrack_1, exp:MovieSceneColorTrack_1, exp:MovieScene2DTransformTrack_1, exp:MovieScene2DTransformTrack_0, exp:MovieSceneColorTrack_0, exp:Image_Anchor
+  [31] QTEAnim : MovieScene (outer QTEAnim_INST) size=256
+        refs: exp:EnhancedInputActionDelegateBinding_0, exp:UpdateBar, exp:MovieScene2DTransformTrack_1, exp:MovieSceneColorTrack_1, exp:MovieSceneColorTrack_0, exp:MovieScene2DTransformTrack_0, exp:Image_Anchor
+  [32] Start : MovieScene (outer Start_INST) size=421
+        refs: exp:EnhancedInputActionDelegateBinding_0, exp:OnValueChanged__DelegateSignature, exp:StopQTE, exp:UpdateBar, exp:MovieSceneColorTrack_1, exp:MovieScene2DTransformTrack_1, exp:MovieScene2DTransformTrack_0, exp:MovieSceneColorTrack_0, exp:MovieSceneFloatTrack_1, exp:MovieSceneFloatTrack_0, exp:Image_Anchor
+  [33] MovieScene2DTransformSection_0 : MovieScene2DTransformSection (outer MovieScene2DTransformTrack_1) size=672
+        refs: exp:Image_Net, exp:EnhancedInputActionDelegateBinding_0, name:ActionValue, exp:WaveImageMouse1, name:AudioStretching, name:bActive, exp:CanvasPanelSlot_8, name:K2Node_Select_Default, exp:EaseInFunction, exp:EaseOutFunction
+  [34] MovieScene2DTransformSection_0 : MovieScene2DTransformSection (outer MovieScene2DTransformTrack_0) size=252
+        refs: exp:EnhancedInputActionDelegateBinding_0, name:AudioStretching, exp:WaveImageMouse1, name:K2Node_Select_Default, name:ActionValue, exp:EaseInFunction, exp:EaseOutFunction
+  [35] MovieScene2DTransformSection_0 : MovieScene2DTransformSection (outer MovieScene2DTransformTrack_1) size=252
+        refs: exp:EnhancedInputActionDelegateBinding_0, exp:WaveImageMouse1, name:K2Node_Select_Default, name:AudioStretching, name:ActionValue, exp:EaseInFunction, exp:EaseOutFunction
+  [36] MovieScene2DTransformSection_0 : MovieScene2DTransformSection (outer MovieScene2DTransformTrack_0) size=252
+        refs: exp:EnhancedInputActionDelegateBinding_0, exp:WaveImageMouse1, name:K2Node_Select_Default, name:AudioStretching, name:ActionValue, exp:EaseInFunction, exp:EaseOutFunction
+  [37] MovieScene2DTransformSection_0 : MovieScene2DTransformSection (outer MovieScene2DTransformTrack_1) size=252
+        refs: exp:EnhancedInputActionDelegateBinding_0, name:AudioStretching, exp:WaveImageMouse1, name:K2Node_Select_Default, name:ActionValue, exp:EaseInFunction, exp:EaseOutFunction
+  [38] MovieScene2DTransformSection_0 : MovieScene2DTransformSection (outer MovieScene2DTransformTrack_0) size=252
+        refs: exp:EnhancedInputActionDelegateBinding_0, name:AudioStretching, exp:WaveImageMouse1, name:K2Node_Select_Default, name:ActionValue, exp:EaseInFunction, exp:EaseOutFunction
+  [39] MovieScene2DTransformSection_0 : MovieScene2DTransformSection (outer MovieScene2DTransformTrack_1) size=252
+        refs: exp:EnhancedInputActionDelegateBinding_0, exp:WaveImageMouse1, name:K2Node_Select_Default, name:AudioStretching, name:ActionValue, exp:EaseInFunction, exp:EaseOutFunction, exp:CanvasPanelSlot_8
+  [40] MovieScene2DTransformTrack_1 : MovieScene2DTransformTrack (outer BounceAnim) size=102
+        refs: name:RenderTransform, exp:MovieScene2DTransformSection_0, exp:MovieScene2DTransformTrack_0, exp:EaseInFunction
+  [41] MovieScene2DTransformTrack_0 : MovieScene2DTransformTrack (outer Done) size=102
+        refs: name:RenderTransform, exp:MovieScene2DTransformSection_0, exp:MovieSceneColorTrack_1
+  [42] MovieScene2DTransformTrack_1 : MovieScene2DTransformTrack (outer Done) size=102
+        refs: name:RenderTransform, exp:MovieScene2DTransformSection_0
+  [43] MovieScene2DTransformTrack_0 : MovieScene2DTransformTrack (outer QTEAnim) size=102
+        refs: name:RenderTransform, exp:MovieScene2DTransformSection_0
+  [44] MovieScene2DTransformTrack_1 : MovieScene2DTransformTrack (outer QTEAnim) size=102
+        refs: name:RenderTransform, exp:MovieScene2DTransformSection_0, exp:BP_OnActivated
+  [45] MovieScene2DTransformTrack_0 : MovieScene2DTransformTrack (outer Start) size=102
+        refs: name:RenderTransform, exp:MovieScene2DTransformSection_0
+  [46] MovieScene2DTransformTrack_1 : MovieScene2DTransformTrack (outer Start) size=102
+        refs: name:RenderTransform, exp:MovieScene2DTransformSection_0, exp:MovieSceneColorSection_0
+  [47] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+  [48] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+  [49] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+  [50] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+  [51] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+  [52] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+  [53] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+  [54] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+  [55] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+  [56] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+  [57] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneFloatSection_0) size=6
+  [58] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneFloatSection_0) size=6
+  [59] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneFloatSection_0) size=6
+  [60] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneFloatSection_0) size=6
+  [61] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+  [62] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+  [63] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+  [64] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+  [65] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+  [66] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+  [67] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+  [68] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+  [69] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+  [70] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+  [71] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+  [72] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+  [73] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+  [74] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+  [75] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+  [76] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+  [77] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneFloatSection_0) size=6
+  [78] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneFloatSection_0) size=6
+  [79] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneFloatSection_0) size=6
+  [80] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneFloatSection_0) size=6
+  [81] MovieSceneColorSection_0 : MovieSceneColorSection (outer MovieSceneColorTrack_0) size=360
+        refs: name:BarMID, name:CallFunc_SpawnSound2D_ReturnValue, name:ActionValue, exp:EnhancedInputActionDelegateBinding_0, exp:WaveImageMouse1, name:K2Node_Select_Default, name:AudioStretching, name:bActive, exp:CanvasPanelSlot_8, exp:EaseInFunction, exp:EaseOutFunction
+  [82] MovieSceneColorSection_0 : MovieSceneColorSection (outer MovieSceneColorTrack_1) size=360
+        refs: name:BarMID, name:CallFunc_SpawnSound2D_ReturnValue, name:ActionValue, exp:EnhancedInputActionDelegateBinding_0, exp:WaveImageMouse1, name:K2Node_Select_Default, name:AudioStretching, exp:CanvasPanelSlot_8, exp:EaseInFunction, exp:EaseOutFunction, exp:MovieScene2DTransformSection_0
+  [83] MovieSceneColorSection_0 : MovieSceneColorSection (outer MovieSceneColorTrack_0) size=360
+        refs: name:BarMID, name:CallFunc_SpawnSound2D_ReturnValue, name:ActionValue, exp:EnhancedInputActionDelegateBinding_0, exp:WaveImageMouse1, name:K2Node_Select_Default, name:AudioStretching, exp:CanvasPanelSlot_8, exp:EaseInFunction, exp:EaseOutFunction
+  [84] MovieSceneColorSection_0 : MovieSceneColorSection (outer MovieSceneColorTrack_1) size=360
+        refs: name:BarMID, name:CallFunc_SpawnSound2D_ReturnValue, name:ActionValue, exp:EnhancedInputActionDelegateBinding_0, exp:WaveImageMouse1, name:K2Node_Select_Default, name:AudioStretching, name:bActive, exp:CanvasPanelSlot_8, exp:EaseInFunction, exp:EaseOutFunction
+  [85] MovieSceneColorSection_0 : MovieSceneColorSection (outer MovieSceneColorTrack_0) size=360
+        refs: name:BarMID, name:CallFunc_SpawnSound2D_ReturnValue, name:ActionValue, exp:EnhancedInputActionDelegateBinding_0, exp:WaveImageMouse1, name:K2Node_Select_Default, name:AudioStretching, name:bActive, exp:CanvasPanelSlot_8, exp:EaseInFunction, exp:EaseOutFunction, exp:ExecuteUbergraph_WBP_QTE_FishClicker
+  [86] MovieSceneColorSection_0 : MovieSceneColorSection (outer MovieSceneColorTrack_1) size=360
+        refs: name:BarMID, name:CallFunc_SpawnSound2D_ReturnValue, name:ActionValue, exp:EnhancedInputActionDelegateBinding_0, exp:WaveImageMouse1, name:K2Node_Select_Default, name:AudioStretching, exp:CanvasPanelSlot_8, exp:EaseInFunction, exp:EaseOutFunction
+  [87] MovieSceneColorTrack_0 : MovieSceneColorTrack (outer Done) size=102
+        refs: name:ColorAndOpacity, exp:MovieSceneColorSection_0, exp:Overlay_Result
+  [88] MovieSceneColorTrack_1 : MovieSceneColorTrack (outer Done) size=102
+        refs: name:ColorAndOpacity, exp:MovieSceneColorSection_0
+  [89] MovieSceneColorTrack_0 : MovieSceneColorTrack (outer QTEAnim) size=102
+        refs: name:ColorAndOpacity, exp:MovieSceneColorSection_0
+  [90] MovieSceneColorTrack_1 : MovieSceneColorTrack (outer QTEAnim) size=102
+        refs: name:ColorAndOpacity, exp:MovieSceneColorSection_0, exp:EaseInFunction
+  [91] MovieSceneColorTrack_0 : MovieSceneColorTrack (outer Start) size=102
+        refs: name:ColorAndOpacity, exp:MovieSceneColorSection_0, exp:OverlaySlot_5
+  [92] MovieSceneColorTrack_1 : MovieSceneColorTrack (outer Start) size=102
+        refs: name:ColorAndOpacity, exp:MovieSceneColorSection_0
+  [93] CompiledData : MovieSceneCompiledData (outer BounceAnim_INST) size=195
+        refs: name:ActionValue, exp:MovieScene2DTransformSection_0, exp:MovieScene2DTransformTrack_0, exp:FinishQTE
+  [94] CompiledData : MovieSceneCompiledData (outer Done_INST) size=497
+        refs: name:bActive, exp:CanvasPanelSlot_8, name:ActionValue, exp:EnhancedInputActionDelegateBinding_0, name:BoolProperty, exp:BP_OnActivated, exp:BP_OnDeactivated, exp:MovieSceneFloatSection_0, exp:MovieSceneColorSection_0, exp:MovieScene2DTransformSection_0, exp:FinishQTE
+  [95] CompiledData : MovieSceneCompiledData (outer QTEAnim_INST) size=373
+        refs: name:ActionValue, name:AudioStretching, exp:EnhancedInputActionDelegateBinding_0, name:BoolProperty, exp:CanvasPanelSlot_8, exp:MovieScene2DTransformSection_0, exp:MovieSceneColorSection_0, exp:FinishQTE
+  [96] CompiledData : MovieSceneCompiledData (outer Start_INST) size=501
+        refs: name:AudioStretching, exp:CanvasPanelSlot_8, name:ActionValue, name:bActive, exp:EnhancedInputActionDelegateBinding_0, exp:BP_OnDeactivated, name:BP_OnActivated, exp:BP_OnActivated, exp:MovieSceneColorSection_0, exp:MovieScene2DTransformSection_0, exp:MovieSceneFloatSection_0, exp:FinishQTE
+  [97] MovieSceneFloatSection_0 : MovieSceneFloatSection (outer MovieSceneFloatTrack_0) size=150
+        refs: exp:EnhancedInputActionDelegateBinding_0, name:AudioStretching, exp:WaveImageMouse1, name:K2Node_Select_Default, name:ActionValue, exp:EaseInFunction, exp:EaseOutFunction, exp:OnFinished__DelegateSignature
+  [98] MovieSceneFloatSection_0 : MovieSceneFloatSection (outer MovieSceneFloatTrack_1) size=214
+        refs: exp:EnhancedInputActionDelegateBinding_0, name:BarMID, exp:WaveImageMouse1, name:K2Node_Select_Default, name:AudioStretching, name:ActionValue, exp:EaseInFunction, exp:EaseOutFunction
+  [99] MovieSceneFloatSection_0 : MovieSceneFloatSection (outer MovieSceneFloatTrack_0) size=182
+        refs: exp:EnhancedInputActionDelegateBinding_0, name:bActive, exp:WaveImageMouse1, name:AudioStretching, name:K2Node_Select_Default, name:ActionValue, exp:EaseInFunction, exp:EaseOutFunction
+  [100] MovieSceneFloatSection_0 : MovieSceneFloatSection (outer MovieSceneFloatTrack_1) size=214
+        refs: exp:EnhancedInputActionDelegateBinding_0, name:BarMID, exp:WaveImageMouse1, name:K2Node_Select_Default, name:AudioStretching, name:ActionValue, exp:EaseInFunction, exp:EaseOutFunction, exp:MovieSceneFloatTrack_1
+  [101] MovieSceneFloatTrack_0 : MovieSceneFloatTrack (outer Done) size=102
+        refs: name:RenderOpacity, exp:MovieSceneFloatSection_0, exp:SetWeightIndex
+  [102] MovieSceneFloatTrack_1 : MovieSceneFloatTrack (outer Done) size=102
+        refs: name:RenderOpacity, exp:MovieSceneFloatSection_0, exp:CompiledData
+  [103] MovieSceneFloatTrack_0 : MovieSceneFloatTrack (outer Start) size=102
+        refs: name:RenderOpacity, exp:MovieSceneFloatSection_0, exp:WaveImageMouse1
+  [104] MovieSceneFloatTrack_1 : MovieSceneFloatTrack (outer Start) size=102
+        refs: name:RenderOpacity, exp:MovieSceneFloatSection_0
+  [105] Overlay_Clicker : Overlay (outer WidgetTree) size=49
+        refs: exp:FinishQTE, exp:OverlaySlot_4, exp:OverlaySlot_5, exp:OverlaySlot_6, exp:OverlaySlot_7, exp:OverlaySlot_3, exp:OverlaySlot_0, exp:OverlaySlot_1, exp:OverlaySlot_9
+  [106] Overlay_Result : Overlay (outer WidgetTree) size=26
+        refs: exp:CanvasPanelSlot_8, exp:OverlaySlot_0, exp:OverlaySlot_1, exp:OverlaySlot_2, name:bActive
+  [107] OverlaySlot_0 : OverlaySlot (outer Overlay_Clicker) size=16
+        refs: exp:Overlay_Clicker, name:CallFunc_Less_DoubleDouble_ReturnValue
+  [108] OverlaySlot_1 : OverlaySlot (outer Overlay_Clicker) size=16
+        refs: exp:Overlay_Clicker, name:CallFunc_Map_Find_ReturnValue
+  [109] OverlaySlot_3 : OverlaySlot (outer Overlay_Clicker) size=16
+        refs: exp:Overlay_Clicker, name:EaseInFunction
+  [110] OverlaySlot_4 : OverlaySlot (outer Overlay_Clicker) size=16
+        refs: exp:Overlay_Clicker, name:CallFunc_Multiply_DoubleDouble_ReturnValue
+  [111] OverlaySlot_5 : OverlaySlot (outer Overlay_Clicker) size=16
+        refs: exp:Overlay_Clicker, name:CallFunc_Map_Find_Value
+  [112] OverlaySlot_6 : OverlaySlot (outer Overlay_Clicker) size=16
+        refs: exp:Overlay_Clicker, name:CallFunc_SpawnSound2D_ReturnValue
+  [113] OverlaySlot_7 : OverlaySlot (outer Overlay_Clicker) size=16
+        refs: exp:Overlay_Clicker, name:CallFunc_Subtract_DoubleDouble_ReturnValue
+  [114] OverlaySlot_9 : OverlaySlot (outer Overlay_Clicker) size=16
+        refs: exp:Overlay_Clicker, name:CallFunc_K2_SetTimerDelegate_ReturnValue
+  [115] OverlaySlot_0 : OverlaySlot (outer Overlay_Result) size=14
+        refs: exp:Overlay_Result, name:CallFunc_SetFloatParameter_InFloat_ImplicitCast
+  [116] OverlaySlot_1 : OverlaySlot (outer Overlay_Result) size=16
+        refs: exp:Overlay_Result, name:CallFunc_SetScalarParameterValue_Value_ImplicitCast
+  [117] OverlaySlot_2 : OverlaySlot (outer Overlay_Result) size=16
+        refs: exp:Overlay_Result, name:CallFunc_PlayAnimation_ReturnValue
+  [118] WBP_InputHint : WBP_InputHint_C (outer WidgetTree) size=58
+        refs: obj:/Game/Dreadmoor/Core/Input/QTE/IA_QTE_LMB.IA_QTE_LMB, name:IMC_QTE, exp:OverlaySlot_3, name:bActive
+  [119] Default__WBP_QTE_FishClicker_C : WBP_QTE_FishClicker_C (outer None) size=121
+        refs: name:K2Node_Select_Default, exp:EaseInFunction, exp:CanvasPanelSlot_8, exp:EaseOutFunction, obj:/Game/Dreadmoor/Core/Input/QTE/IMC_QTE.IMC_QTE
+  [120] BounceAnim_INST : WidgetAnimation (outer WBP_QTE_FishClicker_C) size=91
+        refs: exp:BounceAnim, name:WBP_InputHint, name:ActionValue, exp:OnValueChanged__DelegateSignature, exp:CompiledData
+  [121] Done_INST : WidgetAnimation (outer WBP_QTE_FishClicker_C) size=199
+        refs: exp:Done, exp:EnhancedInputActionDelegateBinding_0, name:Image_Result, name:ActionValue, name:WaveImage1, name:WaveImage2, name:Overlay_Clicker, exp:BP_OnActivated, exp:CompiledData
+  [122] QTEAnim_INST : WidgetAnimation (outer WBP_QTE_FishClicker_C) size=126
+        refs: exp:QTEAnim, name:WaveImageMouse2, name:ActionValue, name:WaveImageMouse1, exp:FinishQTE, exp:CompiledData
+  [123] Start_INST : WidgetAnimation (outer WBP_QTE_FishClicker_C) size=200
+        refs: exp:Start, exp:EnhancedInputActionDelegateBinding_0, name:Image_Result, name:ActionValue, name:WaveImage1, name:WaveImage2, name:Overlay_Clicker, exp:BP_OnDeactivated, exp:CompiledData, exp:Tick
+  [124] WidgetAnimationDelegateBinding_0 : WidgetAnimationDelegateBinding (outer WBP_QTE_FishClicker_C) size=50
+        refs: name:Done, exp:OverlaySlot_3, name:Start, exp:OverlaySlot_4, name:ActionValue
+  [125] WBP_QTE_FishClicker_C : WidgetBlueprintGeneratedClass (outer None) super=DrdCommonActivatableWidget size=2628
+        refs: exp:WidgetTree, exp:EnhancedInputActionDelegateBinding_0, exp:Start_INST, exp:Done_INST, exp:QTEAnim_INST, exp:BounceAnim_INST, exp:WidgetAnimationDelegateBinding_0, name:BounceAnim, exp:WaveImageMouse1, name:OnValueChanged, name:DecreasePowers, name:AudioStretching, name:bWinning, name:DecreasePower, name:ClickPower, name:PercentToWin, name:BarMID, name:bActive, name:bResult, name:Time, name:TimerHandle, name:Value, name:OnFinished, name:QTEAnim, name:Done, name:Start, name:Image_BarFill, name:Image_Glow, name:Image_Net, name:Image_Result, name:Overlay_Clicker, name:WaveImage1, name:WaveImage2, name:WaveImageMouse1, name:WaveImageMouse2, name:WBP_InputHint, obj:/Script/Dreadmoor.DrdCommonActivatableWidget, exp:TimesUp, exp:SetWeightIndex, exp:FinishQTE, exp:StopQTE, exp:UpdateBar, exp:UpdateValue, exp:InpActEvt_IA_QTE_LMB_K2Node_EnhancedInputActionEvent_0, exp:BP_OnActivated, exp:BP_OnDeactivated, exp:Tick, exp:WidgetAnimationEvt_Start_K2Node_WidgetAnimationEvent_0, exp:WidgetAnimationEvt_Done_K2Node_WidgetAnimationEvent_1, exp:ExecuteUbergraph_WBP_QTE_FishClicker, exp:OnValueChanged__DelegateSignature, exp:OnFinished__DelegateSignature, exp:WaveImageMouse2, name:StructProperty, name:UberGraphFrame, name:ColorAndOpacity, name:None, obj:/Script/Engine.PointerToUberGraphFrame, name:ObjectProperty, obj:/Game/Dreadmoor/UI/Common/WBP_InputHint.WBP_InputHint_C
+  [126] WidgetTree : WidgetTree (outer WBP_QTE_FishClicker_C) size=10
+        refs: name:ActionValue
+
+## function BP_OnActivated  flags=0x08080800
+  L0000: WBP_QTE_FishClicker_C.ExecuteUbergraph_WBP_QTE_FishClicker(489)
+  L000F: return
+
+## function BP_OnDeactivated  flags=0x08080800
+  L0000: WBP_QTE_FishClicker_C.ExecuteUbergraph_WBP_QTE_FishClicker(1143)
+  L000F: return
+
+## function ExecuteUbergraph_WBP_QTE_FishClicker  flags=0x00808001
+  L0000: goto computed(EntryPoint)
+  L000A: Default__GameplayStatics.GameplayStatics.PlaySound2D(self, SCUE_QTE_Damb, 1, 1, 0, null, null, true)
+  L0046: CallFunc_Add_DoubleDouble_ReturnValue = Add_DoubleDouble(self.Value, self.ClickPower)
+  L0074: CallFunc_FMin_ReturnValue = FMin(CallFunc_Add_DoubleDouble_ReturnValue, 1)
+  L00A2: self.Value = CallFunc_FMin_ReturnValue
+  L00BD: self.OnValueChanged.Broadcast(self.Value)
+  L00D9: UpdateBar()
+  L00E7: CallFunc_PlayAnimation_ReturnValue_1 = UserWidget.PlayAnimation(self.BounceAnim, 0, 1, 0, 1, false)
+  L011E: goto L06F7
+  L0123: CallFunc_Conv_InputActionValueToBool_ReturnValue = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue)
+  L0140: Temp_bool_Variable = CallFunc_Conv_InputActionValueToBool_ReturnValue
+  L0153: Temp_real_Variable_1 = K2Node_EnhancedInputActionEvent_ElapsedTime
+  L0170: Temp_real_Variable_1 = Temp_real_Variable_1
+  L018B: Temp_real_Variable = K2Node_EnhancedInputActionEvent_TriggeredTime
+  L01A8: Temp_real_Variable = Temp_real_Variable
+  L01C3: Temp_object_Variable = K2Node_EnhancedInputActionEvent_SourceAction
+  L01D6: if not (self.bActive) goto L06F7
+  L01E4: goto L000A
+  L01E9: CommonActivatableWidget.BP_OnActivated()
+  L01F3: self.bWinning = false
+  L01FE: Default__GameplayStatics.GameplayStatics.PlaySound2D(self, SWAVE_Fishing_Alert_UI, 1, 1, 0, null, null, true)
+  L023A: CallFunc_PlayAnimation_ReturnValue = UserWidget.PlayAnimation(self.Start, 0, 1, 0, 1, false)
+  L0271: self.WaveImageMouse1.SetVisibility(2)
+  L0297: self.WaveImageMouse2.SetVisibility(2)
+  L02BD: self.Image_Glow.SetVisibility(2)
+  L02E3: self.WBP_InputHint.SetVisibility(2)
+  L0309: self.bActive = false
+  L0314: CallFunc_GetDynamicMaterial_ReturnValue = self.Image_BarFill.Image.GetDynamicMaterial()
+  L033E: self.BarMID = CallFunc_GetDynamicMaterial_ReturnValue
+  L0351: self.Value = 0
+  L036C: self.OnValueChanged.Broadcast(self.Value)
+  L0388: UpdateBar()
+  L0396: self.WaveImage1.SetBrushFromAtlasInterface(iface<SlateTextureAtlasInterface>(SPR_CircularWaveBg003), false)
+  L03CD: self.WaveImage2.SetBrushFromAtlasInterface(iface<SlateTextureAtlasInterface>(SPR_CircularWaveBg003), false)
+  L0404: self.Image_Result.SetBrushFromAtlasInterface(iface<SlateTextureAtlasInterface>(SPR_IcAttention001_Hover), false)
+  L043B: self.Image_Net.SetBrushFromAtlasInterface(iface<SlateTextureAtlasInterface>(SPR_FishingQtePrbBg002), false)
+  L0472: goto L06F7
+  L0477: CommonActivatableWidget.BP_OnDeactivated()
+  L0481: KismetSystemLibrary.K2_ClearAndInvalidateTimerHandle(self, self.TimerHandle)
+  L0495: self.bActive = false
+  L04A0: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(self.AudioStretching)
+  L04BD: if not (CallFunc_IsValid_ReturnValue) goto L06F7
+  L04CB: self.AudioStretching.ActorComponent.K2_DestroyComponent(self)
+  L04EC: goto L06F7
+  L04F1: UserWidget.Tick(K2Node_Event_MyGeometry, K2Node_Event_InDeltaTime)
+  L050D: if not (self.bActive) goto L06F7
+  L051B: CallFunc_UpdateValue_Delta_ImplicitCast = K2Node_Event_InDeltaTime
+  L0538: UpdateValue(CallFunc_UpdateValue_Delta_ImplicitCast)
+  L054F: UpdateBar()
+  L055D: goto L06F7
+  L0562: CallFunc_SpawnSound2D_ReturnValue = Default__GameplayStatics.GameplayStatics.SpawnSound2D(self, SCUE_QTE_Damb, 1, 1, 0, null, false, true)
+  L05A8: self.AudioStretching = CallFunc_SpawnSound2D_ReturnValue
+  L05BB: bind(K2Node_CreateDelegate_OutputDelegate, self, 'TimesUp')
+  L05D2: CallFunc_K2_SetTimerDelegate_ReturnValue = KismetSystemLibrary.K2_SetTimerDelegate(K2Node_CreateDelegate_OutputDelegate, self.Time, false, false, 0, 0)
+  L060C: self.TimerHandle = CallFunc_K2_SetTimerDelegate_ReturnValue
+  L0627: self.bActive = true
+  L0632: CallFunc_PlayAnimation_ReturnValue_2 = UserWidget.PlayAnimation(self.QTEAnim, 0, 0, 0, 1, true)
+  L0669: self.WaveImageMouse1.SetVisibility(0)
+  L068F: self.WaveImageMouse2.SetVisibility(0)
+  L06B5: self.WBP_InputHint.SetVisibility(0)
+  L06DB: goto L06F7
+  L06E0: FinishQTE(self.bResult)
+  L06F7: return
+
+## function FinishQTE  flags=0x0C820000
+  L0000: Temp_bool_Variable = bSuccess
+  L0013: Temp_struct_Variable = GameplayTag{'QTE.Result.Success'}
+  L0040: Temp_struct_Variable_1 = GameplayTag{'QTE.Result.Failure'}
+  L006D: self.OnFinished.Broadcast(switch(Temp_bool_Variable){false: Temp_struct_Variable_1; true: Temp_struct_Variable; default: K2Node_Select_Default})
+  L00B5: CommonActivatableWidget.DeactivateWidget()
+  L00BF: return
+
+## function InpActEvt_IA_QTE_LMB_K2Node_EnhancedInputActionEvent_0  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction = SourceAction
+  L0048: WBP_QTE_FishClicker_C.ExecuteUbergraph_WBP_QTE_FishClicker(291)
+  L0057: return
+
+## function OnFinished__DelegateSignature  flags=0x0C120000
+  L0000: return
+
+## function OnValueChanged__DelegateSignature  flags=0x0C120000
+  L0000: return
+
+## function SetWeightIndex  flags=0x0C020000
+  L0000: CallFunc_Map_Find_ReturnValue = Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_Find(self.DecreasePowers, Index, CallFunc_Map_Find_Value)
+  L0045: if not (CallFunc_Map_Find_ReturnValue) goto L00B3
+  L0053: CallFunc_Map_Find_ReturnValue = Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_Find(self.DecreasePowers, Index, CallFunc_Map_Find_Value)
+  L0098: self.DecreasePower = CallFunc_Map_Find_Value
+  L00B3: return
+
+## function StopQTE  flags=0x0C820000
+  L0000: self.bResult = bSuccess
+  L0013: self.WaveImageMouse1.SetVisibility(2)
+  L0039: self.WaveImageMouse2.SetVisibility(2)
+  L005F: self.WBP_InputHint.SetVisibility(2)
+  L0085: CallFunc_PlayAnimation_ReturnValue = UserWidget.PlayAnimation(self.Done, 0, 1, 0, 1, false)
+  L00BC: Temp_interface_Variable_2 = iface<SlateTextureAtlasInterface>(SPR_IcAttention001_Win)
+  L00E0: Temp_interface_Variable_3 = iface<SlateTextureAtlasInterface>(SPR_IcAttention001_Lose)
+  L0104: Temp_bool_Variable = self.bResult
+  L0117: self.Image_Result.SetBrushFromAtlasInterface(switch(Temp_bool_Variable){false: Temp_interface_Variable_3; true: Temp_interface_Variable_2; default: K2Node_Select_Default}, false)
+  L0171: Temp_interface_Variable = iface<SlateTextureAtlasInterface>(SPR_CircularWaveBg004)
+  L0195: Temp_interface_Variable_1 = iface<SlateTextureAtlasInterface>(SPR_CircularWaveBg003)
+  L01B9: Temp_bool_Variable_1 = self.bResult
+  L01CC: self.WaveImage1.SetBrushFromAtlasInterface(switch(Temp_bool_Variable_1){false: Temp_interface_Variable_1; true: Temp_interface_Variable; default: K2Node_Select_Default_1}, false)
+  L0226: self.WaveImage2.SetBrushFromAtlasInterface(switch(Temp_bool_Variable_1){false: Temp_interface_Variable_1; true: Temp_interface_Variable; default: K2Node_Select_Default_1}, false)
+  L0280: return
+
+## function Tick  flags=0x08020808
+  L0000: frame.K2Node_Event_MyGeometry = MyGeometry
+  L0012: frame.K2Node_Event_InDeltaTime = InDeltaTime
+  L0024: WBP_QTE_FishClicker_C.ExecuteUbergraph_WBP_QTE_FishClicker(1265)
+  L0033: return
+
+## function TimesUp  flags=0x0C020000
+  L0000: KismetSystemLibrary.K2_ClearAndInvalidateTimerHandle(self, self.TimerHandle)
+  L0014: self.AudioStretching.Stop()
+  L0038: self.bActive = false
+  L0043: CallFunc_GreaterEqual_DoubleDouble_ReturnValue = GreaterEqual_DoubleDouble(self.Value, self.PercentToWin)
+  L0069: StopQTE(CallFunc_GreaterEqual_DoubleDouble_ReturnValue)
+  L0080: UserWidget.StopAnimation(self.QTEAnim)
+  L0093: return
+
+## function UpdateBar  flags=0x0C020000
+  L0000: CallFunc_SetScalarParameterValue_Value_ImplicitCast = self.Value
+  L001D: self.BarMID.MaterialInstanceDynamic.SetScalarParameterValue('Value', CallFunc_SetScalarParameterValue_Value_ImplicitCast)
+  L0053: return
+
+## function UpdateValue  flags=0x0C020000
+  L0000: CallFunc_Multiply_DoubleDouble_ReturnValue = Multiply_DoubleDouble(Delta, self.DecreasePower)
+  L002E: CallFunc_Subtract_DoubleDouble_ReturnValue = Subtract_DoubleDouble(self.Value, CallFunc_Multiply_DoubleDouble_ReturnValue)
+  L005C: CallFunc_FMax_ReturnValue = FMax(CallFunc_Subtract_DoubleDouble_ReturnValue, 0)
+  L008A: self.Value = CallFunc_FMax_ReturnValue
+  L00A5: self.OnValueChanged.Broadcast(self.Value)
+  L00C1: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(self.AudioStretching)
+  L00DE: if not (CallFunc_IsValid_ReturnValue) goto L0143
+  L00EC: CallFunc_SetFloatParameter_InFloat_ImplicitCast = self.Value
+  L0109: self.AudioStretching.SetFloatParameter('QTEIntensity', CallFunc_SetFloatParameter_InFloat_ImplicitCast)
+  L0143: if not (self.bWinning) goto L01F2
+  L0151: CallFunc_Less_DoubleDouble_ReturnValue = Less_DoubleDouble(self.Value, self.PercentToWin)
+  L0177: if not (CallFunc_Less_DoubleDouble_ReturnValue) goto L028E
+  L0185: self.bWinning = false
+  L0190: self.Image_Net.SetBrushFromAtlasInterface(iface<SlateTextureAtlasInterface>(SPR_FishingQtePrbBg002), false)
+  L01C7: self.Image_Glow.SetVisibility(2)
+  L01ED: goto L028E
+  L01F2: CallFunc_GreaterEqual_DoubleDouble_ReturnValue = GreaterEqual_DoubleDouble(self.Value, self.PercentToWin)
+  L0218: if not (CallFunc_GreaterEqual_DoubleDouble_ReturnValue) goto L028E
+  L0226: self.bWinning = true
+  L0231: self.Image_Net.SetBrushFromAtlasInterface(iface<SlateTextureAtlasInterface>(SPR_FishingQtePrbBg003), false)
+  L0268: self.Image_Glow.SetVisibility(4)
+  L028E: return
+
+## function WidgetAnimationEvt_Done_K2Node_WidgetAnimationEvent_1  flags=0x08000000
+  L0000: WBP_QTE_FishClicker_C.ExecuteUbergraph_WBP_QTE_FishClicker(1760)
+  L000F: return
+
+## function WidgetAnimationEvt_Start_K2Node_WidgetAnimationEvent_0  flags=0x08000000
+  L0000: WBP_QTE_FishClicker_C.ExecuteUbergraph_WBP_QTE_FishClicker(1378)
+  L000F: return

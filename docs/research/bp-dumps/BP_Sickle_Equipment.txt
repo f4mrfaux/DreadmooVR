@@ -1,0 +1,80 @@
+# /Game/Dreadmoor/InventoryFramework/Items/Weapon/Sickle/BP_Sickle_Equipment
+# file: Dreadmoor/Content/Dreadmoor/InventoryFramework/Items/Weapon/Sickle/BP_Sickle_Equipment.uasset
+
+## imported packages (2)
+  /Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Cold_Hand_Weapons/dm_vs_Cold_Hand_Weapons
+  /Game/Dreadmoor/InventoryFramework/TraitsAndComponents/IT_MeshData
+
+## exports (13)
+  [0] BP_Sickle_Equipment_C : BlueprintGeneratedClass (outer None) super=Actor size=331
+  [1] Default__BP_Sickle_Equipment_C : BP_Sickle_Equipment_C (outer None) size=8
+  [6] DefaultSceneRoot_GEN_VARIABLE : SceneComponent (outer BP_Sickle_Equipment_C) size=10
+        refs: name:BlueprintType
+  [7] SCS_Node_0 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SceneComponent, exp:DefaultSceneRoot_GEN_VARIABLE, name:DefaultSceneRoot
+  [8] SCS_Node_1 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:StaticMesh_GEN_VARIABLE, exp:SCS_Node_2, name:StaticMesh
+  [9] SCS_Node_2 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:ModuleMesh_GEN_VARIABLE, name:ModuleMesh
+  [10] SimpleConstructionScript_0 : SimpleConstructionScript (outer BP_Sickle_Equipment_C) size=30
+        refs: exp:SCS_Node_1, exp:SCS_Node_2, name:CallFunc_GetContainerByIdentifier_ContainerIndex
+  [11] ModuleMesh_GEN_VARIABLE : StaticMeshComponent (outer BP_Sickle_Equipment_C) size=22
+        refs: name:BlueprintType
+  [12] StaticMesh_GEN_VARIABLE : StaticMeshComponent (outer BP_Sickle_Equipment_C) size=26
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Cold_Hand_Weapons/dm_vs_Cold_Hand_Weapons.dm_vs_Cold_Hand_Weapons, name:BlueprintType
+
+## function ExecuteUbergraph_BP_Sickle_Equipment  flags=0x00808001
+  L0000: push L0487
+  L0005: goto computed(EntryPoint)
+  L000F: CallFunc_SetStaticMesh_ReturnValue = self.ModuleMesh.SetStaticMesh(null)
+  L003E: pop-flow
+  L003F: Temp_int_Loop_Counter_Variable = 0
+  L0056: Temp_int_Array_Index_Variable = 0
+  L006D: CallFunc_Array_Length_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(CallFunc_GetContainerByIdentifier_Container.Items)
+  L00B1: CallFunc_Less_IntInt_ReturnValue = Less_IntInt(Temp_int_Loop_Counter_Variable, CallFunc_Array_Length_ReturnValue)
+  L00D7: if not (CallFunc_Less_IntInt_ReturnValue) pop-flow
+  L00E1: Temp_int_Array_Index_Variable = Temp_int_Loop_Counter_Variable
+  L00FC: push L02F3
+  L0101: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetContainerByIdentifier_Container.Items, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L0145: CallFunc_GetTraitByClassForItem_ReturnValue = FL_InventoryFramework.GetTraitByClassForItem(CallFunc_Array_Get_Item.ItemAsset, IT_MeshData_C, false)
+  L0175: CallFunc_LoadAsset_Blocking_ReturnValue = KismetSystemLibrary.LoadAsset_Blocking(CallFunc_GetTraitByClassForItem_ReturnValue.self.StaticMesh)
+  L01A8: CallFunc_Conv_SoftObjectReferenceToObject_ReturnValue = KismetSystemLibrary.Conv_SoftObjectReferenceToObject(CallFunc_GetTraitByClassForItem_ReturnValue.self.StaticMesh)
+  L01DB: K2Node_DynamicCast_AsStatic_Mesh = cast<StaticMesh>(CallFunc_Conv_SoftObjectReferenceToObject_ReturnValue)
+  L01FF: K2Node_DynamicCast_bSuccess_1 = K2Node_DynamicCast_AsStatic_Mesh
+  L021C: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(K2Node_DynamicCast_AsStatic_Mesh)
+  L0239: if not (CallFunc_IsValid_ReturnValue) goto L000F
+  L0247: CallFunc_Conv_SoftObjectReferenceToObject_ReturnValue = KismetSystemLibrary.Conv_SoftObjectReferenceToObject(CallFunc_GetTraitByClassForItem_ReturnValue.self.StaticMesh)
+  L027A: K2Node_DynamicCast_AsStatic_Mesh = cast<StaticMesh>(CallFunc_Conv_SoftObjectReferenceToObject_ReturnValue)
+  L029E: K2Node_DynamicCast_bSuccess_1 = K2Node_DynamicCast_AsStatic_Mesh
+  L02BB: CallFunc_SetStaticMesh_ReturnValue_1 = self.ModuleMesh.SetStaticMesh(K2Node_DynamicCast_AsStatic_Mesh)
+  L02F2: pop-flow
+  L02F3: CallFunc_Add_IntInt_ReturnValue = Add_IntInt(Temp_int_Loop_Counter_Variable, 1)
+  L031D: Temp_int_Loop_Counter_Variable = CallFunc_Add_IntInt_ReturnValue
+  L0338: goto L006D
+  L033D: InitModuleVisualFromPlayerInventory()
+  L034B: TryShowTutorial()
+  L0359: pop-flow
+  L035A: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L0374: K2Node_DynamicCast_AsI_Inventory = iface<I_Inventory>(CallFunc_GetPlayerController_ReturnValue)
+  L0398: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsI_Inventory
+  L03B5: if not (K2Node_DynamicCast_bSuccess) goto L0476
+  L03C3: K2Node_DynamicCast_AsI_Inventory.GetInventoryComponent(CallFunc_GetInventoryComponent_Component)
+  L03F1: CallFunc_GetInventoryComponent_Component.AC_Inventory.GetContainerByIdentifier(GameplayTag{'IFP.Container.Identifier.Slot.Blade'}, CallFunc_GetInventoryComponent_Component.self.ContainerSettings, true, CallFunc_GetContainerByIdentifier_FoundContainer, CallFunc_GetContainerByIdentifier_Container, CallFunc_GetContainerByIdentifier_ContainerIndex)
+  L0467: if not (CallFunc_GetContainerByIdentifier_FoundContainer) pop-flow
+  L0471: goto L003F
+  L0476: CallFunc_GetInventoryComponent_Component = null
+  L0481: goto L03F1
+  L0486: pop-flow
+  L0487: return
+
+## function InitModuleVisualFromPlayerInventory  flags=0x0C000000
+  L0000: BP_Sickle_Equipment_C.ExecuteUbergraph_BP_Sickle_Equipment(858)
+  L000F: return
+
+## function ReceiveBeginPlay  flags=0x08080800
+  L0000: BP_Sickle_Equipment_C.ExecuteUbergraph_BP_Sickle_Equipment(829)
+  L000F: return
+
+## function TryShowTutorial  flags=0x0C000000
+  L0000: BP_Sickle_Equipment_C.ExecuteUbergraph_BP_Sickle_Equipment(1158)
+  L000F: return

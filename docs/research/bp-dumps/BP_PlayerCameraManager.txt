@@ -1,0 +1,18 @@
+# /Game/Dreadmoor/Core/Features/PlayerCharacter/BP_PlayerCameraManager
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/PlayerCharacter/BP_PlayerCameraManager.uasset
+
+## imported packages (1)
+  /Game/Dreadmoor/Core/Features/PlayerCharacter/BP_CameraModifier_DangerLevel
+
+## exports (6)
+  [0] BP_PlayerCameraManager_C : BlueprintGeneratedClass (outer None) super=PlayerCameraManager size=108
+  [1] Default__BP_PlayerCameraManager_C : BP_PlayerCameraManager_C (outer None) size=40
+        refs: exp:TransformComponent0, obj:/Script/Engine.CameraModifier_CameraShake, name:BP_PlayerCameraManager_C
+  [2] DefaultSceneRoot_GEN_VARIABLE : SceneComponent (outer BP_PlayerCameraManager_C) size=10
+        refs: name:DefaultSceneRoot
+  [3] TransformComponent0 : SceneComponent (outer Default__BP_PlayerCameraManager_C) size=10
+        refs: name:DefaultSceneRoot
+  [4] SCS_Node_0 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SceneComponent, exp:DefaultSceneRoot_GEN_VARIABLE, name:DefaultSceneRoot
+  [5] SimpleConstructionScript_0 : SimpleConstructionScript (outer BP_PlayerCameraManager_C) size=10
+        refs: name:Default__BP_PlayerCameraManager_C

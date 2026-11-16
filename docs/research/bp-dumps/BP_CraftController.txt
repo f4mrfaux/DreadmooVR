@@ -1,0 +1,1731 @@
+# /Game/Dreadmoor/Core/Features/CraftTable/BP_CraftController
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/CraftTable/BP_CraftController.uasset
+
+## imported packages (38)
+  /Game/3rdParty/TFPMovement/Player/Blueprint/Effects/Headbob/BP_Idle
+  /Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/RecipeBook/SM_RecipeBook
+  /Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Workbench/SM_Workbench_BigBox
+  /Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Workbench/SM_Workbench_LongBox
+  /Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Workbench/SM_Workbench_MetalBox
+  /Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Workbench/SM_Workbench_SmallBox
+  /Game/Dreadmoor/Audio/SFX/UI/CRAFT/SCUE_UI_Craft_Back
+  /Game/Dreadmoor/Core/BP_DrdHUD
+  /Game/Dreadmoor/Core/Input/Crafting/IA_Crafting_Click
+  /Game/Dreadmoor/Core/Input/Crafting/IA_Crafting_Start
+  /Game/Dreadmoor/Dev/Testing/Outliner/PP_Outliner_Inst
+  /Game/Dreadmoor/InventoryFramework/Components/BP_InventoryComponent
+  /Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/1ChameleonScales/BP_CraftPile_ChameleonScales
+  /Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/1Jaws/BP_Craft_Pile_Jaws
+  /Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/1Leeches/BP_Craft_Pile_Leeches
+  /Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/1Rubber/BP_Craft_Pile_Rubber
+  /Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/Alcohol/BP_CraftPile_Alcohol
+  /Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/Battery/BP_CraftPile_Battery
+  /Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/BonePlate/BP_CraftPile_BonePlate
+  /Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/Cable/BP_CraftPile_Cable
+  /Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/Clay/BP_CraftPile_Clay
+  /Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/FishFleshType1/BP_CraftPile_FishFleshType1
+  /Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/FishFleshType2/BP_CraftPile_FishFleshType2_OnTable
+  /Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/Gear/BP_CraftPile_Gear
+  /Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/Gunpowder/BP_CraftPile_Gunpowder
+  /Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/GutsType3/BP_CraftPile_GutsType3
+  /Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/Leather/BP_CraftPile_Leather
+  /Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/Lily/BP_CraftPile_Lily
+  /Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/MetalScrap/BP_CraftPile_MetalScrap
+  /Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/MetalScrapType2/BP_CraftPile_MetalScrapType2
+  /Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/MetalScrapType3/BP_CraftPile_MetalScrapType3
+  /Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/Microchip/BP_CraftPile_Microchip
+  /Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/Rope/BP_CraftPile_Rope
+  /Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/Tentacle/BP_CraftPile_Tentacle
+  /Game/Dreadmoor/UI/Common/WBP_InputHintFilled
+  /Game/Dreadmoor/UI/Crafting/WBP_Craft
+  /Game/Dreadmoor/UI/Crafting/WBP_Recipes
+  /Game/Dreadmoor/UI/HUD/WBP_PickedItemInfo
+
+## exports (282)
+  [0] BP_CraftController_C : BlueprintGeneratedClass (outer None) super=Pawn size=7675
+  [1] BP_CraftPile_GutsType1_GEN_VARIABLE_BP_Craft_Pile_Jaws_C_CAT : BP_Craft_Pile_Jaws_C (outer BP_CraftPile_GutsType1_GEN_VARIABLE) size=79
+        refs: exp:PileSequencePlayer, exp:SceneComponent, name:CallFunc_GetSelectedItemsCount_Count, exp:BP_CraftPile_MetalScrap_GEN_VARIABLE_BP_CraftPile_MetalScrap_C_CAT, name:CallFunc_BreakHitResult_bInitialOverlap
+  [2] BP_CraftPile_Leeches_GEN_VARIABLE_BP_Craft_Pile_Leeches_C_CAT : BP_Craft_Pile_Leeches_C (outer BP_CraftPile_Leeches_GEN_VARIABLE) size=82
+        refs: exp:PileSequencePlayer, exp:SceneComponent, name:CallFunc_GetWorldSubsystem_ReturnValue, exp:BP_CraftPile_Microchip_GEN_VARIABLE_BP_CraftPile_Microchip_C_CAT, name:CallFunc_BreakHitResult_bInitialOverlap
+  [3] BP_CraftPile_Rubber_GEN_VARIABLE_BP_Craft_Pile_Rubber_C_CAT : BP_Craft_Pile_Rubber_C (outer BP_CraftPile_Rubber_GEN_VARIABLE) size=81
+        refs: exp:PileSequencePlayer, exp:SceneComponent, name:CallFunc_IsValidSoftClassReference_ReturnValue, exp:BP_CraftPile_MetalScrapType3_GEN_VARIABLE_BP_CraftPile_MetalScrapType3_C_CAT, name:CallFunc_BreakHitResult_bBlockingHit
+  [4] Default__BP_CraftController_C : BP_CraftController_C (outer None) size=601
+        refs: obj:/Game/Dreadmoor/UI/Crafting/WBP_Craft.WBP_Craft_C, name:GameEntities.Interactable.CraftTable.Big, exp:BP_CraftPile_Battery_GEN_VARIABLE_BP_CraftPile_Battery_C_CAT, name:None, obj:/Script/Engine.KismetSystemLibrary.SphereTraceMulti, exp:BP_CraftPile_Leeches_GEN_VARIABLE_BP_Craft_Pile_Leeches_C_CAT, name:CraftingCount, exp:BP_CraftPile_Cable_GEN_VARIABLE_BP_CraftPile_Cable_C_CAT, name:SCUE_Craft_Transition, exp:SCS_Node_53, name:CraftedItemAnim, exp:BP_CraftPile_Gear_GEN_VARIABLE_BP_CraftPile_Gear_C_CAT, name:LS_CraftItem, exp:SCS_Node_6, exp:Ingredient_Cell_Jaws_GEN_VARIABLE, name:CraftedPreviewActor, exp:Ingredient_Cell_Leather_GEN_VARIABLE, exp:BP_CraftPile_BonePlate_GEN_VARIABLE_BP_CraftPile_BonePlate_C_CAT, name:IFP.Items.Type.CraftingMaterial.Alcohol, exp:BP_CraftPile_Alcohol_GEN_VARIABLE_BP_CraftPile_Alcohol_C_CAT, name:SCUE_Craft_Bottle, name:IFP.Items.Type.CraftingMaterial.Battery, exp:Default__BP_CraftController_C, name:SCUE_Craft_Battery, name:IFP.Items.Type.CraftingMaterial.MetalScrap, name:SCUE_Craft_Metal, name:IFP.Items.Type.CraftingMaterial.MetalScrapType2, name:IFP.Items.Type.CraftingMaterial.MetalScrapType3, name:IFP.Items.Type.CraftingMaterial.Gear, name:IFP.Items.Type.CraftingMaterial.GutsType1, name:SCUE_Craft_Fish, name:IFP.Items.Type.CraftingMaterial.GutsType2, exp:BP_CraftPile_Gunpowder1_GEN_VARIABLE_BP_CraftPile_Clay_C_CAT, name:SCUE_Crafting_Process, exp:BP_CraftPile_ChameleonScales_GEN_VARIABLE_BP_CraftPile_ChameleonScales_C_CAT, name:SCUE_Crafting_Final, exp:BP_CraftPile_FishFleshType1_GEN_VARIABLE_BP_CraftPile_FishFleshType1_C_CAT, name:SCUE_Crafting_Recipe, exp:BP_CraftPile_FishFleshType3_GEN_VARIABLE_BP_CraftPile_FishFleshType2_OnTable_C_CAT, name:SWAVE_Ui_Hover_Cue, obj:/Game/Dreadmoor/Audio/SFX/UI/CRAFT/SCUE_UI_Craft_Back.SCUE_UI_Craft_Back
+  [5] BP_CraftPile_Alcohol_GEN_VARIABLE_BP_CraftPile_Alcohol_C_CAT : BP_CraftPile_Alcohol_C (outer BP_CraftPile_Alcohol_GEN_VARIABLE) size=81
+        refs: exp:PileSequencePlayer, exp:SceneComponent, name:CallFunc_GetItemTypeSoftPile_PileClass, exp:BP_CraftPile_MetalScrapType3_GEN_VARIABLE_BP_CraftPile_MetalScrapType3_C_CAT, name:CallFunc_Array_IsEmpty_ReturnValue
+  [6] BP_CraftPile_Battery_GEN_VARIABLE_BP_CraftPile_Battery_C_CAT : BP_CraftPile_Battery_C (outer BP_CraftPile_Battery_GEN_VARIABLE) size=81
+        refs: exp:PileSequencePlayer, exp:SceneComponent, name:CallFunc_GetLocalPlayerFromController_ReturnValue, exp:BP_CraftPile_MetalScrapType3_GEN_VARIABLE_BP_CraftPile_MetalScrapType3_C_CAT, name:CallFunc_BreakHitResult_HitBoneName
+  [7] BP_CraftPile_BonePlate_GEN_VARIABLE_BP_CraftPile_BonePlate_C_CAT : BP_CraftPile_BonePlate_C (outer BP_CraftPile_BonePlate_GEN_VARIABLE) size=83
+        refs: exp:PileSequencePlayer, exp:SceneComponent, name:CallFunc_GetMousePositionOnViewport_ReturnValue, exp:BP_CraftPile_Rope_GEN_VARIABLE_BP_CraftPile_Rope_C_CAT, name:CallFunc_Add_DoubleDouble_A_ImplicitCast
+  [8] BP_CraftPile_Cable_GEN_VARIABLE_BP_CraftPile_Cable_C_CAT : BP_CraftPile_Cable_C (outer BP_CraftPile_Cable_GEN_VARIABLE) size=79
+        refs: exp:PileSequencePlayer, exp:SceneComponent, name:CallFunc_GetNumChildrenComponents_ReturnValue, exp:BP_CraftPile_MetalScrap_GEN_VARIABLE_BP_CraftPile_MetalScrap_C_CAT, name:CallFunc_Add_DoubleDouble_A_ImplicitCast
+  [9] BP_CraftPile_ChameleonScales_GEN_VARIABLE_BP_CraftPile_ChameleonScales_C_CAT : BP_CraftPile_ChameleonScales_C (outer BP_CraftPile_ChameleonScales_GEN_VARIABLE) size=89
+        refs: exp:PileSequencePlayer, exp:SceneComponent, name:CallFunc_GetPlayerController_ReturnValue, exp:BP_CraftPile_BonePlate_GEN_VARIABLE, name:CallFunc_BreakHitResult_bInitialOverlap
+  [10] BP_CraftPile_Gunpowder1_GEN_VARIABLE_BP_CraftPile_Clay_C_CAT : BP_CraftPile_Clay_C (outer BP_CraftPile_Clay_GEN_VARIABLE) size=78
+        refs: exp:PileSequencePlayer, exp:SceneComponent, name:CallFunc_GetPlayerViewPoint_Location, exp:BP_CraftPile_Lily_GEN_VARIABLE_BP_CraftPile_Lily_C_CAT, name:CallFunc_BreakHitResult_HitBoneName
+  [11] BP_CraftPile_FishFleshType1_GEN_VARIABLE_BP_CraftPile_FishFleshType1_C_CAT : BP_CraftPile_FishFleshType1_C (outer BP_CraftPile_FishFleshType1_GEN_VARIABLE) size=88
+        refs: exp:PileSequencePlayer, exp:SceneComponent, name:CallFunc_GetPlayerViewPoint_Rotation, exp:BP_CraftPile_Battery_GEN_VARIABLE, name:bCanCraft
+  [12] BP_CraftPile_FishFleshType3_GEN_VARIABLE_BP_CraftPile_FishFleshType2_OnTable_C_CAT : BP_CraftPile_FishFleshType2_OnTable_C (outer BP_CraftPile_FishFleshType3_GEN_VARIABLE) size=96
+        refs: exp:PileSequencePlayer, exp:SceneComponent, name:CallFunc_GetRecipeStatus_ReturnValue, exp:BP_CraftPile_Gunpowder_GEN_VARIABLE, name:CallFunc_Add_DoubleDouble_A_ImplicitCast
+  [13] BP_CraftPile_Gear_GEN_VARIABLE_BP_CraftPile_Gear_C_CAT : BP_CraftPile_Gear_C (outer BP_CraftPile_Gear_GEN_VARIABLE) size=78
+        refs: exp:PileSequencePlayer, exp:SceneComponent, name:CallFunc_GetSelectedItems_Items, exp:BP_CraftPile_Lily_GEN_VARIABLE_BP_CraftPile_Lily_C_CAT, name:CallFunc_BreakHitResult_bBlockingHit
+  [14] BP_CraftPile_Gunpowder_GEN_VARIABLE_BP_CraftPile_Gunpowder_C_CAT : BP_CraftPile_Gunpowder_C (outer BP_CraftPile_Gunpowder_GEN_VARIABLE) size=83
+        refs: exp:PileSequencePlayer, exp:SceneComponent, name:CallFunc_GetSelectedItems_Items_Value, exp:BP_CraftPile_Rope_GEN_VARIABLE_BP_CraftPile_Rope_C_CAT, name:CallFunc_BreakHitResult_bBlockingHit
+  [15] BP_CraftPile_GutsType3_GEN_VARIABLE_BP_CraftPile_GutsType3_C_CAT : BP_CraftPile_GutsType3_C (outer BP_CraftPile_GutsType3_GEN_VARIABLE) size=83
+        refs: exp:PileSequencePlayer, exp:SceneComponent, name:CallFunc_GetTraitByClassForItem_ReturnValue, exp:BP_CraftPile_Rope_GEN_VARIABLE_BP_CraftPile_Rope_C_CAT, name:BestRecipe
+  [16] BP_CraftPile_Leather_GEN_VARIABLE_BP_CraftPile_Leather_C_CAT : BP_CraftPile_Leather_C (outer BP_CraftPile_Leather_GEN_VARIABLE) size=81
+        refs: exp:PileSequencePlayer, exp:SceneComponent, name:CallFunc_GetViewportSize_ReturnValue, exp:BP_CraftPile_MetalScrapType3_GEN_VARIABLE_BP_CraftPile_MetalScrapType3_C_CAT, name:CallFunc_BreakHitResult_bBlockingHit
+  [17] BP_CraftPile_Lily_GEN_VARIABLE_BP_CraftPile_Lily_C_CAT : BP_CraftPile_Lily_C (outer BP_CraftPile_Lily_GEN_VARIABLE) size=78
+        refs: exp:PileSequencePlayer, exp:SceneComponent, name:CallFunc_Greater_IntInt_ReturnValue, exp:BP_CraftPile_Lily_GEN_VARIABLE_BP_CraftPile_Lily_C_CAT, name:CallFunc_BreakHitResult_HitBoneName
+  [18] BP_CraftPile_MetalScrap_GEN_VARIABLE_BP_CraftPile_MetalScrap_C_CAT : BP_CraftPile_MetalScrap_C (outer BP_CraftPile_MetalScrap_GEN_VARIABLE) size=84
+        refs: exp:PileSequencePlayer, exp:SceneComponent, name:CallFunc_GreaterEqual_DoubleDouble_ReturnValue, exp:BP_CraftPile_Tentacle_GEN_VARIABLE_BP_CraftPile_Tentacle_C_CAT, name:CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue
+  [19] BP_CraftPile_MetalScrapType2_GEN_VARIABLE_BP_CraftPile_MetalScrapType2_C_CAT : BP_CraftPile_MetalScrapType2_C (outer BP_CraftPile_MetalScrapType2_GEN_VARIABLE) size=89
+        refs: exp:PileSequencePlayer, exp:SceneComponent, name:CallFunc_GreaterEqual_IntInt_ReturnValue, exp:BP_CraftPile_BonePlate_GEN_VARIABLE, name:bCrafting
+  [20] BP_CraftPile_MetalScrapType3_GEN_VARIABLE_BP_CraftPile_MetalScrapType3_C_CAT : BP_CraftPile_MetalScrapType3_C (outer BP_CraftPile_MetalScrapType3_GEN_VARIABLE) size=89
+        refs: exp:PileSequencePlayer, exp:SceneComponent, name:CallFunc_IsItemUsableForCrafting_bOut, exp:BP_CraftPile_BonePlate_GEN_VARIABLE, name:BestRecipe
+  [21] BP_CraftPile_Microchip_GEN_VARIABLE_BP_CraftPile_Microchip_C_CAT : BP_CraftPile_Microchip_C (outer BP_CraftPile_Microchip_GEN_VARIABLE) size=83
+        refs: exp:PileSequencePlayer, exp:SceneComponent, name:CallFunc_IsReadyForUse_bOut, exp:BP_CraftPile_Rope_GEN_VARIABLE_BP_CraftPile_Rope_C_CAT, name:CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue
+  [22] BP_CraftPile_Rope_GEN_VARIABLE_BP_CraftPile_Rope_C_CAT : BP_CraftPile_Rope_C (outer BP_CraftPile_Rope_GEN_VARIABLE) size=78
+        refs: exp:PileSequencePlayer, exp:SceneComponent, name:CallFunc_IsValid_ReturnValue, exp:BP_CraftPile_Lily_GEN_VARIABLE_BP_CraftPile_Lily_C_CAT, name:CallFunc_Add_DoubleDouble_A_ImplicitCast
+  [23] BP_CraftPile_Tentacle_GEN_VARIABLE_BP_CraftPile_Tentacle_C_CAT : BP_CraftPile_Tentacle_C (outer BP_CraftPile_Tentacle_GEN_VARIABLE) size=82
+        refs: exp:PileSequencePlayer, exp:SceneComponent, name:CallFunc_IsValidSoftObjectReference_ReturnValue, exp:BP_CraftPile_Microchip_GEN_VARIABLE_BP_CraftPile_Microchip_C_CAT, name:CallFunc_Add_DoubleDouble_A_ImplicitCast
+  [24] BP_InventoryComponent_GEN_VARIABLE : BP_InventoryComponent_C (outer BP_CraftController_C) size=72
+        refs: exp:SCS_Node_54, obj:/Script/Engine.KismetMathLibrary.Greater_IntInt, exp:SCS_Node_55, exp:SCS_Node_53, obj:/Script/Engine.KismetSystemLibrary.SphereTraceMulti, name:CraftedItemPreview, exp:BP_CraftPile_Leeches_GEN_VARIABLE_BP_Craft_Pile_Leeches_C_CAT
+  [25] Camera_GEN_VARIABLE : CameraComponent (outer BP_CraftController_C) size=84
+        refs: exp:SCS_Node_56, obj:/Game/Dreadmoor/Dev/Testing/Outliner/PP_Outliner_Inst.PP_Outliner_Inst, name:BlueprintType
+  [26] BP_CraftPile_Alcohol_GEN_VARIABLE : ChildActorComponent (outer BP_CraftController_C) size=20
+        refs: obj:/Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/Alcohol/BP_CraftPile_Alcohol.BP_CraftPile_Alcohol_C, exp:BP_CraftPile_Alcohol_GEN_VARIABLE_BP_CraftPile_Alcohol_C_CAT
+  [27] BP_CraftPile_Battery_GEN_VARIABLE : ChildActorComponent (outer BP_CraftController_C) size=20
+        refs: obj:/Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/Battery/BP_CraftPile_Battery.BP_CraftPile_Battery_C, exp:BP_CraftPile_Battery_GEN_VARIABLE_BP_CraftPile_Battery_C_CAT
+  [28] BP_CraftPile_BonePlate_GEN_VARIABLE : ChildActorComponent (outer BP_CraftController_C) size=20
+        refs: obj:/Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/BonePlate/BP_CraftPile_BonePlate.BP_CraftPile_BonePlate_C, exp:BP_CraftPile_BonePlate_GEN_VARIABLE_BP_CraftPile_BonePlate_C_CAT
+  [29] BP_CraftPile_Cable_GEN_VARIABLE : ChildActorComponent (outer BP_CraftController_C) size=20
+        refs: obj:/Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/Cable/BP_CraftPile_Cable.BP_CraftPile_Cable_C, exp:BP_CraftPile_Cable_GEN_VARIABLE_BP_CraftPile_Cable_C_CAT
+  [30] BP_CraftPile_ChameleonScales_GEN_VARIABLE : ChildActorComponent (outer BP_CraftController_C) size=20
+        refs: obj:/Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/1ChameleonScales/BP_CraftPile_ChameleonScales.BP_CraftPile_ChameleonScales_C, exp:BP_CraftPile_ChameleonScales_GEN_VARIABLE_BP_CraftPile_ChameleonScales_C_CAT
+  [31] BP_CraftPile_Clay_GEN_VARIABLE : ChildActorComponent (outer BP_CraftController_C) size=70
+        refs: obj:/Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/Clay/BP_CraftPile_Clay.BP_CraftPile_Clay_C, exp:BP_CraftPile_Gunpowder1_GEN_VARIABLE_BP_CraftPile_Clay_C_CAT, name:CallFunc_IsValid_ReturnValue
+  [32] BP_CraftPile_FishFleshType1_GEN_VARIABLE : ChildActorComponent (outer BP_CraftController_C) size=20
+        refs: obj:/Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/FishFleshType1/BP_CraftPile_FishFleshType1.BP_CraftPile_FishFleshType1_C, exp:BP_CraftPile_FishFleshType1_GEN_VARIABLE_BP_CraftPile_FishFleshType1_C_CAT
+  [33] BP_CraftPile_FishFleshType3_GEN_VARIABLE : ChildActorComponent (outer BP_CraftController_C) size=20
+        refs: obj:/Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/FishFleshType2/BP_CraftPile_FishFleshType2_OnTable.BP_CraftPile_FishFleshType2_OnTable_C, exp:BP_CraftPile_FishFleshType3_GEN_VARIABLE_BP_CraftPile_FishFleshType2_OnTable_C_CAT
+  [34] BP_CraftPile_Gear_GEN_VARIABLE : ChildActorComponent (outer BP_CraftController_C) size=20
+        refs: obj:/Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/Gear/BP_CraftPile_Gear.BP_CraftPile_Gear_C, exp:BP_CraftPile_Gear_GEN_VARIABLE_BP_CraftPile_Gear_C_CAT
+  [35] BP_CraftPile_Gunpowder_GEN_VARIABLE : ChildActorComponent (outer BP_CraftController_C) size=20
+        refs: obj:/Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/Gunpowder/BP_CraftPile_Gunpowder.BP_CraftPile_Gunpowder_C, exp:BP_CraftPile_Gunpowder_GEN_VARIABLE_BP_CraftPile_Gunpowder_C_CAT
+  [36] BP_CraftPile_GutsType1_GEN_VARIABLE : ChildActorComponent (outer BP_CraftController_C) size=20
+        refs: obj:/Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/1Jaws/BP_Craft_Pile_Jaws.BP_Craft_Pile_Jaws_C
+  [37] BP_CraftPile_GutsType3_GEN_VARIABLE : ChildActorComponent (outer BP_CraftController_C) size=20
+        refs: obj:/Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/GutsType3/BP_CraftPile_GutsType3.BP_CraftPile_GutsType3_C, exp:BP_CraftPile_GutsType3_GEN_VARIABLE_BP_CraftPile_GutsType3_C_CAT
+  [38] BP_CraftPile_Leather_GEN_VARIABLE : ChildActorComponent (outer BP_CraftController_C) size=20
+        refs: obj:/Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/Leather/BP_CraftPile_Leather.BP_CraftPile_Leather_C, exp:BP_CraftPile_Leather_GEN_VARIABLE_BP_CraftPile_Leather_C_CAT
+  [39] BP_CraftPile_Leeches_GEN_VARIABLE : ChildActorComponent (outer BP_CraftController_C) size=46
+        refs: obj:/Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/1Leeches/BP_Craft_Pile_Leeches.BP_Craft_Pile_Leeches_C, exp:BP_CraftPile_Leeches_GEN_VARIABLE_BP_Craft_Pile_Leeches_C_CAT, name:CallFunc_IsItemUsableForCrafting_bOut, exp:Ingredient_Cell_Leather_GEN_VARIABLE
+  [40] BP_CraftPile_Lily_GEN_VARIABLE : ChildActorComponent (outer BP_CraftController_C) size=70
+        refs: obj:/Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/Lily/BP_CraftPile_Lily.BP_CraftPile_Lily_C, exp:BP_CraftPile_Lily_GEN_VARIABLE_BP_CraftPile_Lily_C_CAT, name:CallFunc_IsReadyForUse_bOut, name:CallFunc_GreaterEqual_DoubleDouble_ReturnValue
+  [41] BP_CraftPile_MetalScrap_GEN_VARIABLE : ChildActorComponent (outer BP_CraftController_C) size=20
+        refs: obj:/Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/MetalScrap/BP_CraftPile_MetalScrap.BP_CraftPile_MetalScrap_C, exp:BP_CraftPile_MetalScrap_GEN_VARIABLE_BP_CraftPile_MetalScrap_C_CAT
+  [42] BP_CraftPile_MetalScrapType2_GEN_VARIABLE : ChildActorComponent (outer BP_CraftController_C) size=70
+        refs: obj:/Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/MetalScrapType2/BP_CraftPile_MetalScrapType2.BP_CraftPile_MetalScrapType2_C, exp:BP_CraftPile_MetalScrapType2_GEN_VARIABLE_BP_CraftPile_MetalScrapType2_C_CAT, exp:Ingredient_Cell_Jaws_GEN_VARIABLE, exp:Ingredient_Cell_Leather_GEN_VARIABLE
+  [43] BP_CraftPile_MetalScrapType3_GEN_VARIABLE : ChildActorComponent (outer BP_CraftController_C) size=20
+        refs: obj:/Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/MetalScrapType3/BP_CraftPile_MetalScrapType3.BP_CraftPile_MetalScrapType3_C, exp:BP_CraftPile_MetalScrapType3_GEN_VARIABLE_BP_CraftPile_MetalScrapType3_C_CAT
+  [44] BP_CraftPile_Microchip_GEN_VARIABLE : ChildActorComponent (outer BP_CraftController_C) size=20
+        refs: obj:/Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/Microchip/BP_CraftPile_Microchip.BP_CraftPile_Microchip_C, exp:BP_CraftPile_Microchip_GEN_VARIABLE_BP_CraftPile_Microchip_C_CAT
+  [45] BP_CraftPile_Rope_GEN_VARIABLE : ChildActorComponent (outer BP_CraftController_C) size=20
+        refs: obj:/Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/Rope/BP_CraftPile_Rope.BP_CraftPile_Rope_C, exp:BP_CraftPile_Rope_GEN_VARIABLE_BP_CraftPile_Rope_C_CAT
+  [46] BP_CraftPile_Rubber_GEN_VARIABLE : ChildActorComponent (outer BP_CraftController_C) size=20
+        refs: obj:/Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/1Rubber/BP_Craft_Pile_Rubber.BP_Craft_Pile_Rubber_C, exp:BP_CraftPile_Rubber_GEN_VARIABLE_BP_Craft_Pile_Rubber_C_CAT
+  [47] BP_CraftPile_Tentacle_GEN_VARIABLE : ChildActorComponent (outer BP_CraftController_C) size=20
+        refs: obj:/Game/Dreadmoor/InventoryFramework/Items/CraftingMaterials/Tentacle/BP_CraftPile_Tentacle.BP_CraftPile_Tentacle_C, exp:BP_CraftPile_Tentacle_GEN_VARIABLE_BP_CraftPile_Tentacle_C_CAT
+  [48] ComponentDelegateBinding_0 : ComponentDelegateBinding (outer BP_CraftController_C) size=88
+        refs: exp:BP_CraftPile_Leeches_GEN_VARIABLE_BP_Craft_Pile_Leeches_C_CAT, name:RecipesBook, name:OnReleased, exp:Ingredient_Cell_Jaws_GEN_VARIABLE, name:OnEndCursorOver, exp:Ingredient_Cell_Leather_GEN_VARIABLE, name:OnBeginCursorOver, exp:Ingredient_Cell_GutsType3_GEN_VARIABLE
+  [49] Ingredient_Cell_Alcohol_GEN_VARIABLE : DrdCraftCellComponent (outer BP_CraftController_C) size=46
+        refs: name:IFP.Items.Type.CraftingMaterial.Alcohol, exp:Ingredient_Cell_Leather_GEN_VARIABLE
+  [50] Ingredient_Cell_Battery_GEN_VARIABLE : DrdCraftCellComponent (outer BP_CraftController_C) size=46
+        refs: name:IFP.Items.Type.CraftingMaterial.Battery, exp:Ingredient_Cell_Leather_GEN_VARIABLE
+  [51] Ingredient_Cell_BonePlate_GEN_VARIABLE : DrdCraftCellComponent (outer BP_CraftController_C) size=70
+        refs: name:IFP.Items.Type.CraftingMaterial.BonePlate, exp:Ingredient_Cell_Leather_GEN_VARIABLE, exp:Ingredient_Cell_Jaws_GEN_VARIABLE
+  [52] Ingredient_Cell_Cable_GEN_VARIABLE : DrdCraftCellComponent (outer BP_CraftController_C) size=72
+        refs: name:IFP.Items.Type.CraftingMaterial.Cable, exp:Ingredient_Cell_Jaws_GEN_VARIABLE
+  [53] Ingredient_Cell_ChameleonScales_GEN_VARIABLE : DrdCraftCellComponent (outer BP_CraftController_C) size=46
+        refs: name:IFP.Items.Type.CraftingMaterial.ChameleonScales, exp:Ingredient_Cell_Leather_GEN_VARIABLE
+  [54] Ingredient_Cell_Clay_GEN_VARIABLE : DrdCraftCellComponent (outer BP_CraftController_C) size=70
+        refs: name:IFP.Items.Type.CraftingMaterial.Clay, exp:Ingredient_Cell_Leather_GEN_VARIABLE
+  [55] Ingredient_Cell_Cloth_GEN_VARIABLE : DrdCraftCellComponent (outer BP_CraftController_C) size=70
+        refs: name:IFP.Items.Type.CraftingMaterial.Cloth, exp:Ingredient_Cell_Leather_GEN_VARIABLE, name:CallFunc_IsValid_ReturnValue
+  [56] Ingredient_Cell_CoralFiber_GEN_VARIABLE : DrdCraftCellComponent (outer BP_CraftController_C) size=70
+        refs: name:IFP.Items.Type.CraftingMaterial.CoralFiber, exp:Ingredient_Cell_Leather_GEN_VARIABLE, name:CallFunc_IsReadyForUse_bOut
+  [57] Ingredient_Cell_FishFleshType1_GEN_VARIABLE : DrdCraftCellComponent (outer BP_CraftController_C) size=70
+        refs: name:IFP.Items.Type.CraftingMaterial.FishFleshType1, exp:Ingredient_Cell_Leather_GEN_VARIABLE, name:CallFunc_IsValid_ReturnValue
+  [58] Ingredient_Cell_FishFleshType3_GEN_VARIABLE : DrdCraftCellComponent (outer BP_CraftController_C) size=70
+        refs: name:IFP.Items.Type.CraftingMaterial.FishFleshType2, exp:Ingredient_Cell_Leather_GEN_VARIABLE, name:CallFunc_IsValid_ReturnValue
+  [59] Ingredient_Cell_Gears_GEN_VARIABLE : DrdCraftCellComponent (outer BP_CraftController_C) size=46
+        refs: name:IFP.Items.Type.CraftingMaterial.Gear, exp:Ingredient_Cell_Leather_GEN_VARIABLE
+  [60] Ingredient_Cell_Gunpowder_GEN_VARIABLE : DrdCraftCellComponent (outer BP_CraftController_C) size=70
+        refs: name:IFP.Items.Type.CraftingMaterial.Gunpowder, exp:Ingredient_Cell_Leather_GEN_VARIABLE
+  [61] Ingredient_Cell_GutsType3_GEN_VARIABLE : DrdCraftCellComponent (outer BP_CraftController_C) size=70
+        refs: name:IFP.Items.Type.CraftingMaterial.GutsType3, exp:Ingredient_Cell_Leather_GEN_VARIABLE, name:CallFunc_IsValid_ReturnValue
+  [62] Ingredient_Cell_Jaws_GEN_VARIABLE : DrdCraftCellComponent (outer BP_CraftController_C) size=70
+        refs: name:IFP.Items.Type.CraftingMaterial.Jaws, exp:Ingredient_Cell_Leather_GEN_VARIABLE, name:CallFunc_IsValid_ReturnValue
+  [63] Ingredient_Cell_Leather_GEN_VARIABLE : DrdCraftCellComponent (outer BP_CraftController_C) size=70
+        refs: name:IFP.Items.Type.CraftingMaterial.Leather, exp:Ingredient_Cell_Leather_GEN_VARIABLE, name:CallFunc_IsValid_ReturnValue
+  [64] Ingredient_Cell_Leeches_GEN_VARIABLE : DrdCraftCellComponent (outer BP_CraftController_C) size=46
+        refs: name:IFP.Items.Type.CraftingMaterial.Leeches, exp:Ingredient_Cell_Jaws_GEN_VARIABLE, exp:Ingredient_Cell_Leather_GEN_VARIABLE
+  [65] Ingredient_Cell_Lily_GEN_VARIABLE : DrdCraftCellComponent (outer BP_CraftController_C) size=70
+        refs: name:IFP.Items.Type.CraftingMaterial.Lily, exp:Ingredient_Cell_Leather_GEN_VARIABLE, name:CallFunc_IsValid_ReturnValue
+  [66] Ingredient_Cell_MetalScrap_GEN_VARIABLE : DrdCraftCellComponent (outer BP_CraftController_C) size=46
+        refs: name:IFP.Items.Type.CraftingMaterial.MetalScrap, exp:Ingredient_Cell_Leather_GEN_VARIABLE
+  [67] Ingredient_Cell_MetalScrapType2_GEN_VARIABLE : DrdCraftCellComponent (outer BP_CraftController_C) size=46
+        refs: name:IFP.Items.Type.CraftingMaterial.MetalScrapType2, exp:Ingredient_Cell_Leather_GEN_VARIABLE
+  [68] Ingredient_Cell_MetalScrapType3_GEN_VARIABLE : DrdCraftCellComponent (outer BP_CraftController_C) size=70
+        refs: name:IFP.Items.Type.CraftingMaterial.MetalScrapType3, exp:Ingredient_Cell_Leather_GEN_VARIABLE, obj:/Game/Dreadmoor/InventoryFramework/Components/BP_InventoryComponent.BP_InventoryComponent_C, name:CallFunc_BreakHitResult_PhysMat
+  [69] Ingredient_Cell_Microchip_GEN_VARIABLE : DrdCraftCellComponent (outer BP_CraftController_C) size=72
+        refs: name:IFP.Items.Type.CraftingMaterial.Microchip, exp:Ingredient_Cell_Jaws_GEN_VARIABLE
+  [70] Ingredient_Cell_Rope_GEN_VARIABLE : DrdCraftCellComponent (outer BP_CraftController_C) size=70
+        refs: name:IFP.Items.Type.CraftingMaterial.Rope, exp:Ingredient_Cell_Leather_GEN_VARIABLE, exp:InpActEvt_IA_Crafting_Start_K2Node_EnhancedInputActionEvent_2, name:CallFunc_IsValid_ReturnValue
+  [71] Ingredient_Cell_Rubber_GEN_VARIABLE : DrdCraftCellComponent (outer BP_CraftController_C) size=94
+        refs: name:IFP.Items.Type.CraftingMaterial.Rubber, exp:Ingredient_Cell_Leather_GEN_VARIABLE, name:CallFunc_IsValid_ReturnValue, exp:Ingredient_Cell_Jaws_GEN_VARIABLE
+  [72] Ingredient_Cell_Tentacle_GEN_VARIABLE : DrdCraftCellComponent (outer BP_CraftController_C) size=34
+        refs: exp:Ingredient_Cell_Leather_GEN_VARIABLE
+  [73] Ingredient_Cell_Wire_GEN_VARIABLE : DrdCraftCellComponent (outer BP_CraftController_C) size=70
+        refs: name:IFP.Items.Type.CraftingMaterial.Wire, exp:Ingredient_Cell_Leather_GEN_VARIABLE
+  [74] PileSequencePlayer : DrdLevelSequencePlayerComponent (outer BP_CraftPile_Alcohol_GEN_VARIABLE_BP_CraftPile_Alcohol_C_CAT) size=10
+        refs: name:ElapsedTime
+  [75] PileSequencePlayer : DrdLevelSequencePlayerComponent (outer BP_CraftPile_Battery_GEN_VARIABLE_BP_CraftPile_Battery_C_CAT) size=10
+        refs: name:ElapsedTime
+  [76] PileSequencePlayer : DrdLevelSequencePlayerComponent (outer BP_CraftPile_BonePlate_GEN_VARIABLE_BP_CraftPile_BonePlate_C_CAT) size=10
+        refs: name:ElapsedTime
+  [77] PileSequencePlayer : DrdLevelSequencePlayerComponent (outer BP_CraftPile_Cable_GEN_VARIABLE_BP_CraftPile_Cable_C_CAT) size=10
+        refs: name:ElapsedTime
+  [78] PileSequencePlayer : DrdLevelSequencePlayerComponent (outer BP_CraftPile_ChameleonScales_GEN_VARIABLE_BP_CraftPile_ChameleonScales_C_CAT) size=10
+        refs: name:ElapsedTime
+  [79] PileSequencePlayer : DrdLevelSequencePlayerComponent (outer BP_CraftPile_Gunpowder1_GEN_VARIABLE_BP_CraftPile_Clay_C_CAT) size=10
+        refs: name:ElapsedTime
+  [80] PileSequencePlayer : DrdLevelSequencePlayerComponent (outer BP_CraftPile_FishFleshType1_GEN_VARIABLE_BP_CraftPile_FishFleshType1_C_CAT) size=10
+        refs: name:ElapsedTime
+  [81] PileSequencePlayer : DrdLevelSequencePlayerComponent (outer BP_CraftPile_FishFleshType3_GEN_VARIABLE_BP_CraftPile_FishFleshType2_OnTable_C_CAT) size=10
+        refs: name:ElapsedTime
+  [82] PileSequencePlayer : DrdLevelSequencePlayerComponent (outer BP_CraftPile_Gear_GEN_VARIABLE_BP_CraftPile_Gear_C_CAT) size=10
+        refs: name:ElapsedTime
+  [83] PileSequencePlayer : DrdLevelSequencePlayerComponent (outer BP_CraftPile_Gunpowder_GEN_VARIABLE_BP_CraftPile_Gunpowder_C_CAT) size=10
+        refs: name:ElapsedTime
+  [84] PileSequencePlayer : DrdLevelSequencePlayerComponent (outer BP_CraftPile_GutsType1_GEN_VARIABLE_BP_Craft_Pile_Jaws_C_CAT) size=10
+        refs: name:ElapsedTime
+  [85] PileSequencePlayer : DrdLevelSequencePlayerComponent (outer BP_CraftPile_GutsType3_GEN_VARIABLE_BP_CraftPile_GutsType3_C_CAT) size=10
+        refs: name:ElapsedTime
+  [86] PileSequencePlayer : DrdLevelSequencePlayerComponent (outer BP_CraftPile_Leather_GEN_VARIABLE_BP_CraftPile_Leather_C_CAT) size=10
+        refs: name:ElapsedTime
+  [87] PileSequencePlayer : DrdLevelSequencePlayerComponent (outer BP_CraftPile_Leeches_GEN_VARIABLE_BP_Craft_Pile_Leeches_C_CAT) size=10
+        refs: name:ElapsedTime
+  [88] PileSequencePlayer : DrdLevelSequencePlayerComponent (outer BP_CraftPile_Lily_GEN_VARIABLE_BP_CraftPile_Lily_C_CAT) size=10
+        refs: name:ElapsedTime
+  [89] PileSequencePlayer : DrdLevelSequencePlayerComponent (outer BP_CraftPile_MetalScrap_GEN_VARIABLE_BP_CraftPile_MetalScrap_C_CAT) size=10
+        refs: name:ElapsedTime
+  [90] PileSequencePlayer : DrdLevelSequencePlayerComponent (outer BP_CraftPile_MetalScrapType2_GEN_VARIABLE_BP_CraftPile_MetalScrapType2_C_CAT) size=10
+        refs: name:ElapsedTime
+  [91] PileSequencePlayer : DrdLevelSequencePlayerComponent (outer BP_CraftPile_MetalScrapType3_GEN_VARIABLE_BP_CraftPile_MetalScrapType3_C_CAT) size=10
+        refs: name:ElapsedTime
+  [92] PileSequencePlayer : DrdLevelSequencePlayerComponent (outer BP_CraftPile_Microchip_GEN_VARIABLE_BP_CraftPile_Microchip_C_CAT) size=10
+        refs: name:ElapsedTime
+  [93] PileSequencePlayer : DrdLevelSequencePlayerComponent (outer BP_CraftPile_Rope_GEN_VARIABLE_BP_CraftPile_Rope_C_CAT) size=10
+        refs: name:ElapsedTime
+  [94] PileSequencePlayer : DrdLevelSequencePlayerComponent (outer BP_CraftPile_Rubber_GEN_VARIABLE_BP_Craft_Pile_Rubber_C_CAT) size=10
+        refs: name:ElapsedTime
+  [95] PileSequencePlayer : DrdLevelSequencePlayerComponent (outer BP_CraftPile_Tentacle_GEN_VARIABLE_BP_CraftPile_Tentacle_C_CAT) size=10
+        refs: name:ElapsedTime
+  [96] EnhancedInputActionDelegateBinding_0 : EnhancedInputActionDelegateBinding (outer BP_CraftController_C) size=70
+        refs: exp:BP_CraftPile_Rubber_GEN_VARIABLE_BP_Craft_Pile_Rubber_C_CAT, obj:/Game/Dreadmoor/Core/Input/Crafting/IA_Crafting_Click.IA_Crafting_Click, obj:/Game/Dreadmoor/Core/Input/Crafting/IA_Crafting_Start.IA_Crafting_Start, exp:SCS_Node_53, exp:BP_CraftPile_Leeches_GEN_VARIABLE_BP_Craft_Pile_Leeches_C_CAT
+  [172] SceneComponent : SceneComponent (outer BP_CraftPile_Alcohol_GEN_VARIABLE_BP_CraftPile_Alcohol_C_CAT) size=10
+        refs: name:IFP.Items.Type.CraftingMaterial.Battery
+  [173] SceneComponent : SceneComponent (outer BP_CraftPile_Battery_GEN_VARIABLE_BP_CraftPile_Battery_C_CAT) size=10
+        refs: name:IFP.Items.Type.CraftingMaterial.Battery
+  [174] SceneComponent : SceneComponent (outer BP_CraftPile_BonePlate_GEN_VARIABLE_BP_CraftPile_BonePlate_C_CAT) size=10
+        refs: name:IFP.Items.Type.CraftingMaterial.Battery
+  [175] SceneComponent : SceneComponent (outer BP_CraftPile_Cable_GEN_VARIABLE_BP_CraftPile_Cable_C_CAT) size=10
+        refs: name:IFP.Items.Type.CraftingMaterial.Battery
+  [176] SceneComponent : SceneComponent (outer BP_CraftPile_ChameleonScales_GEN_VARIABLE_BP_CraftPile_ChameleonScales_C_CAT) size=10
+        refs: name:IFP.Items.Type.CraftingMaterial.Battery
+  [177] SceneComponent : SceneComponent (outer BP_CraftPile_Gunpowder1_GEN_VARIABLE_BP_CraftPile_Clay_C_CAT) size=10
+        refs: name:IFP.Items.Type.CraftingMaterial.Battery
+  [178] SceneComponent : SceneComponent (outer BP_CraftPile_FishFleshType1_GEN_VARIABLE_BP_CraftPile_FishFleshType1_C_CAT) size=10
+        refs: name:IFP.Items.Type.CraftingMaterial.Battery
+  [179] SceneComponent : SceneComponent (outer BP_CraftPile_FishFleshType3_GEN_VARIABLE_BP_CraftPile_FishFleshType2_OnTable_C_CAT) size=10
+        refs: name:IFP.Items.Type.CraftingMaterial.Battery
+  [180] SceneComponent : SceneComponent (outer BP_CraftPile_Gear_GEN_VARIABLE_BP_CraftPile_Gear_C_CAT) size=10
+        refs: name:IFP.Items.Type.CraftingMaterial.Battery
+  [181] SceneComponent : SceneComponent (outer BP_CraftPile_Gunpowder_GEN_VARIABLE_BP_CraftPile_Gunpowder_C_CAT) size=10
+        refs: name:IFP.Items.Type.CraftingMaterial.Battery
+  [182] SceneComponent : SceneComponent (outer BP_CraftPile_GutsType1_GEN_VARIABLE_BP_Craft_Pile_Jaws_C_CAT) size=10
+        refs: name:IFP.Items.Type.CraftingMaterial.Battery
+  [183] SceneComponent : SceneComponent (outer BP_CraftPile_GutsType3_GEN_VARIABLE_BP_CraftPile_GutsType3_C_CAT) size=10
+        refs: name:IFP.Items.Type.CraftingMaterial.Battery
+  [184] SceneComponent : SceneComponent (outer BP_CraftPile_Leather_GEN_VARIABLE_BP_CraftPile_Leather_C_CAT) size=10
+        refs: name:IFP.Items.Type.CraftingMaterial.Battery
+  [185] SceneComponent : SceneComponent (outer BP_CraftPile_Leeches_GEN_VARIABLE_BP_Craft_Pile_Leeches_C_CAT) size=10
+        refs: name:IFP.Items.Type.CraftingMaterial.Battery
+  [186] SceneComponent : SceneComponent (outer BP_CraftPile_Lily_GEN_VARIABLE_BP_CraftPile_Lily_C_CAT) size=10
+        refs: name:IFP.Items.Type.CraftingMaterial.Battery
+  [187] SceneComponent : SceneComponent (outer BP_CraftPile_MetalScrap_GEN_VARIABLE_BP_CraftPile_MetalScrap_C_CAT) size=10
+        refs: name:IFP.Items.Type.CraftingMaterial.Battery
+  [188] SceneComponent : SceneComponent (outer BP_CraftPile_MetalScrapType2_GEN_VARIABLE_BP_CraftPile_MetalScrapType2_C_CAT) size=10
+        refs: name:IFP.Items.Type.CraftingMaterial.Battery
+  [189] SceneComponent : SceneComponent (outer BP_CraftPile_MetalScrapType3_GEN_VARIABLE_BP_CraftPile_MetalScrapType3_C_CAT) size=10
+        refs: name:IFP.Items.Type.CraftingMaterial.Battery
+  [190] SceneComponent : SceneComponent (outer BP_CraftPile_Microchip_GEN_VARIABLE_BP_CraftPile_Microchip_C_CAT) size=10
+        refs: name:IFP.Items.Type.CraftingMaterial.Battery
+  [191] SceneComponent : SceneComponent (outer BP_CraftPile_Rope_GEN_VARIABLE_BP_CraftPile_Rope_C_CAT) size=10
+        refs: name:IFP.Items.Type.CraftingMaterial.Battery
+  [192] SceneComponent : SceneComponent (outer BP_CraftPile_Rubber_GEN_VARIABLE_BP_Craft_Pile_Rubber_C_CAT) size=10
+        refs: name:IFP.Items.Type.CraftingMaterial.Battery
+  [193] SceneComponent : SceneComponent (outer BP_CraftPile_Tentacle_GEN_VARIABLE_BP_CraftPile_Tentacle_C_CAT) size=10
+        refs: name:IFP.Items.Type.CraftingMaterial.Battery
+  [194] CraftedItemPreview_GEN_VARIABLE : SceneComponent (outer BP_CraftController_C) size=34
+        refs: exp:BP_CraftPile_Leeches_GEN_VARIABLE_BP_Craft_Pile_Leeches_C_CAT, exp:Ingredient_Cell_Leather_GEN_VARIABLE
+  [195] DefaultSceneRoot_GEN_VARIABLE : SceneComponent (outer BP_CraftController_C) size=11
+        refs: name:CraftingCount
+  [196] IngredientCells_GEN_VARIABLE : SceneComponent (outer BP_CraftController_C) size=11
+        refs: name:CraftingCount
+  [197] Props_GEN_VARIABLE : SceneComponent (outer BP_CraftController_C) size=10
+        refs: name:IFP.Items.Type.CraftingMaterial.Battery
+  [198] SelectedCell1_GEN_VARIABLE : SceneComponent (outer BP_CraftController_C) size=34
+        refs: exp:BP_CraftPile_Leeches_GEN_VARIABLE_BP_Craft_Pile_Leeches_C_CAT, exp:Ingredient_Cell_Leather_GEN_VARIABLE
+  [199] SelectedCell2_GEN_VARIABLE : SceneComponent (outer BP_CraftController_C) size=34
+        refs: exp:Ingredient_Cell_Leather_GEN_VARIABLE
+  [200] SelectedCell3_GEN_VARIABLE : SceneComponent (outer BP_CraftController_C) size=34
+        refs: exp:Ingredient_Cell_Leather_GEN_VARIABLE
+  [201] SelectedCell4_GEN_VARIABLE : SceneComponent (outer BP_CraftController_C) size=34
+        refs: exp:Ingredient_Cell_Leather_GEN_VARIABLE
+  [202] SelectedCell5_GEN_VARIABLE : SceneComponent (outer BP_CraftController_C) size=34
+        refs: exp:Ingredient_Cell_Leather_GEN_VARIABLE
+  [203] SelectedCell6_GEN_VARIABLE : SceneComponent (outer BP_CraftController_C) size=34
+        refs: exp:Ingredient_Cell_Leather_GEN_VARIABLE
+  [204] SelectedCell7_GEN_VARIABLE : SceneComponent (outer BP_CraftController_C) size=34
+        refs: exp:Ingredient_Cell_Leather_GEN_VARIABLE
+  [205] SelectedCells_GEN_VARIABLE : SceneComponent (outer BP_CraftController_C) size=10
+        refs: name:IFP.Items.Type.CraftingMaterial.Battery
+  [206] SCS_Node_0 : SCS_Node (outer SimpleConstructionScript_0) size=66
+        refs: obj:/Script/Engine.SceneComponent, exp:DefaultSceneRoot_GEN_VARIABLE, exp:Default__BP_CraftController_C, exp:SCS_Node_2, exp:SCS_Node_32, exp:SCS_Node_3, exp:SCS_Node_34, exp:SCS_Node_7, name:DefaultSceneRoot
+  [207] SCS_Node_1 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Dreadmoor.DrdCraftCellComponent, exp:Ingredient_Cell_Gunpowder_GEN_VARIABLE, exp:SCS_Node_55, name:Ingredient_Cell_Gunpowder
+  [208] SCS_Node_10 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Dreadmoor.DrdCraftCellComponent, exp:Ingredient_Cell_Leeches_GEN_VARIABLE, exp:SCS_Node_64, name:Ingredient_Cell_Leeches
+  [209] SCS_Node_11 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Dreadmoor.DrdCraftCellComponent, exp:Ingredient_Cell_GutsType3_GEN_VARIABLE, exp:SCS_Node_65, name:Ingredient_Cell_GutsType3
+  [210] SCS_Node_12 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Dreadmoor.DrdCraftCellComponent, exp:Ingredient_Cell_Leather_GEN_VARIABLE, exp:SCS_Node_56, name:Ingredient_Cell_Leather
+  [211] SCS_Node_13 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Dreadmoor.DrdCraftCellComponent, exp:Ingredient_Cell_Microchip_GEN_VARIABLE, exp:SCS_Node_58, name:Ingredient_Cell_Microchip
+  [212] SCS_Node_14 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Dreadmoor.DrdCraftCellComponent, exp:Ingredient_Cell_Rope_GEN_VARIABLE, exp:SCS_Node_52, name:Ingredient_Cell_Rope
+  [213] SCS_Node_15 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Dreadmoor.DrdCraftCellComponent, exp:Ingredient_Cell_Alcohol_GEN_VARIABLE, exp:SCS_Node_50, name:Ingredient_Cell_Alcohol
+  [214] SCS_Node_16 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Dreadmoor.DrdCraftCellComponent, exp:Ingredient_Cell_Battery_GEN_VARIABLE, exp:SCS_Node_53, name:Ingredient_Cell_Battery
+  [215] SCS_Node_17 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Dreadmoor.DrdCraftCellComponent, exp:Ingredient_Cell_Rubber_GEN_VARIABLE, exp:SCS_Node_54, name:Ingredient_Cell_Rubber
+  [216] SCS_Node_18 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Dreadmoor.DrdCraftCellComponent, exp:Ingredient_Cell_Cable_GEN_VARIABLE, exp:SCS_Node_39, name:Ingredient_Cell_Cable
+  [217] SCS_Node_19 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Dreadmoor.DrdCraftCellComponent, exp:Ingredient_Cell_Clay_GEN_VARIABLE, exp:SCS_Node_21, name:Ingredient_Cell_Clay
+  [218] SCS_Node_2 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.CameraComponent, exp:Camera_GEN_VARIABLE, name:Camera
+  [219] SCS_Node_20 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Dreadmoor.DrdCraftCellComponent, exp:Ingredient_Cell_Lily_GEN_VARIABLE, exp:SCS_Node_22, name:Ingredient_Cell_Lily
+  [220] SCS_Node_21 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:BP_CraftPile_Clay_GEN_VARIABLE, name:BP_CraftPile_Clay
+  [221] SCS_Node_22 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:BP_CraftPile_Lily_GEN_VARIABLE, name:BP_CraftPile_Lily
+  [222] SCS_Node_23 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Dreadmoor.DrdCraftCellComponent, exp:Ingredient_Cell_BonePlate_GEN_VARIABLE, exp:SCS_Node_24, name:Ingredient_Cell_BonePlate
+  [223] SCS_Node_24 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:BP_CraftPile_BonePlate_GEN_VARIABLE, name:BP_CraftPile_BonePlate
+  [224] SCS_Node_25 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Dreadmoor.DrdCraftCellComponent, exp:Ingredient_Cell_MetalScrap_GEN_VARIABLE, exp:SCS_Node_60, name:Ingredient_Cell_MetalScrap
+  [225] SCS_Node_26 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Dreadmoor.DrdCraftCellComponent, exp:Ingredient_Cell_MetalScrapType2_GEN_VARIABLE, exp:SCS_Node_61, name:Ingredient_Cell_MetalScrapType2
+  [226] SCS_Node_27 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Dreadmoor.DrdCraftCellComponent, exp:Ingredient_Cell_MetalScrapType3_GEN_VARIABLE, exp:SCS_Node_62, name:Ingredient_Cell_MetalScrapType3
+  [227] SCS_Node_28 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Dreadmoor.DrdCraftCellComponent, exp:Ingredient_Cell_FishFleshType1_GEN_VARIABLE, exp:SCS_Node_66, name:Ingredient_Cell_FishFleshType1
+  [228] SCS_Node_29 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Dreadmoor.DrdCraftCellComponent, exp:Ingredient_Cell_ChameleonScales_GEN_VARIABLE, exp:SCS_Node_68, name:Ingredient_Cell_ChameleonScales
+  [229] SCS_Node_3 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SceneComponent, exp:CraftedItemPreview_GEN_VARIABLE, name:CraftedItemPreview
+  [230] SCS_Node_30 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Dreadmoor.DrdCraftCellComponent, exp:Ingredient_Cell_FishFleshType3_GEN_VARIABLE, exp:SCS_Node_67, name:Ingredient_Cell_FishFleshType3
+  [231] SCS_Node_31 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Dreadmoor.DrdCraftCellComponent, exp:Ingredient_Cell_Gears_GEN_VARIABLE, exp:SCS_Node_40, name:Ingredient_Cell_Gears
+  [232] SCS_Node_32 : SCS_Node (outer SimpleConstructionScript_0) size=150
+        refs: obj:/Script/Engine.SceneComponent, exp:IngredientCells_GEN_VARIABLE, exp:Camera_GEN_VARIABLE, exp:SCS_Node_15, exp:SCS_Node_16, exp:SCS_Node_17, exp:SCS_Node_18, exp:SCS_Node_30, exp:SCS_Node_25, exp:SCS_Node_26, exp:SCS_Node_27, exp:SCS_Node_28, exp:SCS_Node_29, exp:SCS_Node_31, exp:SCS_Node_12, exp:SCS_Node_14, exp:SCS_Node_4, exp:SCS_Node_6, exp:SCS_Node_33, exp:SCS_Node_13, exp:SCS_Node_1, exp:SCS_Node_9, exp:SCS_Node_10, exp:SCS_Node_11, exp:SCS_Node_35, exp:SCS_Node_57, exp:SCS_Node_19, exp:SCS_Node_20, exp:SCS_Node_23, name:IngredientCells
+  [233] SCS_Node_33 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Dreadmoor.DrdCraftCellComponent, exp:Ingredient_Cell_CoralFiber_GEN_VARIABLE, exp:SCS_Node_47, name:Ingredient_Cell_CoralFiber
+  [234] SCS_Node_34 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, name:EditorOnlyMesh
+  [235] SCS_Node_35 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Dreadmoor.DrdCraftCellComponent, exp:Ingredient_Cell_Cloth_GEN_VARIABLE, exp:SCS_Node_36, name:Ingredient_Cell_Cloth
+  [236] SCS_Node_36 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, name:BP_CraftPile_Cloth
+  [237] SCS_Node_37 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:BP_CraftPile_Tentacle_GEN_VARIABLE, name:BP_CraftPile_Tentacle
+  [238] SCS_Node_38 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SceneComponent, exp:SelectedCell1_GEN_VARIABLE, name:SelectedCell1
+  [239] SCS_Node_39 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:BP_CraftPile_Cable_GEN_VARIABLE, name:BP_CraftPile_Cable
+  [240] SCS_Node_4 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Dreadmoor.DrdCraftCellComponent, exp:Ingredient_Cell_Tentacle_GEN_VARIABLE, exp:SCS_Node_37, name:Ingredient_Cell_Tentacle
+  [241] SCS_Node_40 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:BP_CraftPile_Gear_GEN_VARIABLE, name:BP_CraftPile_Gear
+  [242] SCS_Node_41 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SceneComponent, exp:SelectedCell2_GEN_VARIABLE, name:SelectedCell2
+  [243] SCS_Node_42 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:SM_Workbench_SmallBox_GEN_VARIABLE, name:SM_Workbench_SmallBox
+  [244] SCS_Node_43 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:SM_Workbench_LongBox_GEN_VARIABLE, name:SM_Workbench_LongBox
+  [245] SCS_Node_44 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:SM_Workbench_BigBox_GEN_VARIABLE, name:SM_Workbench_BigBox
+  [246] SCS_Node_45 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SceneComponent, exp:SelectedCell3_GEN_VARIABLE, name:SelectedCell3
+  [247] SCS_Node_46 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:SM_Workbench_MetalBox_GEN_VARIABLE, name:SM_Workbench_MetalBox
+  [248] SCS_Node_47 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, name:BP_CraftPile_CoralFiber
+  [249] SCS_Node_48 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, name:BP_CraftPile_Wire
+  [250] SCS_Node_49 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SceneComponent, exp:SelectedCell4_GEN_VARIABLE, name:SelectedCell4
+  [251] SCS_Node_5 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:RecipesBook_GEN_VARIABLE, name:RecipesBook
+  [252] SCS_Node_50 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:BP_CraftPile_Alcohol_GEN_VARIABLE, name:BP_CraftPile_Alcohol
+  [253] SCS_Node_51 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SceneComponent, exp:SelectedCell5_GEN_VARIABLE, name:SelectedCell5
+  [254] SCS_Node_52 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:BP_CraftPile_Rope_GEN_VARIABLE, name:BP_CraftPile_Rope
+  [255] SCS_Node_53 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:BP_CraftPile_Battery_GEN_VARIABLE, name:BP_CraftPile_Battery
+  [256] SCS_Node_54 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:BP_CraftPile_Rubber_GEN_VARIABLE, name:BP_CraftPile_Rubber
+  [257] SCS_Node_55 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:BP_CraftPile_Gunpowder_GEN_VARIABLE, name:BP_CraftPile_Gunpowder
+  [258] SCS_Node_56 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:BP_CraftPile_Leather_GEN_VARIABLE, name:BP_CraftPile_Leather
+  [259] SCS_Node_57 : SCS_Node (outer SimpleConstructionScript_0) size=66
+        refs: obj:/Script/Engine.SceneComponent, exp:Props_GEN_VARIABLE, exp:Default__BP_CraftController_C, exp:SCS_Node_44, exp:SCS_Node_43, exp:SCS_Node_42, exp:SCS_Node_5, exp:SCS_Node_46, name:Props
+  [260] SCS_Node_58 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:BP_CraftPile_Microchip_GEN_VARIABLE, name:BP_CraftPile_Microchip
+  [261] SCS_Node_59 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SceneComponent, exp:SelectedCell6_GEN_VARIABLE, name:SelectedCell6
+  [262] SCS_Node_6 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Dreadmoor.DrdCraftCellComponent, exp:Ingredient_Cell_Wire_GEN_VARIABLE, exp:SCS_Node_48, name:Ingredient_Cell_Wire
+  [263] SCS_Node_60 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:BP_CraftPile_MetalScrap_GEN_VARIABLE, name:BP_CraftPile_MetalScrap
+  [264] SCS_Node_61 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:BP_CraftPile_MetalScrapType2_GEN_VARIABLE, name:BP_CraftPile_MetalScrapType2
+  [265] SCS_Node_62 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:BP_CraftPile_MetalScrapType3_GEN_VARIABLE, name:BP_CraftPile_MetalScrapType3
+  [266] SCS_Node_63 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:BP_CraftPile_GutsType1_GEN_VARIABLE, name:BP_CraftPile_GutsType1
+  [267] SCS_Node_64 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:BP_CraftPile_Leeches_GEN_VARIABLE, name:BP_CraftPile_Leeches
+  [268] SCS_Node_65 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:BP_CraftPile_GutsType3_GEN_VARIABLE, name:BP_CraftPile_GutsType3
+  [269] SCS_Node_66 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:BP_CraftPile_FishFleshType1_GEN_VARIABLE, name:BP_CraftPile_FishFleshType1
+  [270] SCS_Node_67 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:BP_CraftPile_FishFleshType3_GEN_VARIABLE, name:BP_CraftPile_FishFleshType3
+  [271] SCS_Node_68 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:BP_CraftPile_ChameleonScales_GEN_VARIABLE, name:BP_CraftPile_ChameleonScales
+  [272] SCS_Node_69 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SceneComponent, exp:SelectedCell7_GEN_VARIABLE, name:SelectedCell7
+  [273] SCS_Node_7 : SCS_Node (outer SimpleConstructionScript_0) size=74
+        refs: obj:/Script/Engine.SceneComponent, exp:SelectedCells_GEN_VARIABLE, exp:BP_CraftPile_Battery_GEN_VARIABLE_BP_CraftPile_Battery_C_CAT, exp:SCS_Node_38, exp:SCS_Node_41, exp:SCS_Node_45, exp:SCS_Node_49, exp:SCS_Node_51, exp:SCS_Node_59, exp:SCS_Node_69, name:SelectedCells
+  [274] SCS_Node_8 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Game/Dreadmoor/InventoryFramework/Components/BP_InventoryComponent.BP_InventoryComponent_C, exp:BP_InventoryComponent_GEN_VARIABLE, name:BP_InventoryComponent
+  [275] SCS_Node_9 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Dreadmoor.DrdCraftCellComponent, exp:Ingredient_Cell_Jaws_GEN_VARIABLE, exp:SCS_Node_63, name:Ingredient_Cell_Jaws
+  [276] SimpleConstructionScript_0 : SimpleConstructionScript (outer BP_CraftController_C) size=306
+        refs: exp:SCS_Node_0, exp:SCS_Node_8, exp:Ingredient_Cell_Microchip_GEN_VARIABLE, exp:SCS_Node_2, exp:SCS_Node_32, exp:SCS_Node_3, exp:SCS_Node_34, exp:SCS_Node_15, exp:SCS_Node_16, exp:SCS_Node_17, exp:SCS_Node_18, exp:SCS_Node_30, exp:SCS_Node_25, exp:SCS_Node_26, exp:SCS_Node_27, exp:SCS_Node_28, exp:SCS_Node_29, exp:SCS_Node_31, exp:SCS_Node_12, exp:SCS_Node_14, exp:SCS_Node_4, exp:SCS_Node_6, exp:SCS_Node_33, exp:SCS_Node_13, exp:SCS_Node_1, exp:SCS_Node_9, exp:SCS_Node_10, exp:SCS_Node_11, exp:SCS_Node_35, exp:SCS_Node_36, exp:SCS_Node_47, exp:SCS_Node_48, exp:SCS_Node_39, exp:SCS_Node_40, exp:SCS_Node_50, exp:SCS_Node_52, exp:SCS_Node_53, exp:SCS_Node_54, exp:SCS_Node_55, exp:SCS_Node_56, exp:SCS_Node_57, exp:SCS_Node_44, exp:SCS_Node_43, exp:SCS_Node_42, exp:SCS_Node_5, exp:SCS_Node_58, exp:SCS_Node_60, exp:SCS_Node_61, exp:SCS_Node_62, exp:SCS_Node_63, exp:SCS_Node_64, exp:SCS_Node_65, exp:SCS_Node_66, exp:SCS_Node_67, exp:SCS_Node_68, exp:SCS_Node_37, exp:SCS_Node_46, exp:SCS_Node_7, exp:SCS_Node_38, exp:SCS_Node_41
+  [277] RecipesBook_GEN_VARIABLE : StaticMeshComponent (outer BP_CraftController_C) size=110
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/RecipeBook/SM_RecipeBook.SM_RecipeBook, exp:Ingredient_Cell_Leather_GEN_VARIABLE, name:CallFunc_IsValid_ReturnValue, exp:Ingredient_Cell_Jaws_GEN_VARIABLE, name:CraftedPreviewActor
+  [278] SM_Workbench_BigBox_GEN_VARIABLE : StaticMeshComponent (outer BP_CraftController_C) size=102
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Workbench/SM_Workbench_BigBox.SM_Workbench_BigBox, exp:Ingredient_Cell_Leather_GEN_VARIABLE, exp:Ingredient_Cell_Jaws_GEN_VARIABLE, name:CraftedPreviewActor
+  [279] SM_Workbench_LongBox_GEN_VARIABLE : StaticMeshComponent (outer BP_CraftController_C) size=102
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Workbench/SM_Workbench_LongBox.SM_Workbench_LongBox, exp:Ingredient_Cell_Leather_GEN_VARIABLE, exp:Ingredient_Cell_Jaws_GEN_VARIABLE, name:CraftedPreviewActor
+  [280] SM_Workbench_MetalBox_GEN_VARIABLE : StaticMeshComponent (outer BP_CraftController_C) size=80
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Workbench/SM_Workbench_MetalBox.SM_Workbench_MetalBox, exp:Ingredient_Cell_Jaws_GEN_VARIABLE, name:CraftedPreviewActor
+  [281] SM_Workbench_SmallBox_GEN_VARIABLE : StaticMeshComponent (outer BP_CraftController_C) size=80
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Workbench/SM_Workbench_SmallBox.SM_Workbench_SmallBox, exp:Ingredient_Cell_Jaws_GEN_VARIABLE, name:CraftedPreviewActor
+
+## function BindEvents  flags=0x0C020000
+  L0000: if not (bBind) goto L00E5
+  L000E: bind(K2Node_CreateDelegate_OutputDelegate_1, self, 'ItemAdd')
+  L0025: self.PlayerInventory.self.ItemAdded += K2Node_CreateDelegate_OutputDelegate_1
+  L004E: self.BP_InventoryComponent.self.ItemAdded += K2Node_CreateDelegate_OutputDelegate_1
+  L0077: bind(K2Node_CreateDelegate_OutputDelegate, self, 'ItemCountUpdated')
+  L008E: self.BP_InventoryComponent.self.ItemCountUpdated += K2Node_CreateDelegate_OutputDelegate
+  L00B7: self.PlayerInventory.self.ItemCountUpdated += K2Node_CreateDelegate_OutputDelegate
+  L00E0: goto L01B7
+  L00E5: bind(K2Node_CreateDelegate_OutputDelegate_1, self, 'ItemAdd')
+  L00FC: self.PlayerInventory.self.ItemAdded -= K2Node_CreateDelegate_OutputDelegate_1
+  L0125: self.BP_InventoryComponent.self.ItemAdded -= K2Node_CreateDelegate_OutputDelegate_1
+  L014E: bind(K2Node_CreateDelegate_OutputDelegate, self, 'ItemCountUpdated')
+  L0165: self.BP_InventoryComponent.self.ItemCountUpdated -= K2Node_CreateDelegate_OutputDelegate
+  L018E: self.PlayerInventory.self.ItemCountUpdated -= K2Node_CreateDelegate_OutputDelegate
+  L01B7: return
+
+## function BindPlayerInventoryEvents  flags=0x0C020000
+  L0000: if not (bBind) goto L0093
+  L000E: bind(K2Node_CreateDelegate_OutputDelegate_1, self, 'ItemAdd')
+  L0025: self.PlayerInventory.self.ItemAdded += K2Node_CreateDelegate_OutputDelegate_1
+  L004E: bind(K2Node_CreateDelegate_OutputDelegate, self, 'ItemCountUpdated')
+  L0065: self.PlayerInventory.self.ItemCountUpdated += K2Node_CreateDelegate_OutputDelegate
+  L008E: goto L0113
+  L0093: bind(K2Node_CreateDelegate_OutputDelegate_1, self, 'ItemAdd')
+  L00AA: self.PlayerInventory.self.ItemAdded -= K2Node_CreateDelegate_OutputDelegate_1
+  L00D3: bind(K2Node_CreateDelegate_OutputDelegate, self, 'ItemCountUpdated')
+  L00EA: self.PlayerInventory.self.ItemCountUpdated -= K2Node_CreateDelegate_OutputDelegate
+  L0113: return
+
+## function BindTableInventoryEvents  flags=0x0C020000
+  L0000: if not (bBind) goto L0093
+  L000E: bind(K2Node_CreateDelegate_OutputDelegate_1, self, 'ItemAdd')
+  L0025: self.BP_InventoryComponent.self.ItemAdded += K2Node_CreateDelegate_OutputDelegate_1
+  L004E: bind(K2Node_CreateDelegate_OutputDelegate, self, 'ItemCountUpdated')
+  L0065: self.BP_InventoryComponent.self.ItemCountUpdated += K2Node_CreateDelegate_OutputDelegate
+  L008E: goto L0113
+  L0093: bind(K2Node_CreateDelegate_OutputDelegate_1, self, 'ItemAdd')
+  L00AA: self.BP_InventoryComponent.self.ItemAdded -= K2Node_CreateDelegate_OutputDelegate_1
+  L00D3: bind(K2Node_CreateDelegate_OutputDelegate, self, 'ItemCountUpdated')
+  L00EA: self.BP_InventoryComponent.self.ItemCountUpdated -= K2Node_CreateDelegate_OutputDelegate
+  L0113: return
+
+## function BndEvt__BP_CraftController_RecipesBook_K2Node_ComponentBoundEvent_0_ComponentBeginCursorOverSignature__DelegateSignature  flags=0x08000000
+  L0000: frame.K2Node_ComponentBoundEvent_TouchedComponent_2 = TouchedComponent
+  L0012: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(7736)
+  L0021: return
+
+## function BndEvt__BP_CraftController_RecipesBook_K2Node_ComponentBoundEvent_1_ComponentOnReleasedSignature__DelegateSignature  flags=0x08000000
+  L0000: frame.K2Node_ComponentBoundEvent_TouchedComponent = TouchedComponent
+  L0012: frame.K2Node_ComponentBoundEvent_ButtonReleased = ButtonReleased
+  L0024: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(10600)
+  L0033: return
+
+## function BndEvt__BP_CraftController_RecipesBook_K2Node_ComponentBoundEvent_4_ComponentEndCursorOverSignature__DelegateSignature  flags=0x08000000
+  L0000: frame.K2Node_ComponentBoundEvent_TouchedComponent_1 = TouchedComponent
+  L0012: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(8165)
+  L0021: return
+
+## function BP_OnWidgetDeactivated_Event  flags=0x0C000000
+  L0000: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(10055)
+  L000F: return
+
+## function CacheRefs  flags=0x0C020000
+  L0000: K2Node_DynamicCast_AsPlayer_Controller = cast<PlayerController>(Controller)
+  L0024: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsPlayer_Controller
+  L0041: if not (K2Node_DynamicCast_bSuccess) goto L0107
+  L004F: self.PlayerController = K2Node_DynamicCast_AsPlayer_Controller
+  L0062: K2Node_DynamicCast_AsI_Inventory = iface<I_Inventory>(self.PlayerController)
+  L0086: K2Node_DynamicCast_bSuccess_1 = K2Node_DynamicCast_AsI_Inventory
+  L00A3: if not (K2Node_DynamicCast_bSuccess_1) goto L00F7
+  L00B1: K2Node_DynamicCast_AsI_Inventory.GetInventoryComponent(CallFunc_GetInventoryComponent_Component)
+  L00DF: self.PlayerInventory = CallFunc_GetInventoryComponent_Component
+  L00F2: goto L0107
+  L00F7: CallFunc_GetInventoryComponent_Component = null
+  L0102: goto L00DF
+  L0107: return
+
+## function CameraTilt  flags=0x0C820000
+  L0000: CallFunc_GetMousePositionOnViewport_ReturnValue = WidgetLayoutLibrary.GetMousePositionOnViewport(self)
+  L001D: BreakVector2D(self.CamTiltAngles, CallFunc_BreakVector2D_X, CallFunc_BreakVector2D_Y)
+  L0042: BreakVector2D(self.CamTiltAngles, CallFunc_BreakVector2D_X_1, CallFunc_BreakVector2D_Y_1)
+  L0067: CallFunc_GetViewportSize_ReturnValue = Default__WidgetLayoutLibrary.WidgetLayoutLibrary.GetViewportSize(self)
+  L009A: BreakRotator(self.CameraZeroRotation, CallFunc_BreakRotator_Roll, CallFunc_BreakRotator_Pitch, CallFunc_BreakRotator_Yaw)
+  L00C8: BreakVector2D(CallFunc_GetViewportSize_ReturnValue, CallFunc_BreakVector2D_X_2, CallFunc_BreakVector2D_Y_2)
+  L00ED: BreakVector2D(CallFunc_GetMousePositionOnViewport_ReturnValue, CallFunc_BreakVector2D_X_3, CallFunc_BreakVector2D_Y_3)
+  L0112: CallFunc_Divide_DoubleDouble_ReturnValue = Divide_DoubleDouble(CallFunc_BreakVector2D_X_3, CallFunc_BreakVector2D_X_2)
+  L0140: CallFunc_Divide_DoubleDouble_ReturnValue_1 = Divide_DoubleDouble(CallFunc_BreakVector2D_Y_3, CallFunc_BreakVector2D_Y_2)
+  L016E: CallFunc_FClamp_ReturnValue = FClamp(CallFunc_Divide_DoubleDouble_ReturnValue, 0, 1)
+  L01A5: CallFunc_FClamp_ReturnValue_1 = FClamp(CallFunc_Divide_DoubleDouble_ReturnValue_1, 0, 1)
+  L01DC: CallFunc_Multiply_DoubleDouble_ReturnValue = Multiply_DoubleDouble(CallFunc_FClamp_ReturnValue, 2)
+  L020A: CallFunc_Multiply_DoubleDouble_ReturnValue_1 = Multiply_DoubleDouble(CallFunc_FClamp_ReturnValue_1, 2)
+  L0238: CallFunc_Subtract_DoubleDouble_ReturnValue = Subtract_DoubleDouble(CallFunc_Multiply_DoubleDouble_ReturnValue, 1)
+  L0266: CallFunc_Subtract_DoubleDouble_ReturnValue_1 = Subtract_DoubleDouble(CallFunc_Multiply_DoubleDouble_ReturnValue_1, 1)
+  L0294: CallFunc_Multiply_DoubleDouble_ReturnValue_2 = Multiply_DoubleDouble(CallFunc_Subtract_DoubleDouble_ReturnValue, CallFunc_BreakVector2D_X_1)
+  L02C2: CallFunc_Multiply_DoubleDouble_ReturnValue_3 = Multiply_DoubleDouble(CallFunc_Subtract_DoubleDouble_ReturnValue_1, -1)
+  L02F0: CallFunc_Add_DoubleDouble_A_ImplicitCast_1 = CallFunc_BreakRotator_Yaw
+  L030D: CallFunc_Add_DoubleDouble_ReturnValue = Add_DoubleDouble(CallFunc_Add_DoubleDouble_A_ImplicitCast_1, CallFunc_Multiply_DoubleDouble_ReturnValue_2)
+  L033B: CallFunc_Multiply_DoubleDouble_ReturnValue_4 = Multiply_DoubleDouble(CallFunc_Multiply_DoubleDouble_ReturnValue_3, CallFunc_BreakVector2D_Y)
+  L0369: CallFunc_Add_DoubleDouble_A_ImplicitCast = CallFunc_BreakRotator_Pitch
+  L0386: CallFunc_Add_DoubleDouble_ReturnValue_1 = Add_DoubleDouble(CallFunc_Add_DoubleDouble_A_ImplicitCast, CallFunc_Multiply_DoubleDouble_ReturnValue_4)
+  L03B4: CallFunc_MakeRotator_Pitch_ImplicitCast = CallFunc_Add_DoubleDouble_ReturnValue_1
+  L03D1: CallFunc_MakeRotator_Yaw_ImplicitCast = CallFunc_Add_DoubleDouble_ReturnValue
+  L03EE: CallFunc_MakeRotator_ReturnValue = MakeRotator(CallFunc_BreakRotator_Roll, CallFunc_MakeRotator_Pitch_ImplicitCast, CallFunc_MakeRotator_Yaw_ImplicitCast)
+  L0425: self.Camera.SceneComponent.K2_SetRelativeRotation(CallFunc_MakeRotator_ReturnValue, false, CallFunc_K2_SetRelativeRotation_SweepHitResult, false)
+  L0459: return
+
+## function CancelCraftHold  flags=0x0C020000
+  L0000: self.bIsCrafting = false
+  L000B: self.TimeToCraftLeft = 0
+  L0026: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(self.CraftHUDWidget)
+  L0043: if not (CallFunc_IsValid_ReturnValue) goto L0094
+  L0051: self.CraftHUDWidget.self.WBP_InputHintFilled.SetValue(0)
+  L0094: CallFunc_IsValid_ReturnValue_1 = KismetSystemLibrary.IsValid(self.CraftSoundInstance)
+  L00B1: if not (CallFunc_IsValid_ReturnValue_1) goto L00E3
+  L00BF: self.CraftSoundInstance.Stop()
+  L00E3: return
+
+## function Cleanup  flags=0x0C020000
+  L0000: BindPlayerInventoryEvents(false)
+  L000F: BindTableInventoryEvents(false)
+  L001E: DestroyPiles()
+  L002C: ReturnItems()
+  L003A: Default__CommonUIExtensions.CommonUIExtensions.PopContentFromLayer(self.CraftHUDWidget)
+  L0063: K2_DestroyActor()
+  L0071: return
+
+## function CleanupEditorOnlyPiles  flags=0x0C820000
+  L0000: push L0509
+  L0005: Temp_int_Loop_Counter_Variable = 0
+  L001C: Temp_int_Array_Index_Variable_1 = 0
+  L0033: CallFunc_K2_GetComponentsByClass_ReturnValue = Actor.K2_GetComponentsByClass(DrdCraftCellComponent)
+  L0058: CallFunc_Array_Length_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(CallFunc_K2_GetComponentsByClass_ReturnValue)
+  L0093: CallFunc_Less_IntInt_ReturnValue = Less_IntInt(Temp_int_Loop_Counter_Variable, CallFunc_Array_Length_ReturnValue)
+  L00B9: if not (CallFunc_Less_IntInt_ReturnValue) pop-flow
+  L00C3: Temp_int_Array_Index_Variable_1 = Temp_int_Loop_Counter_Variable
+  L00DE: push L0475
+  L00E3: CallFunc_K2_GetComponentsByClass_ReturnValue = Actor.K2_GetComponentsByClass(DrdCraftCellComponent)
+  L0108: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_K2_GetComponentsByClass_ReturnValue, Temp_int_Array_Index_Variable_1, CallFunc_Array_Get_Item)
+  L0143: CallFunc_GetChildrenComponents_Children = []
+  L014E: CallFunc_Array_Get_Item.SceneComponent.GetChildrenComponents(false, CallFunc_GetChildrenComponents_Children)
+  L0178: CallFunc_Array_Length_ReturnValue_1 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(CallFunc_GetChildrenComponents_Children)
+  L01B3: CallFunc_Subtract_IntInt_ReturnValue_1 = Subtract_IntInt(CallFunc_Array_Length_ReturnValue_1, 1)
+  L01DD: Temp_int_Loop_Counter_Variable_1 = CallFunc_Subtract_IntInt_ReturnValue_1
+  L01F8: CallFunc_K2_GetComponentsByClass_ReturnValue = Actor.K2_GetComponentsByClass(DrdCraftCellComponent)
+  L021D: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_K2_GetComponentsByClass_ReturnValue, Temp_int_Array_Index_Variable_1, CallFunc_Array_Get_Item)
+  L0258: CallFunc_GetChildrenComponents_Children = []
+  L0263: CallFunc_Array_Get_Item.SceneComponent.GetChildrenComponents(false, CallFunc_GetChildrenComponents_Children)
+  L028D: CallFunc_Array_Length_ReturnValue_1 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(CallFunc_GetChildrenComponents_Children)
+  L02C8: CallFunc_Subtract_IntInt_ReturnValue_1 = Subtract_IntInt(CallFunc_Array_Length_ReturnValue_1, 1)
+  L02F2: CallFunc_Max_ReturnValue = Max(0, CallFunc_Subtract_IntInt_ReturnValue_1)
+  L031C: Temp_int_Array_Index_Variable = CallFunc_Max_ReturnValue
+  L0337: CallFunc_GreaterEqual_IntInt_ReturnValue = GreaterEqual_IntInt(Temp_int_Loop_Counter_Variable_1, 0)
+  L0359: if not (CallFunc_GreaterEqual_IntInt_ReturnValue) pop-flow
+  L0363: Temp_int_Array_Index_Variable = Temp_int_Loop_Counter_Variable_1
+  L037E: push L04BF
+  L0383: CallFunc_K2_GetComponentsByClass_ReturnValue = Actor.K2_GetComponentsByClass(DrdCraftCellComponent)
+  L03A8: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_K2_GetComponentsByClass_ReturnValue, Temp_int_Array_Index_Variable_1, CallFunc_Array_Get_Item)
+  L03E3: CallFunc_GetChildrenComponents_Children = []
+  L03EE: CallFunc_Array_Get_Item.SceneComponent.GetChildrenComponents(false, CallFunc_GetChildrenComponents_Children)
+  L0418: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetChildrenComponents_Children, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item_1)
+  L0453: CallFunc_Array_Get_Item_1.ActorComponent.K2_DestroyComponent(self)
+  L0474: pop-flow
+  L0475: CallFunc_Add_IntInt_ReturnValue = Add_IntInt(Temp_int_Loop_Counter_Variable, 1)
+  L049F: Temp_int_Loop_Counter_Variable = CallFunc_Add_IntInt_ReturnValue
+  L04BA: goto L0033
+  L04BF: CallFunc_Subtract_IntInt_ReturnValue = Subtract_IntInt(Temp_int_Loop_Counter_Variable_1, 1)
+  L04E9: Temp_int_Loop_Counter_Variable_1 = CallFunc_Subtract_IntInt_ReturnValue
+  L0504: goto L0337
+  L0509: return
+
+## function CraftRecipe  flags=0x0C400000
+  L0000: frame.K2Node_CustomEvent_Recipe = Recipe
+  L0012: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(5532)
+  L0021: return
+
+## function CustomEvent  flags=0x0C000000
+  L0000: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(8264)
+  L000F: return
+
+## function CustomEvent_0  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_SequenceName = SequenceName
+  L0012: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(9038)
+  L0021: return
+
+## function DestroyPile  flags=0x0CC20000
+  L0000: Temp_bool_Variable_1 = bIngredient
+  L0013: CallFunc_Map_Find_ReturnValue = Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_Find(switch(Temp_bool_Variable_1){false: self.SelectedPiles; true: self.IngredientPiles; default: K2Node_Select_Default}, ItemType, CallFunc_Map_Find_Value)
+  L0084: CallFunc_Map_Find_Value.K2_DestroyActor()
+  L00A8: Temp_bool_Variable = bIngredient
+  L00BB: CallFunc_Map_Remove_ReturnValue = Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_Remove(switch(Temp_bool_Variable){false: self.SelectedPiles; true: self.IngredientPiles; default: K2Node_Select_Default_1}, ItemType)
+  L0123: return
+
+## function DestroyPiles  flags=0x0C820000
+  L0000: push L03B0
+  L0005: push L0169
+  L000A: Temp_int_Variable = 0
+  L0021: CallFunc_Map_Length_ReturnValue_1 = Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_Length(self.IngredientPiles)
+  L005C: CallFunc_Less_IntInt_ReturnValue_1 = Less_IntInt(Temp_int_Variable, CallFunc_Map_Length_ReturnValue_1)
+  L0082: if not (CallFunc_Less_IntInt_ReturnValue_1) goto L02F2
+  L0090: push L031C
+  L0095: Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_GetKeyValueByIndex(self.IngredientPiles, Temp_int_Variable, CallFunc_Map_GetKeyValueByIndex_Key_1, CallFunc_Map_GetKeyValueByIndex_Value_1)
+  L00D9: CallFunc_IsValid_ReturnValue_1 = KismetSystemLibrary.IsValid(CallFunc_Map_GetKeyValueByIndex_Value_1)
+  L00F6: if not (CallFunc_IsValid_ReturnValue_1) pop-flow
+  L0100: Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_GetKeyValueByIndex(self.IngredientPiles, Temp_int_Variable, CallFunc_Map_GetKeyValueByIndex_Key_1, CallFunc_Map_GetKeyValueByIndex_Value_1)
+  L0144: CallFunc_Map_GetKeyValueByIndex_Value_1.K2_DestroyActor()
+  L0168: pop-flow
+  L0169: Temp_int_Variable_1 = 0
+  L0180: CallFunc_Map_Length_ReturnValue = Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_Length(self.SelectedPiles)
+  L01BB: CallFunc_Less_IntInt_ReturnValue = Less_IntInt(Temp_int_Variable_1, CallFunc_Map_Length_ReturnValue)
+  L01E1: if not (CallFunc_Less_IntInt_ReturnValue) goto L02C8
+  L01EF: push L0366
+  L01F4: Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_GetKeyValueByIndex(self.SelectedPiles, Temp_int_Variable_1, CallFunc_Map_GetKeyValueByIndex_Key, CallFunc_Map_GetKeyValueByIndex_Value)
+  L0238: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(CallFunc_Map_GetKeyValueByIndex_Value)
+  L0255: if not (CallFunc_IsValid_ReturnValue) pop-flow
+  L025F: Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_GetKeyValueByIndex(self.SelectedPiles, Temp_int_Variable_1, CallFunc_Map_GetKeyValueByIndex_Key, CallFunc_Map_GetKeyValueByIndex_Value)
+  L02A3: CallFunc_Map_GetKeyValueByIndex_Value.K2_DestroyActor()
+  L02C7: pop-flow
+  L02C8: Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_Clear(self.SelectedPiles)
+  L02F1: pop-flow
+  L02F2: Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_Clear(self.IngredientPiles)
+  L031B: pop-flow
+  L031C: CallFunc_Add_IntInt_ReturnValue = Add_IntInt(Temp_int_Variable, 1)
+  L0346: Temp_int_Variable = CallFunc_Add_IntInt_ReturnValue
+  L0361: goto L0021
+  L0366: CallFunc_Add_IntInt_ReturnValue_1 = Add_IntInt(Temp_int_Variable_1, 1)
+  L0390: Temp_int_Variable_1 = CallFunc_Add_IntInt_ReturnValue_1
+  L03AB: goto L0180
+  L03B0: return
+
+## function ExecuteUbergraph_BP_CraftController  flags=0x00808001
+  L0000: push L296D
+  L0005: goto computed(EntryPoint)
+  L000F: CancelCraftHold()
+  L001D: pop-flow
+  L001E: CancelCraftHold()
+  L002C: self.CraftHUDWidget.ShowPileHint(false, null)
+  L0052: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L006C: CallFunc_GetLocalPlayerFromController_ReturnValue_1 = Default__CommonUIExtensions.CommonUIExtensions.GetLocalPlayerFromController(CallFunc_GetPlayerController_ReturnValue)
+  L009F: CallFunc_PushContentToLayer_ForPlayer_ReturnValue_1 = Default__CommonUIExtensions.CommonUIExtensions.PushContentToLayer_ForPlayer(CallFunc_GetLocalPlayerFromController_ReturnValue_1, GameplayTag{'UI.Layer.Game'}, WBP_Recipes_C)
+  L00F6: K2Node_DynamicCast_AsWBP_Recipes = cast<WBP_Recipes_C>(CallFunc_PushContentToLayer_ForPlayer_ReturnValue_1)
+  L011A: K2Node_DynamicCast_bSuccess_4 = K2Node_DynamicCast_AsWBP_Recipes
+  L0137: if not (K2Node_DynamicCast_bSuccess_4) pop-flow
+  L0141: bind(K2Node_CreateDelegate_OutputDelegate, self, 'BP_OnWidgetDeactivated_Event')
+  L0158: K2Node_DynamicCast_AsWBP_Recipes.self.BP_OnWidgetDeactivated += K2Node_CreateDelegate_OutputDelegate
+  L0181: self.bTraceForPiles = false
+  L018C: pop-flow
+  L018D: CallFunc_Add_DoubleDouble_ReturnValue = Add_DoubleDouble(self.TimeToCraftLeft, 0.04)
+  L01BB: self.TimeToCraftLeft = CallFunc_Add_DoubleDouble_ReturnValue
+  L01D6: if not (self.bIsCrafting) goto L0335
+  L01E4: CallFunc_Divide_DoubleDouble_ReturnValue = Divide_DoubleDouble(self.TimeToCraftLeft, self.TimeToCraft)
+  L0212: CallFunc_Multiply_DoubleDouble_ReturnValue = Multiply_DoubleDouble(self.CraftHUDWidget.self.WBP_InputHintFilled.self.MaxValue, CallFunc_Divide_DoubleDouble_ReturnValue)
+  L026C: self.CraftHUDWidget.self.WBP_InputHintFilled.SetValue(CallFunc_Multiply_DoubleDouble_ReturnValue)
+  L02AF: CallFunc_GreaterEqual_DoubleDouble_ReturnValue = GreaterEqual_DoubleDouble(self.TimeToCraftLeft, self.TimeToCraft)
+  L02D5: if not (CallFunc_GreaterEqual_DoubleDouble_ReturnValue) goto L0344
+  L02E3: TryCraft()
+  L02F1: self.CraftHUDWidget.self.WBP_InputHintFilled.SetValue(0)
+  L0334: pop-flow
+  L0335: CancelCraftHold()
+  L0343: pop-flow
+  L0344: KismetSystemLibrary.Delay(self, 0.02, LatentActionInfo{L018D, -123291224, 'ExecuteUbergraph_BP_CraftController', self})
+  L037A: pop-flow
+  L037B: UpdateCraftResult()
+  L0389: pop-flow
+  L038A: bind(K2Node_CreateDelegate_OutputDelegate_2, self, 'OnLoaded_0A08A745459A8C37DCF7CCA323D7FD12')
+  L03A1: KismetSystemLibrary.LoadAsset(self, CallFunc_GetTraitByClassForItem_ReturnValue.self.CraftPileSettings.MoveItemFromPileSound, K2Node_CreateDelegate_OutputDelegate_2, LatentActionInfo{-1, 717767668, 'ExecuteUbergraph_BP_CraftController', self})
+  L0403: pop-flow
+  L0404: K2Node_DynamicCast_AsSound_Cue = cast<SoundCue>(Temp_object_Variable)
+  L0428: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsSound_Cue
+  L0445: if not (K2Node_DynamicCast_bSuccess) pop-flow
+  L044F: Default__GameplayStatics.GameplayStatics.PlaySound2D(self, K2Node_DynamicCast_AsSound_Cue, 1, 1, 0, null, null, true)
+  L048B: pop-flow
+  L048C: Temp_object_Variable_1 = K2Node_CustomEvent_Loaded
+  L049F: K2Node_DynamicCast_AsSound_Cue_1 = cast<SoundCue>(Temp_object_Variable_1)
+  L04C3: K2Node_DynamicCast_bSuccess_1 = K2Node_DynamicCast_AsSound_Cue_1
+  L04E0: if not (K2Node_DynamicCast_bSuccess_1) pop-flow
+  L04EA: CallFunc_CreateSound2D_ReturnValue = Default__GameplayStatics.GameplayStatics.CreateSound2D(self, K2Node_DynamicCast_AsSound_Cue_1, 1, 1, 0, null, false, true)
+  L0530: self.CraftSoundInstance = CallFunc_CreateSound2D_ReturnValue
+  L0543: pop-flow
+  L0544: bind(K2Node_CreateDelegate_OutputDelegate_1, self, 'OnLoaded_D1B98A41488CDD0D776D569D9E37C779')
+  L055B: KismetSystemLibrary.LoadAsset(self, self.CraftingSound, K2Node_CreateDelegate_OutputDelegate_1, LatentActionInfo{-1, 702900414, 'ExecuteUbergraph_BP_CraftController', self})
+  L059E: pop-flow
+  L059F: CallFunc_Conv_InputActionValueToBool_ReturnValue = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_2)
+  L05BC: Temp_bool_Variable = CallFunc_Conv_InputActionValueToBool_ReturnValue
+  L05CF: Temp_real_Variable_1 = K2Node_EnhancedInputActionEvent_ElapsedTime_2
+  L05EC: Temp_real_Variable_1 = Temp_real_Variable_1
+  L0607: Temp_real_Variable = K2Node_EnhancedInputActionEvent_TriggeredTime_2
+  L0624: Temp_real_Variable = Temp_real_Variable
+  L063F: Temp_object_Variable_2 = K2Node_EnhancedInputActionEvent_SourceAction_2
+  L0652: goto L000F
+  L0657: CallFunc_Conv_InputActionValueToBool_ReturnValue_1 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_1)
+  L0674: Temp_bool_Variable = CallFunc_Conv_InputActionValueToBool_ReturnValue_1
+  L0687: Temp_real_Variable_1 = K2Node_EnhancedInputActionEvent_ElapsedTime_1
+  L06A4: Temp_real_Variable_1 = Temp_real_Variable_1
+  L06BF: Temp_real_Variable = K2Node_EnhancedInputActionEvent_TriggeredTime_1
+  L06DC: Temp_real_Variable = Temp_real_Variable
+  L06F7: Temp_object_Variable_2 = K2Node_EnhancedInputActionEvent_SourceAction_1
+  L070A: goto L000F
+  L070F: CallFunc_Conv_InputActionValueToBool_ReturnValue_2 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue)
+  L072C: Temp_bool_Variable = CallFunc_Conv_InputActionValueToBool_ReturnValue_2
+  L073F: Temp_real_Variable_1 = K2Node_EnhancedInputActionEvent_ElapsedTime
+  L075C: Temp_real_Variable_1 = Temp_real_Variable_1
+  L0777: Temp_real_Variable = K2Node_EnhancedInputActionEvent_TriggeredTime
+  L0794: Temp_real_Variable = Temp_real_Variable
+  L07AF: Temp_object_Variable_2 = K2Node_EnhancedInputActionEvent_SourceAction
+  L07C2: IsReadyForUse(CallFunc_IsReadyForUse_bOut)
+  L07D9: if not (CallFunc_IsReadyForUse_bOut) pop-flow
+  L07E3: if not (self.BestRecipeStatus.bCanCraft) pop-flow
+  L07F6: self.bIsCrafting = true
+  L0801: push L0861
+  L0806: bind(K2Node_CreateDelegate_OutputDelegate_12, self, 'OnLoaded_D4374C87436801E48A2D7F87A6CB1B16')
+  L081D: KismetSystemLibrary.LoadAsset(self, self.CraftingSound, K2Node_CreateDelegate_OutputDelegate_12, LatentActionInfo{-1, -356990025, 'ExecuteUbergraph_BP_CraftController', self})
+  L0860: pop-flow
+  L0861: self.TimeToCraftLeft = 0
+  L087C: goto L0344
+  L0881: Temp_class_Variable = K2Node_CustomEvent_Loaded_8
+  L0894: GetItemTypeSoftPile(self.ItemTypes[self.ItemIndex], true, CallFunc_GetItemTypeSoftPile_PileClass)
+  L08BF: CallFunc_Conv_SoftClassReferenceToClass_ReturnValue = KismetSystemLibrary.Conv_SoftClassReferenceToClass(CallFunc_GetItemTypeSoftPile_PileClass)
+  L08DC: K2Node_ClassDynamicCast_AsDrd_Craft_Pile = classcast<DrdCraftPile>(CallFunc_Conv_SoftClassReferenceToClass_ReturnValue)
+  L0900: K2Node_ClassDynamicCast_bSuccess = K2Node_ClassDynamicCast_AsDrd_Craft_Pile
+  L091D: CallFunc_Array_Add_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Add(self.LoadedPileClasses, K2Node_ClassDynamicCast_AsDrd_Craft_Pile)
+  L0961: FindFreeCellByType(self.ItemTypes[self.ItemIndex], true, CallFunc_FindFreeCellByType_Cell, CallFunc_FindFreeCellByType_bOut)
+  L0995: if not (CallFunc_FindFreeCellByType_bOut) goto L0DC2
+  L09A3: GetItemTypeSoftPile(self.ItemTypes[self.ItemIndex], true, CallFunc_GetItemTypeSoftPile_PileClass)
+  L09CE: CallFunc_Conv_SoftClassReferenceToClass_ReturnValue = KismetSystemLibrary.Conv_SoftClassReferenceToClass(CallFunc_GetItemTypeSoftPile_PileClass)
+  L09EB: K2Node_ClassDynamicCast_AsDrd_Craft_Pile = classcast<DrdCraftPile>(CallFunc_Conv_SoftClassReferenceToClass_ReturnValue)
+  L0A0F: K2Node_ClassDynamicCast_bSuccess = K2Node_ClassDynamicCast_AsDrd_Craft_Pile
+  L0A2C: CallFunc_MakeTransform_ReturnValue = MakeTransform(Vec(0,0,0), Rot(0,0,0), Vec(1,1,1))
+  L0A93: CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue_1 = GameplayStatics.BeginDeferredActorSpawnFromClass(self, K2Node_ClassDynamicCast_AsDrd_Craft_Pile, CallFunc_MakeTransform_ReturnValue, 1, null, 1)
+  L0ABF: Default__KismetSystemLibrary.KismetSystemLibrary.SetStructurePropertyByName(CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue_1, 'ItemType', self.ItemTypes[self.ItemIndex])
+  L0B08: KismetSystemLibrary.SetBoolPropertyByName(CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue_1, 'bIngredient', true)
+  L0B29: CallFunc_MakeTransform_ReturnValue = MakeTransform(Vec(0,0,0), Rot(0,0,0), Vec(1,1,1))
+  L0B90: CallFunc_FinishSpawningActor_ReturnValue_1 = GameplayStatics.FinishSpawningActor(CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue_1, CallFunc_MakeTransform_ReturnValue, 1)
+  L0BB8: bind(K2Node_CreateDelegate_OutputDelegate_4, self, 'PileClicked')
+  L0BCF: CallFunc_FinishSpawningActor_ReturnValue_1.self.OnPileClicked += K2Node_CreateDelegate_OutputDelegate_4
+  L0BF8: CallFunc_K2_AttachToComponent_ReturnValue = CallFunc_FinishSpawningActor_ReturnValue_1.Actor.K2_AttachToComponent(CallFunc_FindFreeCellByType_Cell, 'None', 0, 0, 0, true)
+  L0C3F: GetItemTypeCount(self.ItemTypes[self.ItemIndex], true, CallFunc_GetItemTypeCount_Count)
+  L0C6A: CallFunc_FinishSpawningActor_ReturnValue_1.DrdCraftPile.SetItemCount(CallFunc_GetItemTypeCount_Count)
+  L0C93: Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_Add(self.IngredientPiles, self.ItemTypes[self.ItemIndex], CallFunc_FinishSpawningActor_ReturnValue_1)
+  L0CD8: CallFunc_Array_LastIndex_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_LastIndex(self.ItemTypes)
+  L0D13: CallFunc_EqualEqual_IntInt_ReturnValue = EqualEqual_IntInt(CallFunc_Array_LastIndex_ReturnValue, self.ItemIndex)
+  L0D39: if not (CallFunc_EqualEqual_IntInt_ReturnValue) goto L0D53
+  L0D47: self.bLoading = false
+  L0D52: pop-flow
+  L0D53: CallFunc_Add_IntInt_ReturnValue = Add_IntInt(self.ItemIndex, 1)
+  L0D7D: Temp_int_Variable = CallFunc_Add_IntInt_ReturnValue
+  L0D98: self.ItemIndex = Temp_int_Variable
+  L0DB3: PlaceNextPile()
+  L0DC1: pop-flow
+  L0DC2: CallFunc_GetDebugStringFromGameplayTag_ReturnValue = BlueprintGameplayTagLibrary.GetDebugStringFromGameplayTag(self.ItemTypes[self.ItemIndex])
+  L0DF1: CallFunc_Concat_StrStr_ReturnValue = KismetStringLibrary.Concat_StrStr("Can't find free cell for item type ", CallFunc_GetDebugStringFromGameplayTag_ReturnValue)
+  L0E3B: PrintError(CallFunc_Concat_StrStr_ReturnValue)
+  L0E52: goto L0CD8
+  L0E57: Temp_object_Variable = K2Node_CustomEvent_Loaded_1
+  L0E6A: goto L0404
+  L0E6F: pop-flow
+  L0E70: pop-flow
+  L0E71: pop-flow
+  L0E72: pop-flow
+  L0E73: Cleanup()
+  L0E81: CallFunc_GetPlayerController_ReturnValue_1 = GameplayStatics.GetPlayerController(self, 0)
+  L0E9B: CallFunc_GetHUD_ReturnValue = CallFunc_GetPlayerController_ReturnValue_1.PlayerController.GetHUD()
+  L0EC5: K2Node_DynamicCast_AsBP_Drd_HUD = cast<BP_DrdHUD_C>(CallFunc_GetHUD_ReturnValue)
+  L0EE9: K2Node_DynamicCast_bSuccess_8 = K2Node_DynamicCast_AsBP_Drd_HUD
+  L0F06: if not (K2Node_DynamicCast_bSuccess_8) pop-flow
+  L0F10: K2Node_DynamicCast_AsBP_Drd_HUD.self.WBP Picked Item Info.self.ItemsToNotifyFilter = GameplayTagQuery{0, [GameplayTag{'IFP.Items'}], [0, 1, 1, 1, 0], "", " ANY( IFP.Items )"}
+  L0FB7: pop-flow
+  L0FB8: CacheRefs(K2Node_Event_NewController)
+  L0FCF: self.bTraceForPiles = true
+  L0FDA: BindPlayerInventoryEvents(true)
+  L0FE9: BindTableInventoryEvents(true)
+  L0FF8: push L1328
+  L0FFD: push L12F6
+  L1002: push L11D5
+  L1007: push L1230
+  L100C: CallFunc_GetLocalPlayerFromController_ReturnValue = Default__CommonUIExtensions.CommonUIExtensions.GetLocalPlayerFromController(self.PlayerController)
+  L103F: CallFunc_PushContentToLayer_ForPlayer_ReturnValue = Default__CommonUIExtensions.CommonUIExtensions.PushContentToLayer_ForPlayer(CallFunc_GetLocalPlayerFromController_ReturnValue, GameplayTag{'UI.Layer.Game'}, self.WidgetClass)
+  L1096: K2Node_DynamicCast_AsWBP_Craft = cast<WBP_Craft_C>(CallFunc_PushContentToLayer_ForPlayer_ReturnValue)
+  L10BA: K2Node_DynamicCast_bSuccess_3 = K2Node_DynamicCast_AsWBP_Craft
+  L10D7: if not (K2Node_DynamicCast_bSuccess_3) pop-flow
+  L10E1: self.CraftHUDWidget = K2Node_DynamicCast_AsWBP_Craft
+  L10F4: self.CraftHUDWidget.self.OnBackPressed.Clear()
+  L1114: bind(K2Node_CreateDelegate_OutputDelegate_11, self, 'CustomEvent')
+  L112B: self.CraftHUDWidget.self.OnBackPressed += K2Node_CreateDelegate_OutputDelegate_11
+  L1154: bind(K2Node_CreateDelegate_OutputDelegate_10, self, 'OnOpenRecipesPressed_Event')
+  L116B: self.CraftHUDWidget.self.OnOpenRecipesPressed += K2Node_CreateDelegate_OutputDelegate_10
+  L1194: bind(K2Node_CreateDelegate_OutputDelegate_9, self, 'OnCraftButtonClicked_Event')
+  L11AB: self.CraftHUDWidget.self.OnCraftButtonClicked += K2Node_CreateDelegate_OutputDelegate_9
+  L11D4: pop-flow
+  L11D5: bind(K2Node_CreateDelegate_OutputDelegate_3, self, 'OnLoaded_3E0E6EE247936C6F3DE6CDB4E9643EA1')
+  L11EC: KismetSystemLibrary.LoadAsset(self, self.PossessSound, K2Node_CreateDelegate_OutputDelegate_3, LatentActionInfo{-1, 1054552832, 'ExecuteUbergraph_BP_CraftController', self})
+  L122F: pop-flow
+  L1230: FindAllMatchingItemTypes(CallFunc_FindAllMatchingItemTypes_Types)
+  L1247: CallFunc_Set_IsNotEmpty_ReturnValue = Default__BlueprintSetLibrary.BlueprintSetLibrary.Set_IsNotEmpty(CallFunc_FindAllMatchingItemTypes_Types)
+  L127A: if not (CallFunc_Set_IsNotEmpty_ReturnValue) pop-flow
+  L1284: CallFunc_Set_ToArray_Result = []
+  L128F: Default__BlueprintSetLibrary.BlueprintSetLibrary.Set_ToArray(CallFunc_FindAllMatchingItemTypes_Types, CallFunc_Set_ToArray_Result)
+  L12C1: self.ItemTypes = CallFunc_Set_ToArray_Result
+  L12DC: PlaceNextPile()
+  L12EA: self.bLoading = true
+  L12F5: pop-flow
+  L12F6: KismetSystemLibrary.DelayUntilNextTick(self, LatentActionInfo{L037B, -2083831560, 'ExecuteUbergraph_BP_CraftController', self})
+  L1327: pop-flow
+  L1328: CallFunc_GetPlayerController_ReturnValue_2 = GameplayStatics.GetPlayerController(self, 0)
+  L1342: CallFunc_GetHUD_ReturnValue_1 = CallFunc_GetPlayerController_ReturnValue_2.PlayerController.GetHUD()
+  L136C: K2Node_DynamicCast_AsBP_Drd_HUD_1 = cast<BP_DrdHUD_C>(CallFunc_GetHUD_ReturnValue_1)
+  L1390: K2Node_DynamicCast_bSuccess_9 = K2Node_DynamicCast_AsBP_Drd_HUD_1
+  L13AD: if not (K2Node_DynamicCast_bSuccess_9) pop-flow
+  L13B7: K2Node_DynamicCast_AsBP_Drd_HUD_1.self.WBP Picked Item Info.self.ItemsToNotifyFilter = GameplayTagQuery{0, [GameplayTag{'IFP.Items.Type.CraftingMaterial'}], [0, 1, 3, 1, 0], "", " NONE( IFP.Items.Type.CraftingMaterial )"}
+  L1475: pop-flow
+  L1476: TraceForPile()
+  L1484: CameraTilt()
+  L1492: pop-flow
+  L1493: GetItemTypeSoftPile(self.ItemTypes[self.ItemIndex], true, CallFunc_GetItemTypeSoftPile_PileClass)
+  L14BE: CallFunc_IsValidSoftClassReference_ReturnValue = KismetSystemLibrary.IsValidSoftClassReference(CallFunc_GetItemTypeSoftPile_PileClass)
+  L14DB: if not (CallFunc_IsValidSoftClassReference_ReturnValue) goto L156F
+  L14E9: GetItemTypeSoftPile(self.ItemTypes[self.ItemIndex], true, CallFunc_GetItemTypeSoftPile_PileClass)
+  L1514: bind(K2Node_CreateDelegate_OutputDelegate_15, self, 'OnLoaded_CA18CA3D47AC2D319CDCABA4D5F9FF62')
+  L152B: KismetSystemLibrary.LoadAssetClass(self, CallFunc_GetItemTypeSoftPile_PileClass, K2Node_CreateDelegate_OutputDelegate_15, LatentActionInfo{-1, -1615046863, 'ExecuteUbergraph_BP_CraftController', self})
+  L156E: pop-flow
+  L156F: PrintError("Soft pile class is null!")
+  L1597: goto L0CD8
+  L159C: self.bCrafting = true
+  L15A7: CallFunc_GetWorldSubsystem_ReturnValue_3 = SubsystemBlueprintLibrary.GetWorldSubsystem(self, DrdCraftingSubsystem)
+  L15C5: CallFunc_GetItemAsset_ReturnValue = CallFunc_GetWorldSubsystem_ReturnValue_3.DrdCraftingSubsystem.GetItemAsset(K2Node_CustomEvent_Recipe.OutputItems[0].ItemTypeTag)
+  L1618: CallFunc_IsValidSoftObjectReference_ReturnValue = KismetSystemLibrary.IsValidSoftObjectReference(CallFunc_GetItemAsset_ReturnValue)
+  L1635: if not (CallFunc_IsValidSoftObjectReference_ReturnValue) goto L170F
+  L1643: bind(K2Node_CreateDelegate_OutputDelegate_6, self, 'OnLoaded_810780654997B2C0F883AC9AF74182EB')
+  L165A: CallFunc_GetWorldSubsystem_ReturnValue_3 = SubsystemBlueprintLibrary.GetWorldSubsystem(self, DrdCraftingSubsystem)
+  L1678: CallFunc_GetItemAsset_ReturnValue = CallFunc_GetWorldSubsystem_ReturnValue_3.DrdCraftingSubsystem.GetItemAsset(K2Node_CustomEvent_Recipe.OutputItems[0].ItemTypeTag)
+  L16CB: KismetSystemLibrary.LoadAsset(self, CallFunc_GetItemAsset_ReturnValue, K2Node_CreateDelegate_OutputDelegate_6, LatentActionInfo{-1, 1634452788, 'ExecuteUbergraph_BP_CraftController', self})
+  L170E: pop-flow
+  L170F: CallFunc_GetDebugStringFromGameplayTag_ReturnValue_1 = BlueprintGameplayTagLibrary.GetDebugStringFromGameplayTag(K2Node_CustomEvent_Recipe.OutputItems[0].ItemTypeTag)
+  L174C: CallFunc_Concat_StrStr_ReturnValue_1 = KismetStringLibrary.Concat_StrStr("There is no item asset for item type ", CallFunc_GetDebugStringFromGameplayTag_ReturnValue_1)
+  L1798: PrintError(CallFunc_Concat_StrStr_ReturnValue_1)
+  L17AF: pop-flow
+  L17B0: ReduceRecipeItems(K2Node_CustomEvent_Recipe)
+  L17C7: ReturnItems()
+  L17D5: CallFunc_GetWorldSubsystem_ReturnValue_3 = SubsystemBlueprintLibrary.GetWorldSubsystem(self, DrdCraftingSubsystem)
+  L17F3: CallFunc_GetItemAsset_ReturnValue = CallFunc_GetWorldSubsystem_ReturnValue_3.DrdCraftingSubsystem.GetItemAsset(K2Node_CustomEvent_Recipe.OutputItems[0].ItemTypeTag)
+  L1846: CallFunc_Conv_SoftObjectReferenceToObject_ReturnValue_1 = KismetSystemLibrary.Conv_SoftObjectReferenceToObject(CallFunc_GetItemAsset_ReturnValue)
+  L1863: K2Node_DynamicCast_AsDA_Core_Item_2 = cast<DA_CoreItem>(CallFunc_Conv_SoftObjectReferenceToObject_ReturnValue_1)
+  L1887: K2Node_DynamicCast_bSuccess_7 = K2Node_DynamicCast_AsDA_Core_Item_2
+  L18A4: ShowCraftedItem(K2Node_DynamicCast_AsDA_Core_Item_2)
+  L18BB: UpdateCraftResult()
+  L18C9: pop-flow
+  L18CA: CallFunc_GetWorldSubsystem_ReturnValue_1 = SubsystemBlueprintLibrary.GetWorldSubsystem(self, DrdCraftingSubsystem)
+  L18E8: CallFunc_GetWorldSubsystem_ReturnValue_1.DrdCraftingSubsystem.RegisterRecipeCrafted(K2Node_CustomEvent_Recipe.RecipeTag)
+  L191A: goto L17B0
+  L191F: CallFunc_GetGameInstanceSubsystem_ReturnValue = SubsystemBlueprintLibrary.GetGameInstanceSubsystem(self, DrdAnalyticsSubsystem)
+  L193D: CallFunc_GetGameInstanceSubsystem_ReturnValue.DrdAnalyticsSubsystem.DesignEventRecipeCraft(K2Node_CustomEvent_Recipe.RecipeTag)
+  L196F: goto L18CA
+  L1974: self.CraftingCount = K2Node_CustomEvent_Recipe.OutputItems[0].Count
+  L19A7: self.PlayerInventory.AC_Inventory.TryAddNewItemByDataAsset(self.CraftingAsset, self.CraftingCount, self.PlayerInventory, true, false, CallFunc_TryAddNewItemByDataAsset_Result, CallFunc_TryAddNewItemByDataAsset_NewItem, CallFunc_TryAddNewItemByDataAsset_StackDelta, -1, -1)
+  L1A09: if not (CallFunc_TryAddNewItemByDataAsset_Result) goto L1B64
+  L1A17: CallFunc_GetDisplayName_ReturnValue_1 = KismetSystemLibrary.GetDisplayName(self.CraftingAsset)
+  L1A3C: CallFunc_Concat_StrStr_ReturnValue_3 = KismetStringLibrary.Concat_StrStr("Success crafting item ", CallFunc_GetDisplayName_ReturnValue_1)
+  L1A79: CallFunc_Concat_StrStr_ReturnValue_4 = KismetStringLibrary.Concat_StrStr(CallFunc_Concat_StrStr_ReturnValue_3, " put co container index  ")
+  L1AB9: CallFunc_Conv_IntToString_ReturnValue = KismetStringLibrary.Conv_IntToString(CallFunc_TryAddNewItemByDataAsset_NewItem.ContainerIndex)
+  L1AE7: CallFunc_Concat_StrStr_ReturnValue_5 = KismetStringLibrary.Concat_StrStr(CallFunc_Concat_StrStr_ReturnValue_4, CallFunc_Conv_IntToString_ReturnValue)
+  L1B15: KismetSystemLibrary.PrintString(self, CallFunc_Concat_StrStr_ReturnValue_5, true, true, LinearColor{0, 0.66, 1, 1}, 2, 'None')
+  L1B5F: goto L191F
+  L1B64: self.bCrafting = false
+  L1B6F: KismetSystemLibrary.PrintString(self, "No space for craft!", true, true, LinearColor{0, 0.66, 1, 1}, 2, 'None')
+  L1BC5: pop-flow
+  L1BC6: CallFunc_IsValidSoftClassReference_ReturnValue_1 = KismetSystemLibrary.IsValidSoftClassReference(K2Node_CustomEvent_Item.self.ItemActor)
+  L1BF9: if not (CallFunc_IsValidSoftClassReference_ReturnValue_1) goto L1C78
+  L1C07: bind(K2Node_CreateDelegate_OutputDelegate_5, self, 'OnLoaded_49D91FD548F62A95AB6ADB9CADD45667')
+  L1C1E: KismetSystemLibrary.LoadAssetClass(self, K2Node_CustomEvent_Item.self.ItemActor, K2Node_CreateDelegate_OutputDelegate_5, LatentActionInfo{-1, 916209434, 'ExecuteUbergraph_BP_CraftController', self})
+  L1C77: pop-flow
+  L1C78: CallFunc_GetDisplayName_ReturnValue = KismetSystemLibrary.GetDisplayName(K2Node_CustomEvent_Item)
+  L1C9D: CallFunc_Concat_StrStr_ReturnValue_2 = KismetStringLibrary.Concat_StrStr("There is no "Item Actor" for ", CallFunc_GetDisplayName_ReturnValue)
+  L1CE1: PrintError(CallFunc_Concat_StrStr_ReturnValue_2)
+  L1CF8: FinishCrafting()
+  L1D06: pop-flow
+  L1D07: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(self.CraftedPreviewActor)
+  L1D24: if not (CallFunc_IsValid_ReturnValue) goto L1D56
+  L1D32: self.CraftedPreviewActor.K2_DestroyActor()
+  L1D56: self.bCrafting = false
+  L1D61: pop-flow
+  L1D62: bind(K2Node_CreateDelegate_OutputDelegate_7, self, 'FinishCrafting')
+  L1D79: CallFunc_K2_SetTimerDelegate_ReturnValue = KismetSystemLibrary.K2_SetTimerDelegate(K2Node_CreateDelegate_OutputDelegate_7, 0.2, false, false, 0, 0)
+  L1DAF: pop-flow
+  L1DB0: K2Node_DynamicCast_AsSound_Cue_2 = cast<SoundCue>(Temp_object_Variable_3)
+  L1DD4: K2Node_DynamicCast_bSuccess_2 = K2Node_DynamicCast_AsSound_Cue_2
+  L1DF1: if not (K2Node_DynamicCast_bSuccess_2) pop-flow
+  L1DFB: Default__GameplayStatics.GameplayStatics.PlaySound2D(self, K2Node_DynamicCast_AsSound_Cue_2, 1, 1, 0, null, null, true)
+  L1E37: pop-flow
+  L1E38: K2Node_ComponentBoundEvent_TouchedComponent_2.PrimitiveComponent.SetRenderCustomDepth(true)
+  L1E59: SearchForAllCraftItemsInPlayerInventory(CallFunc_SearchForAllCraftItemsInPlayerInventory_CraftItems)
+  L1E70: GetSelectedItems(CallFunc_GetSelectedItems_Items)
+  L1E87: CallFunc_GetWorldSubsystem_ReturnValue_2 = SubsystemBlueprintLibrary.GetWorldSubsystem(self, DrdCraftingSubsystem)
+  L1EA5: CallFunc_FindSuitableRecipes_OutRecipes = []
+  L1EB0: CallFunc_GetWorldSubsystem_ReturnValue_2.DrdCraftingSubsystem.FindSuitableRecipes(CallFunc_GetSelectedItems_Items, CallFunc_FindSuitableRecipes_OutRecipes, CallFunc_FindSuitableRecipes_OutMaxItemsInSuitableRecipes, GameplayTag{'GameEntities.Interactable.CraftTable.Big'})
+  L1F06: CallFunc_Array_IsNotEmpty_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_IsNotEmpty(CallFunc_FindSuitableRecipes_OutRecipes)
+  L1F39: self.CraftHUDWidget.ShowRecipesHint(CallFunc_Array_IsNotEmpty_ReturnValue, K2Node_ComponentBoundEvent_TouchedComponent_2, CallFunc_FindSuitableRecipes_OutRecipes, CallFunc_GetSelectedItems_Items, CallFunc_SearchForAllCraftItemsInPlayerInventory_CraftItems)
+  L1F8A: bind(K2Node_CreateDelegate_OutputDelegate_13, self, 'OnLoaded_58185B4641E63AFBA74035AAB5EF6D54')
+  L1FA1: KismetSystemLibrary.LoadAsset(self, self.RecipesOpenSound, K2Node_CreateDelegate_OutputDelegate_13, LatentActionInfo{-1, 897906140, 'ExecuteUbergraph_BP_CraftController', self})
+  L1FE4: pop-flow
+  L1FE5: K2Node_ComponentBoundEvent_TouchedComponent_1.PrimitiveComponent.SetRenderCustomDepth(false)
+  L2006: self.CraftHUDWidget.ShowRecipesHint(false, null, Temp_struct_Variable, Temp_struct_Variable_1, Temp_struct_Variable_2)
+  L2047: pop-flow
+  L2048: SendUnpossessEvent()
+  L2056: pop-flow
+  L2057: OpenRecipes()
+  L2065: pop-flow
+  L2066: goto L001E
+  L206B: KismetSystemLibrary.DelayUntilNextTick(self, LatentActionInfo{L001E, 588028026, 'ExecuteUbergraph_BP_CraftController', self})
+  L209C: pop-flow
+  L209D: Temp_object_Variable_3 = K2Node_CustomEvent_Loaded_2
+  L20B0: goto L1DB0
+  L20B5: CallFunc_Conv_InputActionValueToBool_ReturnValue_3 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_3)
+  L20D2: Temp_bool_Variable_1 = CallFunc_Conv_InputActionValueToBool_ReturnValue_3
+  L20E5: Temp_real_Variable_2 = K2Node_EnhancedInputActionEvent_ElapsedTime_3
+  L2102: Temp_real_Variable_2 = Temp_real_Variable_2
+  L211D: Temp_real_Variable_3 = K2Node_EnhancedInputActionEvent_TriggeredTime_3
+  L213A: Temp_real_Variable_3 = Temp_real_Variable_3
+  L2155: Temp_object_Variable_4 = K2Node_EnhancedInputActionEvent_SourceAction_3
+  L2168: CallFunc_IsValid_ReturnValue_1 = KismetSystemLibrary.IsValid(self.HoveredPile)
+  L2185: if not (CallFunc_IsValid_ReturnValue_1) pop-flow
+  L218F: self.HoveredPile.DrdCraftPile.ClickPile()
+  L21AF: pop-flow
+  L21B0: CallFunc_AddComponentByClass_ReturnValue = self.CraftedPreviewActor.Actor.AddComponentByClass(DrdLevelSequencePlayerComponent, false, Transform(rot=0,0,0,1 loc=0,0,0 scale=1,1,1), false)
+  L2236: bind(K2Node_CreateDelegate_OutputDelegate_8, self, 'CustomEvent_0')
+  L224D: CallFunc_AddComponentByClass_ReturnValue.self.OnSequenceFinishedEvent += K2Node_CreateDelegate_OutputDelegate_8
+  L2276: CallFunc_AddComponentByClass_ReturnValue.self.AnimSequences = self.Anim Sequences
+  L22A7: CallFunc_AddComponentByClass_ReturnValue.DrdLevelSequencePlayerComponent.PlaySequence('CraftedItemAnim', false, true, false, true)
+  L22D8: bind(K2Node_CreateDelegate_OutputDelegate_14, self, 'OnLoaded_58185B4641E63AFBA74035AAC1506D2C')
+  L22EF: KismetSystemLibrary.LoadAsset(self, self.CraftingFinishSound, K2Node_CreateDelegate_OutputDelegate_14, LatentActionInfo{-1, 897906140, 'ExecuteUbergraph_BP_CraftController', self})
+  L2332: pop-flow
+  L2333: TryCraft()
+  L2341: pop-flow
+  L2342: self.bTraceForPiles = true
+  L234D: pop-flow
+  L234E: goto L1D62
+  L2353: CallFunc_Conv_SoftClassReferenceToClass_ReturnValue_1 = KismetSystemLibrary.Conv_SoftClassReferenceToClass(K2Node_CustomEvent_Item.self.ItemActor)
+  L2386: K2Node_ClassDynamicCast_AsA_Item_Actor = classcast<A_ItemActor>(CallFunc_Conv_SoftClassReferenceToClass_ReturnValue_1)
+  L23AA: K2Node_ClassDynamicCast_bSuccess_1 = K2Node_ClassDynamicCast_AsA_Item_Actor
+  L23C7: CallFunc_K2_GetComponentToWorld_ReturnValue = self.CraftedItemPreview.SceneComponent.K2_GetComponentToWorld()
+  L23F9: CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue = GameplayStatics.BeginDeferredActorSpawnFromClass(self, K2Node_ClassDynamicCast_AsA_Item_Actor, CallFunc_K2_GetComponentToWorld_ReturnValue, 1, null, 1)
+  L2425: KismetSystemLibrary.SetBoolPropertyByName(CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue, 'AllowBeginPlay', true)
+  L2446: KismetSystemLibrary.SetBoolPropertyByName(CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue, 'StartInventoryOnBeginPlay', true)
+  L2467: KismetSystemLibrary.SetBoolPropertyByName(CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue, 'bIsPreviewActor', true)
+  L2488: CallFunc_K2_GetComponentToWorld_ReturnValue = self.CraftedItemPreview.SceneComponent.K2_GetComponentToWorld()
+  L24BA: CallFunc_FinishSpawningActor_ReturnValue = GameplayStatics.FinishSpawningActor(CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue, CallFunc_K2_GetComponentToWorld_ReturnValue, 1)
+  L24E2: self.CraftedPreviewActor = CallFunc_FinishSpawningActor_ReturnValue
+  L24F5: goto L21B0
+  L24FA: Actor.ReceiveBeginPlay()
+  L2504: CleanupEditorOnlyPiles()
+  L2512: self.CameraZeroRotation = self.Camera.self.RelativeRotation
+  L2543: goto L0544
+  L2548: Temp_class_Variable_1 = K2Node_CustomEvent_Loaded_3
+  L255B: goto L2353
+  L2560: Temp_object_Variable_5 = K2Node_CustomEvent_Loaded_4
+  L2573: CallFunc_GetWorldSubsystem_ReturnValue_3 = SubsystemBlueprintLibrary.GetWorldSubsystem(self, DrdCraftingSubsystem)
+  L2591: CallFunc_GetItemAsset_ReturnValue = CallFunc_GetWorldSubsystem_ReturnValue_3.DrdCraftingSubsystem.GetItemAsset(K2Node_CustomEvent_Recipe.OutputItems[0].ItemTypeTag)
+  L25E4: CallFunc_Conv_SoftObjectReferenceToObject_ReturnValue = KismetSystemLibrary.Conv_SoftObjectReferenceToObject(CallFunc_GetItemAsset_ReturnValue)
+  L2601: K2Node_DynamicCast_AsDA_Core_Item_1 = cast<DA_CoreItem>(CallFunc_Conv_SoftObjectReferenceToObject_ReturnValue)
+  L2625: K2Node_DynamicCast_bSuccess_6 = K2Node_DynamicCast_AsDA_Core_Item_1
+  L2642: self.CraftingAsset = K2Node_DynamicCast_AsDA_Core_Item_1
+  L2655: goto L1974
+  L265A: CallFunc_GetWorldSubsystem_ReturnValue = SubsystemBlueprintLibrary.GetWorldSubsystem(self, DrdCraftingSubsystem)
+  L2678: CallFunc_GetItemAsset_ReturnValue_1 = CallFunc_GetWorldSubsystem_ReturnValue.DrdCraftingSubsystem.GetItemAsset(K2Node_CustomEvent_Key)
+  L26B3: CallFunc_LoadAsset_Blocking_ReturnValue = KismetSystemLibrary.LoadAsset_Blocking(CallFunc_GetItemAsset_ReturnValue_1)
+  L26D0: K2Node_DynamicCast_AsDA_Core_Item = cast<DA_CoreItem>(CallFunc_LoadAsset_Blocking_ReturnValue)
+  L26F4: K2Node_DynamicCast_bSuccess_5 = K2Node_DynamicCast_AsDA_Core_Item
+  L2711: if not (K2Node_DynamicCast_bSuccess_5) pop-flow
+  L271B: CallFunc_GetTraitByClassForItem_ReturnValue = FL_InventoryFramework.GetTraitByClassForItem(K2Node_DynamicCast_AsDA_Core_Item, DrdCraftPileTrait, false)
+  L2742: goto L038A
+  L2747: goto L2342
+  L274C: Temp_object_Variable_6 = K2Node_CustomEvent_Loaded_5
+  L275F: K2Node_DynamicCast_AsSound_Cue_3 = cast<SoundCue>(Temp_object_Variable_6)
+  L2783: K2Node_DynamicCast_bSuccess_10 = K2Node_DynamicCast_AsSound_Cue_3
+  L27A0: if not (K2Node_DynamicCast_bSuccess_10) pop-flow
+  L27AA: CallFunc_CreateSound2D_ReturnValue_1 = Default__GameplayStatics.GameplayStatics.CreateSound2D(self, K2Node_DynamicCast_AsSound_Cue_3, 1, 1, 0, null, false, true)
+  L27F0: CallFunc_CreateSound2D_ReturnValue_1.Play(0)
+  L2819: self.CraftSoundInstance = CallFunc_CreateSound2D_ReturnValue_1
+  L282C: pop-flow
+  L282D: K2Node_DynamicCast_AsSound_Cue_4 = cast<SoundCue>(Temp_object_Variable_7)
+  L2851: K2Node_DynamicCast_bSuccess_11 = K2Node_DynamicCast_AsSound_Cue_4
+  L286E: if not (K2Node_DynamicCast_bSuccess_11) pop-flow
+  L2878: Default__GameplayStatics.GameplayStatics.PlaySound2D(self, K2Node_DynamicCast_AsSound_Cue_4, 1, 1, 0, null, null, true)
+  L28B4: pop-flow
+  L28B5: Temp_object_Variable_7 = K2Node_CustomEvent_Loaded_6
+  L28C8: goto L282D
+  L28CD: Temp_object_Variable_8 = K2Node_CustomEvent_Loaded_7
+  L28E0: K2Node_DynamicCast_AsSound_Cue_5 = cast<SoundCue>(Temp_object_Variable_8)
+  L2904: K2Node_DynamicCast_bSuccess_12 = K2Node_DynamicCast_AsSound_Cue_5
+  L2921: if not (K2Node_DynamicCast_bSuccess_12) pop-flow
+  L292B: Default__GameplayStatics.GameplayStatics.PlaySound2D(self, K2Node_DynamicCast_AsSound_Cue_5, 1, 1, 0, null, null, true)
+  L2967: pop-flow
+  L2968: goto L206B
+  L296D: return
+
+## function FindAllMatchingItemTypes  flags=0x0CC20000
+  L0000: push L0259
+  L0005: CallFunc_GetAllItems_ReturnValue = self.PlayerInventory.AC_Inventory.GetAllItems(self.CraftMaterialsContainerIndex)
+  L0040: Temp_int_Loop_Counter_Variable = 0
+  L0057: Temp_int_Array_Index_Variable = 0
+  L006E: CallFunc_Array_Length_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(CallFunc_GetAllItems_ReturnValue)
+  L00A9: CallFunc_Less_IntInt_ReturnValue = Less_IntInt(Temp_int_Loop_Counter_Variable, CallFunc_Array_Length_ReturnValue)
+  L00CF: if not (CallFunc_Less_IntInt_ReturnValue) goto L01EF
+  L00DD: Temp_int_Array_Index_Variable = Temp_int_Loop_Counter_Variable
+  L00F8: push L020F
+  L00FD: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetAllItems_ReturnValue, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L0138: IsItemUsableForCrafting(CallFunc_Array_Get_Item, CallFunc_IsItemUsableForCrafting_bOut)
+  L0158: if not (CallFunc_IsItemUsableForCrafting_bOut) pop-flow
+  L0162: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetAllItems_ReturnValue, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L019D: Default__BlueprintSetLibrary.BlueprintSetLibrary.Set_Add(L_ItemTypes, CallFunc_Array_Get_Item.ItemAsset.self.ItemType)
+  L01EE: pop-flow
+  L01EF: Types = L_ItemTypes
+  L020A: goto L0259
+  L020F: CallFunc_Add_IntInt_ReturnValue = Add_IntInt(Temp_int_Loop_Counter_Variable, 1)
+  L0239: Temp_int_Loop_Counter_Variable = CallFunc_Add_IntInt_ReturnValue
+  L0254: goto L006E
+  L0259: return
+
+## function FindFreeCellByType  flags=0x0CC20000
+  L0000: push L055A
+  L0005: if not (bIngredient) goto L02DC
+  L0013: Temp_int_Loop_Counter_Variable = 0
+  L002A: Temp_int_Array_Index_Variable = 0
+  L0041: CallFunc_K2_GetComponentsByClass_ReturnValue = Actor.K2_GetComponentsByClass(DrdCraftCellComponent)
+  L0066: CallFunc_Array_Length_ReturnValue_1 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(CallFunc_K2_GetComponentsByClass_ReturnValue)
+  L00A1: CallFunc_Less_IntInt_ReturnValue_1 = Less_IntInt(Temp_int_Loop_Counter_Variable, CallFunc_Array_Length_ReturnValue_1)
+  L00C7: if not (CallFunc_Less_IntInt_ReturnValue_1) goto L04AB
+  L00D5: Temp_int_Array_Index_Variable = Temp_int_Loop_Counter_Variable
+  L00F0: push L04C6
+  L00F5: CallFunc_K2_GetComponentsByClass_ReturnValue = Actor.K2_GetComponentsByClass(DrdCraftCellComponent)
+  L011A: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_K2_GetComponentsByClass_ReturnValue, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item_1)
+  L0155: CallFunc_EqualEqual_GameplayTag_ReturnValue = BlueprintGameplayTagLibrary.EqualEqual_GameplayTag(CallFunc_Array_Get_Item_1.self.ItemType, Type)
+  L0191: if not (CallFunc_EqualEqual_GameplayTag_ReturnValue) pop-flow
+  L019B: CallFunc_K2_GetComponentsByClass_ReturnValue = Actor.K2_GetComponentsByClass(DrdCraftCellComponent)
+  L01C0: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_K2_GetComponentsByClass_ReturnValue, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item_1)
+  L01FB: CallFunc_GetNumChildrenComponents_ReturnValue_1 = CallFunc_Array_Get_Item_1.SceneComponent.GetNumChildrenComponents()
+  L022D: CallFunc_EqualEqual_IntInt_ReturnValue_1 = EqualEqual_IntInt(CallFunc_GetNumChildrenComponents_ReturnValue_1, 0)
+  L024F: if not (CallFunc_EqualEqual_IntInt_ReturnValue_1) pop-flow
+  L0259: CallFunc_K2_GetComponentsByClass_ReturnValue = Actor.K2_GetComponentsByClass(DrdCraftCellComponent)
+  L027E: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_K2_GetComponentsByClass_ReturnValue, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item_1)
+  L02B9: Cell = CallFunc_Array_Get_Item_1
+  L02CC: bOut = true
+  L02D7: goto L055A
+  L02DC: Temp_int_Loop_Counter_Variable_1 = 0
+  L02F3: Temp_int_Array_Index_Variable_1 = 0
+  L030A: CallFunc_Array_Length_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(self.SelectedItemCells)
+  L0345: CallFunc_Less_IntInt_ReturnValue = Less_IntInt(Temp_int_Loop_Counter_Variable_1, CallFunc_Array_Length_ReturnValue)
+  L036B: if not (CallFunc_Less_IntInt_ReturnValue) goto L0490
+  L0379: Temp_int_Array_Index_Variable_1 = Temp_int_Loop_Counter_Variable_1
+  L0394: push L0510
+  L0399: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(self.SelectedItemCells, Temp_int_Array_Index_Variable_1, CallFunc_Array_Get_Item)
+  L03D4: CallFunc_GetNumChildrenComponents_ReturnValue = CallFunc_Array_Get_Item.SceneComponent.GetNumChildrenComponents()
+  L0406: CallFunc_EqualEqual_IntInt_ReturnValue = EqualEqual_IntInt(CallFunc_GetNumChildrenComponents_ReturnValue, 0)
+  L0428: if not (CallFunc_EqualEqual_IntInt_ReturnValue) pop-flow
+  L0432: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(self.SelectedItemCells, Temp_int_Array_Index_Variable_1, CallFunc_Array_Get_Item)
+  L046D: Cell = CallFunc_Array_Get_Item
+  L0480: bOut = true
+  L048B: goto L055A
+  L0490: Cell = null
+  L049B: bOut = false
+  L04A6: goto L055A
+  L04AB: Cell = null
+  L04B6: bOut = false
+  L04C1: goto L055A
+  L04C6: CallFunc_Add_IntInt_ReturnValue = Add_IntInt(Temp_int_Loop_Counter_Variable, 1)
+  L04F0: Temp_int_Loop_Counter_Variable = CallFunc_Add_IntInt_ReturnValue
+  L050B: goto L0041
+  L0510: CallFunc_Add_IntInt_ReturnValue_1 = Add_IntInt(Temp_int_Loop_Counter_Variable_1, 1)
+  L053A: Temp_int_Loop_Counter_Variable_1 = CallFunc_Add_IntInt_ReturnValue_1
+  L0555: goto L030A
+  L055A: return
+
+## function FinishCrafting  flags=0x0C000000
+  L0000: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(7431)
+  L000F: return
+
+## function GetInventory  flags=0x1C420000
+  L0000: if not (bIngredient) goto L0026
+  L000E: Component = self.PlayerInventory
+  L0021: goto L0039
+  L0026: Component = self.BP_InventoryComponent
+  L0039: return
+
+## function GetInventoryComponent  flags=0x0C420800
+  L0000: Component = self.BP_InventoryComponent
+  L0013: return
+
+## function GetItemTypeCount  flags=0x1CC20000
+  L0000: push L0231
+  L0005: L_Count = 0
+  L001C: GetInventory(bIngredient, CallFunc_GetInventory_Component)
+  L003C: CallFunc_GetItemsByType_ReturnValue = CallFunc_GetInventory_Component.AC_Inventory.GetItemsByType(ItemType, -1)
+  L007C: Temp_int_Loop_Counter_Variable = 0
+  L0093: Temp_int_Array_Index_Variable = 0
+  L00AA: CallFunc_Array_Length_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(CallFunc_GetItemsByType_ReturnValue)
+  L00E5: CallFunc_Less_IntInt_ReturnValue = Less_IntInt(Temp_int_Loop_Counter_Variable, CallFunc_Array_Length_ReturnValue)
+  L010B: if not (CallFunc_Less_IntInt_ReturnValue) goto L01C7
+  L0119: Temp_int_Array_Index_Variable = Temp_int_Loop_Counter_Variable
+  L0134: push L01E7
+  L0139: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetItemsByType_ReturnValue, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L0174: CallFunc_Add_IntInt_ReturnValue_1 = Add_IntInt(L_Count, CallFunc_Array_Get_Item.Count)
+  L01AB: L_Count = CallFunc_Add_IntInt_ReturnValue_1
+  L01C6: pop-flow
+  L01C7: Count = L_Count
+  L01E2: goto L0231
+  L01E7: CallFunc_Add_IntInt_ReturnValue = Add_IntInt(Temp_int_Loop_Counter_Variable, 1)
+  L0211: Temp_int_Loop_Counter_Variable = CallFunc_Add_IntInt_ReturnValue
+  L022C: goto L00AA
+  L0231: return
+
+## function GetItemTypeSoftPile  flags=0x1CC20000
+  L0000: GetInventory(bIsIngredient, CallFunc_GetInventory_Component)
+  L0020: CallFunc_GetItemsByType_ReturnValue = CallFunc_GetInventory_Component.AC_Inventory.GetItemsByType(ItemType, self.CraftMaterialsContainerIndex)
+  L0064: CallFunc_Array_IsNotEmpty_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_IsNotEmpty(CallFunc_GetItemsByType_ReturnValue)
+  L0097: if not (CallFunc_Array_IsNotEmpty_ReturnValue) goto L01A7
+  L00A5: CallFunc_GetTraitByClassForItem_ReturnValue = FL_InventoryFramework.GetTraitByClassForItem(CallFunc_GetItemsByType_ReturnValue[0].ItemAsset, DrdCraftPileTrait, false)
+  L00DB: CallFunc_Not_PreBool_ReturnValue = Not_PreBool(bIsIngredient)
+  L00F8: CallFunc_IsValidSoftClassReference_ReturnValue = KismetSystemLibrary.IsValidSoftClassReference(CallFunc_GetTraitByClassForItem_ReturnValue.self.CraftPileSettings.OptionalOnTablePileClass)
+  L0134: CallFunc_BooleanAND_ReturnValue = BooleanAND(CallFunc_Not_PreBool_ReturnValue, CallFunc_IsValidSoftClassReference_ReturnValue)
+  L015A: if not (CallFunc_BooleanAND_ReturnValue) goto L01C1
+  L0168: PileClass = CallFunc_GetTraitByClassForItem_ReturnValue.self.CraftPileSettings.OptionalOnTablePileClass
+  L01A2: goto L01FB
+  L01A7: PileClass = soft("")
+  L01BC: goto L01FB
+  L01C1: PileClass = CallFunc_GetTraitByClassForItem_ReturnValue.self.CraftPileSettings.PileClass
+  L01FB: return
+
+## function GetSelectedItems  flags=0x0CC20000
+  L0000: push L0294
+  L0005: CallFunc_GetAllItems_ReturnValue = self.BP_InventoryComponent.AC_Inventory.GetAllItems(0)
+  L003C: Temp_int_Loop_Counter_Variable = 0
+  L0053: Temp_int_Array_Index_Variable = 0
+  L006A: CallFunc_Array_Length_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(CallFunc_GetAllItems_ReturnValue)
+  L00A5: CallFunc_Less_IntInt_ReturnValue = Less_IntInt(Temp_int_Loop_Counter_Variable, CallFunc_Array_Length_ReturnValue)
+  L00CB: if not (CallFunc_Less_IntInt_ReturnValue) goto L022A
+  L00D9: Temp_int_Array_Index_Variable = Temp_int_Loop_Counter_Variable
+  L00F4: push L024A
+  L00F9: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetAllItems_ReturnValue, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L0134: CallFunc_Map_Find_ReturnValue = Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_Find(L_Items, CallFunc_Array_Get_Item.ItemAsset.self.ItemType, CallFunc_Map_Find_Value)
+  L0198: CallFunc_Add_IntInt_ReturnValue_1 = Add_IntInt(CallFunc_Map_Find_Value, CallFunc_Array_Get_Item.Count)
+  L01CF: Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_Add(L_Items, CallFunc_Array_Get_Item.ItemAsset.self.ItemType, CallFunc_Add_IntInt_ReturnValue_1)
+  L0229: pop-flow
+  L022A: Items = L_Items
+  L0245: goto L0294
+  L024A: CallFunc_Add_IntInt_ReturnValue = Add_IntInt(Temp_int_Loop_Counter_Variable, 1)
+  L0274: Temp_int_Loop_Counter_Variable = CallFunc_Add_IntInt_ReturnValue
+  L028F: goto L006A
+  L0294: return
+
+## function GetSelectedItemsCount  !! disassembly failed: bad field path length 67108864
+
+## function InpActEvt_IA_Crafting_Click_K2Node_EnhancedInputActionEvent_3  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_3 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_3 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_3 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_3 = SourceAction
+  L0048: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(8373)
+  L0057: return
+
+## function InpActEvt_IA_Crafting_Start_K2Node_EnhancedInputActionEvent_0  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction = SourceAction
+  L0048: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(1807)
+  L0057: return
+
+## function InpActEvt_IA_Crafting_Start_K2Node_EnhancedInputActionEvent_1  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_1 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_1 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_1 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_1 = SourceAction
+  L0048: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(1623)
+  L0057: return
+
+## function InpActEvt_IA_Crafting_Start_K2Node_EnhancedInputActionEvent_2  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_2 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_2 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_2 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_2 = SourceAction
+  L0048: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(1439)
+  L0057: return
+
+## function IsItemUsableForCrafting  flags=0x1C420000
+  L0000: CallFunc_GetTraitByClassForItem_ReturnValue = FL_InventoryFramework.GetTraitByClassForItem(Item.ItemAsset, DrdCraftPileTrait, false)
+  L0030: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(CallFunc_GetTraitByClassForItem_ReturnValue)
+  L004D: if not (CallFunc_IsValid_ReturnValue) goto L006B
+  L005B: bOut = true
+  L0066: goto L0076
+  L006B: bOut = false
+  L0076: return
+
+## function IsPreviewActor  flags=0x0C420800
+  L0000: ReturnValue = false
+  L000B: return ReturnValue
+
+## function IsReadyForUse  flags=0x1C420000
+  L0000: CallFunc_Not_PreBool_ReturnValue = Not_PreBool(self.bLoading)
+  L001D: CallFunc_Not_PreBool_ReturnValue_1 = Not_PreBool(self.bCrafting)
+  L003A: CallFunc_BooleanAND_ReturnValue = BooleanAND(CallFunc_Not_PreBool_ReturnValue_1, CallFunc_Not_PreBool_ReturnValue)
+  L0060: bOut = CallFunc_BooleanAND_ReturnValue
+  L0073: return
+
+## function ItemAdd  flags=0x0C020000
+  L0000: IsItemUsableForCrafting(ItemData, CallFunc_IsItemUsableForCrafting_bOut)
+  L0020: if not (CallFunc_IsItemUsableForCrafting_bOut) goto L01E4
+  L002E: CallFunc_EqualEqual_ObjectObject_ReturnValue = EqualEqual_ObjectObject(self.PlayerInventory, ItemData.UniqueID.ParentComponent)
+  L0066: GetItemTypeCount(ItemData.ItemAsset.self.ItemType, CallFunc_EqualEqual_ObjectObject_ReturnValue, CallFunc_GetItemTypeCount_Count)
+  L00AE: CallFunc_Greater_IntInt_ReturnValue = Greater_IntInt(CallFunc_GetItemTypeCount_Count, 1)
+  L00D0: if not (CallFunc_Greater_IntInt_ReturnValue) goto L0168
+  L00DE: CallFunc_EqualEqual_ObjectObject_ReturnValue = EqualEqual_ObjectObject(self.PlayerInventory, ItemData.UniqueID.ParentComponent)
+  L0116: UpdatePileCount(ItemData.ItemAsset.self.ItemType, CallFunc_EqualEqual_ObjectObject_ReturnValue)
+  L0155: UpdateCraftResult()
+  L0163: goto L01E4
+  L0168: CallFunc_EqualEqual_ObjectObject_ReturnValue = EqualEqual_ObjectObject(self.PlayerInventory, ItemData.UniqueID.ParentComponent)
+  L01A0: SpawnPile(ItemData.ItemAsset.self.ItemType, CallFunc_EqualEqual_ObjectObject_ReturnValue)
+  L01DF: goto L0155
+  L01E4: return
+
+## function ItemCountUpdated  flags=0x0C020000
+  L0000: IsItemUsableForCrafting(ItemData, CallFunc_IsItemUsableForCrafting_bOut)
+  L0020: if not (CallFunc_IsItemUsableForCrafting_bOut) goto L01E4
+  L002E: CallFunc_EqualEqual_ObjectObject_ReturnValue = EqualEqual_ObjectObject(self.PlayerInventory, ItemData.UniqueID.ParentComponent)
+  L0066: GetItemTypeCount(ItemData.ItemAsset.self.ItemType, CallFunc_EqualEqual_ObjectObject_ReturnValue, CallFunc_GetItemTypeCount_Count)
+  L00AE: CallFunc_Greater_IntInt_ReturnValue = Greater_IntInt(CallFunc_GetItemTypeCount_Count, 0)
+  L00D0: if not (CallFunc_Greater_IntInt_ReturnValue) goto L0168
+  L00DE: CallFunc_EqualEqual_ObjectObject_ReturnValue = EqualEqual_ObjectObject(self.PlayerInventory, ItemData.UniqueID.ParentComponent)
+  L0116: UpdatePileCount(ItemData.ItemAsset.self.ItemType, CallFunc_EqualEqual_ObjectObject_ReturnValue)
+  L0155: UpdateCraftResult()
+  L0163: goto L01E4
+  L0168: CallFunc_EqualEqual_ObjectObject_ReturnValue = EqualEqual_ObjectObject(self.PlayerInventory, ItemData.UniqueID.ParentComponent)
+  L01A0: DestroyPile(ItemData.ItemAsset.self.ItemType, CallFunc_EqualEqual_ObjectObject_ReturnValue)
+  L01DF: goto L0155
+  L01E4: return
+
+## function ItemEquipped  flags=0x0C020800
+  L0000: frame.K2Node_Event_Component_1 = Component
+  L0012: frame.K2Node_Event_Actor_1 = Actor
+  L0024: frame.K2Node_Event_ItemID_1 = ItemID
+  L0036: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(3695)
+  L0045: return
+
+## function ItemUnequipped  flags=0x0C020800
+  L0000: frame.K2Node_Event_Component = Component
+  L0012: frame.K2Node_Event_Actor = Actor
+  L0024: frame.K2Node_Event_ItemID = ItemID
+  L0036: frame.K2Node_Event_RemovalPolicy = RemovalPolicy
+  L0048: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(3696)
+  L0057: return
+
+## function MeetsCurrencyCheck  flags=0x0C420800
+  L0000: ReturnValue = false
+  L000B: return ReturnValue
+
+## function OnCraftButtonClicked_Event  flags=0x0C000000
+  L0000: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(9011)
+  L000F: return
+
+## function OnLoaded_0A08A745459A8C37DCF7CCA323D7FD12  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Loaded_1 = Loaded
+  L0012: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(3671)
+  L0021: return
+
+## function OnLoaded_3E0E6EE247936C6F3DE6CDB4E9643EA1  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Loaded_2 = Loaded
+  L0012: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(8349)
+  L0021: return
+
+## function OnLoaded_49D91FD548F62A95AB6ADB9CADD45667  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Loaded_3 = Loaded
+  L0012: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(9544)
+  L0021: return
+
+## function OnLoaded_58185B4641E63AFBA74035AAB5EF6D54  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Loaded_6 = Loaded
+  L0012: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(10421)
+  L0021: return
+
+## function OnLoaded_58185B4641E63AFBA74035AAC1506D2C  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Loaded_7 = Loaded
+  L0012: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(10445)
+  L0021: return
+
+## function OnLoaded_810780654997B2C0F883AC9AF74182EB  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Loaded_4 = Loaded
+  L0012: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(9568)
+  L0021: return
+
+## function OnLoaded_CA18CA3D47AC2D319CDCABA4D5F9FF62  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Loaded_8 = Loaded
+  L0012: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(2177)
+  L0021: return
+
+## function OnLoaded_D1B98A41488CDD0D776D569D9E37C779  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Loaded = Loaded
+  L0012: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(1164)
+  L0021: return
+
+## function OnLoaded_D4374C87436801E48A2D7F87A6CB1B16  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Loaded_5 = Loaded
+  L0012: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(10060)
+  L0021: return
+
+## function OnOpenRecipesPressed_Event  flags=0x0C000000
+  L0000: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(8279)
+  L000F: return
+
+## function OpenRecipes  flags=0x0C000000
+  L0000: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(8294)
+  L000F: return
+
+## function PassUniqueID  flags=0x0C020800
+  L0000: frame.K2Node_Event_UniqueID = UniqueID
+  L0012: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(3697)
+  L0021: return
+
+## function PileClicked  flags=0x0C420000
+  L0000: IsReadyForUse(CallFunc_IsReadyForUse_bOut)
+  L0017: if not (CallFunc_IsReadyForUse_bOut) goto L00FE
+  L0025: if not (bIngredient) goto L00D9
+  L0033: GetSelectedItemsCount(CallFunc_GetSelectedItemsCount_Count)
+  L004A: CallFunc_GreaterEqual_IntInt_ReturnValue = GreaterEqual_IntInt(CallFunc_GetSelectedItemsCount_Count, self.MaxSelectedItems)
+  L0070: if not (CallFunc_GreaterEqual_IntInt_ReturnValue) goto L00D9
+  L007E: KismetSystemLibrary.PrintString(self, "Max selected items!", true, true, LinearColor{0, 0.66, 1, 1}, 2, 'None')
+  L00D4: goto L00FE
+  L00D9: TryMoveItem(ItemType, bIngredient, 1)
+  L00FE: return
+
+## function PlaceNextPile  flags=0x0C000000
+  L0000: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(5267)
+  L000F: return
+
+## function PlayPileSound  flags=0x0C400000
+  L0000: frame.K2Node_CustomEvent_Key = Key
+  L0012: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(9818)
+  L0021: return
+
+## function PrintError  flags=0x0C020000
+  L0000: CallFunc_Concat_StrStr_ReturnValue = KismetStringLibrary.Concat_StrStr("Error: BP_CraftController - ", InString)
+  L0043: KismetSystemLibrary.PrintString(self, CallFunc_Concat_StrStr_ReturnValue, false, true, LinearColor{1, 0, 0.000167, 1}, 10, 'None')
+  L008D: return
+
+## function ReceiveBeginPlay  flags=0x08080800
+  L0000: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(9466)
+  L000F: return
+
+## function ReceivePossessed  flags=0x08020804
+  L0000: frame.K2Node_Event_NewController = NewController
+  L0012: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(4024)
+  L0021: return
+
+## function ReceiveTick  flags=0x08020800
+  L0000: frame.K2Node_Event_DeltaSeconds = DeltaSeconds
+  L0012: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(5238)
+  L0021: return
+
+## function ReceiveUnpossessed  flags=0x08020804
+  L0000: frame.K2Node_Event_OldController = OldController
+  L0012: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(3699)
+  L0021: return
+
+## function ReduceRecipeItems  flags=0x0CC20000
+  L0000: push L0330
+  L0005: Temp_int_Loop_Counter_Variable = 0
+  L001C: Temp_int_Array_Index_Variable = 0
+  L0033: CallFunc_Array_Length_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(Recipe.CostItems)
+  L0077: CallFunc_Less_IntInt_ReturnValue = Less_IntInt(Temp_int_Loop_Counter_Variable, CallFunc_Array_Length_ReturnValue)
+  L009D: if not (CallFunc_Less_IntInt_ReturnValue) pop-flow
+  L00A7: Temp_int_Array_Index_Variable = Temp_int_Loop_Counter_Variable
+  L00C2: push L02E6
+  L00C7: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(Recipe.CostItems, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L010B: CallFunc_GetWorldSubsystem_ReturnValue = SubsystemBlueprintLibrary.GetWorldSubsystem(self, DrdCraftingSubsystem)
+  L0129: CallFunc_GetItemAsset_ReturnValue = CallFunc_GetWorldSubsystem_ReturnValue.DrdCraftingSubsystem.GetItemAsset(CallFunc_Array_Get_Item.ItemTypeTag)
+  L016D: CallFunc_LoadAsset_Blocking_ReturnValue = KismetSystemLibrary.LoadAsset_Blocking(CallFunc_GetItemAsset_ReturnValue)
+  L018A: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(Recipe.CostItems, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L01CE: CallFunc_GetWorldSubsystem_ReturnValue = SubsystemBlueprintLibrary.GetWorldSubsystem(self, DrdCraftingSubsystem)
+  L01EC: CallFunc_GetItemAsset_ReturnValue = CallFunc_GetWorldSubsystem_ReturnValue.DrdCraftingSubsystem.GetItemAsset(CallFunc_Array_Get_Item.ItemTypeTag)
+  L0230: CallFunc_Conv_SoftObjectReferenceToObject_ReturnValue = KismetSystemLibrary.Conv_SoftObjectReferenceToObject(CallFunc_GetItemAsset_ReturnValue)
+  L024D: K2Node_DynamicCast_AsDA_Core_Item = cast<DA_CoreItem>(CallFunc_Conv_SoftObjectReferenceToObject_ReturnValue)
+  L0271: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsDA_Core_Item
+  L028E: self.BP_InventoryComponent.AC_Inventory.MassReduceCount(K2Node_DynamicCast_AsDA_Core_Item, CallFunc_Array_Get_Item.Count, self.BP_InventoryComponent, self.CraftMaterialsContainerIndex, true, CallFunc_MassReduceCount_RemainingCount)
+  L02E5: pop-flow
+  L02E6: CallFunc_Add_IntInt_ReturnValue = Add_IntInt(Temp_int_Loop_Counter_Variable, 1)
+  L0310: Temp_int_Loop_Counter_Variable = CallFunc_Add_IntInt_ReturnValue
+  L032B: goto L0033
+  L0330: return
+
+## function ReturnItems  flags=0x0C820000
+  L0000: push L0305
+  L0005: CallFunc_GetAllItems_ReturnValue = self.BP_InventoryComponent.AC_Inventory.GetAllItems(-1)
+  L003C: push L023C
+  L0041: CallFunc_Array_Length_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(CallFunc_GetAllItems_ReturnValue)
+  L007C: CallFunc_Subtract_IntInt_ReturnValue_1 = Subtract_IntInt(CallFunc_Array_Length_ReturnValue, 1)
+  L00A6: Temp_int_Loop_Counter_Variable = CallFunc_Subtract_IntInt_ReturnValue_1
+  L00C1: CallFunc_Array_Length_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(CallFunc_GetAllItems_ReturnValue)
+  L00FC: CallFunc_Subtract_IntInt_ReturnValue_1 = Subtract_IntInt(CallFunc_Array_Length_ReturnValue, 1)
+  L0126: CallFunc_Max_ReturnValue = Max(0, CallFunc_Subtract_IntInt_ReturnValue_1)
+  L0150: Temp_int_Array_Index_Variable = CallFunc_Max_ReturnValue
+  L016B: CallFunc_GreaterEqual_IntInt_ReturnValue = GreaterEqual_IntInt(Temp_int_Loop_Counter_Variable, 0)
+  L018D: if not (CallFunc_GreaterEqual_IntInt_ReturnValue) pop-flow
+  L0197: Temp_int_Array_Index_Variable = Temp_int_Loop_Counter_Variable
+  L01B2: push L02BB
+  L01B7: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetAllItems_ReturnValue, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L01F2: TryMoveItem(CallFunc_Array_Get_Item.ItemAsset.self.ItemType, false, CallFunc_Array_Get_Item.Count)
+  L023B: pop-flow
+  L023C: CallFunc_Array_IsEmpty_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_IsEmpty(CallFunc_GetAllItems_ReturnValue)
+  L026F: if not (CallFunc_Array_IsEmpty_ReturnValue) goto L027E
+  L027D: pop-flow
+  L027E: Default__GameplayStatics.GameplayStatics.PlaySound2D(self, self.ItemBackFromWorkSpaceSound, 1, 1, 0, null, null, true)
+  L02BA: pop-flow
+  L02BB: CallFunc_Subtract_IntInt_ReturnValue = Subtract_IntInt(Temp_int_Loop_Counter_Variable, 1)
+  L02E5: Temp_int_Loop_Counter_Variable = CallFunc_Subtract_IntInt_ReturnValue
+  L0300: goto L016B
+  L0305: return
+
+## function SearchForAllCraftItemsInPlayerInventory  flags=0x0CC20000
+  L0000: push L02FD
+  L0005: CallFunc_GetAllItems_ReturnValue = self.PlayerInventory.AC_Inventory.GetAllItems(self.CraftMaterialsContainerIndex)
+  L0040: Temp_int_Loop_Counter_Variable = 0
+  L0057: Temp_int_Array_Index_Variable = 0
+  L006E: CallFunc_Array_Length_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(CallFunc_GetAllItems_ReturnValue)
+  L00A9: CallFunc_Less_IntInt_ReturnValue = Less_IntInt(Temp_int_Loop_Counter_Variable, CallFunc_Array_Length_ReturnValue)
+  L00CF: if not (CallFunc_Less_IntInt_ReturnValue) goto L0293
+  L00DD: Temp_int_Array_Index_Variable = Temp_int_Loop_Counter_Variable
+  L00F8: push L02B3
+  L00FD: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetAllItems_ReturnValue, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L0138: IsItemUsableForCrafting(CallFunc_Array_Get_Item, CallFunc_IsItemUsableForCrafting_bOut)
+  L0158: if not (CallFunc_IsItemUsableForCrafting_bOut) pop-flow
+  L0162: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetAllItems_ReturnValue, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L019D: CallFunc_Map_Find_ReturnValue = Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_Find(L_ItemTypes, CallFunc_Array_Get_Item.ItemAsset.self.ItemType, CallFunc_Map_Find_Value)
+  L0201: CallFunc_Add_IntInt_ReturnValue_1 = Add_IntInt(CallFunc_Map_Find_Value, CallFunc_Array_Get_Item.Count)
+  L0238: Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_Add(L_ItemTypes, CallFunc_Array_Get_Item.ItemAsset.self.ItemType, CallFunc_Add_IntInt_ReturnValue_1)
+  L0292: pop-flow
+  L0293: CraftItems = L_ItemTypes
+  L02AE: goto L02FD
+  L02B3: CallFunc_Add_IntInt_ReturnValue = Add_IntInt(Temp_int_Loop_Counter_Variable, 1)
+  L02DD: Temp_int_Loop_Counter_Variable = CallFunc_Add_IntInt_ReturnValue
+  L02F8: goto L006E
+  L02FD: return
+
+## function SendUnpossessEvent  flags=0x0C820000
+  L0000: IsReadyForUse(CallFunc_IsReadyForUse_bOut)
+  L0017: if not (CallFunc_IsReadyForUse_bOut) goto L00F7
+  L0025: if not (self.bIsCrafting) goto L0038
+  L0033: goto L00F7
+  L0038: CallFunc_GetController_ReturnValue = Pawn.GetController()
+  L004C: CallFunc_GetInstigator_ReturnValue = Actor.GetInstigator()
+  L0060: CallFunc_GetInstigator_ReturnValue_1 = Actor.GetInstigator()
+  L0074: K2Node_MakeStruct_GameplayEventData.Instigator = CallFunc_GetInstigator_ReturnValue
+  L0090: K2Node_MakeStruct_GameplayEventData.Target = self
+  L00A4: K2Node_MakeStruct_GameplayEventData.OptionalObject = CallFunc_GetController_ReturnValue
+  L00C0: AbilitySystemBlueprintLibrary.SendGameplayEventToActor(CallFunc_GetInstigator_ReturnValue_1, GameplayTag{'GAS.Event.Craft.End'}, K2Node_MakeStruct_GameplayEventData)
+  L00F7: return
+
+## function SetIsPreviewActor  flags=0x0C020800
+  L0000: frame.K2Node_Event_NewStatus = NewStatus
+  L0012: frame.K2Node_Event_OriginalActor = OriginalActor
+  L0024: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(3698)
+  L0033: return
+
+## function ShowCraftedItem  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Item = Item
+  L0012: BP_CraftController_C.ExecuteUbergraph_BP_CraftController(7110)
+  L0021: return
+
+## function SpawnPile  flags=0x0CC20000
+  L0000: GetItemTypeSoftPile(ItemType, bIngredient, CallFunc_GetItemTypeSoftPile_PileClass)
+  L0029: CallFunc_IsValidSoftClassReference_ReturnValue = KismetSystemLibrary.IsValidSoftClassReference(CallFunc_GetItemTypeSoftPile_PileClass)
+  L0046: if not (CallFunc_IsValidSoftClassReference_ReturnValue) goto L04C9
+  L0054: GetItemTypeSoftPile(ItemType, bIngredient, CallFunc_GetItemTypeSoftPile_PileClass)
+  L007D: CallFunc_LoadClassAsset_Blocking_ReturnValue = KismetSystemLibrary.LoadClassAsset_Blocking(CallFunc_GetItemTypeSoftPile_PileClass)
+  L009A: FindFreeCellByType(ItemType, bIngredient, CallFunc_FindFreeCellByType_Cell, CallFunc_FindFreeCellByType_bOut)
+  L00CC: if not (CallFunc_FindFreeCellByType_bOut) goto L0443
+  L00DA: CallFunc_MakeTransform_ReturnValue = MakeTransform(Vec(0,0,0), Rot(0,0,0), Vec(1,1,1))
+  L0141: GetItemTypeSoftPile(ItemType, bIngredient, CallFunc_GetItemTypeSoftPile_PileClass)
+  L016A: CallFunc_Conv_SoftClassReferenceToClass_ReturnValue = KismetSystemLibrary.Conv_SoftClassReferenceToClass(CallFunc_GetItemTypeSoftPile_PileClass)
+  L0187: K2Node_ClassDynamicCast_AsDrd_Craft_Pile = classcast<DrdCraftPile>(CallFunc_Conv_SoftClassReferenceToClass_ReturnValue)
+  L01AB: K2Node_ClassDynamicCast_bSuccess = K2Node_ClassDynamicCast_AsDrd_Craft_Pile
+  L01C8: CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue = GameplayStatics.BeginDeferredActorSpawnFromClass(self, K2Node_ClassDynamicCast_AsDrd_Craft_Pile, CallFunc_MakeTransform_ReturnValue, 1, null, 1)
+  L01F4: Default__KismetSystemLibrary.KismetSystemLibrary.SetStructurePropertyByName(CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue, 'ItemType', ItemType)
+  L0233: KismetSystemLibrary.SetBoolPropertyByName(CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue, 'bIngredient', bIngredient)
+  L025C: CallFunc_MakeTransform_ReturnValue = MakeTransform(Vec(0,0,0), Rot(0,0,0), Vec(1,1,1))
+  L02C3: CallFunc_FinishSpawningActor_ReturnValue = GameplayStatics.FinishSpawningActor(CallFunc_BeginDeferredActorSpawnFromClass_ReturnValue, CallFunc_MakeTransform_ReturnValue, 1)
+  L02EB: bind(K2Node_CreateDelegate_OutputDelegate, self, 'PileClicked')
+  L0302: CallFunc_FinishSpawningActor_ReturnValue.self.OnPileClicked += K2Node_CreateDelegate_OutputDelegate
+  L032B: CallFunc_K2_AttachToComponent_ReturnValue = CallFunc_FinishSpawningActor_ReturnValue.Actor.K2_AttachToComponent(CallFunc_FindFreeCellByType_Cell, 'None', 0, 0, 0, true)
+  L0372: GetItemTypeCount(ItemType, bIngredient, CallFunc_GetItemTypeCount_Count)
+  L039B: CallFunc_FinishSpawningActor_ReturnValue.DrdCraftPile.SetItemCount(CallFunc_GetItemTypeCount_Count)
+  L03C4: Temp_bool_Variable = bIngredient
+  L03D7: Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_Add(switch(Temp_bool_Variable){false: self.SelectedPiles; true: self.IngredientPiles; default: K2Node_Select_Default}, ItemType, CallFunc_FinishSpawningActor_ReturnValue)
+  L043E: goto L04C9
+  L0443: CallFunc_GetDebugStringFromGameplayTag_ReturnValue = BlueprintGameplayTagLibrary.GetDebugStringFromGameplayTag(ItemType)
+  L0468: CallFunc_Concat_StrStr_ReturnValue = KismetStringLibrary.Concat_StrStr("Can't find free cell for cell type ", CallFunc_GetDebugStringFromGameplayTag_ReturnValue)
+  L04B2: PrintError(CallFunc_Concat_StrStr_ReturnValue)
+  L04C9: return
+
+## function Trace  flags=0x0C820000
+  L0000: CallFunc_GetHitResultUnderCursorByChannel_ReturnValue = self.PlayerController.PlayerController.GetHitResultUnderCursorByChannel(0, true, CallFunc_GetHitResultUnderCursorByChannel_HitResult)
+  L0036: if not (CallFunc_GetHitResultUnderCursorByChannel_ReturnValue) goto L034F
+  L0044: CallFunc_GetHitResultUnderCursorByChannel_ReturnValue = self.PlayerController.PlayerController.GetHitResultUnderCursorByChannel(0, true, CallFunc_GetHitResultUnderCursorByChannel_HitResult)
+  L007A: self.PlayerController.GetPlayerViewPoint(CallFunc_GetPlayerViewPoint_Location, CallFunc_GetPlayerViewPoint_Rotation)
+  L00B0: GameplayStatics.BreakHitResult(CallFunc_GetHitResultUnderCursorByChannel_HitResult, CallFunc_BreakHitResult_bBlockingHit, CallFunc_BreakHitResult_bInitialOverlap, CallFunc_BreakHitResult_Time, CallFunc_BreakHitResult_Distance, CallFunc_BreakHitResult_Location, CallFunc_BreakHitResult_ImpactPoint, CallFunc_BreakHitResult_Normal, CallFunc_BreakHitResult_ImpactNormal, CallFunc_BreakHitResult_PhysMat, CallFunc_BreakHitResult_HitActor, CallFunc_BreakHitResult_HitComponent, CallFunc_BreakHitResult_HitBoneName, CallFunc_BreakHitResult_BoneName, CallFunc_BreakHitResult_HitItem, CallFunc_BreakHitResult_ElementIndex, CallFunc_BreakHitResult_FaceIndex, CallFunc_BreakHitResult_TraceStart, CallFunc_BreakHitResult_TraceEnd)
+  L0165: CallFunc_LineTraceSingle_ReturnValue = KismetSystemLibrary.LineTraceSingle(self, CallFunc_GetPlayerViewPoint_Location, CallFunc_BreakHitResult_ImpactPoint, 0, false, Temp_object_Variable, 2, CallFunc_LineTraceSingle_OutHit, true, LinearColor{1, 0, 0, 1}, LinearColor{0, 1, 0, 1}, 5)
+  L01ED: if not (CallFunc_LineTraceSingle_ReturnValue) goto L034F
+  L01FB: GameplayStatics.BreakHitResult(CallFunc_LineTraceSingle_OutHit, CallFunc_BreakHitResult_bBlockingHit_1, CallFunc_BreakHitResult_bInitialOverlap_1, CallFunc_BreakHitResult_Time_1, CallFunc_BreakHitResult_Distance_1, CallFunc_BreakHitResult_Location_1, CallFunc_BreakHitResult_ImpactPoint_1, CallFunc_BreakHitResult_Normal_1, CallFunc_BreakHitResult_ImpactNormal_1, CallFunc_BreakHitResult_PhysMat_1, CallFunc_BreakHitResult_HitActor_1, CallFunc_BreakHitResult_HitComponent_1, CallFunc_BreakHitResult_HitBoneName_1, CallFunc_BreakHitResult_BoneName_1, CallFunc_BreakHitResult_HitItem_1, CallFunc_BreakHitResult_ElementIndex_1, CallFunc_BreakHitResult_FaceIndex_1, CallFunc_BreakHitResult_TraceStart_1, CallFunc_BreakHitResult_TraceEnd_1)
+  L02B0: CallFunc_GetDisplayName_ReturnValue = KismetSystemLibrary.GetDisplayName(CallFunc_BreakHitResult_HitActor_1)
+  L02D5: CallFunc_Concat_StrStr_ReturnValue = KismetStringLibrary.Concat_StrStr("Click to ", CallFunc_GetDisplayName_ReturnValue)
+  L0305: KismetSystemLibrary.PrintString(self, CallFunc_Concat_StrStr_ReturnValue, true, true, LinearColor{0, 0.66, 1, 1}, 2, 'None')
+  L034F: return
+
+## function TraceForPile  flags=0x0C820000
+  L0000: push L0870
+  L0005: K2Node_MakeArray_Array = [1]
+  L0019: TraceSphereRadiuses = K2Node_MakeArray_Array
+  L0034: if not (self.bTraceForPiles) pop-flow
+  L003E: Temp_int_Loop_Counter_Variable_1 = 0
+  L0055: Temp_int_Array_Index_Variable = 0
+  L006C: CallFunc_Array_Length_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(TraceSphereRadiuses)
+  L00A7: CallFunc_Less_IntInt_ReturnValue = Less_IntInt(Temp_int_Loop_Counter_Variable_1, CallFunc_Array_Length_ReturnValue)
+  L00CD: if not (CallFunc_Less_IntInt_ReturnValue) goto L052C
+  L00DB: Temp_int_Array_Index_Variable = Temp_int_Loop_Counter_Variable_1
+  L00F6: push L0645
+  L00FB: CallFunc_Conv_DoubleToVector_ReturnValue = Conv_DoubleToVector(200)
+  L0120: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(TraceSphereRadiuses, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L015B: CallFunc_DeprojectMousePositionToWorld_ReturnValue = self.PlayerController.PlayerController.DeprojectMousePositionToWorld(CallFunc_DeprojectMousePositionToWorld_WorldLocation, CallFunc_DeprojectMousePositionToWorld_WorldDirection)
+  L0197: CallFunc_Multiply_VectorVector_ReturnValue = Multiply_VectorVector(CallFunc_DeprojectMousePositionToWorld_WorldDirection, CallFunc_Conv_DoubleToVector_ReturnValue)
+  L01C5: CallFunc_Add_VectorVector_ReturnValue = Add_VectorVector(CallFunc_DeprojectMousePositionToWorld_WorldLocation, CallFunc_Multiply_VectorVector_ReturnValue)
+  L01F3: CallFunc_SphereTraceMulti_Radius_ImplicitCast = CallFunc_Array_Get_Item
+  L0210: CallFunc_SphereTraceMulti_OutHits = []
+  L021B: CallFunc_SphereTraceMulti_ReturnValue = KismetSystemLibrary.SphereTraceMulti(self, CallFunc_DeprojectMousePositionToWorld_WorldLocation, CallFunc_Add_VectorVector_ReturnValue, CallFunc_SphereTraceMulti_Radius_ImplicitCast, 2, true, Temp_object_Variable, 0, CallFunc_SphereTraceMulti_OutHits, true, LinearColor{1, 0, 0, 1}, LinearColor{0, 1, 0, 1}, 5)
+  L02AC: Temp_bool_True_if_break_was_hit_Variable = false
+  L02B7: Temp_int_Loop_Counter_Variable = 0
+  L02CE: Temp_int_Array_Index_Variable_1 = 0
+  L02E5: CallFunc_Not_PreBool_ReturnValue = Not_PreBool(Temp_bool_True_if_break_was_hit_Variable)
+  L0302: CallFunc_Array_Length_ReturnValue_1 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(CallFunc_SphereTraceMulti_OutHits)
+  L033D: CallFunc_Less_IntInt_ReturnValue_1 = Less_IntInt(Temp_int_Loop_Counter_Variable, CallFunc_Array_Length_ReturnValue_1)
+  L0363: CallFunc_BooleanAND_ReturnValue = BooleanAND(CallFunc_Not_PreBool_ReturnValue, CallFunc_Less_IntInt_ReturnValue_1)
+  L0389: if not (CallFunc_BooleanAND_ReturnValue) pop-flow
+  L0393: Temp_int_Array_Index_Variable_1 = Temp_int_Loop_Counter_Variable
+  L03AE: push L068F
+  L03B3: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_SphereTraceMulti_OutHits, Temp_int_Array_Index_Variable_1, CallFunc_Array_Get_Item_1)
+  L03EE: GameplayStatics.BreakHitResult(CallFunc_Array_Get_Item_1, CallFunc_BreakHitResult_bBlockingHit, CallFunc_BreakHitResult_bInitialOverlap, CallFunc_BreakHitResult_Time, CallFunc_BreakHitResult_Distance, CallFunc_BreakHitResult_Location, CallFunc_BreakHitResult_ImpactPoint, CallFunc_BreakHitResult_Normal, CallFunc_BreakHitResult_ImpactNormal, CallFunc_BreakHitResult_PhysMat, CallFunc_BreakHitResult_HitActor, CallFunc_BreakHitResult_HitComponent, CallFunc_BreakHitResult_HitBoneName, CallFunc_BreakHitResult_BoneName, CallFunc_BreakHitResult_HitItem, CallFunc_BreakHitResult_ElementIndex, CallFunc_BreakHitResult_FaceIndex, CallFunc_BreakHitResult_TraceStart, CallFunc_BreakHitResult_TraceEnd)
+  L04A3: K2Node_DynamicCast_AsDrd_Craft_Pile = cast<DrdCraftPile>(CallFunc_BreakHitResult_HitActor)
+  L04C7: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsDrd_Craft_Pile
+  L04E4: if not (K2Node_DynamicCast_bSuccess) pop-flow
+  L04EE: Default__BlueprintSetLibrary.BlueprintSetLibrary.Set_Add(AllHoveredPiles, K2Node_DynamicCast_AsDrd_Craft_Pile)
+  L0520: Temp_bool_True_if_break_was_hit_Variable = true
+  L052B: pop-flow
+  L052C: push L06D9
+  L0531: push L05BF
+  L0536: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(self.HoveredPile)
+  L0553: if not (CallFunc_IsValid_ReturnValue) goto L07E3
+  L0561: CallFunc_Set_Contains_ReturnValue = Default__BlueprintSetLibrary.BlueprintSetLibrary.Set_Contains(AllHoveredPiles, self.HoveredPile)
+  L059D: if not (CallFunc_Set_Contains_ReturnValue) goto L07E3
+  L05AB: NewHovered = self.HoveredPile
+  L05BE: pop-flow
+  L05BF: CallFunc_IsValid_ReturnValue_1 = KismetSystemLibrary.IsValid(self.HoveredPile)
+  L05DC: if not (CallFunc_IsValid_ReturnValue_1) pop-flow
+  L05E6: CallFunc_NotEqual_ObjectObject_ReturnValue = NotEqual_ObjectObject(self.HoveredPile, NewHovered)
+  L060C: if not (CallFunc_NotEqual_ObjectObject_ReturnValue) pop-flow
+  L0616: self.CraftHUDWidget.ShowPileHint(false, self.HoveredPile)
+  L0644: pop-flow
+  L0645: CallFunc_Add_IntInt_ReturnValue_1 = Add_IntInt(Temp_int_Loop_Counter_Variable_1, 1)
+  L066F: Temp_int_Loop_Counter_Variable_1 = CallFunc_Add_IntInt_ReturnValue_1
+  L068A: goto L006C
+  L068F: CallFunc_Add_IntInt_ReturnValue = Add_IntInt(Temp_int_Loop_Counter_Variable, 1)
+  L06B9: Temp_int_Loop_Counter_Variable = CallFunc_Add_IntInt_ReturnValue
+  L06D4: goto L02E5
+  L06D9: CallFunc_IsValid_ReturnValue_2 = KismetSystemLibrary.IsValid(NewHovered)
+  L06F6: if not (CallFunc_IsValid_ReturnValue_2) goto L0783
+  L0704: CallFunc_NotEqual_ObjectObject_ReturnValue_1 = NotEqual_ObjectObject(self.HoveredPile, NewHovered)
+  L072A: if not (CallFunc_NotEqual_ObjectObject_ReturnValue_1) pop-flow
+  L0734: NewHovered.DrdCraftPile.SetIsHovered(true)
+  L0755: self.CraftHUDWidget.ShowPileHint(true, NewHovered)
+  L0783: CallFunc_IsValid_ReturnValue_3 = KismetSystemLibrary.IsValid(self.HoveredPile)
+  L07A0: if not (CallFunc_IsValid_ReturnValue_3) goto L07CF
+  L07AE: self.HoveredPile.DrdCraftPile.SetIsHovered(false)
+  L07CF: self.HoveredPile = NewHovered
+  L07E2: pop-flow
+  L07E3: CallFunc_Set_IsEmpty_ReturnValue = Default__BlueprintSetLibrary.BlueprintSetLibrary.Set_IsEmpty(AllHoveredPiles)
+  L0816: if not (CallFunc_Set_IsEmpty_ReturnValue) goto L0825
+  L0824: pop-flow
+  L0825: Default__BlueprintSetLibrary.BlueprintSetLibrary.Set_GetItemByIndex(AllHoveredPiles, 0, CallFunc_Set_GetItemByIndex_Item)
+  L085C: NewHovered = CallFunc_Set_GetItemByIndex_Item
+  L086F: pop-flow
+  L0870: return
+
+## function TryCraft  flags=0x0C020000
+  L0000: IsReadyForUse(CallFunc_IsReadyForUse_bOut)
+  L0017: if not (CallFunc_IsReadyForUse_bOut) goto L0053
+  L0025: if not (self.BestRecipeStatus.bCanCraft) goto L0053
+  L003C: CraftRecipe(self.BestRecipe)
+  L0053: return
+
+## function TryMoveItem  flags=0x0CC20000
+  L0000: GetInventory(bIngredient, CallFunc_GetInventory_Component_1)
+  L0020: L_From = CallFunc_GetInventory_Component_1
+  L0033: CallFunc_Not_PreBool_ReturnValue = Not_PreBool(bIngredient)
+  L0050: GetInventory(CallFunc_Not_PreBool_ReturnValue, CallFunc_GetInventory_Component)
+  L0070: L_To = CallFunc_GetInventory_Component
+  L0083: CallFunc_GetItemsByType_ReturnValue = L_From.AC_Inventory.GetItemsByType(ItemType, -1)
+  L00C3: L_ReducingItem = CallFunc_GetItemsByType_ReturnValue[0]
+  L00E4: L_To.AC_Inventory.TryAddNewItemByDataAsset(L_ReducingItem.ItemAsset, Count, L_To, true, false, CallFunc_TryAddNewItemByDataAsset_Result, CallFunc_TryAddNewItemByDataAsset_NewItem, CallFunc_TryAddNewItemByDataAsset_StackDelta, -1, -1)
+  L014F: if not (CallFunc_TryAddNewItemByDataAsset_Result) goto L01B1
+  L015D: L_From.AC_Inventory.ReduceItemCount(L_ReducingItem, 1, true, CallFunc_ReduceItemCount_NewCount)
+  L0195: PlayPileSound(ItemType)
+  L01AC: goto L01D0
+  L01B1: PrintError("Can't move item")
+  L01D0: return
+
+## function TryStackItem  flags=0x0C020000
+  L0000: return
+
+## function UpdateCraftResult  flags=0x0C820000
+  L0000: push L0528
+  L0005: MaxAvailRecipeItemsCount = 0
+  L001C: push L0385
+  L0021: push L02FF
+  L0026: GetSelectedItems(CallFunc_GetSelectedItems_Items)
+  L003D: CallFunc_Map_IsNotEmpty_ReturnValue = Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_IsNotEmpty(CallFunc_GetSelectedItems_Items)
+  L0070: if not (CallFunc_Map_IsNotEmpty_ReturnValue) goto L0439
+  L007E: CallFunc_GetWorldSubsystem_ReturnValue = SubsystemBlueprintLibrary.GetWorldSubsystem(self, DrdCraftingSubsystem)
+  L009C: CallFunc_FindSuitableRecipes_OutRecipes = []
+  L00A7: CallFunc_GetWorldSubsystem_ReturnValue.DrdCraftingSubsystem.FindSuitableRecipes(CallFunc_GetSelectedItems_Items, CallFunc_FindSuitableRecipes_OutRecipes, CallFunc_FindSuitableRecipes_OutMaxItemsInSuitableRecipes, GameplayTag{'GameEntities.Interactable.CraftTable.Big'})
+  L00FD: CallFunc_Array_IsNotEmpty_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_IsNotEmpty(CallFunc_FindSuitableRecipes_OutRecipes)
+  L0130: if not (CallFunc_Array_IsNotEmpty_ReturnValue) goto L0439
+  L013E: CallFunc_GetWorldSubsystem_ReturnValue = SubsystemBlueprintLibrary.GetWorldSubsystem(self, DrdCraftingSubsystem)
+  L015C: CallFunc_FindSuitableRecipes_OutRecipes = []
+  L0167: CallFunc_GetWorldSubsystem_ReturnValue.DrdCraftingSubsystem.FindSuitableRecipes(CallFunc_GetSelectedItems_Items, CallFunc_FindSuitableRecipes_OutRecipes, CallFunc_FindSuitableRecipes_OutMaxItemsInSuitableRecipes, GameplayTag{'GameEntities.Interactable.CraftTable.Big'})
+  L01BD: MaxAvailRecipeItemsCount = CallFunc_FindSuitableRecipes_OutMaxItemsInSuitableRecipes
+  L01D8: CallFunc_GetWorldSubsystem_ReturnValue = SubsystemBlueprintLibrary.GetWorldSubsystem(self, DrdCraftingSubsystem)
+  L01F6: CallFunc_FindSuitableRecipes_OutRecipes = []
+  L0201: CallFunc_GetWorldSubsystem_ReturnValue.DrdCraftingSubsystem.FindSuitableRecipes(CallFunc_GetSelectedItems_Items, CallFunc_FindSuitableRecipes_OutRecipes, CallFunc_FindSuitableRecipes_OutMaxItemsInSuitableRecipes, GameplayTag{'GameEntities.Interactable.CraftTable.Big'})
+  L0257: self.BestRecipe = CallFunc_FindSuitableRecipes_OutRecipes[0]
+  L0278: CallFunc_GetWorldSubsystem_ReturnValue_1 = SubsystemBlueprintLibrary.GetWorldSubsystem(self, DrdCraftingSubsystem)
+  L0296: CallFunc_GetRecipeStatus_ReturnValue = CallFunc_GetWorldSubsystem_ReturnValue_1.DrdCraftingSubsystem.GetRecipeStatus(self.BestRecipe.RecipeTag, CallFunc_GetSelectedItems_Items)
+  L02E3: self.BestRecipeStatus = CallFunc_GetRecipeStatus_ReturnValue
+  L02FE: pop-flow
+  L02FF: GetSelectedItemsCount(CallFunc_GetSelectedItemsCount_Count)
+  L0316: CallFunc_GreaterEqual_IntInt_ReturnValue = GreaterEqual_IntInt(CallFunc_GetSelectedItemsCount_Count, self.MaxSelectedItems)
+  L033C: self.CraftHUDWidget.UpdateCraftResult(self.BestRecipe, self.BestRecipeStatus, CallFunc_GreaterEqual_IntInt_ReturnValue, MaxAvailRecipeItemsCount)
+  L0384: pop-flow
+  L0385: IsReadyForUse(CallFunc_IsReadyForUse_bOut)
+  L039C: if not (CallFunc_IsReadyForUse_bOut) goto L03FD
+  L03AA: if not (self.BestRecipeStatus.bCanCraft) goto L03FD
+  L03C1: self.CraftHUDWidget.self.WBP_InputHintFilled.SetIsEnabled(true)
+  L03FC: pop-flow
+  L03FD: self.CraftHUDWidget.self.WBP_InputHintFilled.SetIsEnabled(false)
+  L0438: pop-flow
+  L0439: self.BestRecipe = DrdCraftRecipe{GameplayTag{'None'}, [], [], 1, GameplayTag{'None'}, GameplayTagContainer{[]}, GameplayTagContainer{[]}, false, false, 'None'}
+  L04F7: self.BestRecipeStatus = DrdRecipeStatus{0, 0, 0, false}
+  L0527: pop-flow
+  L0528: return
+
+## function UpdatePileCount  flags=0x0CC20000
+  L0000: Temp_bool_Variable = bIngredient
+  L0013: CallFunc_Map_Find_ReturnValue = Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_Find(switch(Temp_bool_Variable){false: self.SelectedPiles; true: self.IngredientPiles; default: K2Node_Select_Default}, Type, CallFunc_Map_Find_Value)
+  L0084: if not (CallFunc_Map_Find_ReturnValue) goto L016D
+  L0092: GetItemTypeCount(Type, bIngredient, CallFunc_GetItemTypeCount_Count)
+  L00BB: Temp_bool_Variable = bIngredient
+  L00CE: CallFunc_Map_Find_ReturnValue = Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_Find(switch(Temp_bool_Variable){false: self.SelectedPiles; true: self.IngredientPiles; default: K2Node_Select_Default}, Type, CallFunc_Map_Find_Value)
+  L013F: CallFunc_Map_Find_Value.DrdCraftPile.SetItemCount(CallFunc_GetItemTypeCount_Count)
+  L0168: goto L01E8
+  L016D: CallFunc_GetDebugStringFromGameplayTag_ReturnValue = BlueprintGameplayTagLibrary.GetDebugStringFromGameplayTag(Type)
+  L0192: CallFunc_Concat_StrStr_ReturnValue = KismetStringLibrary.Concat_StrStr("Can't find pile by type ", CallFunc_GetDebugStringFromGameplayTag_ReturnValue)
+  L01D1: PrintError(CallFunc_Concat_StrStr_ReturnValue)
+  L01E8: return
+
+## function UserConstructionScript  flags=0x0C820800
+  L0000: L_Delta = Vec(0,0,0)
+  L002B: CallFunc_GetChildrenComponents_Children = []
+  L0036: self.SelectedCells.SceneComponent.GetChildrenComponents(false, CallFunc_GetChildrenComponents_Children)
+  L0060: self.SelectedItemCells = CallFunc_GetChildrenComponents_Children
+  L007B: return

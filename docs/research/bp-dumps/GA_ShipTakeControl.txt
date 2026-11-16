@@ -1,0 +1,83 @@
+# /Game/Dreadmoor/Core/Features/Ship/Riding/GA_ShipTakeControl
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/Ship/Riding/GA_ShipTakeControl.uasset
+
+## imported packages (18)
+  /Game/Dreadmoor/Blueprints/Developers/Sanich/BP_CraftTable_Ship
+  /Game/Dreadmoor/Core/Features/Fishing/BP_BoatDynamicForceMesh
+  /Game/Dreadmoor/Core/Features/Fishing/BP_ShipFishingSpot_Proxy
+  /Game/Dreadmoor/Core/Features/Fishing/BP_ShipFishingSpot_Proxy2
+  /Game/Dreadmoor/Core/Features/QuestFeatures/QuestModularObjects/Boat/BP_BoatModularObject
+  /Game/Dreadmoor/Core/Features/Radio/BP_Radio
+  /Game/Dreadmoor/Core/Features/Ship/BP_SmallBoat_V2
+  /Game/Dreadmoor/Core/Features/Ship/Docking/BP_ShipGangplank
+  /Game/Dreadmoor/Core/Features/Ship/FishScanner/BP_ShipFishScanner
+  /Game/Dreadmoor/Core/Features/Ship/Riding/BP_ShipSteeringWheel
+  /Game/Dreadmoor/Core/Features/Ship/ShipModules/BP_SideModulesInteractButton
+  /Game/Dreadmoor/Core/Features/Ship/StorageBox/BP_Storage
+  /Game/Dreadmoor/Core/Features/UpgradeDock/BP_ShipHoldHatchSlotInteractable
+  /Game/Dreadmoor/Core/Features/UpgradeDock/BP_ShipUpgradeSlotInteractable
+  /Game/Dreadmoor/Core/Features/WaterFeatures/SurfaceSwimming/BP_WaterExit_Boat_Left
+  /Game/Dreadmoor/Core/Features/WaterFeatures/SurfaceSwimming/BP_WaterExit_Boat_Right
+  /Game/Dreadmoor/Core/Libraries/BPFL_MIscFunctions
+  /Game/Dreadmoor/InventoryFramework/Components/BP_InventoryComponent
+
+## exports (5)
+  [0] GA_ShipTakeControl_C : BlueprintGeneratedClass (outer None) super=DrdGameplayAbility size=207
+  [4] Default__GA_ShipTakeControl_C : GA_ShipTakeControl_C (outer None) size=33
+        refs: name:GAS.Character.IsInteracting, name:UI.RecipePin.Allowed
+
+## function EventReceived_2767CBFA422AD792A4040F9F731034EF  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Payload = Payload
+  L0012: GA_ShipTakeControl_C.ExecuteUbergraph_GA_ShipTakeControl(1268)
+  L0021: return
+
+## function ExecuteUbergraph_GA_ShipTakeControl  flags=0x00808001
+  L0000: push L0514
+  L0005: goto computed(EntryPoint)
+  L000F: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L0029: CallFunc_GetPlayerController_ReturnValue.Controller.Possess(K2Node_DynamicCast_AsPawn)
+  L0052: CallFunc_WaitGameplayEvent_ReturnValue = AbilityTask_WaitGameplayEvent.WaitGameplayEvent(self, GameplayTag{'GAS.Event.RidingShip.End'}, null, true, true)
+  L0085: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(CallFunc_WaitGameplayEvent_ReturnValue)
+  L00A2: if not (CallFunc_IsValid_ReturnValue) pop-flow
+  L00AC: bind(K2Node_CreateDelegate_OutputDelegate, self, 'EventReceived_2767CBFA422AD792A4040F9F731034EF')
+  L00C3: CallFunc_WaitGameplayEvent_ReturnValue.self.EventReceived += K2Node_CreateDelegate_OutputDelegate
+  L00EC: CallFunc_WaitGameplayEvent_ReturnValue.GameplayTask.ReadyForActivation()
+  L010C: pop-flow
+  L010D: KismetSystemLibrary.Delay(self, 0.5, LatentActionInfo{L000F, 15358074, 'ExecuteUbergraph_GA_ShipTakeControl', self})
+  L0143: pop-flow
+  L0144: CallFunc_K2_CommitAbility_ReturnValue = K2_CommitAbility()
+  L015C: if not (CallFunc_K2_CommitAbility_ReturnValue) pop-flow
+  L0166: CallFunc_GetParentActor_ReturnValue = K2Node_Event_EventData.Target.Actor.GetParentActor()
+  L0199: K2Node_DynamicCast_AsBP_Small_Boat_V2 = cast<BP_SmallBoat_V2_C>(CallFunc_GetParentActor_ReturnValue)
+  L01BD: K2Node_DynamicCast_bSuccess_1 = K2Node_DynamicCast_AsBP_Small_Boat_V2
+  L01DA: if not (K2Node_DynamicCast_bSuccess_1) pop-flow
+  L01E4: CallFunc_GetCharacterTranformOnUnpossess_ReturnValue = K2Node_DynamicCast_AsBP_Small_Boat_V2.GetCharacterTranformOnUnpossess()
+  L021A: CallFunc_K2_SetActorTransform_ReturnValue = K2Node_Event_EventData.Instigator.Actor.K2_SetActorTransform(CallFunc_GetCharacterTranformOnUnpossess_ReturnValue, false, CallFunc_K2_SetActorTransform_SweepHitResult, true)
+  L0261: CallFunc_GetPlayerController_ReturnValue_2 = GameplayStatics.GetPlayerController(self, 0)
+  L027B: K2Node_Event_EventData.Instigator.DisableInput(CallFunc_GetPlayerController_ReturnValue_2)
+  L02B1: CallFunc_GetParentActor_ReturnValue = K2Node_Event_EventData.Target.Actor.GetParentActor()
+  L02E4: CallFunc_K2_AttachToActor_ReturnValue = K2Node_Event_EventData.Instigator.Actor.K2_AttachToActor(CallFunc_GetParentActor_ReturnValue, 'None', 1, 1, 1, true)
+  L0334: CallFunc_GetParentActor_ReturnValue = K2Node_Event_EventData.Target.Actor.GetParentActor()
+  L0367: K2Node_DynamicCast_AsPawn = cast<Pawn>(CallFunc_GetParentActor_ReturnValue)
+  L038B: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsPawn
+  L03A8: if not (K2Node_DynamicCast_bSuccess) pop-flow
+  L03B2: Default__BPFL_MIscFunctions_C.UpdateAllCamerasFOVToSettingsValue(K2Node_DynamicCast_AsPawn, self)
+  L03E0: if not (K2Node_DynamicCast_AsBP_Small_Boat_V2.self.bFirstPersonCameraEnabled) goto L0432
+  L0404: K2Node_Event_EventData.Instigator.SetActorHiddenInGame(true)
+  L0432: CallFunc_GetPlayerController_ReturnValue_1 = GameplayStatics.GetPlayerController(self, 0)
+  L044C: CallFunc_GetPlayerController_ReturnValue_1.SetViewTargetWithBlend(K2Node_DynamicCast_AsPawn, 0.5, 1, 0, false)
+  L0486: goto L010D
+  L048B: K2_EndAbility()
+  L0499: pop-flow
+  L049A: goto L0144
+  L049F: CallFunc_GetPlayerController_ReturnValue_3 = GameplayStatics.GetPlayerController(self, 0)
+  L04B9: K2Node_Event_EventData.Instigator.EnableInput(CallFunc_GetPlayerController_ReturnValue_3)
+  L04EF: goto L048B
+  L04F4: Temp_struct_Variable = K2Node_CustomEvent_Payload
+  L050F: goto L049F
+  L0514: return
+
+## function K2_ActivateAbilityFromEvent  flags=0x08480800
+  L0000: frame.K2Node_Event_EventData = EventData
+  L0012: GA_ShipTakeControl_C.ExecuteUbergraph_GA_ShipTakeControl(1178)
+  L0021: return

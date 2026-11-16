@@ -1,0 +1,186 @@
+# /Game/Dreadmoor/Core/Features/Fishing/BP_FishingFloat
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/Fishing/BP_FishingFloat.uasset
+
+## imported packages (9)
+  /Game/Dreadmoor/Animations/Rods/Rod_Simple/Materials/MI_Rod_Physics
+  /Game/Dreadmoor/Art/StaticMesh/Characters/FishingRod/Anims/ABP_Float
+  /Game/Dreadmoor/Art/StaticMesh/Characters/FishingRod/SK_FishingRod_Float
+  /Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Fishing_lure/SKM_dm_vs_fishing_lure_3_New1
+  /Game/Dreadmoor/Art/VFX/Niagara/Water/NS_StylizedSplash_01
+  /Game/Dreadmoor/Audio/SFX/Action/Water_Splash/SCUE_Splash_FishingFloat
+  /Game/Dreadmoor/Audio/SFX/Fishing/SCUE_Fishing_Spinning_Short_Random
+  /Game/Dreadmoor/Core/Features/Fishing/BP_FishingDynamic_ForceMesh
+  /Game/Dreadmoor/UI/Fishing/WBP_FishingFloat
+
+## exports (39)
+  [0] BP_FishingFloat_C : BlueprintGeneratedClass (outer None) super=Actor size=1315
+  [1] Box_GEN_VARIABLE : BoxComponent (outer BP_FishingFloat_C) size=148
+        refs: exp:BP_FishingDynamic_ForceMesh_GEN_VARIABLE_BP_FishingDynamic_ForceMesh_C_CAT_0, name:Custom, exp:ComponentDelegateBinding_0, name:WorldStatic, name:WorldDynamic, name:Pawn, name:Camera, name:PhysicsBody, name:Vehicle, name:Destructible
+  [2] BP_FishingDynamic_ForceMesh_GEN_VARIABLE_BP_FishingDynamic_ForceMesh_C_CAT_0 : BP_FishingDynamic_ForceMesh_C (outer BP_FishingDynamic_ForceMesh_GEN_VARIABLE) size=79
+        refs: exp:Buoyancy_GEN_VARIABLE, exp:ReceiveDestroyed, name:EntryPoint
+  [3] Default__BP_FishingFloat_C : BP_FishingFloat_C (outer None) size=19
+  [4] Buoyancy_GEN_VARIABLE : BuoyancyComponent (outer BP_FishingFloat_C) size=87
+        refs: name:K2Node_DynamicCast_bSuccess
+  [5] BP_FishingDynamic_ForceMesh_GEN_VARIABLE : ChildActorComponent (outer BP_FishingFloat_C) size=20
+        refs: obj:/Game/Dreadmoor/Core/Features/Fishing/BP_FishingDynamic_ForceMesh.BP_FishingDynamic_ForceMesh_C, exp:BP_FishingDynamic_ForceMesh_GEN_VARIABLE_BP_FishingDynamic_ForceMesh_C_CAT_0
+  [6] ComponentDelegateBinding_0 : ComponentDelegateBinding (outer BP_FishingFloat_C) size=36
+        refs: name:Buoyancy, name:OnEnteredWaterDelegate, exp:OnEnteredWater__DelegateSignature
+  [7] CurveFloat_0 : CurveFloat (outer BP_FishingFloat_C) size=93
+        refs: exp:BP_FishingDynamic_ForceMesh_GEN_VARIABLE_BP_FishingDynamic_ForceMesh_C_CAT_0, name:K2Node_DynamicCast_bSuccess
+  [22] JakubCablePhysic_GEN_VARIABLE : JakubCablePhysic (outer BP_FishingFloat_C) size=117
+        refs: obj:/Game/Dreadmoor/Animations/Rods/Rod_Simple/Materials/MI_Rod_Physics.MI_Rod_Physics, name:Custom, exp:BP_FishingDynamic_ForceMesh_GEN_VARIABLE, name:Visibility, name:Camera, name:Pawn, name:PhysicsBody, name:Vehicle, name:Destructible
+  [23] ProjectileMovement_GEN_VARIABLE : ProjectileMovementComponent (outer BP_FishingFloat_C) size=14
+        refs: name:K2Node_Select_Default
+  [24] DefaultSceneRoot_GEN_VARIABLE : SceneComponent (outer BP_FishingFloat_C) size=10
+  [25] SCS_Node_0 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SceneComponent, exp:DefaultSceneRoot_GEN_VARIABLE, name:DefaultSceneRoot
+  [26] SCS_Node_1 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/JakubCableComponent.JakubCablePhysic, exp:JakubCablePhysic_GEN_VARIABLE, name:JakubCablePhysic
+  [27] SCS_Node_2 : SCS_Node (outer SimpleConstructionScript_0) size=58
+        refs: obj:/Script/Engine.BoxComponent, exp:BP_FishingDynamic_ForceMesh_GEN_VARIABLE_BP_FishingDynamic_ForceMesh_C_CAT_0, exp:SCS_Node_5, exp:SCS_Node_9, exp:SCS_Node_1, name:Box
+  [28] SCS_Node_3 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ProjectileMovementComponent, exp:ProjectileMovement_GEN_VARIABLE, name:ProjectileMovement
+  [29] SCS_Node_4 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Water.BuoyancyComponent, exp:Buoyancy_GEN_VARIABLE, name:Buoyancy
+  [30] SCS_Node_5 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/UMG.WidgetComponent, exp:Widget_GEN_VARIABLE, name:Widget
+  [31] SCS_Node_6 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.ChildActorComponent, exp:BP_FishingDynamic_ForceMesh_GEN_VARIABLE, name:BP_FishingDynamic_ForceMesh
+  [32] SCS_Node_7 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Engine.SkeletalMeshComponent, exp:BaitMeshComponent_GEN_VARIABLE, name:Line_Socket, name:BaitMeshComponent
+  [33] SCS_Node_9 : SCS_Node (outer SimpleConstructionScript_0) size=54
+        refs: obj:/Script/Engine.SkeletalMeshComponent, exp:SkeletalMesh_GEN_VARIABLE, exp:SCS_Node_7, exp:SCS_Node_6, name:SkeletalMesh
+  [34] SimpleConstructionScript_0 : SimpleConstructionScript (outer BP_FishingFloat_C) size=62
+        refs: exp:BP_FishingDynamic_ForceMesh_GEN_VARIABLE_BP_FishingDynamic_ForceMesh_C_CAT_0, exp:SCS_Node_2, exp:SCS_Node_4, exp:SCS_Node_3, exp:CurveFloat_0, exp:SCS_Node_5, exp:SCS_Node_9, exp:SCS_Node_1, exp:SCS_Node_7, exp:SCS_Node_6, name:CallFunc_GetUserWidgetObject_ReturnValue
+  [35] BaitMeshComponent_GEN_VARIABLE : SkeletalMeshComponent (outer BP_FishingFloat_C) size=183
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/New_Version_Assets/Environment/Props/Fishing_lure/SKM_dm_vs_fishing_lure_3_New1.SKM_dm_vs_fishing_lure_3_New1, name:Custom, exp:CurveFloat_0, name:WorldStatic, name:WorldDynamic, name:Pawn, name:Visibility, name:Camera, name:PhysicsBody, name:Vehicle, name:Destructible
+  [36] SkeletalMesh_GEN_VARIABLE : SkeletalMeshComponent (outer BP_FishingFloat_C) size=52
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/Characters/FishingRod/Anims/ABP_Float.ABP_Float_C, obj:/Game/Dreadmoor/Art/StaticMesh/Characters/FishingRod/SK_FishingRod_Float.SK_FishingRod_Float, name:K2Node_DynamicCast_bSuccess
+  [37] Timeline_Template : TimelineTemplate (outer BP_FishingFloat_C) size=91
+        refs: exp:CurveFloat_0, name:Timeline_Lerp_402A26AE462F8DA924DFD986123CDF8D, name:Lerp, name:Timeline, name:Timeline__Direction_402A26AE462F8DA924DFD986123CDF8D, name:Timeline__UpdateFunc, name:Timeline__FinishedFunc
+  [38] Widget_GEN_VARIABLE : WidgetComponent (outer BP_FishingFloat_C) size=48
+        refs: obj:/Game/Dreadmoor/UI/Fishing/WBP_FishingFloat.WBP_FishingFloat_C, name:K2Node_DynamicCast_AsWBP_Fishing_Float, name:K2Node_Select_Default
+
+## function AttachEndTo  flags=0x0C820000
+  L0000: CallFunc_GetCableParticlesStructure_ReturnValue = self.JakubCablePhysic.JakubCablePhysic.GetCableParticlesStructure()
+  L0032: CallFunc_Array_LastIndex_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_LastIndex(CallFunc_GetCableParticlesStructure_ReturnValue)
+  L006D: self.JakubCablePhysic.JakubCablePhysic.SetAttachIndexToComponent(Component, SocketName, CallFunc_Array_LastIndex_ReturnValue)
+  L00A8: self.SkeletalMesh.SceneComponent.SetHiddenInGame(true, true)
+  L00CA: bind(K2Node_CreateDelegate_OutputDelegate, self, 'AttachParentDestroyed')
+  L00E1: CallFunc_GetOwner_ReturnValue = Component.ActorComponent.GetOwner()
+  L010B: CallFunc_GetOwner_ReturnValue.self.OnDestroyed += K2Node_CreateDelegate_OutputDelegate
+  L0134: return
+
+## function AttachParentDestroyed  flags=0x0C020000
+  L0000: return
+
+## function Bite  flags=0x0C000000
+  L0000: BP_FishingFloat_C.ExecuteUbergraph_BP_FishingFloat(586)
+  L000F: return
+
+## function BndEvt__BP_FishingFloat_Buoyancy_K2Node_ComponentBoundEvent_0_OnPontoonEnteredWater__DelegateSignature  flags=0x08400000
+  L0000: frame.K2Node_ComponentBoundEvent_Pontoon = Pontoon
+  L0012: BP_FishingFloat_C.ExecuteUbergraph_BP_FishingFloat(154)
+  L0021: return
+
+## function ExecuteUbergraph_BP_FishingFloat  flags=0x00808001
+  L0000: goto computed(EntryPoint)
+  L000A: CallFunc_VLerp_ReturnValue = VLerp(Vec(0,0,0), Vec(0,0,-200), self.Timeline_Lerp_402A26AE462F8DA924DFD986123CDF8D)
+  L0061: self.SkeletalMesh.SceneComponent.K2_SetRelativeLocation(CallFunc_VLerp_ReturnValue, false, CallFunc_K2_SetRelativeLocation_SweepHitResult, false)
+  L0095: goto L04B2
+  L009A: GameplayStatics.PlaySoundAtLocation(self, SCUE_Splash_FishingFloat, Vec(0,0,0), Rot(0,0,0), 1, 1, 0, null, null, null, null)
+  L00F3: self.OnEnteredWater.Broadcast()
+  L0106: self.State = 1
+  L011D: CallFunc_K2_GetActorLocation_ReturnValue = Actor.K2_GetActorLocation()
+  L0139: CallFunc_SpawnSystemAtLocation_ReturnValue = NiagaraFunctionLibrary.SpawnSystemAtLocation(self, NS_StylizedSplash_01, CallFunc_K2_GetActorLocation_ReturnValue, Rot(0,0,0), Vec(1,1,1), true, true, 0, true)
+  L0197: self.ProjectileMovement.Deactivate()
+  L01BB: CallFunc_K2_SetActorLocation_ReturnValue = Actor.K2_SetActorLocation(K2Node_ComponentBoundEvent_Pontoon.WaterPlaneLocation, false, CallFunc_K2_SetActorLocation_SweepHitResult, false)
+  L01EC: CallFunc_SpawnSound2D_ReturnValue = Default__GameplayStatics.GameplayStatics.SpawnSound2D(self, SCUE_Fishing_Spinning_Short_Random, 1, 1, 0, null, false, true)
+  L0232: self.AudioComp = CallFunc_SpawnSound2D_ReturnValue
+  L0245: goto L04B2
+  L024A: self.State = 0
+  L0261: self.Timeline.TimelineComponent.PlayFromStart()
+  L0281: goto L04B2
+  L0286: self.State = 1
+  L029D: goto L04B2
+  L02A2: CallFunc_K2_AttachToComponent_ReturnValue = self.JakubCablePhysic.SceneComponent.K2_AttachToComponent(self.StartAttach, self.StartAttackSocket, 2, 0, 1, true)
+  L02E5: CallFunc_GetCableParticlesStructure_ReturnValue = self.JakubCablePhysic.JakubCablePhysic.GetCableParticlesStructure()
+  L0317: CallFunc_Array_LastIndex_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_LastIndex(CallFunc_GetCableParticlesStructure_ReturnValue)
+  L0352: self.JakubCablePhysic.JakubCablePhysic.SetAttachIndexToComponent(self.SkeletalMesh, 'Line_Socket', CallFunc_Array_LastIndex_ReturnValue)
+  L0391: GameplayTagsK2Node_SwitchGameplayTag_CmpSuccess = BlueprintGameplayTagLibrary.NotEqual_TagTag(self.FishingBehavior, "Fishing.Behavior.Predatory")
+  L03CA: if not (GameplayTagsK2Node_SwitchGameplayTag_CmpSuccess) goto L03DD
+  L03D8: goto L04B2
+  L03DD: self.SkeletalMesh.SceneComponent.SetHiddenInGame(true, false)
+  L03FF: self.BaitMeshComponent.SceneComponent.SetHiddenInGame(false, false)
+  L0421: self.BaitMeshComponent.SkeletalMeshComponent.SetSkeletalMeshAsset(self.BaitMesh)
+  L044A: goto L04B2
+  L044F: Actor.ReceiveDestroyed()
+  L0459: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(self.AudioComp)
+  L0476: if not (CallFunc_IsValid_ReturnValue) goto L04B2
+  L0484: self.AudioComp.Stop()
+  L04A8: goto L04B2
+  L04AD: goto L0286
+  L04B2: return
+
+## function HideWidget  flags=0x0C020000
+  L0000: self.Widget.SceneComponent.SetVisibility(false, false)
+  L0022: return
+
+## function OnEnteredWater__DelegateSignature  flags=0x0C120000
+  L0000: return
+
+## function ReceiveBeginPlay  flags=0x08080800
+  L0000: BP_FishingFloat_C.ExecuteUbergraph_BP_FishingFloat(674)
+  L000F: return
+
+## function ReceiveDestroyed  flags=0x08020800
+  L0000: BP_FishingFloat_C.ExecuteUbergraph_BP_FishingFloat(1103)
+  L000F: return
+
+## function ShowWidget  flags=0x0C020000
+  L0000: CallFunc_GetUserWidgetObject_ReturnValue = self.Widget.WidgetComponent.GetUserWidgetObject()
+  L002A: K2Node_DynamicCast_AsWBP_Fishing_Float = cast<WBP_FishingFloat_C>(CallFunc_GetUserWidgetObject_ReturnValue)
+  L004E: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsWBP_Fishing_Float
+  L006B: if not (K2Node_DynamicCast_bSuccess) goto L00A6
+  L0079: K2Node_DynamicCast_AsWBP_Fishing_Float.Start(Duration)
+  L00A6: return
+
+## function ThrowBackTo  flags=0x0C820000
+  L0000: push L0314
+  L0005: K2Node_VariableSet_ProjectileGravityScale_ImplicitCast = Gravity
+  L0022: self.ProjectileMovement.self.ProjectileGravityScale = K2Node_VariableSet_ProjectileGravityScale_ImplicitCast
+  L0053: CallFunc_K2_AttachToComponent_ReturnValue = self.BP_FishingDynamic_ForceMesh.SceneComponent.K2_AttachToComponent(self.SkeletalMesh, 'Line_Socket', 2, 1, 1, true)
+  L009A: push L02FC
+  L009F: self.JakubCablePhysic.SceneComponent.SetHiddenInGame(false, false)
+  L00C1: CallFunc_EqualEqual_GameplayTag_ReturnValue = BlueprintGameplayTagLibrary.EqualEqual_GameplayTag(self.FishingBehavior, GameplayTag{'Fishing.Behavior.Predatory'})
+  L00F9: Temp_bool_Variable = CallFunc_EqualEqual_GameplayTag_ReturnValue
+  L010C: switch(Temp_bool_Variable){false: self.SkeletalMesh; true: self.BaitMeshComponent; default: K2Node_Select_Default}.SceneComponent.SetHiddenInGame(false, false)
+  L015A: self.ProjectileMovement.SetActive(true, false)
+  L0180: CallFunc_GetCableParticlesStructure_ReturnValue = self.JakubCablePhysic.JakubCablePhysic.GetCableParticlesStructure()
+  L01B2: CallFunc_Array_LastIndex_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_LastIndex(CallFunc_GetCableParticlesStructure_ReturnValue)
+  L01ED: self.JakubCablePhysic.JakubCablePhysic.SetAttachIndexToComponent(self.SkeletalMesh, 'Line_Socket', CallFunc_Array_LastIndex_ReturnValue)
+  L022C: CallFunc_K2_GetActorLocation_ReturnValue = Actor.K2_GetActorLocation()
+  L0248: CallFunc_GetGravityZ_ReturnValue = self.ProjectileMovement.GetGravityZ()
+  L027E: CallFunc_SuggestProjectileVelocity_CustomArc_ReturnValue = GameplayStatics.SuggestProjectileVelocity_CustomArc(self, CallFunc_SuggestProjectileVelocity_CustomArc_OutLaunchVelocity, CallFunc_K2_GetActorLocation_ReturnValue, Location, CallFunc_GetGravityZ_ReturnValue, ArcParam)
+  L02C0: if not (CallFunc_SuggestProjectileVelocity_CustomArc_ReturnValue) pop-flow
+  L02CA: self.ProjectileMovement.self.Velocity = CallFunc_SuggestProjectileVelocity_CustomArc_OutLaunchVelocity
+  L02FB: pop-flow
+  L02FC: self.State = 2
+  L0313: pop-flow
+  L0314: return
+
+## function ThrowTo  flags=0x0C020000
+  L0000: CallFunc_K2_GetActorLocation_ReturnValue = Actor.K2_GetActorLocation()
+  L001C: CallFunc_GetGravityZ_ReturnValue = self.ProjectileMovement.GetGravityZ()
+  L0052: CallFunc_SuggestProjectileVelocity_CustomArc_ReturnValue = GameplayStatics.SuggestProjectileVelocity_CustomArc(self, CallFunc_SuggestProjectileVelocity_CustomArc_OutLaunchVelocity, CallFunc_K2_GetActorLocation_ReturnValue, Location, CallFunc_GetGravityZ_ReturnValue, ArcParam)
+  L0094: if not (CallFunc_SuggestProjectileVelocity_CustomArc_ReturnValue) goto L00D3
+  L00A2: self.ProjectileMovement.self.Velocity = CallFunc_SuggestProjectileVelocity_CustomArc_OutLaunchVelocity
+  L00D3: return
+
+## function Timeline__FinishedFunc  flags=0x08000000
+  L0000: BP_FishingFloat_C.ExecuteUbergraph_BP_FishingFloat(1197)
+  L000F: return
+
+## function Timeline__UpdateFunc  flags=0x08000000
+  L0000: BP_FishingFloat_C.ExecuteUbergraph_BP_FishingFloat(10)
+  L000F: return

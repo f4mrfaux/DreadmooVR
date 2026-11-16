@@ -1,0 +1,155 @@
+# /Game/Dreadmoor/Animations/Rods/Rod_Simple/ABP_SimpleRod_Fishing
+# file: Dreadmoor/Content/Dreadmoor/Animations/Rods/Rod_Simple/ABP_SimpleRod_Fishing.uasset
+
+## imported packages (14)
+  /Game/Dreadmoor/Animations/Rods/Animations/Simple_Rod/BS_Fishing_SimpleRod
+  /Game/Dreadmoor/Animations/Rods/Animations/Simple_Rod/BS_Fishing_SimpleRod_Relax
+  /Game/Dreadmoor/Animations/Rods/Animations/Simple_Rod/dm_vs_basic_fishing_rod_Ready
+  /Game/Dreadmoor/Animations/Rods/Animations/Simple_Rod/dm_vs_basic_fishing_rod_Ready_Cast
+  /Game/Dreadmoor/Animations/Rods/Animations/Simple_Rod/dm_vs_basic_fishing_rod_Ready_Cast_Idle
+  /Game/Dreadmoor/Animations/Rods/Animations/Simple_Rod/dm_vs_basic_fishing_rod_Starting
+  /Game/Dreadmoor/Animations/Rods/Animations/Simple_Rod/dm_vs_basic_fishing_rod_Starting_Idle
+  /Game/Dreadmoor/Animations/Rods/Animations/Simple_Rod/dm_vs_basic_fishing_rod_Twist_NotFish
+  /Game/Dreadmoor/Animations/Rods/Animations/Simple_Rod/dm_vs_basic_fishing_rod_hook
+  /Game/Dreadmoor/Animations/Rods/Animations/Simple_Rod/dm_vs_basic_fishing_rod_idle
+  /Game/Dreadmoor/Animations/Rods/Animations/Simple_Rod/dm_vs_basic_fishing_rod_soft_UP
+  /Game/Dreadmoor/Animations/Rods/Rod_Simple/dm_vs_basic_fishing_rod_Full_Skeleton
+  /Game/Dreadmoor/Core/Features/Fishing/BP_FishingController
+  /Game/Dreadmoor/Core/Features/WaterFeatures/DeckTentacle/BP_DeckTentacleComponent
+
+## exports (17)
+  [0] Default__ABP_SimpleRod_Fishing_C : ABP_SimpleRod_Fishing_C (outer None) size=2186
+        refs: obj:/Game/Dreadmoor/Animations/Rods/Animations/Simple_Rod/dm_vs_basic_fishing_rod_hook.dm_vs_basic_fishing_rod_hook, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_SimpleRod_Fishing_AnimGraphNode_TransitionResult_8B43E413406F327100D8B8B00F3C134D, obj:/Game/Dreadmoor/Animations/Rods/Animations/Simple_Rod/dm_vs_basic_fishing_rod_Ready_Cast_Idle.dm_vs_basic_fishing_rod_Ready_Cast_Idle, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_SimpleRod_Fishing_AnimGraphNode_TransitionResult_A3D553CB4504522BB09903B83E3724B6, obj:/Game/Dreadmoor/Animations/Rods/Animations/Simple_Rod/dm_vs_basic_fishing_rod_Ready_Cast.dm_vs_basic_fishing_rod_Ready_Cast, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_SimpleRod_Fishing_AnimGraphNode_TransitionResult_FF73D75847B8DED183FC5FB1BA91345A, obj:/Game/Dreadmoor/Animations/Rods/Animations/Simple_Rod/dm_vs_basic_fishing_rod_Ready.dm_vs_basic_fishing_rod_Ready, exp:AnimBlueprintGeneratedConstantData, obj:/Game/Dreadmoor/Animations/Rods/Animations/Simple_Rod/dm_vs_basic_fishing_rod_Starting_Idle.dm_vs_basic_fishing_rod_Starting_Idle, obj:/Game/Dreadmoor/Animations/Rods/Animations/Simple_Rod/dm_vs_basic_fishing_rod_Starting.dm_vs_basic_fishing_rod_Starting, obj:/Game/Dreadmoor/Animations/Rods/Animations/Simple_Rod/BS_Fishing_SimpleRod_Relax.BS_Fishing_SimpleRod_Relax, obj:/Game/Dreadmoor/Animations/Rods/Animations/Simple_Rod/BS_Fishing_SimpleRod.BS_Fishing_SimpleRod, obj:/Game/Dreadmoor/Animations/Rods/Animations/Simple_Rod/dm_vs_basic_fishing_rod_idle.dm_vs_basic_fishing_rod_idle, exp:AnimGraph, name:bBlendRootMotionBasedOnRootBone, name:DEF-Reel-Base, name:DefaultSlot, name:Aiming, name:AnimGraph, name:Caught, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_SimpleRod_Fishing_AnimGraphNode_TransitionResult_602A883B411E66B38F348ABA04598217, name:Casting, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_SimpleRod_Fishing_AnimGraphNode_TransitionResult_0D4DBB9E4A2D9A0CFD1CF9BBFED2E864, name:Casting_Cast, exp:BlueprintUpdateAnimation, exp:BlueprintInitializeAnimation, name:Starting_Idle, name:Starting, name:Fishing, name:DefaultSharedGroup, name:Idle, obj:/Game/Dreadmoor/Animations/Rods/Animations/Simple_Rod/dm_vs_basic_fishing_rod_soft_UP.dm_vs_basic_fishing_rod_soft_UP, obj:/Game/Dreadmoor/Animations/Rods/Animations/Simple_Rod/dm_vs_basic_fishing_rod_Twist_NotFish.dm_vs_basic_fishing_rod_Twist_NotFish, name:bCaught, name:__AnimBlueprintMutables, exp:AnimBlueprintGeneratedMutableData, name:Explicit Time, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_SimpleRod_Fishing_AnimGraphNode_TransitionResult_6473988742D46CC6810E7FBEC22F37C9, name:Fish Exhausted, name:__BoolProperty, name:Left_Right, name:Reel, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_SimpleRod_Fishing_AnimGraphNode_TransitionResult_61B7B3074704D19A966A858411C02F1C, exp:ExecuteUbergraph_ABP_SimpleRod_Fishing, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_SimpleRod_Fishing_AnimGraphNode_TransitionResult_F824DD0B4DD41D2F5061DBA590127AB5, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_SimpleRod_Fishing_AnimGraphNode_TransitionResult_8E741205413D9BA23714E5BD756CB893
+  [1] ABP_SimpleRod_Fishing_C : AnimBlueprintGeneratedClass (outer None) super=AnimInstance size=8495
+  [15] AnimBlueprintGeneratedConstantData : ScriptStruct (outer ABP_SimpleRod_Fishing_C) super=AnimBlueprintConstantData size=3963
+        refs: obj:/Script/Engine.AnimBlueprintConstantData, name:NameProperty, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_SimpleRod_Fishing_AnimGraphNode_TransitionResult_8E741205413D9BA23714E5BD756CB893, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_SimpleRod_Fishing_AnimGraphNode_TransitionResult_A3D553CB4504522BB09903B83E3724B6, name:__BlendProfile, name:None, name:IntProperty, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_SimpleRod_Fishing_AnimGraphNode_TransitionResult_8B43E413406F327100D8B8B00F3C134D, exp:BlueprintInitializeAnimation, name:ArrayProperty, exp:AnimGraph, exp:AnimBlueprintGeneratedConstantData, name:bUseExplicitFrame, name:FloatProperty, name:StructProperty, obj:/Script/Engine.InputScaleBiasClampConstants, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_SimpleRod_Fishing_AnimGraphNode_TransitionResult_6473988742D46CC6810E7FBEC22F37C9, name:ObjectProperty, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_SimpleRod_Fishing_AnimGraphNode_TransitionResult_61B7B3074704D19A966A858411C02F1C, obj:/Script/Engine.AnimSequenceBase, name:ByteProperty, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_SimpleRod_Fishing_AnimGraphNode_TransitionResult_0D4DBB9E4A2D9A0CFD1CF9BBFED2E864, obj:/Script/AnimGraphRuntime.ESequenceEvalReinit, name:BoolProperty, exp:BlueprintUpdateAnimation, name:EnumProperty, obj:/Script/Engine.EAnimSyncMethod, name:UnderlyingType, name:__AnimBlueprintMutables, obj:/Script/Engine.EAnimGroupRole, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_SimpleRod_Fishing_AnimGraphNode_TransitionResult_602A883B411E66B38F348ABA04598217, obj:/Script/Engine.CurveFloat, obj:/Script/AnimGraphRuntime.EBlendListChildUpdateMode, obj:/Script/Engine.EAlphaBlendOption, obj:/Script/AnimGraphRuntime.EBlendListTransitionType, obj:/Script/Engine.BlendProfile, obj:/Script/Engine.AnimNodeFunctionRef, name:AnimBlueprintExtension_PropertyAccess, name:Default__ABP_SimpleRod_Fishing_C, obj:/Script/Engine.AnimSubsystem_PropertyAccess, name:AnimBlueprintExtension_Base, name:bShouldLoop, obj:/Script/Engine.AnimSubsystem_Base, name:AnimGraphNode_Root, name:bMeshSpaceScaleBlend, obj:/Script/Engine.AnimNodeExposedValueHandler_PropertyAccess, name:AnimGraphNode_TransitionResult, exp:AnimBlueprintGeneratedMutableData, name:AnimGraphNode_BlendSpacePlayer, name:AnimGraphNode_SequencePlayer, name:AnimGraphNode_StateResult, name:AnimGraphNode_StateMachine, name:AnimGraphNode_LayeredBoneBlend, name:AnimGraphNode_SequenceEvaluator, name:AnimGraphNode_BlendListByBool, name:AnimGraphNode_Slot
+  [16] AnimBlueprintGeneratedMutableData : ScriptStruct (outer ABP_SimpleRod_Fishing_C) super=AnimBlueprintMutableData size=418
+        refs: obj:/Script/Engine.AnimBlueprintMutableData, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_SimpleRod_Fishing_AnimGraphNode_TransitionResult_61B7B3074704D19A966A858411C02F1C, name:BoolProperty, name:__BoolProperty, name:__BlendProfile, name:None, name:FloatProperty, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_SimpleRod_Fishing_AnimGraphNode_TransitionResult_6473988742D46CC6810E7FBEC22F37C9, exp:BlueprintInitializeAnimation, exp:AnimGraph, exp:BlueprintUpdateAnimation, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_SimpleRod_Fishing_AnimGraphNode_TransitionResult_0D4DBB9E4A2D9A0CFD1CF9BBFED2E864, exp:EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_SimpleRod_Fishing_AnimGraphNode_TransitionResult_602A883B411E66B38F348ABA04598217, name:__AnimBlueprintMutables
+
+## function AnimGraph  flags=0x0C400000
+  L0000: AnimGraph = PoseLink{-1}
+  L0025: return
+
+## function BlueprintInitializeAnimation  flags=0x08020800
+  L0000: ABP_SimpleRod_Fishing_C.ExecuteUbergraph_ABP_SimpleRod_Fishing(986)
+  L000F: return
+
+## function BlueprintUpdateAnimation  flags=0x08020800
+  L0000: frame.K2Node_Event_DeltaTimeX = DeltaTimeX
+  L0012: ABP_SimpleRod_Fishing_C.ExecuteUbergraph_ABP_SimpleRod_Fishing(1001)
+  L0021: return
+
+## function EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_SimpleRod_Fishing_AnimGraphNode_TransitionResult_0D4DBB9E4A2D9A0CFD1CF9BBFED2E864  flags=0x08000000
+  L0000: ABP_SimpleRod_Fishing_C.ExecuteUbergraph_ABP_SimpleRod_Fishing(232)
+  L000F: return
+
+## function EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_SimpleRod_Fishing_AnimGraphNode_TransitionResult_602A883B411E66B38F348ABA04598217  flags=0x08000000
+  L0000: ABP_SimpleRod_Fishing_C.ExecuteUbergraph_ABP_SimpleRod_Fishing(10)
+  L000F: return
+
+## function EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_SimpleRod_Fishing_AnimGraphNode_TransitionResult_61B7B3074704D19A966A858411C02F1C  flags=0x08000000
+  L0000: ABP_SimpleRod_Fishing_C.ExecuteUbergraph_ABP_SimpleRod_Fishing(504)
+  L000F: return
+
+## function EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_SimpleRod_Fishing_AnimGraphNode_TransitionResult_6473988742D46CC6810E7FBEC22F37C9  flags=0x08000000
+  L0000: ABP_SimpleRod_Fishing_C.ExecuteUbergraph_ABP_SimpleRod_Fishing(726)
+  L000F: return
+
+## function EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_SimpleRod_Fishing_AnimGraphNode_TransitionResult_8B43E413406F327100D8B8B00F3C134D  flags=0x08000000
+  L0000: ABP_SimpleRod_Fishing_C.ExecuteUbergraph_ABP_SimpleRod_Fishing(2456)
+  L000F: return
+
+## function EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_SimpleRod_Fishing_AnimGraphNode_TransitionResult_8E741205413D9BA23714E5BD756CB893  flags=0x08000000
+  L0000: ABP_SimpleRod_Fishing_C.ExecuteUbergraph_ABP_SimpleRod_Fishing(321)
+  L000F: return
+
+## function EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_SimpleRod_Fishing_AnimGraphNode_TransitionResult_A3D553CB4504522BB09903B83E3724B6  flags=0x08000000
+  L0000: ABP_SimpleRod_Fishing_C.ExecuteUbergraph_ABP_SimpleRod_Fishing(415)
+  L000F: return
+
+## function EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_SimpleRod_Fishing_AnimGraphNode_TransitionResult_F824DD0B4DD41D2F5061DBA590127AB5  flags=0x08000000
+  L0000: ABP_SimpleRod_Fishing_C.ExecuteUbergraph_ABP_SimpleRod_Fishing(326)
+  L000F: return
+
+## function EvaluateGraphExposedInputs_ExecuteUbergraph_ABP_SimpleRod_Fishing_AnimGraphNode_TransitionResult_FF73D75847B8DED183FC5FB1BA91345A  flags=0x08000000
+  L0000: ABP_SimpleRod_Fishing_C.ExecuteUbergraph_ABP_SimpleRod_Fishing(593)
+  L000F: return
+
+## function ExecuteUbergraph_ABP_SimpleRod_Fishing  flags=0x00008001
+  L0000: goto computed(EntryPoint)
+  L000A: CallFunc_GetInstanceAssetPlayerTimeFromEndFraction_ReturnValue = AnimInstance.GetInstanceAssetPlayerTimeFromEndFraction(23)
+  L002B: CallFunc_Less_DoubleDouble_A_ImplicitCast = CallFunc_GetInstanceAssetPlayerTimeFromEndFraction_ReturnValue
+  L0048: CallFunc_Less_DoubleDouble_ReturnValue = Less_DoubleDouble(CallFunc_Less_DoubleDouble_A_ImplicitCast, 0.05)
+  L006E: self.AnimGraphNode_TransitionResult_8.bCanEnterTransition = CallFunc_Less_DoubleDouble_ReturnValue
+  L008A: goto L09EC
+  L008F: CallFunc_EqualEqual_GameplayTag_ReturnValue = BlueprintGameplayTagLibrary.EqualEqual_GameplayTag(self.State, GameplayTag{'Fishing.State.Fighting'})
+  L00C7: self.AnimGraphNode_TransitionResult_2.bCanEnterTransition = CallFunc_EqualEqual_GameplayTag_ReturnValue
+  L00E3: goto L09EC
+  L00E8: CallFunc_EqualEqual_GameplayTag_ReturnValue_1 = BlueprintGameplayTagLibrary.EqualEqual_GameplayTag(self.State, GameplayTag{'Fishing.State.Start'})
+  L0120: self.AnimGraphNode_TransitionResult_3.bCanEnterTransition = CallFunc_EqualEqual_GameplayTag_ReturnValue_1
+  L013C: goto L09EC
+  L0141: goto L008F
+  L0146: CallFunc_EqualEqual_GameplayTag_ReturnValue_3 = BlueprintGameplayTagLibrary.EqualEqual_GameplayTag(self.State, GameplayTag{'Fishing.State.Idle'})
+  L017E: self.AnimGraphNode_TransitionResult_4.bCanEnterTransition = CallFunc_EqualEqual_GameplayTag_ReturnValue_3
+  L019A: goto L09EC
+  L019F: CallFunc_EqualEqual_GameplayTag_ReturnValue_2 = BlueprintGameplayTagLibrary.EqualEqual_GameplayTag(self.State, GameplayTag{'Fishing.State.Casting'})
+  L01D7: self.AnimGraphNode_TransitionResult_5.bCanEnterTransition = CallFunc_EqualEqual_GameplayTag_ReturnValue_2
+  L01F3: goto L09EC
+  L01F8: CallFunc_EqualEqual_GameplayTag_ReturnValue_5 = BlueprintGameplayTagLibrary.EqualEqual_GameplayTag(self.State, GameplayTag{'Fishing.State.Idle'})
+  L0230: self.AnimGraphNode_TransitionResult_7.bCanEnterTransition = CallFunc_EqualEqual_GameplayTag_ReturnValue_5
+  L024C: goto L09EC
+  L0251: CallFunc_GetInstanceAssetPlayerTimeFromEndFraction_ReturnValue_2 = AnimInstance.GetInstanceAssetPlayerTimeFromEndFraction(13)
+  L0272: CallFunc_Less_DoubleDouble_A_ImplicitCast_2 = CallFunc_GetInstanceAssetPlayerTimeFromEndFraction_ReturnValue_2
+  L028F: CallFunc_Less_DoubleDouble_ReturnValue_2 = Less_DoubleDouble(CallFunc_Less_DoubleDouble_A_ImplicitCast_2, 0.05)
+  L02B5: self.AnimGraphNode_TransitionResult_1.bCanEnterTransition = CallFunc_Less_DoubleDouble_ReturnValue_2
+  L02D1: goto L09EC
+  L02D6: CallFunc_GetInstanceAssetPlayerTimeFromEndFraction_ReturnValue_1 = AnimInstance.GetInstanceAssetPlayerTimeFromEndFraction(19)
+  L02F7: CallFunc_Less_DoubleDouble_A_ImplicitCast_1 = CallFunc_GetInstanceAssetPlayerTimeFromEndFraction_ReturnValue_1
+  L0314: CallFunc_Less_DoubleDouble_ReturnValue_1 = Less_DoubleDouble(CallFunc_Less_DoubleDouble_A_ImplicitCast_1, 0.05)
+  L033A: self.AnimGraphNode_TransitionResult_6.bCanEnterTransition = CallFunc_Less_DoubleDouble_ReturnValue_1
+  L0356: goto L09EC
+  L035B: CallFunc_TryGetPawnOwner_ReturnValue = TryGetPawnOwner()
+  L0373: K2Node_DynamicCast_AsBP_Fishing_Controller = cast<BP_FishingController_C>(CallFunc_TryGetPawnOwner_ReturnValue)
+  L0397: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsBP_Fishing_Controller
+  L03B4: if not (K2Node_DynamicCast_bSuccess) goto L09EC
+  L03C2: self.FishingController = K2Node_DynamicCast_AsBP_Fishing_Controller
+  L03D5: goto L09EC
+  L03DA: AnimInstance.BlueprintInitializeAnimation()
+  L03E4: goto L035B
+  L03E9: AnimInstance.BlueprintUpdateAnimation(K2Node_Event_DeltaTimeX)
+  L03FC: CallFunc_IsValid_ReturnValue_1 = KismetSystemLibrary.IsValid(self.FishingController)
+  L0419: if not (CallFunc_IsValid_ReturnValue_1) goto L09EC
+  L0427: self.State = self.FishingController.self.State
+  L0458: self.FishingController.IsSameDirection(CallFunc_IsSameDirection_bOut_1)
+  L0485: CallFunc_SelectFloat_ReturnValue_1 = SelectFloat(1, 0.6, CallFunc_IsSameDirection_bOut_1)
+  L04BC: CallFunc_FInterpTo_DeltaTime_ImplicitCast = K2Node_Event_DeltaTimeX
+  L04D9: CallFunc_FInterpTo_ReturnValue_1 = FInterpTo(self.Mult, CallFunc_SelectFloat_ReturnValue_1, CallFunc_FInterpTo_DeltaTime_ImplicitCast, 4)
+  L0519: self.Mult = CallFunc_FInterpTo_ReturnValue_1
+  L0534: self.FishingController.IsSameDirection(CallFunc_IsSameDirection_bOut)
+  L0561: self.SameDirection = CallFunc_IsSameDirection_bOut
+  L0574: self.Fish Exhausted = self.FishingController.self.bFishExhausted
+  L059D: CallFunc_MapRangeClamped_InRangeA_ImplicitCast = self.FishingController.self.StruggleXLimits.Min
+  L05D9: CallFunc_MapRangeClamped_InRangeB_ImplicitCast = self.FishingController.self.StruggleXLimits.Max
+  L0615: CallFunc_MapRangeClamped_ReturnValue_1 = MapRangeClamped(self.FishingController.self.StruggleX, CallFunc_MapRangeClamped_InRangeA_ImplicitCast, CallFunc_MapRangeClamped_InRangeB_ImplicitCast, -1, 1)
+  L0674: CallFunc_Multiply_DoubleDouble_ReturnValue = Multiply_DoubleDouble(CallFunc_MapRangeClamped_ReturnValue_1, self.Mult)
+  L06A2: CallFunc_SelectFloat_ReturnValue_2 = SelectFloat(0, CallFunc_Multiply_DoubleDouble_ReturnValue, self.FishingController.self.bFishExhausted)
+  L06EF: CallFunc_FInterpTo_Current_ImplicitCast_1 = self.Left_Right
+  L070C: CallFunc_FInterpTo_DeltaTime_ImplicitCast_1 = K2Node_Event_DeltaTimeX
+  L0729: CallFunc_FInterpTo_ReturnValue_2 = FInterpTo(CallFunc_FInterpTo_Current_ImplicitCast_1, CallFunc_SelectFloat_ReturnValue_2, CallFunc_FInterpTo_DeltaTime_ImplicitCast_1, self.FishingController.self.RodControl)
+  L077F: K2Node_VariableSet_Left_Right_ImplicitCast = CallFunc_FInterpTo_ReturnValue_2
+  L079C: self.Left_Right = K2Node_VariableSet_Left_Right_ImplicitCast
+  L07B7: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(self.FishingController.self.StrugglingFish)
+  L07EA: self.bCaught = CallFunc_IsValid_ReturnValue
+  L07FD: CallFunc_SelectFloat_ReturnValue = SelectFloat(1, 0, self.FishingController.self.bMousePressed)
+  L084A: CallFunc_FInterpTo_Current_ImplicitCast = self.Reel
+  L0867: CallFunc_FInterpTo_DeltaTime_ImplicitCast_2 = K2Node_Event_DeltaTimeX
+  L0884: CallFunc_FInterpTo_ReturnValue = FInterpTo(CallFunc_FInterpTo_Current_ImplicitCast, CallFunc_SelectFloat_ReturnValue, CallFunc_FInterpTo_DeltaTime_ImplicitCast_2, 4)
+  L08C4: K2Node_VariableSet_Reel_ImplicitCast = CallFunc_FInterpTo_ReturnValue
+  L08E1: self.Reel = K2Node_VariableSet_Reel_ImplicitCast
+  L08FC: CallFunc_MapRangeClamped_ReturnValue = MapRangeClamped(self.FishingController.self.ReelTime, 0, 1, 0, 2)
+  L095B: K2Node_VariableSet_Explicit_Time_ImplicitCast = CallFunc_MapRangeClamped_ReturnValue
+  L0978: self.Explicit Time = K2Node_VariableSet_Explicit_Time_ImplicitCast
+  L0993: goto L09EC
+  L0998: CallFunc_EqualEqual_GameplayTag_ReturnValue_4 = BlueprintGameplayTagLibrary.EqualEqual_GameplayTag(self.State, GameplayTag{'Fishing.State.Aiming'})
+  L09D0: self.AnimGraphNode_TransitionResult.bCanEnterTransition = CallFunc_EqualEqual_GameplayTag_ReturnValue_4
+  L09EC: return

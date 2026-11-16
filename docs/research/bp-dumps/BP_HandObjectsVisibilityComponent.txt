@@ -1,0 +1,91 @@
+# /Game/Dreadmoor/InventoryFramework/Components/BP_HandObjectsVisibilityComponent
+# file: Dreadmoor/Content/Dreadmoor/InventoryFramework/Components/BP_HandObjectsVisibilityComponent.uasset
+
+## imported packages (1)
+  /Game/Dreadmoor/InventoryFramework/Components/BP_GearTransitionComponent
+
+## exports (6)
+  [0] BP_HandObjectsVisibilityComponent_C : BlueprintGeneratedClass (outer None) super=ActorComponent size=317
+  [1] Default__BP_HandObjectsVisibilityComponent_C : BP_HandObjectsVisibilityComponent_C (outer None) size=10
+        refs: name:bHidden
+
+## function AreHandObjectsHidden  flags=0x1C420000
+  L0000: CallFunc_Set_Length_ReturnValue = Default__BlueprintSetLibrary.BlueprintSetLibrary.Set_Length(self.HideHandObjectsSources)
+  L003B: CallFunc_Greater_IntInt_ReturnValue = Greater_IntInt(CallFunc_Set_Length_ReturnValue, 0)
+  L005D: bHidden = CallFunc_Greater_IntInt_ReturnValue
+  L0070: return
+
+## function OnHandObjectsHiddenChanged__DelegateSignature  flags=0x0C120000
+  L0000: return
+
+## function ReleaseHideHandObjects  flags=0x0C820000
+  L0000: push L0435
+  L0005: CallFunc_Set_Length_ReturnValue_1 = Default__BlueprintSetLibrary.BlueprintSetLibrary.Set_Length(self.HideHandObjectsSources)
+  L0040: CallFunc_Greater_IntInt_ReturnValue = Greater_IntInt(CallFunc_Set_Length_ReturnValue_1, 0)
+  L0062: if not (CallFunc_Greater_IntInt_ReturnValue) pop-flow
+  L006C: CallFunc_Set_Remove_ReturnValue_1 = Default__BlueprintSetLibrary.BlueprintSetLibrary.Set_Remove(self.HideHandObjectsSources, Source)
+  L00A8: CallFunc_Set_ToArray_Result = []
+  L00B3: Default__BlueprintSetLibrary.BlueprintSetLibrary.Set_ToArray(self.HideHandObjectsSources, CallFunc_Set_ToArray_Result)
+  L00E5: Temp_int_Loop_Counter_Variable = 0
+  L00FC: Temp_int_Array_Index_Variable = 0
+  L0113: CallFunc_Array_Length_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(CallFunc_Set_ToArray_Result)
+  L014E: CallFunc_Less_IntInt_ReturnValue = Less_IntInt(Temp_int_Loop_Counter_Variable, CallFunc_Array_Length_ReturnValue)
+  L0174: if not (CallFunc_Less_IntInt_ReturnValue) goto L0209
+  L0182: Temp_int_Array_Index_Variable = Temp_int_Loop_Counter_Variable
+  L019D: push L0373
+  L01A2: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_Set_ToArray_Result, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L01DD: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(CallFunc_Array_Get_Item)
+  L01FA: if not (CallFunc_IsValid_ReturnValue) goto L03BD
+  L0208: pop-flow
+  L0209: CallFunc_Set_Length_ReturnValue = Default__BlueprintSetLibrary.BlueprintSetLibrary.Set_Length(self.HideHandObjectsSources)
+  L0244: CallFunc_EqualEqual_IntInt_ReturnValue = EqualEqual_IntInt(CallFunc_Set_Length_ReturnValue, 0)
+  L0266: if not (CallFunc_EqualEqual_IntInt_ReturnValue) pop-flow
+  L0270: if not (false) goto L02E7
+  L0276: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L0290: CallFunc_GetComponentByClass_ReturnValue = CallFunc_GetPlayerController_ReturnValue.Actor.GetComponentByClass(BP_GearTransitionComponent_C)
+  L02C3: CallFunc_GetComponentByClass_ReturnValue.EquipPreviouslyEquippedObject()
+  L02E7: if not (true) goto L035F
+  L02ED: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L0307: CallFunc_GetComponentByClass_ReturnValue = CallFunc_GetPlayerController_ReturnValue.Actor.GetComponentByClass(BP_GearTransitionComponent_C)
+  L033A: CallFunc_GetComponentByClass_ReturnValue.HideHandToolItem(false)
+  L035F: self.OnHandObjectsHiddenChanged.Broadcast()
+  L0372: pop-flow
+  L0373: CallFunc_Add_IntInt_ReturnValue = Add_IntInt(Temp_int_Loop_Counter_Variable, 1)
+  L039D: Temp_int_Loop_Counter_Variable = CallFunc_Add_IntInt_ReturnValue
+  L03B8: goto L0113
+  L03BD: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_Set_ToArray_Result, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L03F8: CallFunc_Set_Remove_ReturnValue = Default__BlueprintSetLibrary.BlueprintSetLibrary.Set_Remove(self.HideHandObjectsSources, CallFunc_Array_Get_Item)
+  L0434: pop-flow
+  L0435: return
+
+## function RequestHideHandObjects  flags=0x0C020000
+  L0000: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(Source)
+  L001D: CallFunc_Set_Contains_ReturnValue = Default__BlueprintSetLibrary.BlueprintSetLibrary.Set_Contains(self.HideHandObjectsSources, Source)
+  L0059: CallFunc_Not_PreBool_ReturnValue = Not_PreBool(CallFunc_Set_Contains_ReturnValue)
+  L0076: CallFunc_BooleanAND_ReturnValue = BooleanAND(CallFunc_IsValid_ReturnValue, CallFunc_Not_PreBool_ReturnValue)
+  L009C: if not (CallFunc_BooleanAND_ReturnValue) goto L03AE
+  L00AA: CallFunc_Set_Length_ReturnValue = Default__BlueprintSetLibrary.BlueprintSetLibrary.Set_Length(self.HideHandObjectsSources)
+  L00E5: CallFunc_EqualEqual_IntInt_ReturnValue = EqualEqual_IntInt(CallFunc_Set_Length_ReturnValue, 0)
+  L0107: if not (CallFunc_EqualEqual_IntInt_ReturnValue) goto L037C
+  L0115: Default__BlueprintSetLibrary.BlueprintSetLibrary.Set_Add(self.HideHandObjectsSources, Source)
+  L0147: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L0161: CallFunc_GetComponentByClass_ReturnValue = CallFunc_GetPlayerController_ReturnValue.Actor.GetComponentByClass(BP_GearTransitionComponent_C)
+  L0194: CallFunc_GetComponentByClass_ReturnValue.GetHandTool(CallFunc_GetHandTool_DataAsset, CallFunc_GetHandTool_HandToolActor)
+  L01CA: CallFunc_IsValid_ReturnValue_1 = KismetSystemLibrary.IsValid(CallFunc_GetHandTool_HandToolActor)
+  L01E7: if not (CallFunc_IsValid_ReturnValue_1) goto L027B
+  L01F5: if not (true) goto L0275
+  L01FB: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L0215: CallFunc_GetComponentByClass_ReturnValue = CallFunc_GetPlayerController_ReturnValue.Actor.GetComponentByClass(BP_GearTransitionComponent_C)
+  L0248: CallFunc_GetComponentByClass_ReturnValue.self.ActiveSlotBeforeInteract = 0
+  L0275: if not (false) goto L02EC
+  L027B: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L0295: CallFunc_GetComponentByClass_ReturnValue = CallFunc_GetPlayerController_ReturnValue.Actor.GetComponentByClass(BP_GearTransitionComponent_C)
+  L02C8: CallFunc_GetComponentByClass_ReturnValue.UnequipAny()
+  L02EC: if not (true) goto L0364
+  L02F2: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L030C: CallFunc_GetComponentByClass_ReturnValue = CallFunc_GetPlayerController_ReturnValue.Actor.GetComponentByClass(BP_GearTransitionComponent_C)
+  L033F: CallFunc_GetComponentByClass_ReturnValue.HideHandToolItem(true)
+  L0364: self.OnHandObjectsHiddenChanged.Broadcast()
+  L0377: goto L03AE
+  L037C: Default__BlueprintSetLibrary.BlueprintSetLibrary.Set_Add(self.HideHandObjectsSources, Source)
+  L03AE: return

@@ -1,0 +1,21 @@
+# /Game/Dreadmoor/Core/Features/Fishing/StateTree/STT_Fishing_CatchFish
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/Fishing/StateTree/STT_Fishing_CatchFish.uasset
+
+## imported packages (2)
+  /Game/Dreadmoor/Core/Features/Fishing/BP_FishingController
+  /Game/Dreadmoor/Core/Features/WaterFeatures/DeckTentacle/BP_DeckTentacleComponent
+
+## exports (4)
+  [0] STT_Fishing_CatchFish_C : BlueprintGeneratedClass (outer None) super=StateTreeTaskBlueprintBase size=295
+  [3] Default__STT_Fishing_CatchFish_C : STT_Fishing_CatchFish_C (outer None) size=11
+
+## function ExecuteUbergraph_STT_Fishing_CatchFish  flags=0x00808001
+  L0000: goto computed(EntryPoint)
+  L000A: self.Actor.CatchFish(self.bAddToInventory)
+  L0037: StateTreeTaskBlueprintBase.FinishTask(true)
+  L0042: return
+
+## function ReceiveLatentEnterState  flags=0x08420800
+  L0000: frame.K2Node_Event_Transition = Transition
+  L0012: STT_Fishing_CatchFish_C.ExecuteUbergraph_STT_Fishing_CatchFish(10)
+  L0021: return

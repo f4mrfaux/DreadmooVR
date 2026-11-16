@@ -1,0 +1,450 @@
+# /Game/Dreadmoor/Core/Features/QTE/DirectionalDrag/WBP_QTE_DirectionalDrag
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/QTE/DirectionalDrag/WBP_QTE_DirectionalDrag.uasset
+
+## imported packages (27)
+  /Game/Dreadmoor/Core/Input/QTE/IA_QTE_LMB
+  /Game/Dreadmoor/Core/Input/QTE/IA_QTE_Look
+  /Game/Dreadmoor/Core/Input/QTE/IMC_QTE_Drag_UI
+  /Game/Dreadmoor/Localization/ST_UI
+  /Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcAttention001_Lose
+  /Game/Dreadmoor/UI/Atlases/Icons/Frames/SPR_IcAttention001_Win
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_CircularWaveBg003
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_CircularWaveBg004
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_KeyLMB002
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_QteMovementArrow001_Hover
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_QteMovementBg001_Default
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_QteMovementBgBt001_Default
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_QteMovementBgBt001_Hover
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_QteMovementBgPrb001
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_QteMovementBgPrb002
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_QteMovementFinish001_Default
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_QteMovementFinish001_Hover
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_QteMovementFinish001_Lose
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_QteMovementFinish001_Win
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_QteMovementStroke001_Default
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_QteMovementStroke001_Hover
+  /Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_QteMovementStroke001_Lose
+  /Game/Dreadmoor/UI/Common/WBP_InputHint
+  /Game/Dreadmoor/UI/Fonts/Font_NotoSans
+  /Game/Dreadmoor/UI/Materials/MT_FontBlurredOutline
+  /Game/Dreadmoor/UI/Materials/M_QteMovementPrb001
+  /Game/Dreadmoor/UI/Tutorial/FishingSpecial/WBP_FishingSpecial_Predatory
+
+## exports (97)
+  [0] CanvasPanel_23 : CanvasPanel (outer WidgetTree) size=18
+        refs: exp:CanvasPanelSlot_1, name:ActionPressed
+  [1] CanvasPanelSlot_0 : CanvasPanelSlot (outer CanvasPanel_23) size=79
+        refs: exp:EnhancedInputActionDelegateBinding_0, exp:MovieSceneByteTrack_0, name:CallFunc_GetLocalPlayerFromController_ReturnValue
+  [2] CanvasPanelSlot_1 : CanvasPanelSlot (outer CanvasPanel_23) size=69
+        refs: exp:EnhancedInputActionDelegateBinding_0, exp:MovieSceneByteTrack_0, name:InpActEvt_IA_QTE_LMB_K2Node_EnhancedInputActionEvent
+  [3] CommonActionWidget_Icon : CommonActionWidget (outer WidgetTree) size=16
+        refs: obj:/Game/Dreadmoor/Core/Input/QTE/IA_QTE_LMB.IA_QTE_LMB, name:Mult
+  [4] EnhancedInputActionDelegateBinding_0 : EnhancedInputActionDelegateBinding (outer WBP_QTE_DirectionalDrag_C) size=55
+        refs: exp:CanvasPanelSlot_1, obj:/Game/Dreadmoor/Core/Input/QTE/IA_QTE_LMB.IA_QTE_LMB, exp:Overlay_60, obj:/Game/Dreadmoor/Core/Input/QTE/IA_QTE_Look.IA_QTE_Look, exp:Overlay_62, name:ActionPressed
+  [25] HorizontalBox_0 : HorizontalBox (outer WidgetTree) size=22
+        refs: exp:HorizontalBoxSlot_0, exp:HorizontalBoxSlot_6, name:ActionPressed
+  [26] HorizontalBoxSlot_0 : HorizontalBoxSlot (outer HorizontalBox_0) size=14
+        refs: exp:HorizontalBox_0, name:OnEventTriggered
+  [27] HorizontalBoxSlot_6 : HorizontalBoxSlot (outer HorizontalBox_0) size=14
+        refs: exp:HorizontalBox_0, name:OnEventTriggered__DelegateSignature
+  [28] Image : Image (outer WidgetTree) size=29
+        refs: obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_QteMovementBg001_Default.SPR_QteMovementBg001_Default, name:InterfaceProperty
+  [29] Image_1 : Image (outer WidgetTree) size=49
+        refs: obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_QteMovementFinish001_Default.SPR_QteMovementFinish001_Default, exp:OverlaySlot_4, name:ActionValue
+  [30] Image_194 : Image (outer WidgetTree) size=29
+        refs: obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_QteMovementBgBt001_Default.SPR_QteMovementBgBt001_Default, name:K2Node_EnhancedInputActionEvent_TriggeredTime
+  [31] Image_2 : Image (outer WidgetTree) size=29
+        refs: obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_QteMovementArrow001_Hover.SPR_QteMovementArrow001_Hover, name:K2Node_EnhancedInputActionEvent_ElapsedTime
+  [32] Image_70 : Image (outer WidgetTree) size=29
+        refs: obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_QteMovementStroke001_Default.SPR_QteMovementStroke001_Default, name:InputType
+  [33] Image_Result : Image (outer WidgetTree) size=32
+        refs: obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_KeyLMB002.SPR_KeyLMB002, exp:OverlaySlot_1
+  [34] Image_TimeBar : Image (outer WidgetTree) size=29
+        refs: obj:/Game/Dreadmoor/UI/Materials/M_QteMovementPrb001.M_QteMovementPrb001, name:K2Node_Select_Default
+  [35] WaveImageMouse1 : Image (outer WidgetTree) size=32
+        refs: obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_CircularWaveBg004.SPR_CircularWaveBg004, exp:OverlaySlot_4
+  [36] WaveImageMouse2 : Image (outer WidgetTree) size=32
+        refs: obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_CircularWaveBg004.SPR_CircularWaveBg004, exp:OverlaySlot_5
+  [37] Success : MovieScene (outer Success_INST) size=435
+        refs: exp:CommonActionWidget_Icon, exp:OnFinished__DelegateSignature, exp:BP_OnDeactivated, exp:InpActEvt_IA_QTE_LMB_K2Node_EnhancedInputActionEvent_2, exp:CanvasPanelSlot_1, exp:MovieScene2DTransformTrack_2, exp:MovieSceneColorTrack_0, exp:MovieSceneByteTrack_0, exp:MovieSceneFloatTrack_0, exp:MovieSceneColorTrack_1, exp:MovieScene2DTransformTrack_1, exp:MovieSceneByteTrack_1, exp:ExecuteUbergraph_WBP_QTE_DirectionalDrag, exp:MovieScene2DTransformTrack_0, exp:ShowTutorial, exp:EaseOutFunction
+  [38] MovieScene2DTransformSection_0 : MovieScene2DTransformSection (outer MovieScene2DTransformTrack_0) size=506
+        refs: name:Angle, name:CallFunc_GetPlayerController_ReturnValue, exp:CommonActionWidget_Icon, name:ActionValue, exp:HorizontalBoxSlot_6, exp:CanvasPanelSlot_1, name:ExecuteUbergraph_WBP_QTE_DirectionalDrag, name:ActionPressed, exp:EaseInFunction, exp:EaseOutFunction
+  [39] MovieScene2DTransformSection_0 : MovieScene2DTransformSection (outer MovieScene2DTransformTrack_1) size=252
+        refs: exp:CommonActionWidget_Icon, exp:HorizontalBoxSlot_6, name:ExecuteUbergraph_WBP_QTE_DirectionalDrag, name:ActionPressed, exp:EaseInFunction, exp:EaseOutFunction
+  [40] MovieScene2DTransformSection_0 : MovieScene2DTransformSection (outer MovieScene2DTransformTrack_2) size=252
+        refs: exp:CommonActionWidget_Icon, name:ActionPressed, exp:HorizontalBoxSlot_6, name:ExecuteUbergraph_WBP_QTE_DirectionalDrag, exp:EaseInFunction, exp:EaseOutFunction, exp:OnEventTriggered__DelegateSignature
+  [41] MovieScene2DTransformTrack_0 : MovieScene2DTransformTrack (outer Success) size=102
+        refs: name:RenderTransform, exp:MovieScene2DTransformSection_0
+  [42] MovieScene2DTransformTrack_1 : MovieScene2DTransformTrack (outer Success) size=102
+        refs: name:RenderTransform, exp:MovieScene2DTransformSection_0, exp:EaseOutFunction
+  [43] MovieScene2DTransformTrack_2 : MovieScene2DTransformTrack (outer Success) size=102
+        refs: name:RenderTransform, exp:MovieScene2DTransformSection_0, exp:WaveImageMouse2
+  [44] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+  [45] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+  [46] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+  [47] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+  [48] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+  [49] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieScene2DTransformSection_0) size=6
+  [50] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneByteSection_0) size=6
+  [51] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneByteSection_0) size=6
+  [52] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneByteSection_0) size=6
+  [53] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneByteSection_0) size=6
+  [54] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+  [55] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+  [56] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+  [57] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneColorSection_0) size=6
+  [58] EaseInFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneFloatSection_0) size=6
+  [59] EaseOutFunction : MovieSceneBuiltInEasingFunction (outer MovieSceneFloatSection_0) size=6
+  [60] MovieSceneByteSection_0 : MovieSceneByteSection (outer MovieSceneByteTrack_0) size=74
+        refs: obj:/Script/UMG.ESlateVisibility, exp:EaseInFunction, exp:EaseOutFunction
+  [61] MovieSceneByteSection_0 : MovieSceneByteSection (outer MovieSceneByteTrack_1) size=74
+        refs: obj:/Script/UMG.ESlateVisibility, exp:EaseInFunction, exp:EaseOutFunction, exp:WBP_InputHint_1
+  [62] MovieSceneByteTrack_0 : MovieSceneByteTrack (outer Success) size=108
+        refs: obj:/Script/UMG.ESlateVisibility, name:Visibility, exp:MovieSceneByteSection_0
+  [63] MovieSceneByteTrack_1 : MovieSceneByteTrack (outer Success) size=108
+        refs: obj:/Script/UMG.ESlateVisibility, name:Visibility, exp:MovieSceneByteSection_0
+  [64] MovieSceneColorSection_0 : MovieSceneColorSection (outer MovieSceneColorTrack_0) size=360
+        refs: name:Angle, name:CallFunc_GetPlayerController_ReturnValue, exp:CommonActionWidget_Icon, exp:HorizontalBoxSlot_6, name:ExecuteUbergraph_WBP_QTE_DirectionalDrag, name:ActionPressed, name:ActionValue, exp:CanvasPanelSlot_1, exp:EaseInFunction, exp:EaseOutFunction
+  [65] MovieSceneColorSection_0 : MovieSceneColorSection (outer MovieSceneColorTrack_1) size=360
+        refs: name:Angle, name:CallFunc_GetPlayerController_ReturnValue, exp:CommonActionWidget_Icon, exp:HorizontalBoxSlot_6, name:ExecuteUbergraph_WBP_QTE_DirectionalDrag, name:ActionPressed, exp:CanvasPanelSlot_1, exp:EaseInFunction, exp:EaseOutFunction
+  [66] MovieSceneColorTrack_0 : MovieSceneColorTrack (outer Success) size=102
+        refs: name:ColorAndOpacity, exp:MovieSceneColorSection_0, exp:OverlaySlot_2
+  [67] MovieSceneColorTrack_1 : MovieSceneColorTrack (outer Success) size=102
+        refs: name:ColorAndOpacity, exp:MovieSceneColorSection_0
+  [68] CompiledData : MovieSceneCompiledData (outer Success_INST) size=827
+        refs: name:ActionValue, exp:CommonActionWidget_Icon, exp:ActionPressed, exp:BP_OnActivated, exp:EnhancedInputActionDelegateBinding_0, exp:CanvasPanelSlot_1, name:BlueprintType, exp:BP_OnDeactivated, exp:FinishQTE, exp:InpActEvt_IA_QTE_Look_K2Node_EnhancedInputActionEvent_0, exp:OnEventTriggered__DelegateSignature, exp:OnFinished__DelegateSignature, name:CallFunc_BreakVector2D_Y, exp:MovieScene2DTransformSection_0, exp:MovieSceneColorSection_0, exp:MovieSceneByteSection_0, exp:MovieSceneFloatSection_0
+  [69] MovieSceneFloatSection_0 : MovieSceneFloatSection (outer MovieSceneFloatTrack_0) size=150
+        refs: exp:CommonActionWidget_Icon, exp:HorizontalBoxSlot_6, name:ExecuteUbergraph_WBP_QTE_DirectionalDrag, name:ActionPressed, exp:EaseInFunction, exp:EaseOutFunction, exp:EnhancedInputActionDelegateBinding_0
+  [70] MovieSceneFloatTrack_0 : MovieSceneFloatTrack (outer Success) size=102
+        refs: name:RenderOpacity, exp:MovieSceneFloatSection_0
+  [71] Overlay_60 : Overlay (outer WidgetTree) size=41
+        refs: exp:ActionPressed, exp:OverlaySlot_0, exp:OverlaySlot_1, exp:OverlaySlot_2, exp:OverlaySlot_4, exp:OverlaySlot_5, exp:OverlaySlot_6, exp:CanvasPanelSlot_1
+  [72] Overlay_62 : Overlay (outer WidgetTree) size=65
+        refs: exp:BP_OnActivated, exp:OverlaySlot_0, exp:OverlaySlot_3, exp:OverlaySlot_1, exp:OverlaySlot_6, exp:OverlaySlot_4, exp:OverlaySlot_5, exp:OverlaySlot_2, name:ActionValue
+  [73] OverlaySlot_0 : OverlaySlot (outer Overlay_60) size=14
+        refs: exp:Overlay_60, name:CallFunc_GreaterEqual_DoubleDouble_ReturnValue
+  [74] OverlaySlot_1 : OverlaySlot (outer Overlay_60) size=14
+        refs: exp:Overlay_60, name:CallFunc_GetRotated2D_AngleDeg_ImplicitCast
+  [75] OverlaySlot_2 : OverlaySlot (outer Overlay_60) size=15
+        refs: exp:Overlay_60, name:MulticastInlineDelegateProperty
+  [76] OverlaySlot_4 : OverlaySlot (outer Overlay_60) size=17
+        refs: exp:Overlay_60, name:CallFunc_GetRotated2D_ReturnValue
+  [77] OverlaySlot_5 : OverlaySlot (outer Overlay_60) size=16
+        refs: exp:Overlay_60, name:CallFunc_GreaterEqual_DoubleDouble_B_ImplicitCast
+  [78] OverlaySlot_6 : OverlaySlot (outer Overlay_60) size=16
+        refs: exp:Overlay_60, name:InpActEvt_IA_QTE_Look_K2Node_EnhancedInputActionEvent
+  [79] OverlaySlot_0 : OverlaySlot (outer Overlay_62) size=14
+        refs: exp:Overlay_62, name:CallFunc_GetWorldDeltaSeconds_ReturnValue
+  [80] OverlaySlot_1 : OverlaySlot (outer Overlay_62) size=16
+        refs: exp:Overlay_62, name:CallFunc_LessEqual_DoubleDouble_B_ImplicitCast
+  [81] OverlaySlot_2 : OverlaySlot (outer Overlay_62) size=14
+        refs: exp:Overlay_62, name:MyGeometry
+  [82] OverlaySlot_3 : OverlaySlot (outer Overlay_62) size=14
+        refs: exp:Overlay_62, name:CallFunc_LessEqual_DoubleDouble_ReturnValue
+  [83] OverlaySlot_4 : OverlaySlot (outer Overlay_62) size=16
+        refs: exp:Overlay_62, name:CallFunc_MakeBrushFromSprite_ReturnValue
+  [84] OverlaySlot_5 : OverlaySlot (outer Overlay_62) size=16
+        refs: exp:Overlay_62, name:CallFunc_MakeVector2D_ReturnValue
+  [85] OverlaySlot_6 : OverlaySlot (outer Overlay_62) size=16
+        refs: exp:Overlay_62, name:Angle
+  [86] ProgressBar_Time : ProgressBar (outer WidgetTree) size=41
+        refs: obj:/Game/Dreadmoor/UI/Atlases/WindowUI/Frames/SPR_QteMovementBgPrb001.SPR_QteMovementBgPrb001, name:IntProperty
+  [87] SizeBox_0 : SizeBox (outer WidgetTree) size=35
+        refs: exp:SizeBoxSlot_0, exp:OverlaySlot_2
+  [88] SizeBoxSlot_0 : SizeBoxSlot (outer SizeBox_0) size=16
+        refs: exp:SizeBox_0, name:ObjectProperty
+  [89] TextBlock_116 : TextBlock (outer WidgetTree) size=115
+        refs: exp:CanvasPanelSlot_1, exp:EnhancedInputActionDelegateBinding_0, obj:/Game/Dreadmoor/UI/Fonts/Font_NotoSans.Font_NotoSans, exp:InpActEvt_IA_QTE_LMB_K2Node_EnhancedInputActionEvent_1, obj:/Game/Dreadmoor/UI/Materials/MT_FontBlurredOutline.MT_FontBlurredOutline, name:CondensedBold, exp:SizeBoxSlot_0, name:ActionValue
+  [90] WBP_InputHint : WBP_InputHint_C (outer WidgetTree) size=38
+        refs: exp:CanvasPanelSlot_1, exp:EnhancedInputActionDelegateBinding_0, obj:/Game/Dreadmoor/Core/Input/QTE/IA_QTE_LMB.IA_QTE_LMB, name:CallFunc_GetLooseSavedFlagValue_ReturnValue
+  [91] WBP_InputHint_1 : WBP_InputHint_C (outer WidgetTree) size=38
+        refs: exp:CanvasPanelSlot_1, exp:EnhancedInputActionDelegateBinding_0, obj:/Game/Dreadmoor/Core/Input/QTE/IA_QTE_Look.IA_QTE_Look, name:CallFunc_GetPlayerController_ReturnValue
+  [92] Default__WBP_QTE_DirectionalDrag_C : WBP_QTE_DirectionalDrag_C (outer None) size=76
+        refs: name:CallFunc_BreakVector2D_X, exp:MovieSceneByteSection_0, obj:/Game/Dreadmoor/Core/Input/QTE/IMC_QTE_Drag_UI.IMC_QTE_Drag_UI
+  [93] Success_INST : WidgetAnimation (outer WBP_QTE_DirectionalDrag_C) size=202
+        refs: exp:Success, exp:CommonActionWidget_Icon, name:Image_Result, name:WaveImageMouse1, name:WaveImageMouse2, exp:MovieSceneColorTrack_0, exp:CanvasPanelSlot_1, exp:BP_OnDeactivated, exp:CompiledData, exp:OverlaySlot_2
+  [94] WidgetAnimationDelegateBinding_0 : WidgetAnimationDelegateBinding (outer WBP_QTE_DirectionalDrag_C) size=30
+        refs: name:Success
+  [95] WBP_QTE_DirectionalDrag_C : WidgetBlueprintGeneratedClass (outer None) super=DrdCommonActivatableWidget size=2888
+        refs: exp:WidgetTree, exp:Success_INST, exp:EnhancedInputActionDelegateBinding_0, exp:WidgetAnimationDelegateBinding_0, name:BP_OnDeactivated, exp:Image_194, name:InputType, name:OnEventTriggered, name:Time, name:TimeBarMID, name:Config, name:bDanger, name:RemainingTime, name:bSuccess, name:bActive, name:TargetY, name:bPressed, name:Angle, name:OnFinished, name:Success, name:CommonActionWidget_Icon, name:Image, exp:MovieSceneColorTrack_0, exp:CanvasPanelSlot_1, exp:MovieSceneFloatTrack_0, name:Image_Result, name:Image_TimeBar, exp:MovieSceneByteSection_0, exp:MovieSceneByteTrack_0, name:ProgressBar_Time, name:WaveImageMouse1, name:WaveImageMouse2, name:WBP_InputHint, exp:MovieScene2DTransformSection_0, obj:/Script/Dreadmoor.DrdCommonActivatableWidget, exp:ShowTutorial, exp:SetWeightIndex, exp:SetDanger, exp:UpdateTimeBar, exp:UpdateTime, exp:StopQTE, exp:Drag, exp:ActionPressed, exp:SetRandomRotation, exp:FinishQTE, exp:InpActEvt_IA_QTE_LMB_K2Node_EnhancedInputActionEvent_2, exp:InpActEvt_IA_QTE_LMB_K2Node_EnhancedInputActionEvent_1, exp:InpActEvt_IA_QTE_Look_K2Node_EnhancedInputActionEvent_0, exp:BP_OnActivated, exp:BP_OnDeactivated, exp:WidgetAnimationEvt_Success_K2Node_WidgetAnimationEvent_0, exp:Tick, exp:ExecuteUbergraph_WBP_QTE_DirectionalDrag, exp:OnEventTriggered__DelegateSignature, exp:OnFinished__DelegateSignature, exp:Image_2, name:StructProperty, name:UberGraphFrame, name:CallFunc_GreaterEqual_DoubleDouble_B_ImplicitCast, name:None
+  [96] WidgetTree : WidgetTree (outer WBP_QTE_DirectionalDrag_C) size=10
+
+## function ActionPressed  flags=0x0C020000
+  L0000: if not (self.bActive) goto L03A0
+  L000E: self.bPressed = bPressed
+  L0021: Temp_byte_Variable = 2
+  L0035: Temp_byte_Variable_1 = 0
+  L0049: Temp_bool_Variable_3 = self.bPressed
+  L005C: self.TextBlock_116.SetVisibility(switch(Temp_bool_Variable_3){false: Temp_byte_Variable_1; true: Temp_byte_Variable; default: K2Node_Select_Default_3})
+  L00B5: Temp_interface_Variable_2 = iface<SlateTextureAtlasInterface>(SPR_QteMovementStroke001_Hover)
+  L00D9: Temp_interface_Variable_3 = iface<SlateTextureAtlasInterface>(SPR_QteMovementStroke001_Default)
+  L00FD: Temp_bool_Variable_2 = self.bPressed
+  L0110: self.Image_70.SetBrushFromAtlasInterface(switch(Temp_bool_Variable_2){false: Temp_interface_Variable_3; true: Temp_interface_Variable_2; default: K2Node_Select_Default_2}, false)
+  L016A: Temp_interface_Variable = iface<SlateTextureAtlasInterface>(SPR_QteMovementFinish001_Hover)
+  L018E: Temp_interface_Variable_1 = iface<SlateTextureAtlasInterface>(SPR_QteMovementFinish001_Default)
+  L01B2: Temp_bool_Variable_1 = self.bPressed
+  L01C5: self.Image_1.SetBrushFromAtlasInterface(switch(Temp_bool_Variable_1){false: Temp_interface_Variable_1; true: Temp_interface_Variable; default: K2Node_Select_Default_1}, false)
+  L021F: Temp_interface_Variable_4 = iface<SlateTextureAtlasInterface>(SPR_QteMovementBgBt001_Default)
+  L0243: Temp_interface_Variable_5 = iface<SlateTextureAtlasInterface>(SPR_QteMovementBgBt001_Hover)
+  L0267: Temp_bool_Variable_4 = self.bPressed
+  L027A: self.Image_194.SetBrushFromAtlasInterface(switch(Temp_bool_Variable_4){false: Temp_interface_Variable_4; true: Temp_interface_Variable_5; default: K2Node_Select_Default_4}, false)
+  L02D4: Temp_struct_Variable = Vector2D{0.75, 0.75}
+  L0306: Temp_struct_Variable_1 = Vector2D{1, 1}
+  L0338: Temp_bool_Variable = self.bPressed
+  L034B: self.Overlay_62.Widget.SetRenderScale(switch(Temp_bool_Variable){false: Temp_struct_Variable_1; true: Temp_struct_Variable; default: K2Node_Select_Default})
+  L03A0: return
+
+## function BP_OnActivated  flags=0x08080800
+  L0000: WBP_QTE_DirectionalDrag_C.ExecuteUbergraph_WBP_QTE_DirectionalDrag(1305)
+  L000F: return
+
+## function BP_OnDeactivated  flags=0x08080800
+  L0000: WBP_QTE_DirectionalDrag_C.ExecuteUbergraph_WBP_QTE_DirectionalDrag(2234)
+  L000F: return
+
+## function Drag  flags=0x0C020000
+  L0000: CallFunc_Multiply_DoubleDouble_ReturnValue = Multiply_DoubleDouble(Value, Mult)
+  L002E: CallFunc_Multiply_DoubleDouble_B_ImplicitCast = self.Config.SpeedMult
+  L0054: CallFunc_Multiply_DoubleDouble_ReturnValue_1 = Multiply_DoubleDouble(CallFunc_Multiply_DoubleDouble_ReturnValue, CallFunc_Multiply_DoubleDouble_B_ImplicitCast)
+  L0082: CallFunc_Multiply_DoubleDouble_ReturnValue_2 = Multiply_DoubleDouble(CallFunc_Multiply_DoubleDouble_ReturnValue_1, -1)
+  L00B0: BreakVector2D(self.Overlay_62.self.RenderTransform.Translation, CallFunc_BreakVector2D_X, CallFunc_BreakVector2D_Y)
+  L00F4: CallFunc_Add_DoubleDouble_ReturnValue = Add_DoubleDouble(CallFunc_Multiply_DoubleDouble_ReturnValue_2, CallFunc_BreakVector2D_Y)
+  L0122: CallFunc_MakeVector2D_ReturnValue_1 = MakeVector2D(0, CallFunc_Add_DoubleDouble_ReturnValue)
+  L0150: self.Overlay_62.Widget.SetRenderTranslation(CallFunc_MakeVector2D_ReturnValue_1)
+  L0179: BreakVector2D(self.Overlay_62.self.RenderTransform.Translation, CallFunc_BreakVector2D_X, CallFunc_BreakVector2D_Y)
+  L01BD: CallFunc_LessEqual_DoubleDouble_ReturnValue = LessEqual_DoubleDouble(CallFunc_BreakVector2D_Y, self.TargetY)
+  L01E3: if not (CallFunc_LessEqual_DoubleDouble_ReturnValue) goto L0285
+  L01F1: CallFunc_MakeVector2D_ReturnValue = MakeVector2D(0, self.TargetY)
+  L021F: self.Overlay_62.Widget.SetRenderTranslation(CallFunc_MakeVector2D_ReturnValue)
+  L0248: StopQTE(true)
+  L0257: self.OnEventTriggered.Broadcast(GameplayTag{'QTE.Event.PreSuccess'})
+  L0285: return
+
+## function ExecuteUbergraph_WBP_QTE_DirectionalDrag  flags=0x00808001
+  L0000: goto computed(EntryPoint)
+  L000A: CallFunc_Conv_InputActionValueToBool_ReturnValue = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_2)
+  L0027: Temp_bool_Variable = CallFunc_Conv_InputActionValueToBool_ReturnValue
+  L003A: Temp_real_Variable_1 = K2Node_EnhancedInputActionEvent_ElapsedTime_2
+  L0057: Temp_real_Variable_1 = Temp_real_Variable_1
+  L0072: Temp_real_Variable = K2Node_EnhancedInputActionEvent_TriggeredTime_2
+  L008F: Temp_real_Variable = Temp_real_Variable
+  L00AA: Temp_object_Variable = K2Node_EnhancedInputActionEvent_SourceAction_2
+  L00BD: ActionPressed(false)
+  L00CC: goto L093F
+  L00D1: CallFunc_Conv_InputActionValueToBool_ReturnValue_1 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_1)
+  L00EE: Temp_bool_Variable = CallFunc_Conv_InputActionValueToBool_ReturnValue_1
+  L0101: Temp_real_Variable_1 = K2Node_EnhancedInputActionEvent_ElapsedTime_1
+  L011E: Temp_real_Variable_1 = Temp_real_Variable_1
+  L0139: Temp_real_Variable = K2Node_EnhancedInputActionEvent_TriggeredTime_1
+  L0156: Temp_real_Variable = Temp_real_Variable
+  L0171: Temp_object_Variable = K2Node_EnhancedInputActionEvent_SourceAction_1
+  L0184: ActionPressed(true)
+  L0193: goto L093F
+  L0198: CallFunc_Conv_InputActionValueToAxis2D_ReturnValue = EnhancedInputLibrary.Conv_InputActionValueToAxis2D(K2Node_EnhancedInputActionEvent_ActionValue)
+  L01BD: Temp_struct_Variable = CallFunc_Conv_InputActionValueToAxis2D_ReturnValue
+  L01D8: Temp_real_Variable_3 = K2Node_EnhancedInputActionEvent_ElapsedTime
+  L01F5: Temp_real_Variable_3 = Temp_real_Variable_3
+  L0210: Temp_real_Variable_2 = K2Node_EnhancedInputActionEvent_TriggeredTime
+  L022D: Temp_real_Variable_2 = Temp_real_Variable_2
+  L0248: Temp_object_Variable_1 = K2Node_EnhancedInputActionEvent_SourceAction
+  L025B: if not (self.bActive) goto L093F
+  L0269: if not (self.bPressed) goto L093F
+  L0277: CallFunc_Normal2D_ReturnValue = Normal2D(Temp_struct_Variable)
+  L029C: CallFunc_GetRotated2D_AngleDeg_ImplicitCast = self.Angle
+  L02B9: CallFunc_GetRotated2D_ReturnValue = GetRotated2D(CallFunc_Normal2D_ReturnValue, CallFunc_GetRotated2D_AngleDeg_ImplicitCast)
+  L02E7: BreakVector2D(CallFunc_GetRotated2D_ReturnValue, CallFunc_BreakVector2D_X, CallFunc_BreakVector2D_Y)
+  L030C: CallFunc_GreaterEqual_DoubleDouble_B_ImplicitCast = self.Config.MoveThreshold
+  L0332: CallFunc_GreaterEqual_DoubleDouble_ReturnValue = GreaterEqual_DoubleDouble(CallFunc_BreakVector2D_Y, CallFunc_GreaterEqual_DoubleDouble_B_ImplicitCast)
+  L0358: if not (CallFunc_GreaterEqual_DoubleDouble_ReturnValue) goto L093F
+  L0366: CallFunc_Normal2D_ReturnValue = Normal2D(Temp_struct_Variable)
+  L038B: CallFunc_GetRotated2D_AngleDeg_ImplicitCast = self.Angle
+  L03A8: CallFunc_GetRotated2D_ReturnValue = GetRotated2D(CallFunc_Normal2D_ReturnValue, CallFunc_GetRotated2D_AngleDeg_ImplicitCast)
+  L03D6: BreakVector2D(CallFunc_GetRotated2D_ReturnValue, CallFunc_BreakVector2D_X, CallFunc_BreakVector2D_Y)
+  L03FB: CallFunc_GetRotated2D_AngleDeg_ImplicitCast_1 = self.Angle
+  L0418: CallFunc_GetRotated2D_ReturnValue_1 = GetRotated2D(Temp_struct_Variable, CallFunc_GetRotated2D_AngleDeg_ImplicitCast_1)
+  L0446: BreakVector2D(CallFunc_GetRotated2D_ReturnValue_1, CallFunc_BreakVector2D_X_1, CallFunc_BreakVector2D_Y_1)
+  L046B: CallFunc_Abs_ReturnValue = Abs(CallFunc_BreakVector2D_Y_1)
+  L0490: Drag(CallFunc_Abs_ReturnValue, CallFunc_BreakVector2D_Y)
+  L04B0: goto L093F
+  L04B5: self.Time = self.RemainingTime
+  L04D0: UpdateTimeBar()
+  L04DE: self.bActive = true
+  L04E9: ActionPressed(false)
+  L04F8: SetRandomRotation()
+  L0506: ShowTutorial()
+  L0514: goto L093F
+  L0519: CommonActivatableWidget.BP_OnActivated()
+  L0523: CallFunc_GetDrdConfigSubsystem_ReturnValue = DrdConfigsSubsystem.GetDrdConfigSubsystem()
+  L0537: CallFunc_GetConfigDirectionalDrag_ReturnValue = CallFunc_GetDrdConfigSubsystem_ReturnValue.DrdConfigsSubsystem.GetConfigDirectionalDrag()
+  L0569: self.Config = CallFunc_GetConfigDirectionalDrag_ReturnValue
+  L0584: CallFunc_GetDynamicMaterial_ReturnValue = self.Image_TimeBar.Image.GetDynamicMaterial()
+  L05AE: self.TimeBarMID = CallFunc_GetDynamicMaterial_ReturnValue
+  L05C1: self.Overlay_62.Widget.SetRenderTranslation(Vector2D{0, 30})
+  L0601: SetDanger(false)
+  L0610: self.Image_2.Widget.SetRenderOpacity(1)
+  L0635: self.Image_194.SetVisibility(0)
+  L065B: self.Image_TimeBar.SetVisibility(0)
+  L0681: self.CommonActionWidget_Icon.SetVisibility(0)
+  L06A7: self.Image_Result.SetVisibility(1)
+  L06CD: CallFunc_Map_Find_ReturnValue = Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_Find(self.Config.Time, Temp_int_Variable, CallFunc_Map_Find_Value)
+  L071B: K2Node_VariableSet_RemainingTime_ImplicitCast = CallFunc_Map_Find_Value
+  L0738: self.RemainingTime = K2Node_VariableSet_RemainingTime_ImplicitCast
+  L0753: goto L04B5
+  L0758: CallFunc_GetGameInstanceSubsystem_ReturnValue = SubsystemBlueprintLibrary.GetGameInstanceSubsystem(self, DrdPersistentDataSubsystem)
+  L0776: CallFunc_GetGameInstanceSubsystem_ReturnValue.DrdPersistentDataSubsystem.SetLooseSavedFlagValue('PredatoryQTETutorialShown', true)
+  L07A4: goto L093F
+  L07A9: CallFunc_GetGameInstanceSubsystem_ReturnValue = SubsystemBlueprintLibrary.GetGameInstanceSubsystem(self, DrdPersistentDataSubsystem)
+  L07C7: CallFunc_GetLooseSavedFlagValue_ReturnValue = CallFunc_GetGameInstanceSubsystem_ReturnValue.DrdPersistentDataSubsystem.GetLooseSavedFlagValue('PredatoryQTETutorialShown')
+  L07FE: if not (CallFunc_GetLooseSavedFlagValue_ReturnValue) goto L0811
+  L080C: goto L093F
+  L0811: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L082B: CallFunc_GetLocalPlayerFromController_ReturnValue = Default__CommonUIExtensions.CommonUIExtensions.GetLocalPlayerFromController(CallFunc_GetPlayerController_ReturnValue)
+  L085E: CallFunc_PushContentToLayer_ForPlayer_ReturnValue = Default__CommonUIExtensions.CommonUIExtensions.PushContentToLayer_ForPlayer(CallFunc_GetLocalPlayerFromController_ReturnValue, GameplayTag{'UI.Layer.Modal'}, WBP_FishingSpecial_Predatory)
+  L08B5: goto L0758
+  L08BA: CommonActivatableWidget.BP_OnDeactivated()
+  L08C4: goto L093F
+  L08C9: FinishQTE(self.bSuccess)
+  L08E0: goto L093F
+  L08E5: UserWidget.Tick(K2Node_Event_MyGeometry, K2Node_Event_InDeltaTime)
+  L0901: CallFunc_GetWorldDeltaSeconds_ReturnValue = GameplayStatics.GetWorldDeltaSeconds(self)
+  L091E: UpdateTime(CallFunc_GetWorldDeltaSeconds_ReturnValue)
+  L0935: goto L093F
+  L093A: goto L07A9
+  L093F: return
+
+## function FinishQTE  flags=0x0C820000
+  L0000: Temp_bool_Variable = bSuccess
+  L0013: Temp_struct_Variable = GameplayTag{'QTE.Result.Success'}
+  L0040: Temp_struct_Variable_1 = GameplayTag{'QTE.Result.Failure'}
+  L006D: self.OnFinished.Broadcast(switch(Temp_bool_Variable){false: Temp_struct_Variable_1; true: Temp_struct_Variable; default: K2Node_Select_Default})
+  L00B5: CommonActivatableWidget.DeactivateWidget()
+  L00BF: return
+
+## function InpActEvt_IA_QTE_LMB_K2Node_EnhancedInputActionEvent_1  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_1 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_1 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_1 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_1 = SourceAction
+  L0048: WBP_QTE_DirectionalDrag_C.ExecuteUbergraph_WBP_QTE_DirectionalDrag(209)
+  L0057: return
+
+## function InpActEvt_IA_QTE_LMB_K2Node_EnhancedInputActionEvent_2  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_2 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_2 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_2 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_2 = SourceAction
+  L0048: WBP_QTE_DirectionalDrag_C.ExecuteUbergraph_WBP_QTE_DirectionalDrag(10)
+  L0057: return
+
+## function InpActEvt_IA_QTE_Look_K2Node_EnhancedInputActionEvent_0  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction = SourceAction
+  L0048: WBP_QTE_DirectionalDrag_C.ExecuteUbergraph_WBP_QTE_DirectionalDrag(408)
+  L0057: return
+
+## function OnEventTriggered__DelegateSignature  flags=0x0C120000
+  L0000: return
+
+## function OnFinished__DelegateSignature  flags=0x0C120000
+  L0000: return
+
+## function SetDanger  flags=0x0C820000
+  L0000: self.bDanger = bDanger
+  L0013: Temp_object_Variable = SPR_QteMovementBgPrb002
+  L0026: Temp_object_Variable_1 = SPR_QteMovementBgPrb001
+  L0039: Temp_bool_Variable = self.bDanger
+  L004C: CallFunc_MakeBrushFromSprite_ReturnValue = PaperSpriteBlueprintLibrary.MakeBrushFromSprite(switch(Temp_bool_Variable){false: Temp_object_Variable_1; true: Temp_object_Variable; default: K2Node_Select_Default}, 88, 328)
+  L00A7: self.ProgressBar_Time.self.WidgetStyle.FillImage = CallFunc_MakeBrushFromSprite_ReturnValue
+  L00E1: return
+
+## function SetRandomRotation  flags=0x0C020000
+  L0000: CallFunc_RandomFloatInRange_ReturnValue = RandomFloatInRange(0, 360)
+  L002E: self.Angle = CallFunc_RandomFloatInRange_ReturnValue
+  L0049: CallFunc_SetRenderTransformAngle_Angle_ImplicitCast = self.Angle
+  L0066: self.Overlay_60.Widget.SetRenderTransformAngle(CallFunc_SetRenderTransformAngle_Angle_ImplicitCast)
+  L008F: CallFunc_Multiply_DoubleDouble_ReturnValue = Multiply_DoubleDouble(self.Angle, -1)
+  L00BD: CallFunc_SetRenderTransformAngle_Angle_ImplicitCast_1 = CallFunc_Multiply_DoubleDouble_ReturnValue
+  L00DA: self.Overlay_62.Widget.SetRenderTransformAngle(CallFunc_SetRenderTransformAngle_Angle_ImplicitCast_1)
+  L0103: return
+
+## function SetWeightIndex  flags=0x0C020000
+  L0000: CallFunc_Map_Find_ReturnValue = Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_Find(self.Config.Time, Index, CallFunc_Map_Find_Value)
+  L004E: if not (CallFunc_Map_Find_ReturnValue) goto L00FD
+  L005C: CallFunc_Map_Find_ReturnValue = Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_Find(self.Config.Time, Index, CallFunc_Map_Find_Value)
+  L00AA: K2Node_VariableSet_RemainingTime_ImplicitCast = CallFunc_Map_Find_Value
+  L00C7: self.RemainingTime = K2Node_VariableSet_RemainingTime_ImplicitCast
+  L00E2: self.Time = self.RemainingTime
+  L00FD: return
+
+## function ShowTutorial  flags=0x0C000000
+  L0000: WBP_QTE_DirectionalDrag_C.ExecuteUbergraph_WBP_QTE_DirectionalDrag(2362)
+  L000F: return
+
+## function StopQTE  flags=0x0C820000
+  L0000: self.bSuccess = bSuccess
+  L0013: self.bActive = false
+  L001E: self.Image_Result.SetVisibility(0)
+  L0044: Temp_interface_Variable_5 = iface<SlateTextureAtlasInterface>(SPR_IcAttention001_Win)
+  L0068: Temp_interface_Variable_6 = iface<SlateTextureAtlasInterface>(SPR_IcAttention001_Lose)
+  L008C: Temp_bool_Variable_3 = self.bSuccess
+  L009F: self.Image_Result.SetBrushFromAtlasInterface(switch(Temp_bool_Variable_3){false: Temp_interface_Variable_6; true: Temp_interface_Variable_5; default: K2Node_Select_Default_2}, false)
+  L00F9: Temp_interface_Variable_3 = iface<SlateTextureAtlasInterface>(SPR_QteMovementStroke001_Hover)
+  L011D: Temp_interface_Variable_4 = iface<SlateTextureAtlasInterface>(SPR_QteMovementStroke001_Lose)
+  L0141: Temp_bool_Variable_1 = self.bSuccess
+  L0154: self.Image_70.SetBrushFromAtlasInterface(switch(Temp_bool_Variable_1){false: Temp_interface_Variable_4; true: Temp_interface_Variable_3; default: K2Node_Select_Default_1}, false)
+  L01AE: Temp_interface_Variable_1 = iface<SlateTextureAtlasInterface>(SPR_QteMovementFinish001_Win)
+  L01D2: Temp_interface_Variable_2 = iface<SlateTextureAtlasInterface>(SPR_QteMovementFinish001_Lose)
+  L01F6: Temp_bool_Variable = self.bSuccess
+  L0209: self.Image_1.SetBrushFromAtlasInterface(switch(Temp_bool_Variable){false: Temp_interface_Variable_2; true: Temp_interface_Variable_1; default: K2Node_Select_Default}, false)
+  L0263: Temp_interface_Variable = iface<SlateTextureAtlasInterface>(SPR_CircularWaveBg003)
+  L0287: Temp_interface_Variable_7 = iface<SlateTextureAtlasInterface>(SPR_CircularWaveBg004)
+  L02AB: Temp_bool_Variable_4 = self.bSuccess
+  L02BE: self.WaveImageMouse1.SetBrushFromAtlasInterface(switch(Temp_bool_Variable_4){false: Temp_interface_Variable; true: Temp_interface_Variable_7; default: K2Node_Select_Default_3}, false)
+  L0318: self.WaveImageMouse2.SetBrushFromAtlasInterface(switch(Temp_bool_Variable_4){false: Temp_interface_Variable; true: Temp_interface_Variable_7; default: K2Node_Select_Default_3}, false)
+  L0372: Temp_bool_Variable_2 = self.bSuccess
+  L0385: CallFunc_PlayAnimation_ReturnValue = UserWidget.PlayAnimation(switch(Temp_bool_Variable_2){false: self.Success; true: self.Success; default: K2Node_Select_Default_4}, 0, 1, 0, 1, false)
+  L03E8: self.Overlay_62.Widget.SetRenderScale(Vector2D{1, 1})
+  L0428: self.Image_194.SetVisibility(2)
+  L044E: self.TextBlock_116.SetVisibility(2)
+  L0474: self.CommonActionWidget_Icon.SetVisibility(2)
+  L049A: return
+
+## function Tick  flags=0x08020808
+  L0000: frame.K2Node_Event_MyGeometry = MyGeometry
+  L0012: frame.K2Node_Event_InDeltaTime = InDeltaTime
+  L0024: WBP_QTE_DirectionalDrag_C.ExecuteUbergraph_WBP_QTE_DirectionalDrag(2277)
+  L0033: return
+
+## function UpdateTime  flags=0x0C020000
+  L0000: if not (self.bActive) goto L00FC
+  L000E: CallFunc_Subtract_DoubleDouble_ReturnValue = Subtract_DoubleDouble(self.RemainingTime, Delta)
+  L003C: CallFunc_FMax_ReturnValue = FMax(CallFunc_Subtract_DoubleDouble_ReturnValue, 0)
+  L006A: self.RemainingTime = CallFunc_FMax_ReturnValue
+  L0085: UpdateTimeBar()
+  L0093: CallFunc_LessEqual_DoubleDouble_ReturnValue = LessEqual_DoubleDouble(self.RemainingTime, 0)
+  L00B9: if not (CallFunc_LessEqual_DoubleDouble_ReturnValue) goto L00FC
+  L00C7: StopQTE(false)
+  L00D6: self.Image_TimeBar.SetVisibility(1)
+  L00FC: return
+
+## function UpdateTimeBar  flags=0x0C020000
+  L0000: CallFunc_Divide_DoubleDouble_ReturnValue = Divide_DoubleDouble(self.RemainingTime, self.Time)
+  L002E: CallFunc_SetPercent_InPercent_ImplicitCast = CallFunc_Divide_DoubleDouble_ReturnValue
+  L004B: self.ProgressBar_Time.ProgressBar.SetPercent(CallFunc_SetPercent_InPercent_ImplicitCast)
+  L0074: CallFunc_Divide_DoubleDouble_ReturnValue = Divide_DoubleDouble(self.RemainingTime, self.Time)
+  L00A2: CallFunc_SetScalarParameterValue_Value_ImplicitCast = CallFunc_Divide_DoubleDouble_ReturnValue
+  L00BF: self.TimeBarMID.MaterialInstanceDynamic.SetScalarParameterValue('Value', CallFunc_SetScalarParameterValue_Value_ImplicitCast)
+  L00F5: if not (self.bDanger) goto L0108
+  L0103: goto L019F
+  L0108: CallFunc_Divide_DoubleDouble_ReturnValue = Divide_DoubleDouble(self.RemainingTime, self.Time)
+  L0136: CallFunc_LessEqual_DoubleDouble_B_ImplicitCast = self.Config.DangerTimePercent
+  L015C: CallFunc_LessEqual_DoubleDouble_ReturnValue = LessEqual_DoubleDouble(CallFunc_Divide_DoubleDouble_ReturnValue, CallFunc_LessEqual_DoubleDouble_B_ImplicitCast)
+  L0182: if not (CallFunc_LessEqual_DoubleDouble_ReturnValue) goto L019F
+  L0190: SetDanger(true)
+  L019F: return
+
+## function WidgetAnimationEvt_Success_K2Node_WidgetAnimationEvent_0  flags=0x08000000
+  L0000: WBP_QTE_DirectionalDrag_C.ExecuteUbergraph_WBP_QTE_DirectionalDrag(2249)
+  L000F: return

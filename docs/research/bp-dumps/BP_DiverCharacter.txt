@@ -1,0 +1,522 @@
+# /Game/Dreadmoor/Core/Features/UnderwaterFeatures/DiverCharacter/BP_DiverCharacter
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/UnderwaterFeatures/DiverCharacter/BP_DiverCharacter.uasset
+
+## imported packages (35)
+  /Game/Dreadmoor/Animations/Characters/New/dm_demo_NewProtagonistSick
+  /Game/Dreadmoor/Blueprints/Developers/Sanich/BP_CraftTable_Ship
+  /Game/Dreadmoor/Core/Features/ActionPlayer/BP_ActionPlayer
+  /Game/Dreadmoor/Core/Features/Fishing/BP_BoatDynamicForceMesh
+  /Game/Dreadmoor/Core/Features/Fishing/BP_ShipFishingSpot_Proxy
+  /Game/Dreadmoor/Core/Features/Fishing/BP_ShipFishingSpot_Proxy2
+  /Game/Dreadmoor/Core/Features/PlayerCharacter/BP_PlayerCharacter
+  /Game/Dreadmoor/Core/Features/QuestFeatures/QuestModularObjects/Boat/BP_BoatModularObject
+  /Game/Dreadmoor/Core/Features/Radio/BP_Radio
+  /Game/Dreadmoor/Core/Features/Ship/BP_SmallBoat_V2
+  /Game/Dreadmoor/Core/Features/Ship/Docking/BP_ShipGangplank
+  /Game/Dreadmoor/Core/Features/Ship/FishScanner/BP_ShipFishScanner
+  /Game/Dreadmoor/Core/Features/Ship/Riding/BP_ShipSteeringWheel
+  /Game/Dreadmoor/Core/Features/Ship/ShipModules/BP_SideModulesInteractButton
+  /Game/Dreadmoor/Core/Features/Ship/StorageBox/BP_Storage
+  /Game/Dreadmoor/Core/Features/UnderwaterFeatures/DiverCharacter/Animations/ABP_DiverCharacter
+  /Game/Dreadmoor/Core/Features/UnderwaterFeatures/DivingZone/GAS/Effects/GE_AddOxygen
+  /Game/Dreadmoor/Core/Features/UnderwaterFeatures/DivingZone/GAS/Effects/GE_InitOxygen
+  /Game/Dreadmoor/Core/Features/UpgradeDock/BP_ShipHoldHatchSlotInteractable
+  /Game/Dreadmoor/Core/Features/UpgradeDock/BP_ShipUpgradeSlotInteractable
+  /Game/Dreadmoor/Core/Features/UpgradeDock/Components/BP_SlotTracerComponent
+  /Game/Dreadmoor/Core/Features/WaterFeatures/LiveEater/GAS/GE_LiveEater_Damage
+  /Game/Dreadmoor/Core/Features/WaterFeatures/SurfaceSwimming/BP_WaterExit_Boat_Left
+  /Game/Dreadmoor/Core/Features/WaterFeatures/SurfaceSwimming/BP_WaterExit_Boat_Right
+  /Game/Dreadmoor/Core/Input/Character/IA_Interact
+  /Game/Dreadmoor/Core/Input/Character/IA_Look
+  /Game/Dreadmoor/Core/Input/Character/IA_Move
+  /Game/Dreadmoor/Core/Input/Character/IA_Sprint
+  /Game/Dreadmoor/Core/Input/Character/IMC_CharacterMapping
+  /Game/Dreadmoor/Core/Input/Diving/Actions/IA_ExitDiving
+  /Game/Dreadmoor/Core/Input/Diving/Actions/IA_SwimUp
+  /Game/Dreadmoor/Core/Input/Diving/IMC_Diving
+  /Game/Dreadmoor/InventoryFramework/Components/BP_InventoryComponent
+  /Game/Dreadmoor/UI/Core/BPFL_UiFunctions
+  /Game/Dreadmoor/UI/Diving/WBP_DivingHUD
+
+## exports (45)
+  [0] AbilitySystemComp : AbilitySystemComponent (outer Default__BP_DiverCharacter_C) size=10
+        refs: name:AbilitySystemComponent
+  [1] BP_DiverCharacter_C : BlueprintGeneratedClass (outer None) super=DrdDiverCharacter size=1363
+  [2] Default__BP_DiverCharacter_C : BP_DiverCharacter_C (outer None) size=96
+        refs: obj:/Game/Dreadmoor/Core/Input/Diving/IMC_Diving.IMC_Diving, exp:OxygenSet, exp:HealthSet, obj:/Game/Dreadmoor/Core/Features/UnderwaterFeatures/DivingZone/GAS/Effects/GE_InitOxygen.GE_InitOxygen_C, exp:CharacterMesh0, exp:CharMoveComp, exp:CollisionCylinder, name:AddControllerYawInput
+  [3] Camera_GEN_VARIABLE : CameraComponent (outer BP_DiverCharacter_C) size=61
+        refs: obj:/Game/Dreadmoor/Core/Features/Ship/BP_SmallBoat_V2.BP_SmallBoat_V2_C.RadioActor_GEN_VARIABLE.RadioActor_GEN_VARIABLE_BP_Radio_C_CAT, name:WBP_DivingDepthTracker
+  [4] CollisionCylinder : CapsuleComponent (outer Default__BP_DiverCharacter_C) size=14
+        refs: name:Changed
+  [5] CharMoveComp : CharacterMovementComponent (outer Default__BP_DiverCharacter_C) size=30
+        refs: name:AddControllerYawInput
+  [6] DrdActorTag_GEN_VARIABLE : DrdActorTagComponent (outer BP_DiverCharacter_C) size=25
+        refs: name:GameEntities.Player.DiverChar, name:AbilitySystemComponent
+  [7] HealthSet : DrdAttributeSetHealth (outer Default__BP_DiverCharacter_C) size=6
+  [8] OxygenSet : DrdAttributeSetOxygen (outer Default__BP_DiverCharacter_C) size=6
+  [9] DrdProxyInteraction_GEN_VARIABLE : DrdProxyInteractionComponent (outer BP_DiverCharacter_C) size=20
+        refs: obj:/Game/Dreadmoor/Core/Input/Character/IA_Interact.IA_Interact
+  [10] DrdTaggedObjectsTriggerVolume_GEN_VARIABLE : DrdTaggedObjectsTriggerVolume (outer BP_DiverCharacter_C) size=40
+        refs: name:UpdateOxygenValue, name:CallFunc_WaitForAttributeChanged_ReturnValue
+  [11] EnhancedInputActionDelegateBinding_0 : EnhancedInputActionDelegateBinding (outer BP_DiverCharacter_C) size=115
+        refs: exp:DrdActorTag_GEN_VARIABLE, obj:/Game/Dreadmoor/Core/Input/Diving/Actions/IA_ExitDiving.IA_ExitDiving, exp:CollisionCylinder, obj:/Game/Dreadmoor/Core/Input/Character/IA_Move.IA_Move, obj:/Game/Dreadmoor/Core/Input/Character/IA_Interact.IA_Interact, exp:Camera_GEN_VARIABLE, obj:/Game/Dreadmoor/Core/Input/Character/IA_Look.IA_Look, exp:CharMoveComp, obj:/Game/Dreadmoor/Core/Input/Character/IA_Sprint.IA_Sprint, obj:/Game/Dreadmoor/Core/Input/Diving/Actions/IA_SwimUp.IA_SwimUp, name:Activate
+  [36] InputKeyDelegateBinding_0 : InputKeyDelegateBinding (outer BP_DiverCharacter_C) size=40
+        refs: name:One
+  [37] DefaultSceneRoot_GEN_VARIABLE : SceneComponent (outer BP_DiverCharacter_C) size=10
+        refs: name:AbilitySystemComponent
+  [38] SCS_Node_0 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SceneComponent, exp:DefaultSceneRoot_GEN_VARIABLE, name:DefaultSceneRoot
+  [39] SCS_Node_1 : SCS_Node (outer SimpleConstructionScript_0) size=61
+        refs: obj:/Script/Engine.CameraComponent, exp:Camera_GEN_VARIABLE, name:head, name:CharacterMesh0, name:Camera
+  [40] SCS_Node_2 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Dreadmoor.DrdProxyInteractionComponent, exp:DrdProxyInteraction_GEN_VARIABLE, name:DrdProxyInteraction
+  [41] SCS_Node_3 : SCS_Node (outer SimpleConstructionScript_0) size=53
+        refs: obj:/Script/Dreadmoor.DrdTaggedObjectsTriggerVolume, exp:DrdTaggedObjectsTriggerVolume_GEN_VARIABLE, name:CollisionCylinder, name:DrdTaggedObjectsTriggerVolume
+  [42] SCS_Node_4 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Dreadmoor.DrdActorTagComponent, exp:DrdActorTag_GEN_VARIABLE, name:DrdActorTag
+  [43] SimpleConstructionScript_0 : SimpleConstructionScript (outer BP_DiverCharacter_C) size=50
+        refs: exp:Camera_GEN_VARIABLE, exp:SCS_Node_1, exp:SCS_Node_2, exp:SCS_Node_3, exp:SCS_Node_4, name:CallFunc_GetAbilitySystemComponent_ReturnValue
+  [44] CharacterMesh0 : SkeletalMeshComponent (outer Default__BP_DiverCharacter_C) size=82
+        refs: obj:/Game/Dreadmoor/Core/Features/UnderwaterFeatures/DiverCharacter/Animations/ABP_DiverCharacter.ABP_DiverCharacter_C, obj:/Game/Dreadmoor/Animations/Characters/New/dm_demo_NewProtagonistSick.dm_demo_NewProtagonistSick, exp:CollisionCylinder, obj:/Game/Dreadmoor/Core/Features/Ship/BP_SmallBoat_V2.BP_SmallBoat_V2_C.ModuleInteract_Armor_RightFront_GEN_VARIABLE.ShipModule_Nose1_GEN_VARIABLE_BP_ShipUpgradeSlotInteractable_C_CAT, name:WBP_DivingDepthTracker
+
+## function AddOxygenToCharacter  flags=0x0C820000
+  L0000: CallFunc_MakeOutgoingSpec_ReturnValue = self.AbilitySystemComponent.MakeOutgoingSpec(GE_AddOxygen_C, 0, GameplayEffectContextHandle{})
+  L0052: CallFunc_AssignTagSetByCallerMagnitude_Magnitude_ImplicitCast = Value
+  L006F: CallFunc_AssignTagSetByCallerMagnitude_ReturnValue = AbilitySystemBlueprintLibrary.AssignTagSetByCallerMagnitude(CallFunc_MakeOutgoingSpec_ReturnValue, GameplayTag{'GameStats.Oxygen'}, CallFunc_AssignTagSetByCallerMagnitude_Magnitude_ImplicitCast)
+  L00B8: CallFunc_BP_ApplyGameplayEffectSpecToSelf_ReturnValue = self.AbilitySystemComponent.AbilitySystemComponent.BP_ApplyGameplayEffectSpecToSelf(CallFunc_AssignTagSetByCallerMagnitude_ReturnValue)
+  L00F3: return
+
+## function Changed_801C14BE495D8DC7DD0C58AE9DF7819B  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Attribute = Attribute
+  L0012: frame.K2Node_CustomEvent_NewValue = NewValue
+  L0024: frame.K2Node_CustomEvent_OldValue = OldValue
+  L0036: BP_DiverCharacter_C.ExecuteUbergraph_BP_DiverCharacter(4298)
+  L0045: return
+
+## function ConsumeOxygen  flags=0x0C000000
+  L0000: BP_DiverCharacter_C.ExecuteUbergraph_BP_DiverCharacter(7738)
+  L000F: return
+
+## function DepthLimitReached  flags=0x1C420000
+  L0000: CallFunc_Conv_IntToDouble_ReturnValue = Conv_IntToDouble(100)
+  L0021: CallFunc_K2_GetActorLocation_ReturnValue = Actor.K2_GetActorLocation()
+  L003D: BreakVector(CallFunc_K2_GetActorLocation_ReturnValue, CallFunc_BreakVector_X, CallFunc_BreakVector_Y, CallFunc_BreakVector_Z)
+  L006B: CallFunc_Conv_IntToDouble_ReturnValue_1 = Conv_IntToDouble(self.CurrentMaxDepth)
+  L0090: CallFunc_Multiply_DoubleDouble_ReturnValue = Multiply_DoubleDouble(CallFunc_Conv_IntToDouble_ReturnValue_1, CallFunc_Conv_IntToDouble_ReturnValue)
+  L00BE: CallFunc_Subtract_DoubleDouble_ReturnValue = Subtract_DoubleDouble(self.ZeroDepthValue, CallFunc_Multiply_DoubleDouble_ReturnValue)
+  L00EC: CallFunc_LessEqual_DoubleDouble_ReturnValue = LessEqual_DoubleDouble(CallFunc_BreakVector_Z, CallFunc_Subtract_DoubleDouble_ReturnValue)
+  L0112: CallFunc_Subtract_DoubleDouble_ReturnValue_1 = Subtract_DoubleDouble(CallFunc_BreakVector_Z, CallFunc_Subtract_DoubleDouble_ReturnValue)
+  L0140: CallFunc_Divide_DoubleDouble_ReturnValue = Divide_DoubleDouble(CallFunc_Subtract_DoubleDouble_ReturnValue_1, 100)
+  L016E: CallFunc_FTrunc_ReturnValue = FTrunc(CallFunc_Divide_DoubleDouble_ReturnValue)
+  L0193: CallFunc_Multiply_IntInt_ReturnValue = Multiply_IntInt(CallFunc_FTrunc_ReturnValue, -1)
+  L01BD: State = CallFunc_LessEqual_DoubleDouble_ReturnValue
+  L01D0: NumMeters = CallFunc_Multiply_IntInt_ReturnValue
+  L01EB: return
+
+## function ExecuteUbergraph_BP_DiverCharacter  flags=0x00808001
+  L0000: push L238A
+  L0005: goto computed(EntryPoint)
+  L000F: DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_2, BP_PlayerCharacter_C).PerformCharacterDeath()
+  L0047: pop-flow
+  L0048: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(self.DivingHUD)
+  L0065: if not (CallFunc_IsValid_ReturnValue) pop-flow
+  L006F: CallFunc_IsValid_ReturnValue_1 = KismetSystemLibrary.IsValid(self.DivingHUD.self.WBP_DivingDepthTracker)
+  L00A2: if not (CallFunc_IsValid_ReturnValue_1) pop-flow
+  L00AC: CallFunc_K2_GetActorLocation_ReturnValue_1 = Actor.K2_GetActorLocation()
+  L00C8: BreakVector(CallFunc_K2_GetActorLocation_ReturnValue_1, CallFunc_BreakVector_X_1, CallFunc_BreakVector_Y_1, CallFunc_BreakVector_Z_1)
+  L00F6: CallFunc_Subtract_DoubleDouble_ReturnValue = Subtract_DoubleDouble(self.ZeroDepthValue, CallFunc_BreakVector_Z_1)
+  L0124: CallFunc_Divide_DoubleDouble_ReturnValue = Divide_DoubleDouble(CallFunc_Subtract_DoubleDouble_ReturnValue, 100)
+  L0152: CallFunc_FTrunc_ReturnValue = FTrunc(CallFunc_Divide_DoubleDouble_ReturnValue)
+  L0177: self.DivingHUD.self.WBP_DivingDepthTracker.UpdateDepthValue(CallFunc_FTrunc_ReturnValue, self.CurrentMaxDepth)
+  L01C3: pop-flow
+  L01C4: CallFunc_GetWorldSubsystem_ReturnValue = SubsystemBlueprintLibrary.GetWorldSubsystem(self, DrdConfigsSubsystem)
+  L01E2: CallFunc_GetDrdDivingConfig_ReturnValue = CallFunc_GetWorldSubsystem_ReturnValue.DrdConfigsSubsystem.GetDrdDivingConfig()
+  L0214: self.CurrentMaxDepth = CallFunc_GetDrdDivingConfig_ReturnValue.MaxDivingDepth
+  L0238: pop-flow
+  L0239: push L024D
+  L023E: if not (Temp_bool_Has_Been_Initd_Variable) goto L0321
+  L024C: pop-flow
+  L024D: if not (Temp_bool_IsClosed_Variable) goto L025C
+  L025B: pop-flow
+  L025C: Temp_bool_IsClosed_Variable = true
+  L0267: KismetSystemLibrary.PrintString(self, "Updating max diving Depth", true, true, LinearColor{0, 0.66, 1, 1}, 2, 'None')
+  L02C3: CallFunc_GetDrdConfigSubsystem_ReturnValue = DrdConfigsSubsystem.GetDrdConfigSubsystem()
+  L02D7: CallFunc_GetDrdConfigSubsystem_ReturnValue.DrdConfigsSubsystem.OverrideDefaultConfig(DrdGdConfigDiving, 'Level2', 1)
+  L0312: SetupDiverData()
+  L0320: pop-flow
+  L0321: Temp_bool_Has_Been_Initd_Variable = true
+  L032C: if not (false) pop-flow
+  L032E: Temp_bool_IsClosed_Variable = true
+  L0339: pop-flow
+  L033A: if not (self.bCanInformAboutDepth) pop-flow
+  L0344: Default__BPFL_UiFunctions_C.PlayNotification(Text("Maximum possible depth has been reached"), self)
+  L03B8: self.bCanInformAboutDepth = false
+  L03C3: bind(K2Node_CreateDelegate_OutputDelegate, self, 'ResetDepthInform')
+  L03DA: CallFunc_K2_SetTimerDelegate_Time_ImplicitCast = self.InformationCooldown
+  L03F7: CallFunc_K2_SetTimerDelegate_ReturnValue_1 = KismetSystemLibrary.K2_SetTimerDelegate(K2Node_CreateDelegate_OutputDelegate, CallFunc_K2_SetTimerDelegate_Time_ImplicitCast, false, true, 0, 0)
+  L0431: pop-flow
+  L0432: CallFunc_IsValid_ReturnValue_2 = KismetSystemLibrary.IsValid(self.DivingHUD)
+  L044F: if not (CallFunc_IsValid_ReturnValue_2) pop-flow
+  L0459: CallFunc_IsValid_ReturnValue_3 = KismetSystemLibrary.IsValid(self.DivingHUD.self.WBP_DivingOxygenTracker)
+  L048C: if not (CallFunc_IsValid_ReturnValue_3) pop-flow
+  L0496: CallFunc_FTrunc_A_ImplicitCast_1 = self.OxygenAttributeSet.self.MaxOxygen.CurrentValue
+  L04D2: CallFunc_FTrunc_ReturnValue_2 = FTrunc(CallFunc_FTrunc_A_ImplicitCast_1)
+  L04F7: CallFunc_FTrunc_A_ImplicitCast_2 = self.OxygenAttributeSet.self.Oxygen.CurrentValue
+  L0533: CallFunc_FTrunc_ReturnValue_3 = FTrunc(CallFunc_FTrunc_A_ImplicitCast_2)
+  L0558: self.DivingHUD.self.WBP_DivingOxygenTracker.UpdateOxygenValue(CallFunc_FTrunc_ReturnValue_3, CallFunc_FTrunc_ReturnValue_2)
+  L05A4: pop-flow
+  L05A5: self.DivingHUD.CommonActivatableWidget.DeactivateWidget()
+  L05C5: pop-flow
+  L05C6: CallFunc_IsValid_ReturnValue_4 = KismetSystemLibrary.IsValid(self.DivingHUD)
+  L05E3: if not (CallFunc_IsValid_ReturnValue_4) pop-flow
+  L05ED: goto L05A5
+  L05F2: CallFunc_IsValid_ReturnValue_5 = KismetSystemLibrary.IsValid(self.DivingHUD)
+  L060F: if not (CallFunc_IsValid_ReturnValue_5) goto L063D
+  L061D: self.DivingHUD.CommonActivatableWidget.DeactivateWidget()
+  L063D: K2Node_MakeStruct_DrdObjectId_2.Tag = GameplayTag{'GameEntities.Player.MainChar'}
+  L0673: K2Node_MakeStruct_DrdObjectId_2.Guid = Guid{0, 0, 0, 0}
+  L06B0: K2Node_GetActorFromRefsSubsystem_2_HasPropertyResult = DrdActorRefsSubsystem.IsActorWithIdOfClassRegistered(self, K2Node_MakeStruct_DrdObjectId_2, BP_PlayerCharacter_C)
+  L06D7: if not (K2Node_GetActorFromRefsSubsystem_2_HasPropertyResult) pop-flow
+  L06E1: KismetSystemLibrary.DelayUntilNextTick(self, LatentActionInfo{L000F, 750913144, 'ExecuteUbergraph_BP_DiverCharacter', self})
+  L0712: pop-flow
+  L0713: CallFunc_IsValid_ReturnValue_6 = KismetSystemLibrary.IsValid(self.DivingHUD)
+  L0730: if not (CallFunc_IsValid_ReturnValue_6) pop-flow
+  L073A: CallFunc_IsValid_ReturnValue_7 = KismetSystemLibrary.IsValid(self.DivingHUD.self.WBP_DivingOxygenTracker)
+  L076D: if not (CallFunc_IsValid_ReturnValue_7) pop-flow
+  L0777: CallFunc_FTrunc_A_ImplicitCast = CallFunc_GetAttributeSet_ReturnValue.self.Health.CurrentValue
+  L07B3: CallFunc_FTrunc_ReturnValue_1 = FTrunc(CallFunc_FTrunc_A_ImplicitCast)
+  L07D8: self.DivingHUD.self.WBP_DivingOxygenTracker.UpdateHealthValue(CallFunc_FTrunc_ReturnValue_1)
+  L081B: pop-flow
+  L081C: CallFunc_GetWorldSubsystem_ReturnValue_3 = SubsystemBlueprintLibrary.GetWorldSubsystem(self, DrdConfigsSubsystem)
+  L083A: CallFunc_GetDrdDivingConfig_ReturnValue_3 = CallFunc_GetWorldSubsystem_ReturnValue_3.DrdConfigsSubsystem.GetDrdDivingConfig()
+  L086C: ReduceHealth(CallFunc_GetDrdDivingConfig_ReturnValue_3.Damage_NoOxygen)
+  L088C: pop-flow
+  L088D: CallFunc_IsValid_ReturnValue_8 = KismetSystemLibrary.IsValid(self.OxygenAttributeSet)
+  L08AA: if not (CallFunc_IsValid_ReturnValue_8) pop-flow
+  L08B4: CallFunc_LessEqual_DoubleDouble_A_ImplicitCast = self.OxygenAttributeSet.self.Oxygen.CurrentValue
+  L08F0: CallFunc_LessEqual_DoubleDouble_ReturnValue = LessEqual_DoubleDouble(CallFunc_LessEqual_DoubleDouble_A_ImplicitCast, 0)
+  L0916: if not (CallFunc_LessEqual_DoubleDouble_ReturnValue) goto L0929
+  L0924: goto L081C
+  L0929: CallFunc_GetWorldSubsystem_ReturnValue_1 = SubsystemBlueprintLibrary.GetWorldSubsystem(self, DrdConfigsSubsystem)
+  L0947: CallFunc_GetDrdDivingConfig_ReturnValue_1 = CallFunc_GetWorldSubsystem_ReturnValue_1.DrdConfigsSubsystem.GetDrdDivingConfig()
+  L0979: Temp_real_Variable_8 = 1
+  L0994: Temp_bool_Variable_3 = self.bIsSprinting
+  L09A7: K2Node_Select_Option_1_ImplicitCast = CallFunc_GetDrdDivingConfig_ReturnValue_1.OxygenConsumptionMultiplyer
+  L09CD: CallFunc_Multiply_DoubleDouble_A_ImplicitCast = CallFunc_GetDrdDivingConfig_ReturnValue_1.OxygenConsumptionValue
+  L09F3: CallFunc_Multiply_DoubleDouble_ReturnValue_1 = Multiply_DoubleDouble(CallFunc_Multiply_DoubleDouble_A_ImplicitCast, switch(Temp_bool_Variable_3){false: Temp_real_Variable_8; true: K2Node_Select_Option_1_ImplicitCast; default: K2Node_Select_Default})
+  L0A4D: AddOxygenToCharacter(CallFunc_Multiply_DoubleDouble_ReturnValue_1)
+  L0A64: goto L0432
+  L0A69: K2Node_MakeStruct_DrdObjectId.Tag = GameplayTag{'GameEntities.Player.MainChar'}
+  L0A9F: K2Node_MakeStruct_DrdObjectId.Guid = Guid{0, 0, 0, 0}
+  L0ADC: K2Node_GetActorFromRefsSubsystem_HasPropertyResult = DrdActorRefsSubsystem.IsActorWithIdOfClassRegistered(self, K2Node_MakeStruct_DrdObjectId, DrdPlayerCharacter)
+  L0B03: if not (K2Node_GetActorFromRefsSubsystem_HasPropertyResult) pop-flow
+  L0B0D: CallFunc_GetAbilitySystemComponent_ReturnValue = AbilitySystemBlueprintLibrary.GetAbilitySystemComponent(DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId, DrdPlayerCharacter))
+  L0B3E: CallFunc_MakeOutgoingSpec_ReturnValue = CallFunc_GetAbilitySystemComponent_ReturnValue.MakeOutgoingSpec(GE_LiveEater_Damage_C, 0, GameplayEffectContextHandle{})
+  L0B90: CallFunc_AssignTagSetByCallerMagnitude_ReturnValue = AbilitySystemBlueprintLibrary.AssignTagSetByCallerMagnitude(CallFunc_MakeOutgoingSpec_ReturnValue, GameplayTag{'GAS.SetByCaller.Damage'}, K2Node_CustomEvent_Damage)
+  L0BD9: CallFunc_GetAbilitySystemComponent_ReturnValue = AbilitySystemBlueprintLibrary.GetAbilitySystemComponent(DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId, DrdPlayerCharacter))
+  L0C0A: CallFunc_BP_ApplyGameplayEffectSpecToSelf_ReturnValue = CallFunc_GetAbilitySystemComponent_ReturnValue.AbilitySystemComponent.BP_ApplyGameplayEffectSpecToSelf(CallFunc_AssignTagSetByCallerMagnitude_ReturnValue)
+  L0C45: UpdateHealthUI()
+  L0C53: K2Node_MakeStruct_DrdObjectId_4.Tag = GameplayTag{'GameEntities.Player.MainChar'}
+  L0C89: K2Node_MakeStruct_DrdObjectId_4.Guid = Guid{0, 0, 0, 0}
+  L0CC6: K2Node_GetActorFromRefsSubsystem_4_HasPropertyResult = DrdActorRefsSubsystem.IsActorWithIdOfClassRegistered(self, K2Node_MakeStruct_DrdObjectId_4, BP_PlayerCharacter_C)
+  L0CED: if not (K2Node_GetActorFromRefsSubsystem_4_HasPropertyResult) pop-flow
+  L0CF7: CallFunc_GetAttributeSet_ReturnValue_1 = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_4, BP_PlayerCharacter_C).self.AbilitySystemComponent.AbilitySystemComponent.GetAttributeSet(DrdAttributeSetHealth)
+  L0D54: CallFunc_LessEqual_DoubleDouble_A_ImplicitCast_2 = CallFunc_GetAttributeSet_ReturnValue_1.self.Health.CurrentValue
+  L0D90: CallFunc_LessEqual_DoubleDouble_ReturnValue_2 = LessEqual_DoubleDouble(CallFunc_LessEqual_DoubleDouble_A_ImplicitCast_2, 0)
+  L0DB6: if not (CallFunc_LessEqual_DoubleDouble_ReturnValue_2) pop-flow
+  L0DC0: PerformCharacterDeath()
+  L0DCE: pop-flow
+  L0DCF: CallFunc_Conv_InputActionValueToBool_ReturnValue = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_2)
+  L0DEC: Temp_bool_Variable_1 = CallFunc_Conv_InputActionValueToBool_ReturnValue
+  L0DFF: Temp_real_Variable_3 = K2Node_EnhancedInputActionEvent_ElapsedTime_2
+  L0E1C: Temp_real_Variable_3 = Temp_real_Variable_3
+  L0E37: Temp_real_Variable_2 = K2Node_EnhancedInputActionEvent_TriggeredTime_2
+  L0E54: Temp_real_Variable_2 = Temp_real_Variable_2
+  L0E6F: Temp_object_Variable = K2Node_EnhancedInputActionEvent_SourceAction_2
+  L0E82: AddMovementInput(Vec(0,0,1), 1, false)
+  L0EAF: pop-flow
+  L0EB0: CallFunc_Conv_InputActionValueToBool_ReturnValue_1 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_1)
+  L0ECD: Temp_bool_Variable_2 = CallFunc_Conv_InputActionValueToBool_ReturnValue_1
+  L0EE0: Temp_real_Variable_5 = K2Node_EnhancedInputActionEvent_ElapsedTime_1
+  L0EFD: Temp_real_Variable_5 = Temp_real_Variable_5
+  L0F18: Temp_real_Variable_4 = K2Node_EnhancedInputActionEvent_TriggeredTime_1
+  L0F35: Temp_real_Variable_4 = Temp_real_Variable_4
+  L0F50: Temp_object_Variable_1 = K2Node_EnhancedInputActionEvent_SourceAction_1
+  L0F63: K2Node_VariableSet_MaxFlySpeed_ImplicitCast = self.DefaultSwimSpeed
+  L0F80: self.CharacterMovement.self.MaxFlySpeed = K2Node_VariableSet_MaxFlySpeed_ImplicitCast
+  L0FB1: self.bIsSprinting = false
+  L0FBC: pop-flow
+  L0FBD: CallFunc_Conv_InputActionValueToBool_ReturnValue_2 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue)
+  L0FDA: Temp_bool_Variable_2 = CallFunc_Conv_InputActionValueToBool_ReturnValue_2
+  L0FED: Temp_real_Variable_5 = K2Node_EnhancedInputActionEvent_ElapsedTime
+  L100A: Temp_real_Variable_5 = Temp_real_Variable_5
+  L1025: Temp_real_Variable_4 = K2Node_EnhancedInputActionEvent_TriggeredTime
+  L1042: Temp_real_Variable_4 = Temp_real_Variable_4
+  L105D: Temp_object_Variable_1 = K2Node_EnhancedInputActionEvent_SourceAction
+  L1070: K2Node_VariableSet_MaxFlySpeed_ImplicitCast_1 = self.SprintSwimSpeed
+  L108D: self.CharacterMovement.self.MaxFlySpeed = K2Node_VariableSet_MaxFlySpeed_ImplicitCast_1
+  L10BE: self.bIsSprinting = true
+  L10C9: pop-flow
+  L10CA: Temp_struct_Variable = K2Node_CustomEvent_Attribute
+  L10E5: Temp_real_Variable_7 = K2Node_CustomEvent_NewValue
+  L1100: Temp_real_Variable_6 = K2Node_CustomEvent_OldValue
+  L111B: UpdateHealthUI()
+  L1129: CallFunc_LessEqual_DoubleDouble_A_ImplicitCast_1 = Temp_real_Variable_7
+  L1146: CallFunc_LessEqual_DoubleDouble_ReturnValue_1 = LessEqual_DoubleDouble(CallFunc_LessEqual_DoubleDouble_A_ImplicitCast_1, 0)
+  L116C: if not (CallFunc_LessEqual_DoubleDouble_ReturnValue_1) pop-flow
+  L1176: PerformCharacterDeath()
+  L1184: pop-flow
+  L1185: Pawn.ReceivePossessed(K2Node_Event_NewController)
+  L1198: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L11B2: CallFunc_GetLocalPlayerSubSystemFromPlayerController_ReturnValue = SubsystemBlueprintLibrary.GetLocalPlayerSubSystemFromPlayerController(CallFunc_GetPlayerController_ReturnValue, EnhancedInputLocalPlayerSubsystem)
+  L11D8: Temp_struct_Variable_3 = ModifyContextOptions{1, 0, 0}
+  L1216: CallFunc_GetLocalPlayerSubSystemFromPlayerController_ReturnValue.AddMappingContext(IMC_CharacterMapping, 0, Temp_struct_Variable_3)
+  L1252: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L126C: CallFunc_GetLocalPlayerSubSystemFromPlayerController_ReturnValue = SubsystemBlueprintLibrary.GetLocalPlayerSubSystemFromPlayerController(CallFunc_GetPlayerController_ReturnValue, EnhancedInputLocalPlayerSubsystem)
+  L1292: Temp_struct_Variable_2 = ModifyContextOptions{1, 0, 0}
+  L12D0: CallFunc_GetLocalPlayerSubSystemFromPlayerController_ReturnValue.AddMappingContext(IMC_Diving, 1, Temp_struct_Variable_2)
+  L130C: CallFunc_BP_ApplyGameplayEffectToSelf_ReturnValue = self.AbilitySystemComponent.AbilitySystemComponent.BP_ApplyGameplayEffectToSelf(GE_InitOxygen_C, 0, GameplayEffectContextHandle{})
+  L135A: bind(K2Node_CreateDelegate_OutputDelegate_2, self, 'TrackDivingDepth')
+  L1371: CallFunc_K2_SetTimerDelegate_ReturnValue = KismetSystemLibrary.K2_SetTimerDelegate(K2Node_CreateDelegate_OutputDelegate_2, 0.1, true, true, 0, 0)
+  L13A7: self.DiverDepthTrackerTimerHandle = CallFunc_K2_SetTimerDelegate_ReturnValue
+  L13C2: CallFunc_GetPlayerController_ReturnValue_1 = GameplayStatics.GetPlayerController(self, 0)
+  L13DC: CallFunc_GetLocalPlayerFromController_ReturnValue = Default__CommonUIExtensions.CommonUIExtensions.GetLocalPlayerFromController(CallFunc_GetPlayerController_ReturnValue_1)
+  L140F: CallFunc_PushContentToLayer_ForPlayer_ReturnValue = Default__CommonUIExtensions.CommonUIExtensions.PushContentToLayer_ForPlayer(CallFunc_GetLocalPlayerFromController_ReturnValue, GameplayTag{'UI.Layer.Game'}, WBP_DivingHUD_C)
+  L1466: K2Node_DynamicCast_AsWBP_Diving_HUD = cast<WBP_DivingHUD_C>(CallFunc_PushContentToLayer_ForPlayer_ReturnValue)
+  L148A: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsWBP_Diving_HUD
+  L14A7: if not (K2Node_DynamicCast_bSuccess) pop-flow
+  L14B1: self.DivingHUD = K2Node_DynamicCast_AsWBP_Diving_HUD
+  L14C4: K2Node_MakeStruct_DrdObjectId_1.Tag = GameplayTag{'GameEntities.Player.MainBoat'}
+  L14FA: K2Node_MakeStruct_DrdObjectId_1.Guid = Guid{0, 0, 0, 0}
+  L1537: K2Node_GetActorFromRefsSubsystem_1_HasPropertyResult = DrdActorRefsSubsystem.IsActorWithIdOfClassRegistered(self, K2Node_MakeStruct_DrdObjectId_1, BP_SmallBoat_V2_C)
+  L155E: if not (K2Node_GetActorFromRefsSubsystem_1_HasPropertyResult) pop-flow
+  L1568: CallFunc_K2_GetActorLocation_ReturnValue = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_1, BP_SmallBoat_V2_C).Actor.K2_GetActorLocation()
+  L15AE: BreakVector(CallFunc_K2_GetActorLocation_ReturnValue, CallFunc_BreakVector_X, CallFunc_BreakVector_Y, CallFunc_BreakVector_Z)
+  L15DC: self.ZeroDepthValue = CallFunc_BreakVector_Z
+  L15F7: SetupDiverData()
+  L1605: CallFunc_GetAttributeSet_ReturnValue_2 = self.AbilitySystemComponent.AbilitySystemComponent.GetAttributeSet(DrdAttributeSetOxygen)
+  L1638: self.OxygenAttributeSet = CallFunc_GetAttributeSet_ReturnValue_2
+  L164B: CallFunc_GetWorldSubsystem_ReturnValue_2 = SubsystemBlueprintLibrary.GetWorldSubsystem(self, DrdConfigsSubsystem)
+  L1669: CallFunc_GetDrdDivingConfig_ReturnValue_2 = CallFunc_GetWorldSubsystem_ReturnValue_2.DrdConfigsSubsystem.GetDrdDivingConfig()
+  L169B: bind(K2Node_CreateDelegate_OutputDelegate_3, self, 'ConsumeOxygen')
+  L16B2: CallFunc_K2_SetTimerDelegate_ReturnValue_2 = KismetSystemLibrary.K2_SetTimerDelegate(K2Node_CreateDelegate_OutputDelegate_3, CallFunc_GetDrdDivingConfig_ReturnValue_2.OxygenConsumptionSpeed, true, true, 0, 0)
+  L16F5: self.OxygenConsumeTimerHandle = CallFunc_K2_SetTimerDelegate_ReturnValue_2
+  L1710: ConsumeOxygen()
+  L171E: UpdateHealthUI()
+  L172C: CallFunc_GetWorldSubsystem_ReturnValue_4 = SubsystemBlueprintLibrary.GetWorldSubsystem(self, DrdConfigsSubsystem)
+  L174A: CallFunc_GetDrdDivingConfig_ReturnValue_4 = CallFunc_GetWorldSubsystem_ReturnValue_4.DrdConfigsSubsystem.GetDrdDivingConfig()
+  L177C: bind(K2Node_CreateDelegate_OutputDelegate_4, self, 'TryApplyDepthDamage')
+  L1793: CallFunc_K2_SetTimerDelegate_ReturnValue_3 = KismetSystemLibrary.K2_SetTimerDelegate(K2Node_CreateDelegate_OutputDelegate_4, CallFunc_GetDrdDivingConfig_ReturnValue_4.Damage_PerMeter_Frequency, true, true, 0, 0)
+  L17D6: self.DamagePerDepthTimerHandle = CallFunc_K2_SetTimerDelegate_ReturnValue_3
+  L17F1: K2Node_MakeStruct_DrdObjectId_5.Tag = GameplayTag{'GameEntities.Player.MainChar'}
+  L1827: K2Node_MakeStruct_DrdObjectId_5.Guid = Guid{0, 0, 0, 0}
+  L1864: K2Node_GetActorFromRefsSubsystem_5_HasPropertyResult = DrdActorRefsSubsystem.IsActorWithIdOfClassRegistered(self, K2Node_MakeStruct_DrdObjectId_5, BP_PlayerCharacter_C)
+  L188B: if not (K2Node_GetActorFromRefsSubsystem_5_HasPropertyResult) pop-flow
+  L1895: CallFunc_WaitForAttributeChanged_ReturnValue = AbilityAsync_WaitAttributeChanged.WaitForAttributeChanged(DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_5, BP_PlayerCharacter_C), GameplayAttribute{"Health", fieldpath("/Script/Dreadmoor.DrdAttributeSetHealth:Health"), DrdAttributeSetHealth}, false)
+  L1917: CallFunc_IsValid_ReturnValue_9 = KismetSystemLibrary.IsValid(CallFunc_WaitForAttributeChanged_ReturnValue)
+  L1934: if not (CallFunc_IsValid_ReturnValue_9) pop-flow
+  L193E: bind(K2Node_CreateDelegate_OutputDelegate_1, self, 'Changed_801C14BE495D8DC7DD0C58AE9DF7819B')
+  L1955: CallFunc_WaitForAttributeChanged_ReturnValue.self.Changed += K2Node_CreateDelegate_OutputDelegate_1
+  L197E: CallFunc_WaitForAttributeChanged_ReturnValue.Activate()
+  L19A2: pop-flow
+  L19A3: CallFunc_GetControlRotation_ReturnValue = Pawn.GetControlRotation()
+  L19BF: CallFunc_GetForwardVector_ReturnValue = GetForwardVector(CallFunc_GetControlRotation_ReturnValue)
+  L19E4: BreakVector2D(Temp_struct_Variable_1, CallFunc_BreakVector2D_X, CallFunc_BreakVector2D_Y)
+  L1A09: CallFunc_AddMovementInput_ScaleValue_ImplicitCast_1 = CallFunc_BreakVector2D_Y
+  L1A26: AddMovementInput(CallFunc_GetForwardVector_ReturnValue, CallFunc_AddMovementInput_ScaleValue_ImplicitCast_1, false)
+  L1A47: pop-flow
+  L1A48: Pawn.ReceiveUnpossessed(K2Node_Event_OldController)
+  L1A5B: KismetSystemLibrary.K2_ClearAndInvalidateTimerHandle(self, self.DiverDepthTrackerTimerHandle)
+  L1A6F: KismetSystemLibrary.K2_ClearAndInvalidateTimerHandle(self, self.OxygenConsumeTimerHandle)
+  L1A83: KismetSystemLibrary.K2_ClearAndInvalidateTimerHandle(self, self.DamagePerDepthTimerHandle)
+  L1A97: pop-flow
+  L1A98: CallFunc_GetInstigator_ReturnValue = Actor.GetInstigator()
+  L1AAC: AbilitySystemBlueprintLibrary.SendGameplayEventToActor(CallFunc_GetInstigator_ReturnValue, GameplayTag{'GAS.Event.Towing'}, GameplayEventData{GameplayTag{'None'}, null, null, null, null, GameplayEffectContextHandle{}, GameplayTagContainer{[]}, GameplayTagContainer{[]}, 0, GameplayAbilityTargetDataHandle{}})
+  L1B60: SetLifeSpan(1)
+  L1B73: goto L05C6
+  L1B78: CallFunc_Conv_InputActionValueToAxis2D_ReturnValue = EnhancedInputLibrary.Conv_InputActionValueToAxis2D(K2Node_EnhancedInputActionEvent_ActionValue_5)
+  L1B9D: Temp_struct_Variable_4 = CallFunc_Conv_InputActionValueToAxis2D_ReturnValue
+  L1BB8: Temp_real_Variable = K2Node_EnhancedInputActionEvent_ElapsedTime_5
+  L1BD5: Temp_real_Variable = Temp_real_Variable
+  L1BF0: Temp_real_Variable_9 = K2Node_EnhancedInputActionEvent_TriggeredTime_5
+  L1C0D: Temp_real_Variable_9 = Temp_real_Variable_9
+  L1C28: Temp_object_Variable_2 = K2Node_EnhancedInputActionEvent_SourceAction_5
+  L1C3B: BreakVector2D(Temp_struct_Variable_4, CallFunc_BreakVector2D_X_1, CallFunc_BreakVector2D_Y_1)
+  L1C60: CallFunc_AddControllerYawInput_Val_ImplicitCast = CallFunc_BreakVector2D_X_1
+  L1C7D: AddControllerYawInput(CallFunc_AddControllerYawInput_Val_ImplicitCast)
+  L1C94: BreakVector2D(Temp_struct_Variable_4, CallFunc_BreakVector2D_X_1, CallFunc_BreakVector2D_Y_1)
+  L1CB9: CallFunc_AddControllerPitchInput_Val_ImplicitCast = CallFunc_BreakVector2D_Y_1
+  L1CD6: AddControllerPitchInput(CallFunc_AddControllerPitchInput_Val_ImplicitCast)
+  L1CED: pop-flow
+  L1CEE: CallFunc_Conv_InputActionValueToBool_ReturnValue_3 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_3)
+  L1D0B: Temp_bool_Variable = CallFunc_Conv_InputActionValueToBool_ReturnValue_3
+  L1D1E: Temp_real_Variable_1 = K2Node_EnhancedInputActionEvent_ElapsedTime_3
+  L1D3B: Temp_real_Variable_1 = Temp_real_Variable_1
+  L1D56: Temp_real_Variable_14 = K2Node_EnhancedInputActionEvent_TriggeredTime_3
+  L1D73: Temp_real_Variable_14 = Temp_real_Variable_14
+  L1D8E: Temp_object_Variable_3 = K2Node_EnhancedInputActionEvent_SourceAction_3
+  L1DA1: self.DrdProxyInteraction.DrdProxyInteractionComponent.OnInteract_Proxy(Temp_bool_Variable)
+  L1DCA: pop-flow
+  L1DCB: CallFunc_ContainsTag_ReturnValue = self.DrdTaggedObjectsTriggerVolume.DrdTaggedObjectsTriggerVolume.ContainsTag(GameplayTag{'GameEntities.Area.ExitDivingZone'})
+  L1E10: if not (CallFunc_ContainsTag_ReturnValue) pop-flow
+  L1E1A: goto L1A98
+  L1E1F: goto L0048
+  L1E24: goto L01C4
+  L1E29: goto L033A
+  L1E2E: self.bCanInformAboutDepth = true
+  L1E39: pop-flow
+  L1E3A: goto L088D
+  L1E3F: CallFunc_GetActorRightVector_ReturnValue = Actor.GetActorRightVector()
+  L1E5B: BreakVector2D(Temp_struct_Variable_1, CallFunc_BreakVector2D_X, CallFunc_BreakVector2D_Y)
+  L1E80: CallFunc_AddMovementInput_ScaleValue_ImplicitCast = CallFunc_BreakVector2D_X
+  L1E9D: AddMovementInput(CallFunc_GetActorRightVector_ReturnValue, CallFunc_AddMovementInput_ScaleValue_ImplicitCast, false)
+  L1EBE: goto L19A3
+  L1EC3: KismetSystemLibrary.K2_ClearAndInvalidateTimerHandle(self, self.OxygenConsumeTimerHandle)
+  L1ED7: CallFunc_GetInstigator_ReturnValue_1 = Actor.GetInstigator()
+  L1EEB: AbilitySystemBlueprintLibrary.SendGameplayEventToActor(CallFunc_GetInstigator_ReturnValue_1, GameplayTag{'GAS.Event.Towing'}, GameplayEventData{GameplayTag{'None'}, null, null, null, null, GameplayEffectContextHandle{}, GameplayTagContainer{[]}, GameplayTagContainer{[]}, 0, GameplayAbilityTargetDataHandle{}})
+  L1F9F: SetLifeSpan(1)
+  L1FB2: goto L05F2
+  L1FB7: goto L0A69
+  L1FBC: K2Node_MakeStruct_DrdObjectId_3.Tag = GameplayTag{'GameEntities.Player.MainChar'}
+  L1FF2: K2Node_MakeStruct_DrdObjectId_3.Guid = Guid{0, 0, 0, 0}
+  L202F: K2Node_GetActorFromRefsSubsystem_3_HasPropertyResult = DrdActorRefsSubsystem.IsActorWithIdOfClassRegistered(self, K2Node_MakeStruct_DrdObjectId_3, BP_PlayerCharacter_C)
+  L2056: if not (K2Node_GetActorFromRefsSubsystem_3_HasPropertyResult) pop-flow
+  L2060: CallFunc_GetAttributeSet_ReturnValue = DrdActorRefsSubsystem.GetActorByIdOfClass(self, K2Node_MakeStruct_DrdObjectId_3, BP_PlayerCharacter_C).self.AbilitySystemComponent.AbilitySystemComponent.GetAttributeSet(DrdAttributeSetHealth)
+  L20BD: goto L0713
+  L20C2: CallFunc_Conv_InputActionValueToAxis2D_ReturnValue_1 = EnhancedInputLibrary.Conv_InputActionValueToAxis2D(K2Node_EnhancedInputActionEvent_ActionValue_6)
+  L20E7: Temp_struct_Variable_1 = CallFunc_Conv_InputActionValueToAxis2D_ReturnValue_1
+  L2102: Temp_real_Variable_11 = K2Node_EnhancedInputActionEvent_ElapsedTime_6
+  L211F: Temp_real_Variable_11 = Temp_real_Variable_11
+  L213A: Temp_real_Variable_12 = K2Node_EnhancedInputActionEvent_TriggeredTime_6
+  L2157: Temp_real_Variable_12 = Temp_real_Variable_12
+  L2172: Temp_object_Variable_4 = K2Node_EnhancedInputActionEvent_SourceAction_6
+  L2185: goto L1E3F
+  L218A: CallFunc_Conv_InputActionValueToBool_ReturnValue_4 = EnhancedInputLibrary.Conv_InputActionValueToBool(K2Node_EnhancedInputActionEvent_ActionValue_4)
+  L21A7: Temp_bool_Variable_4 = CallFunc_Conv_InputActionValueToBool_ReturnValue_4
+  L21BA: Temp_real_Variable_10 = K2Node_EnhancedInputActionEvent_ElapsedTime_4
+  L21D7: Temp_real_Variable_10 = Temp_real_Variable_10
+  L21F2: Temp_real_Variable_13 = K2Node_EnhancedInputActionEvent_TriggeredTime_4
+  L220F: Temp_real_Variable_13 = Temp_real_Variable_13
+  L222A: Temp_object_Variable_5 = K2Node_EnhancedInputActionEvent_SourceAction_4
+  L223D: goto L1DCB
+  L2242: DepthLimitReached(CallFunc_DepthLimitReached_State, CallFunc_DepthLimitReached_NumMeters)
+  L2262: if not (CallFunc_DepthLimitReached_State) pop-flow
+  L226C: CallFunc_GetWorldSubsystem_ReturnValue_5 = SubsystemBlueprintLibrary.GetWorldSubsystem(self, DrdConfigsSubsystem)
+  L228A: CallFunc_GetDrdDivingConfig_ReturnValue_5 = CallFunc_GetWorldSubsystem_ReturnValue_5.DrdConfigsSubsystem.GetDrdDivingConfig()
+  L22BC: DepthLimitReached(CallFunc_DepthLimitReached_State, CallFunc_DepthLimitReached_NumMeters)
+  L22DC: CallFunc_Conv_IntToDouble_ReturnValue = Conv_IntToDouble(CallFunc_DepthLimitReached_NumMeters)
+  L2301: CallFunc_Multiply_DoubleDouble_A_ImplicitCast_1 = CallFunc_GetDrdDivingConfig_ReturnValue_5.Damage_PerMeter
+  L2327: CallFunc_Multiply_DoubleDouble_ReturnValue = Multiply_DoubleDouble(CallFunc_Multiply_DoubleDouble_A_ImplicitCast_1, CallFunc_Conv_IntToDouble_ReturnValue)
+  L2355: CallFunc_ReduceHealth_Damage_ImplicitCast = CallFunc_Multiply_DoubleDouble_ReturnValue
+  L2372: ReduceHealth(CallFunc_ReduceHealth_Damage_ImplicitCast)
+  L2389: pop-flow
+  L238A: return
+
+## function InpActEvt_IA_ExitDiving_K2Node_EnhancedInputActionEvent_4  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_4 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_4 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_4 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_4 = SourceAction
+  L0048: BP_DiverCharacter_C.ExecuteUbergraph_BP_DiverCharacter(8586)
+  L0057: return
+
+## function InpActEvt_IA_Interact_K2Node_EnhancedInputActionEvent_3  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_3 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_3 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_3 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_3 = SourceAction
+  L0048: BP_DiverCharacter_C.ExecuteUbergraph_BP_DiverCharacter(7406)
+  L0057: return
+
+## function InpActEvt_IA_Look_K2Node_EnhancedInputActionEvent_5  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_5 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_5 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_5 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_5 = SourceAction
+  L0048: BP_DiverCharacter_C.ExecuteUbergraph_BP_DiverCharacter(7032)
+  L0057: return
+
+## function InpActEvt_IA_Move_K2Node_EnhancedInputActionEvent_6  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_6 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_6 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_6 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_6 = SourceAction
+  L0048: BP_DiverCharacter_C.ExecuteUbergraph_BP_DiverCharacter(8386)
+  L0057: return
+
+## function InpActEvt_IA_Sprint_K2Node_EnhancedInputActionEvent_0  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction = SourceAction
+  L0048: BP_DiverCharacter_C.ExecuteUbergraph_BP_DiverCharacter(4029)
+  L0057: return
+
+## function InpActEvt_IA_Sprint_K2Node_EnhancedInputActionEvent_1  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_1 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_1 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_1 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_1 = SourceAction
+  L0048: BP_DiverCharacter_C.ExecuteUbergraph_BP_DiverCharacter(3760)
+  L0057: return
+
+## function InpActEvt_IA_SwimUp_K2Node_EnhancedInputActionEvent_2  flags=0x08000000
+  L0000: frame.K2Node_EnhancedInputActionEvent_ActionValue_2 = ActionValue
+  L0012: frame.K2Node_EnhancedInputActionEvent_ElapsedTime_2 = ElapsedTime
+  L0024: frame.K2Node_EnhancedInputActionEvent_TriggeredTime_2 = TriggeredTime
+  L0036: frame.K2Node_EnhancedInputActionEvent_SourceAction_2 = SourceAction
+  L0048: BP_DiverCharacter_C.ExecuteUbergraph_BP_DiverCharacter(3535)
+  L0057: return
+
+## function InpActEvt_One_K2Node_InputKeyEvent_0  flags=0x08000000
+  L0000: frame.K2Node_InputKeyEvent_Key = Key
+  L0012: BP_DiverCharacter_C.ExecuteUbergraph_BP_DiverCharacter(569)
+  L0021: return
+
+## function PerformCharacterDeath  flags=0x0C000000
+  L0000: BP_DiverCharacter_C.ExecuteUbergraph_BP_DiverCharacter(7875)
+  L000F: return
+
+## function ReceivePossessed  flags=0x08020804
+  L0000: frame.K2Node_Event_NewController = NewController
+  L0012: BP_DiverCharacter_C.ExecuteUbergraph_BP_DiverCharacter(4485)
+  L0021: return
+
+## function ReceiveUnpossessed  flags=0x08020804
+  L0000: frame.K2Node_Event_OldController = OldController
+  L0012: BP_DiverCharacter_C.ExecuteUbergraph_BP_DiverCharacter(6728)
+  L0021: return
+
+## function ReduceHealth  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Damage = Damage
+  L0012: BP_DiverCharacter_C.ExecuteUbergraph_BP_DiverCharacter(8119)
+  L0021: return
+
+## function ResetDepthInform  flags=0x0C000000
+  L0000: BP_DiverCharacter_C.ExecuteUbergraph_BP_DiverCharacter(7726)
+  L000F: return
+
+## function SetDiverOwner  flags=0x0C020000
+  L0000: self.DrdProxyInteraction.self.ProxyOwnerCharacter = OwnerToSet
+  L0029: self.DrdProxyInteraction.DrdProxyInteractionComponent.InitProxyInteraction()
+  L0049: return
+
+## function SetupDiverData  flags=0x0C000000
+  L0000: BP_DiverCharacter_C.ExecuteUbergraph_BP_DiverCharacter(7716)
+  L000F: return
+
+## function TrackDivingDepth  flags=0x0C000000
+  L0000: BP_DiverCharacter_C.ExecuteUbergraph_BP_DiverCharacter(7711)
+  L000F: return
+
+## function TryApplyDepthDamage  flags=0x0C000000
+  L0000: BP_DiverCharacter_C.ExecuteUbergraph_BP_DiverCharacter(8770)
+  L000F: return
+
+## function TryInformAboutMaxDepth  flags=0x0C000000
+  L0000: BP_DiverCharacter_C.ExecuteUbergraph_BP_DiverCharacter(7721)
+  L000F: return
+
+## function UpdateHealthUI  flags=0x0C000000
+  L0000: BP_DiverCharacter_C.ExecuteUbergraph_BP_DiverCharacter(8124)
+  L000F: return

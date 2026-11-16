@@ -1,0 +1,57 @@
+# /Game/Dreadmoor/Core/Features/Hook/GAS/GA_HarpoonAim
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/Hook/GAS/GA_HarpoonAim.uasset
+
+## imported packages (3)
+  /Game/Dreadmoor/Core/Features/ActionPlayer/BP_ActionPlayer
+  /Game/Dreadmoor/Core/Features/PlayerCharacter/BP_PlayerCharacter
+  /Game/Dreadmoor/Core/Features/UpgradeDock/Components/BP_SlotTracerComponent
+
+## exports (6)
+  [0] GA_HarpoonAim_C : BlueprintGeneratedClass (outer None) super=DrdGameplayAbility size=274
+  [5] Default__GA_HarpoonAim_C : GA_HarpoonAim_C (outer None) size=14
+
+## function ExecuteUbergraph_GA_HarpoonAim  flags=0x00008001
+  L0000: goto computed(EntryPoint)
+  L000A: CallFunc_GetAvatarActorFromActorInfo_ReturnValue = GameplayAbility.GetAvatarActorFromActorInfo()
+  L001E: K2Node_DynamicCast_AsBP_Player_Character = cast<BP_PlayerCharacter_C>(CallFunc_GetAvatarActorFromActorInfo_ReturnValue)
+  L0042: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsBP_Player_Character
+  L005F: if not (K2Node_DynamicCast_bSuccess) goto L026E
+  L006D: K2Node_DynamicCast_AsBP_Player_Character.SetAiming(false)
+  L0092: CallFunc_IsValid_ReturnValue_1 = KismetSystemLibrary.IsValid(self.InputTask)
+  L00AF: if not (CallFunc_IsValid_ReturnValue_1) goto L026E
+  L00BD: self.InputTask.GameplayTask.EndTask()
+  L00DD: goto L026E
+  L00E2: Temp_real_Variable = K2Node_CustomEvent_TimeHeld
+  L00FD: K2_EndAbility()
+  L010B: goto L026E
+  L0110: CallFunc_WaitInputRelease_ReturnValue = AbilityTask_WaitInputRelease.WaitInputRelease(self, true)
+  L0126: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(CallFunc_WaitInputRelease_ReturnValue)
+  L0143: if not (CallFunc_IsValid_ReturnValue) goto L01B1
+  L0151: bind(K2Node_CreateDelegate_OutputDelegate, self, 'OnRelease_ADE3AD784FF91894C0F79381D422F06A')
+  L0168: CallFunc_WaitInputRelease_ReturnValue.self.OnRelease += K2Node_CreateDelegate_OutputDelegate
+  L0191: CallFunc_WaitInputRelease_ReturnValue.GameplayTask.ReadyForActivation()
+  L01B1: self.InputTask = CallFunc_WaitInputRelease_ReturnValue
+  L01C4: goto L026E
+  L01C9: CallFunc_GetAvatarActorFromActorInfo_ReturnValue_1 = GameplayAbility.GetAvatarActorFromActorInfo()
+  L01DD: K2Node_DynamicCast_AsBP_Player_Character_1 = cast<BP_PlayerCharacter_C>(CallFunc_GetAvatarActorFromActorInfo_ReturnValue_1)
+  L0201: K2Node_DynamicCast_bSuccess_1 = K2Node_DynamicCast_AsBP_Player_Character_1
+  L021E: if not (K2Node_DynamicCast_bSuccess_1) goto L026E
+  L022C: K2Node_DynamicCast_AsBP_Player_Character_1.SetAiming(true)
+  L0251: goto L0110
+  L0256: GameplayAbility.K2_OnEndAbility(K2Node_Event_bWasCancelled)
+  L0269: goto L000A
+  L026E: return
+
+## function K2_ActivateAbility  flags=0x08080800
+  L0000: GA_HarpoonAim_C.ExecuteUbergraph_GA_HarpoonAim(457)
+  L000F: return
+
+## function K2_OnEndAbility  flags=0x08080800
+  L0000: frame.K2Node_Event_bWasCancelled = bWasCancelled
+  L0012: GA_HarpoonAim_C.ExecuteUbergraph_GA_HarpoonAim(598)
+  L0021: return
+
+## function OnRelease_ADE3AD784FF91894C0F79381D422F06A  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_TimeHeld = TimeHeld
+  L0012: GA_HarpoonAim_C.ExecuteUbergraph_GA_HarpoonAim(226)
+  L0021: return

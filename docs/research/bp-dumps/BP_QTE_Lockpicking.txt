@@ -1,0 +1,50 @@
+# /Game/Dreadmoor/Core/Features/QTE/Lockpicking/BP_QTE_Lockpicking
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/QTE/Lockpicking/BP_QTE_Lockpicking.uasset
+
+## imported packages (1)
+  /Game/Dreadmoor/Core/Features/QTE/Lockpicking/WBP_QTE_Lockpicking
+
+## exports (6)
+  [0] BP_QTE_Lockpicking_C : BlueprintGeneratedClass (outer None) super=DrdQteController size=274
+  [1] Default__BP_QTE_Lockpicking_C : BP_QTE_Lockpicking_C (outer None) size=8
+
+## function Cleanup  flags=0x08020800
+  L0000: BP_QTE_Lockpicking_C.ExecuteUbergraph_BP_QTE_Lockpicking(533)
+  L000F: return
+
+## function ExecuteUbergraph_BP_QTE_Lockpicking  flags=0x00808001
+  L0000: goto computed(EntryPoint)
+  L000A: DrdQteController.Init()
+  L0014: CallFunc_GetLocalPlayerFromController_ReturnValue = Default__CommonUIExtensions.CommonUIExtensions.GetLocalPlayerFromController(self.PlayerController)
+  L0047: CallFunc_PushContentToLayer_ForPlayer_ReturnValue = Default__CommonUIExtensions.CommonUIExtensions.PushContentToLayer_ForPlayer(CallFunc_GetLocalPlayerFromController_ReturnValue, GameplayTag{'UI.Layer.QTE'}, WBP_QTE_Lockpicking_C)
+  L009E: K2Node_DynamicCast_AsWBP_QTE_Lockpicking = cast<WBP_QTE_Lockpicking_C>(CallFunc_PushContentToLayer_ForPlayer_ReturnValue)
+  L00C2: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsWBP_QTE_Lockpicking
+  L00DF: if not (K2Node_DynamicCast_bSuccess) goto L027E
+  L00ED: self.QTE = K2Node_DynamicCast_AsWBP_QTE_Lockpicking
+  L0100: Default__BlueprintInstancedStructLibrary.BlueprintInstancedStructLibrary.GetInstancedStructValue(CallFunc_GetInstancedStructValue_ExecResult, self.Payload, CallFunc_GetInstancedStructValue_Value)
+  L013B: K2Node_SwitchEnum_CmpSuccess = NotEqual_ByteByte(CallFunc_GetInstancedStructValue_ExecResult, 0)
+  L015A: if not (K2Node_SwitchEnum_CmpSuccess) goto L019A
+  L0168: K2Node_SwitchEnum_CmpSuccess = NotEqual_ByteByte(CallFunc_GetInstancedStructValue_ExecResult, 1)
+  L0187: if not (K2Node_SwitchEnum_CmpSuccess) goto L01D0
+  L0195: goto L027E
+  L019A: self.QTE.SetLevel(CallFunc_GetInstancedStructValue_Value.LockpickingLevel)
+  L01D0: bind(K2Node_CreateDelegate_OutputDelegate, self, 'Finished')
+  L01E7: self.QTE.self.OnFinished += K2Node_CreateDelegate_OutputDelegate
+  L0210: goto L027E
+  L0215: DrdQteController.Cleanup()
+  L021F: self.QTE = null
+  L022A: goto L027E
+  L022F: Default__CommonUIExtensions.CommonUIExtensions.PopContentFromLayer(self.QTE)
+  L0258: self.OnQteFinished.Broadcast(K2Node_CustomEvent_Result)
+  L0274: goto L027E
+  L0279: goto L000A
+  L027E: return
+
+## function Finished  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Result = Result
+  L0012: BP_QTE_Lockpicking_C.ExecuteUbergraph_BP_QTE_Lockpicking(559)
+  L0021: return
+
+## function Init  flags=0x08020800
+  L0000: BP_QTE_Lockpicking_C.ExecuteUbergraph_BP_QTE_Lockpicking(633)
+  L000F: return

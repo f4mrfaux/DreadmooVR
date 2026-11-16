@@ -1,0 +1,25 @@
+# /Game/Dreadmoor/Blueprints/Developers/Sanich/BP_CraftTable_Ship
+# file: Dreadmoor/Content/Dreadmoor/Blueprints/Developers/Sanich/BP_CraftTable_Ship.uasset
+
+## imported packages (1)
+  /Game/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/SM_Workbench_small
+
+## exports (10)
+  [0] BP_CraftTable_Ship_C : BlueprintGeneratedClass (outer None) super=Pawn size=214
+  [1] Default__BP_CraftTable_Ship_C : BP_CraftTable_Ship_C (outer None) size=12
+        refs: exp:InheritableComponentHandler
+  [2] InheritableComponentHandler : InheritableComponentHandler (outer BP_CraftTable_Ship_C) size=6
+  [3] DefaultSceneRoot_GEN_VARIABLE : SceneComponent (outer BP_CraftTable_Ship_C) size=10
+        refs: name:BlueprintType
+  [4] SCS_Node_0 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.SceneComponent, exp:DefaultSceneRoot_GEN_VARIABLE, name:DefaultSceneRoot
+  [5] SCS_Node_1 : SCS_Node (outer SimpleConstructionScript_0) size=40
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:SM_Workbench_small_GEN_VARIABLE, name:SM_Workbench_small
+  [6] SCS_Node_2 : SCS_Node (outer SimpleConstructionScript_0) size=50
+        refs: obj:/Script/Engine.StaticMeshComponent, exp:Cube_GEN_VARIABLE, exp:SCS_Node_1, name:Cube
+  [7] SimpleConstructionScript_0 : SimpleConstructionScript (outer BP_CraftTable_Ship_C) size=30
+        refs: exp:SCS_Node_2, exp:SCS_Node_1, name:DefaultSceneRoot
+  [8] Cube_GEN_VARIABLE : StaticMeshComponent (outer BP_CraftTable_Ship_C) size=162
+        refs: name:Custom, exp:SCS_Node_1, name:WorldStatic, name:WorldDynamic, name:Camera, name:PhysicsBody, name:Vehicle, name:Destructible, name:BlueprintType
+  [9] SM_Workbench_small_GEN_VARIABLE : StaticMeshComponent (outer BP_CraftTable_Ship_C) size=169
+        refs: obj:/Game/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/SM_Workbench_small.SM_Workbench_small, name:Custom, exp:SCS_Node_1, name:WorldStatic, name:WorldDynamic, name:PhysicsBody, name:Vehicle, name:Destructible, name:Camera, name:BlueprintType

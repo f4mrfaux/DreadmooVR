@@ -1,0 +1,116 @@
+# /Game/Dreadmoor/Core/Features/Fishing/GAS/Abilities/GA_Fishing_StaminaReducing
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/Fishing/GAS/Abilities/GA_Fishing_StaminaReducing.uasset
+
+## imported packages (4)
+  /Game/Dreadmoor/Core/Features/Fishing/BP_FishingController
+  /Game/Dreadmoor/Core/Features/Fishing/GAS/Abilities/GE_Fishing_StaminaReducingCooldown
+  /Game/Dreadmoor/Core/Features/WaterFeatures/DeckTentacle/BP_DeckTentacleComponent
+  /Game/Dreadmoor/Localization/ST_GameplayAbilities
+
+## exports (10)
+  [0] GA_Fishing_StaminaReducing_C : BlueprintGeneratedClass (outer None) super=DrdGameplayAbility size=632
+  [9] Default__GA_Fishing_StaminaReducing_C : GA_Fishing_StaminaReducing_C (outer None) size=186
+        refs: name:GAS.State.Fishing.Stamina.Reducing, obj:/Script/Dreadmoor.DrdAbilityConfigUI, name:SPR_AbilitySkillRodFishing001, name:GAS.Event.Fishing.Fish.Spawned, obj:/Game/Dreadmoor/Core/Features/Fishing/GAS/Abilities/GE_Fishing_StaminaReducingCooldown.GE_Fishing_StaminaReducingCooldown_C
+
+## function EventReceived_114C3AA34760ACC8684E7AAA825C8B68  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Payload = Payload
+  L0012: GA_Fishing_StaminaReducing_C.ExecuteUbergraph_GA_Fishing_StaminaReducing(10)
+  L0021: return
+
+## function ExecuteUbergraph_GA_Fishing_StaminaReducing  flags=0x00808001
+  L0000: goto computed(EntryPoint)
+  L000A: Temp_struct_Variable = K2Node_CustomEvent_Payload
+  L0025: K2_EndAbility()
+  L0033: goto L055B
+  L0038: CallFunc_WaitGameplayEvent_ReturnValue = AbilityTask_WaitGameplayEvent.WaitGameplayEvent(self, GameplayTag{'GAS.Event.Fishing.Fish.Destroyed'}, null, false, true)
+  L006B: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(CallFunc_WaitGameplayEvent_ReturnValue)
+  L0088: if not (CallFunc_IsValid_ReturnValue) goto L00F6
+  L0096: bind(K2Node_CreateDelegate_OutputDelegate, self, 'EventReceived_114C3AA34760ACC8684E7AAA825C8B68')
+  L00AD: CallFunc_WaitGameplayEvent_ReturnValue.self.EventReceived += K2Node_CreateDelegate_OutputDelegate
+  L00D6: CallFunc_WaitGameplayEvent_ReturnValue.GameplayTask.ReadyForActivation()
+  L00F6: bind(K2Node_CreateDelegate_OutputDelegate_1, self, 'Tick')
+  L010D: CallFunc_K2_SetTimerDelegate_ReturnValue = KismetSystemLibrary.K2_SetTimerDelegate(K2Node_CreateDelegate_OutputDelegate_1, self.TickTime, true, false, 0, 0)
+  L0147: self.TimerHandle = CallFunc_K2_SetTimerDelegate_ReturnValue
+  L0162: goto L055B
+  L0167: KismetSystemLibrary.K2_ClearAndInvalidateTimerHandle(self, self.TimerHandle)
+  L017B: CallFunc_RemoveLooseGameplayTags_ReturnValue = AbilitySystemBlueprintLibrary.RemoveLooseGameplayTags(self.FishingController, self.AddedTags, false)
+  L01A2: bind(K2Node_CreateDelegate_OutputDelegate_3, self, 'FishExhaustionChanged')
+  L01B9: self.FishingController.self.OnFishExhaustionChanged -= K2Node_CreateDelegate_OutputDelegate_3
+  L01E2: self.FishingController = null
+  L01ED: CallFunc_K2_GetCooldownTags_ReturnValue = DrdGameplayAbility.K2_GetCooldownTags()
+  L0209: GameplayAbility.BP_RemoveGameplayEffectFromOwnerWithGrantedTags(CallFunc_K2_GetCooldownTags_ReturnValue, -1)
+  L0221: goto L055B
+  L0226: GameplayAbility.K2_ActivateAbilityFromEvent(K2Node_Event_EventData)
+  L0239: CallFunc_GetActorInfo_ReturnValue = GameplayAbility.GetActorInfo()
+  L0255: K2Node_DynamicCast_AsBP_Fishing_Controller = cast<BP_FishingController_C>(CallFunc_GetActorInfo_ReturnValue.OwnerActor)
+  L0282: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsBP_Fishing_Controller
+  L029F: if not (K2Node_DynamicCast_bSuccess) goto L055B
+  L02AD: self.FishingController = K2Node_DynamicCast_AsBP_Fishing_Controller
+  L02C0: goto L0038
+  L02C5: CallFunc_K2_CheckAbilityCooldown_ReturnValue = K2_CheckAbilityCooldown()
+  L02DD: if not (CallFunc_K2_CheckAbilityCooldown_ReturnValue) goto L055B
+  L02EB: CallFunc_RandomBoolWithWeight_ReturnValue = RandomBoolWithWeight(self.TriggerChance)
+  L0308: if not (CallFunc_RandomBoolWithWeight_ReturnValue) goto L055B
+  L0316: IsStartAvailable(CallFunc_IsStartAvailable_bOut)
+  L032D: if not (CallFunc_IsStartAvailable_bOut) goto L055B
+  L033B: TriggerEvent()
+  L0349: goto L055B
+  L034E: CallFunc_K2_CommitAbility_ReturnValue = K2_CommitAbility()
+  L0366: if not (CallFunc_K2_CommitAbility_ReturnValue) goto L055B
+  L0374: KismetSystemLibrary.K2_PauseTimerHandle(self, self.TimerHandle)
+  L0388: self.FishingController.self.CurrentEvent = GameplayTag{'Fishing.Event.GAS'}
+  L03CB: CallFunc_AddLooseGameplayTags_ReturnValue = AbilitySystemBlueprintLibrary.AddLooseGameplayTags(self.FishingController, self.TagsToAdd, false)
+  L03F2: self.AddedTags = self.TagsToAdd
+  L040D: bind(K2Node_CreateDelegate_OutputDelegate_2, self, 'FishExhaustionChanged')
+  L0424: self.FishingController.self.OnFishExhaustionChanged += K2Node_CreateDelegate_OutputDelegate_2
+  L044D: goto L055B
+  L0452: self.AddedTags = GameplayTagContainer{[]}
+  L0480: KismetSystemLibrary.K2_UnPauseTimerHandle(self, self.TimerHandle)
+  L0494: self.FishingController.self.CurrentEvent = GameplayTag{'None'}
+  L04D7: goto L055B
+  L04DC: CallFunc_RemoveLooseGameplayTags_ReturnValue_1 = AbilitySystemBlueprintLibrary.RemoveLooseGameplayTags(self.FishingController, self.AddedTags, false)
+  L0503: goto L0452
+  L0508: if not (K2Node_CustomEvent_bExhausted) goto L055B
+  L0516: bind(K2Node_CreateDelegate_OutputDelegate_2, self, 'FishExhaustionChanged')
+  L052D: self.FishingController.self.OnFishExhaustionChanged -= K2Node_CreateDelegate_OutputDelegate_2
+  L0556: goto L04DC
+  L055B: return
+
+## function FishExhaustionChanged  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_bExhausted = bExhausted
+  L0012: GA_Fishing_StaminaReducing_C.ExecuteUbergraph_GA_Fishing_StaminaReducing(1288)
+  L0021: return
+
+## function IsStartAvailable  flags=0x0C420000
+  L0000: self.FishingController.IsEventActive(CallFunc_IsEventActive_bOut)
+  L002D: if not (CallFunc_IsEventActive_bOut) goto L004B
+  L003B: bOut = false
+  L0046: goto L00FB
+  L004B: if not (self.FishingController.self.bFishExhausted) goto L007F
+  L006F: bOut = false
+  L007A: goto L00FB
+  L007F: self.FishingController.GetFishStaminaPercent(CallFunc_GetFishStaminaPercent_Percent)
+  L00AC: CallFunc_Less_DoubleDouble_ReturnValue = Less_DoubleDouble(CallFunc_GetFishStaminaPercent_Percent, self.MinStaminaPercent)
+  L00D2: if not (CallFunc_Less_DoubleDouble_ReturnValue) goto L00F0
+  L00E0: bOut = false
+  L00EB: goto L00FB
+  L00F0: bOut = true
+  L00FB: return
+
+## function K2_ActivateAbilityFromEvent  flags=0x08480800
+  L0000: frame.K2Node_Event_EventData = EventData
+  L0012: GA_Fishing_StaminaReducing_C.ExecuteUbergraph_GA_Fishing_StaminaReducing(550)
+  L0021: return
+
+## function K2_OnEndAbility  flags=0x08080800
+  L0000: frame.K2Node_Event_bWasCancelled = bWasCancelled
+  L0012: GA_Fishing_StaminaReducing_C.ExecuteUbergraph_GA_Fishing_StaminaReducing(359)
+  L0021: return
+
+## function Tick  flags=0x0C000000
+  L0000: GA_Fishing_StaminaReducing_C.ExecuteUbergraph_GA_Fishing_StaminaReducing(709)
+  L000F: return
+
+## function TriggerEvent  flags=0x0C000000
+  L0000: GA_Fishing_StaminaReducing_C.ExecuteUbergraph_GA_Fishing_StaminaReducing(846)
+  L000F: return

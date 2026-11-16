@@ -1,0 +1,21 @@
+# Unreal build output and caches
+unreal/Dreadmoor/Binaries/
+unreal/Dreadmoor/Intermediate/
+unreal/Dreadmoor/Saved/
+unreal/Dreadmoor/DerivedDataCache/
+unreal/Dreadmoor/*.sln
+unreal/Dreadmoor/.vs/
+unreal/build.log
+
+# Third-party editor plugin, re-fetched per docs/setup/unreal-editor-mcp.md
+unreal/Dreadmoor/Plugins/EngineWire/
+
+# Local tools and build products
+tools/bin/
+build/
+__pycache__/
+*.pyc
+
+# Session scratch
+.remember/
+.superpowers/

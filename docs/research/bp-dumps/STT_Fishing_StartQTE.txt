@@ -1,0 +1,36 @@
+# /Game/Dreadmoor/Core/Features/Fishing/StateTree/STT_Fishing_StartQTE
+# file: Dreadmoor/Content/Dreadmoor/Core/Features/Fishing/StateTree/STT_Fishing_StartQTE.uasset
+
+## imported packages (2)
+  /Game/Dreadmoor/Core/Features/Fishing/BP_FishingController
+  /Game/Dreadmoor/Core/Features/WaterFeatures/DeckTentacle/BP_DeckTentacleComponent
+
+## exports (5)
+  [0] STT_Fishing_StartQTE_C : BlueprintGeneratedClass (outer None) super=StateTreeTaskBlueprintBase size=309
+  [4] Default__STT_Fishing_StartQTE_C : STT_Fishing_StartQTE_C (outer None) size=11
+
+## function ExecuteUbergraph_STT_Fishing_StartQTE  flags=0x00808001
+  L0000: goto computed(EntryPoint)
+  L000A: self.Actor.ForceQTEEvent(GameplayTag{'None'})
+  L0049: goto L0182
+  L004E: StateTreeTaskBlueprintBase.ReceiveLatentEnterState(K2Node_Event_Transition)
+  L0061: CallFunc_GetWorldSubsystem_ReturnValue = SubsystemBlueprintLibrary.GetWorldSubsystem(self, DrdQteSubsystem)
+  L007F: CallFunc_StartQTE_ReturnValue = CallFunc_GetWorldSubsystem_ReturnValue.DrdQteSubsystem.StartQTE(self.QTE, InstancedStruct{})
+  L00C0: bind(K2Node_CreateDelegate_OutputDelegate, self, 'QTEFinished')
+  L00D7: CallFunc_StartQTE_ReturnValue.self.OnQteFinished += K2Node_CreateDelegate_OutputDelegate
+  L0100: self.Actor.ForceQTEEvent(self.QTE)
+  L012D: goto L0182
+  L0132: CallFunc_EqualEqual_GameplayTag_ReturnValue = BlueprintGameplayTagLibrary.EqualEqual_GameplayTag(K2Node_CustomEvent_ResultTag, GameplayTag{'QTE.Result.Success'})
+  L016A: StateTreeTaskBlueprintBase.FinishTask(CallFunc_EqualEqual_GameplayTag_ReturnValue)
+  L017D: goto L000A
+  L0182: return
+
+## function QTEFinished  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_ResultTag = ResultTag
+  L0012: STT_Fishing_StartQTE_C.ExecuteUbergraph_STT_Fishing_StartQTE(306)
+  L0021: return
+
+## function ReceiveLatentEnterState  flags=0x08420800
+  L0000: frame.K2Node_Event_Transition = Transition
+  L0012: STT_Fishing_StartQTE_C.ExecuteUbergraph_STT_Fishing_StartQTE(78)
+  L0021: return
