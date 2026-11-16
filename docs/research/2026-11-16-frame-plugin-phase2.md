@@ -62,3 +62,30 @@ telemetry: digital 894 lines, 0 dropped; analog 377 lines, 0 dropped
 - Positive identification of game actions (for example "Jump happened") isn't implemented.
   Only the pad the game received is observed.
 - Input-focus state isn't logged yet (see the hypothesis above).
+
+## Benchmark session (15:13–15:18): Bob calls it a good benchmark
+
+Setup:
+- nightly 01143
+- native Frame binding file (loaded 15:13:02)
+- DreadmoorVR.dll and the read-only probe; the bridge is off
+- `UI_FollowView=true`, `VR_AimMethod=1`, `VR_RoomscaleMovement=true`, `VR_SnapTurn=false`
+
+Logs are in `build/benchmark_1518/`.
+
+From the report: Frame A→A (0x1000), **Frame B→B (0x2000)**, **Frame X→X (0x4000) ×7 with no
+A bit**, LB (0x0100). Poses were valid 100% and controllers in use 94.6%. Digital: 0 dropped.
+Analogue: the 600 cap was hit, with 559 dropped. That doesn't affect digital edges, but it
+should be raised.
+
+Bob: looking is much better and X interacts without jumping. There's some lighting
+artifacting (deferred).
+
+**Found by telemetry:** `ThumbRestTouchRight@R->0x0002` ×2 is a D-pad Down the game received
+while no D-pad action was down. That's UEVR D-pad shifting (thumbrest plus stick), which
+breaks spec item 4. Fix: `VR_DPadShifting=false`.
+
+**Still wrong:** left-stick movement follows the character's facing, not the head. Fix:
+`VR_MovementOrientation=1` (head).
+
+Both fixes are written after the game exits, because UEVR saves its config on exit.

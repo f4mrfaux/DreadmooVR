@@ -8,3 +8,5 @@ VR_SyncedSequentialMethod=1
 UI_FollowView=true
 VR_AimMethod=1
 VR_RoomscaleMovement=true
+VR_MovementOrientation=1
+VR_DPadShifting=false
