@@ -11,13 +11,20 @@
   it wrote last time and no longer ships are removed; nothing else is ever touched.
   config.txt is merged key by key, so settings changed in the UEVR menu survive.
 
-.PARAMETER Probe   Also deploy src/scripts/m0_probe.lua (M0 only).
-.PARAMETER NoPak   Skip the pak half.
+.PARAMETER Probe     Also deploy src/scripts/m0_probe.lua (read-only listener).
+.PARAMETER NoPak     Skip the pak half (the pak is locked while the game runs).
+.PARAMETER Bridge    Also deploy main.lua (the gameplay bridge). Off by default.
+.PARAMETER Config    Also merge profile/config.txt into UEVR's config.txt. Off by default.
+.PARAMETER RemovePlugin  Phase 1 rollback: delete plugins\DreadmoorVR.dll and stop. Nothing else
+                         changes (scripts, binding file, pak and config.txt stay as they are).
 #>
 [CmdletBinding(SupportsShouldProcess)]
 param(
     [switch]$Probe,
-    [switch]$NoPak
+    [switch]$NoPak,
+    [switch]$Bridge,
+    [switch]$Config,
+    [switch]$RemovePlugin
 )
 $ErrorActionPreference = 'Stop'
 
@@ -26,10 +33,17 @@ $UevrDir = Join-Path $env:APPDATA 'UnrealVRMod\Dreadmoor-Win64-Shipping'
 $Mods = 'D:\SteamLibrary\steamapps\common\DREADMOOR\Dreadmoor\Content\Paks\~mods'
 $Manifest = Join-Path $UevrDir 'deployed.txt'
 
+if ($RemovePlugin) {
+    $dll = Join-Path $UevrDir 'plugins\DreadmoorVR.dll'
+    if (Test-Path $dll) { Remove-Item $dll; Write-Host "Removed $dll" } else { Write-Host "No plugin deployed." }
+    return
+}
+
 # What ships: destination -> source
 $plan = [ordered]@{}
 foreach ($f in Get-ChildItem (Join-Path $Repo 'src\scripts') -Filter *.lua) {
     if ($f.Name -eq 'm0_probe.lua' -and -not $Probe) { continue }
+    if ($f.Name -eq 'main.lua' -and -not $Bridge) { continue }
     $plan[(Join-Path $UevrDir "scripts\$($f.Name)")] = $f.FullName
 }
 # Modules live in scripts\lib so UEVR does not autoload them; main.lua requires them.
@@ -40,6 +54,9 @@ foreach ($f in Get-ChildItem (Join-Path $Repo 'src\scripts\lib') -Filter *.lua) 
 # docs/research/2026-11-16-steam-frame-input.md); UEVR does not rewrite files it doesn't own.
 $frameBinding = Join-Path $Repo 'profile\steamvr\dreadmoorvr_bindings_frame_controller.json'
 $plan[(Join-Path $UevrDir 'dreadmoorvr_bindings_frame_controller.json')] = $frameBinding
+# Native input plugin (Phase 1). UEVR loads every DLL in <profile>\plugins.
+$pluginDll = Join-Path $Repo 'build\plugin\Release\DreadmoorVR.dll'
+if (Test-Path $pluginDll) { $plan[(Join-Path $UevrDir 'plugins\DreadmoorVR.dll')] = $pluginDll }
 $dataDir = Join-Path $Repo 'src\data'
 if (Test-Path $dataDir) {
     foreach ($f in Get-ChildItem $dataDir -File | Where-Object Name -ne '.gitkeep') {
@@ -73,10 +90,10 @@ foreach ($dst in $plan.Keys) {
     }
 }
 
-# Merge config.txt.
+# Merge config.txt (opt-in).
 $cfgSrc = Join-Path $Repo 'profile\config.txt'
 $cfgDst = Join-Path $UevrDir 'config.txt'
-if ($PSCmdlet.ShouldProcess($cfgDst, 'Merge settings')) {
+if ($Config -and $PSCmdlet.ShouldProcess($cfgDst, 'Merge settings')) {
     $lines = [System.Collections.Generic.List[string]]::new()
     if (Test-Path $cfgDst) { $lines.AddRange([string[]](Get-Content $cfgDst)) }
     foreach ($kv in Get-Content $cfgSrc | Where-Object { $_ -match '=' }) {
