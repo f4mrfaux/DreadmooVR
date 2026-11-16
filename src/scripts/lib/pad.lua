@@ -68,4 +68,15 @@ function pad.merge(real)
     return m
 end
 
+-- Replaces the four face-button bits of buttons with the physical state (a, b, x, y booleans).
+-- Used when more than one input path sets face buttons and they arrive mixed.
+function pad.replace_face(buttons, a, b, x, y)
+    local out = buttons & ~0xF000
+    if a then out = out | 0x1000 end
+    if b then out = out | 0x2000 end
+    if x then out = out | 0x4000 end
+    if y then out = out | 0x8000 end
+    return out
+end
+
 return pad

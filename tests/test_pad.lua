@@ -62,4 +62,14 @@ return {
         pad.reset()
         assert(not pcall(pad.press, "Q", true))
     end,
+
+    test_pad_replace_face_x_only = function()
+        -- Incoming A+X plus LB; physically only X is down -> X and LB remain.
+        assert(pad.replace_face(0x5100, false, false, true, false) == 0x4100)
+    end,
+
+    test_pad_replace_face_all_and_none = function()
+        assert(pad.replace_face(0x0000, true, true, true, true) == 0xF000)
+        assert(pad.replace_face(0xF00F, false, false, false, false) == 0x000F)
+    end,
 }
