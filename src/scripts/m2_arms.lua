@@ -74,9 +74,19 @@ end
 
 local clock = 0
 
+local hidden_on = nil  -- the game mesh whose bones we hid, so they can be restored
+
+local function restore_game_body()
+    if hidden_on == nil then return end
+    for _, bone in ipairs(GAME_BONES_TO_HIDE) do pcall(function() hidden_on:UnHideBoneByName(bone) end) end
+    hidden_on = nil
+end
+
 local function attach_and_hide(pawn)
+    restore_game_body()
     actor.Body:K2_AttachToComponent(pawn.Mesh, "None", SNAP_TO_TARGET, SNAP_TO_TARGET, SNAP_TO_TARGET, false)
     for _, bone in ipairs(GAME_BONES_TO_HIDE) do pawn.Mesh:HideBoneByName(bone, PBO_NONE) end
+    hidden_on = pawn.Mesh
 end
 
 local function spawn(pawn)
@@ -86,15 +96,22 @@ local function spawn(pawn)
         actor = armsloader.spawn(cls, pawn:GetTransform())
         if actor == nil then error("spawn returned nil") end
         attach_and_hide(pawn)
-        local hook = uevr.uobject_hook
-        local l = hook.get_or_add_motion_controller_state(actor.LeftHandTarget)
-        local r = hook.get_or_add_motion_controller_state(actor.RightHandTarget)
+        -- UEVR exposes the hook as the global usertype UEVR_UObjectHook (ScriptContext.cpp:990);
+        -- activate() (:991) turns the system on, get_or_add_motion_controller_state (:1028).
+        UEVR_UObjectHook.activate()
+        local l = UEVR_UObjectHook.get_or_add_motion_controller_state(actor.LeftHandTarget)
+        local r = UEVR_UObjectHook.get_or_add_motion_controller_state(actor.RightHandTarget)
         if l == nil or r == nil then error("motion controller state unavailable") end
         l:set_hand(HAND_LEFT); l:set_permanent(true)
         r:set_hand(HAND_RIGHT); r:set_permanent(true)
         log("spawned BP_VRArms; hand targets bound to controllers; game arms/head hidden")
     end)
-    if not ok then log("spawn FAILED: " .. tostring(err)) end
+    if not ok then
+        log("spawn FAILED: " .. tostring(err))
+        restore_game_body()
+        if actor ~= nil then pcall(function() actor:K2_DestroyActor() end) end
+        actor = nil
+    end
     return ok
 end
 
@@ -132,6 +149,7 @@ uevr.sdk.callbacks.on_pre_engine_tick(function(_, delta)
 end)
 
 uevr.sdk.callbacks.on_script_reset(function()
+    restore_game_body()
     if actor ~= nil then pcall(function() actor:K2_DestroyActor() end) end
     actor = nil
 end)

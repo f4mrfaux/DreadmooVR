@@ -38,7 +38,7 @@ Add a row here before using a new call.
 | `FAnimNode_ModifyBone` fields | AnimNode_ModifyBone.h:37/57/69 | node props | `BoneToModify`, `RotationMode`=**BMM_Replace**, `RotationSpace`=BCS_WorldSpace |
 | `FAnimNode_CopyPoseFromMesh::bUseAttachedParent` | AnimNode_CopyPoseFromMesh.h:28 | node prop | true, so `Body` must be attached to the game mesh |
 | `USkeletalMeshComponent::AnimClass` | Components/SkeletalMeshComponent.h:368 | property | `ABP_VRArms_C` |
-| UEVR `uevr.uobject_hook.get_or_add_motion_controller_state(obj)`, `:set_hand(0 left, 1 right)`, `:set_permanent(bool)` | lua-api ScriptContext.cpp:1028, 984, 985 (UEVR 4ee5c6b) | Lua API | hand index from UObjectHook.cpp |
+| UEVR global usertype `UEVR_UObjectHook.activate()`, `UEVR_UObjectHook.get_or_add_motion_controller_state(obj)`, `:set_hand(0 left, 1 right)`, `:set_permanent(bool)` (NOT `uevr.uobject_hook`, which is nil in game) | lua-api ScriptContext.cpp:990, 991, 1028, 984, 985 (UEVR 4ee5c6b) | Lua API | hand index from UObjectHook.cpp |
 | Cook setting `[CookSettings] CookContentMissingSeverity=Warning` | Editor/UnrealEd/Private/Cooker/CookImportsChecker.cpp:683 | DefaultEditor.ini | stand-in references are external on purpose |
 
 **Enum values** (Engine/EngineTypes.h):
