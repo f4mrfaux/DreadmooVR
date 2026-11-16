@@ -35,9 +35,43 @@ local modes = load_module("modes")
 local armsloader = load_module("armsloader")
 load_module("m1flow")
 local flow = load_module("armsflow").new(loaded)
+local armstats = load_module("armstats")
+local stats = armstats.new()
 log("loaded")
 
 local actor = nil
+local sample_err_logged = false
+
+-- Refinement harness: 1 Hz sample per hand (controller target vs the arms' actual bones), 10 s
+-- summary. Read-only. GetSocketLocation/GetSocketRotation: SceneComponent.h:791/799.
+local SAMPLE_S, SUMMARY_S = 1.0, 10.0
+local last_sample, last_summary = 0, 0
+local function f3(v) return string.format("%.0f,%.0f,%.0f", v.X, v.Y, v.Z) end
+local function r3(r) return string.format("%.0f,%.0f,%.0f", r.Pitch, r.Yaw, r.Roll) end
+
+local function sample_arms(pawn, now)
+    if now - last_sample < SAMPLE_S then return end
+    last_sample = now
+    local head = pawn.Mesh:GetSocketLocation("head")
+    for _, h in ipairs({ { "L", actor.LeftHandTarget, "_l" }, { "R", actor.RightHandTarget, "_r" } }) do
+        local side, target, sfx = h[1], h[2], h[3]
+        local s = {
+            target = target:K2_GetComponentLocation(), target_rot = target:K2_GetComponentRotation(),
+            hand = actor.Body:GetSocketLocation("hand" .. sfx), hand_rot = actor.Body:GetSocketRotation("hand" .. sfx),
+            elbow = actor.Body:GetSocketLocation("lowerarm" .. sfx), shoulder = actor.Body:GetSocketLocation("upperarm" .. sfx),
+        }
+        local m = armstats.sample(s)
+        stats:add(side, m)
+        log(string.format("arm %s target=%s hand=%s elbow=%s shoulder=%s head=%s reach_err=%.1f to_target=%.1f arm_len=%.1f d_rot=%.0f,%.0f,%.0f target_rot=%s hand_rot=%s",
+            side, f3(s.target), f3(s.hand), f3(s.elbow), f3(s.shoulder), f3(head), m.reach_err, m.shoulder_to_target, m.arm_len,
+            m.d_pitch, m.d_yaw, m.d_roll, r3(s.target_rot), r3(s.hand_rot)))
+    end
+    if now - last_summary >= SUMMARY_S then
+        last_summary = now
+        log("arms summary " .. stats:summary("L") .. " | " .. stats:summary("R"))
+    end
+end
+
 local clock = 0
 
 local function attach_and_hide(pawn)
@@ -87,6 +121,10 @@ uevr.sdk.callbacks.on_pre_engine_tick(function(_, delta)
     elseif action == "reattach" then
         local ok, err = pcall(function() attach_and_hide(pawn); actor:SetActorHiddenInGame(false) end)
         log("reattached to new walking pawn" .. (ok and "" or (" FAILED: " .. tostring(err))))
+    end
+    if flow.status == "active" and actor ~= nil and mode == "walking" then
+        local ok, err = pcall(sample_arms, pawn, clock)
+        if not ok and not sample_err_logged then sample_err_logged = true; log("harness FAILED: " .. tostring(err)) end
     end
     if flow.status ~= before and (flow.status == "fail" or flow.status == "no_reply" or flow.status == "spawn_failed") then
         log("stopped: " .. flow.status .. (flow.reason and (" - " .. flow.reason) or ""))
