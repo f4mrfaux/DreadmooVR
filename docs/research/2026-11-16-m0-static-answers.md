@@ -34,21 +34,24 @@ code compares against. The state tree could hold more tags that no Blueprint nam
 
 ## Fight direction
 
-**Read**, end to end:
+**Corrected by Bob from play (2026-11-16):** you pull **against** the fish, as in real
+fishing. My first reading said the opposite and was wrong.
+
+What the code does show (**Read**):
 
 - `IA_Fishing_Fight` is stick X with no negate modifier, so stick left is negative.
-- `GetPlayerDirection`: `StruggleX < 0` gives 1, `> 0` gives 2, and 0 gives 0.
-- For the fish, `FishDirection == 2` puts the fish mesh at +Y beside the rod in
-  `GetFishMeshTargetOffset`, and it turns the camera +17.5° of yaw in `RotateControl`. Both of
-  those are to the right.
-- So 1 means left and 2 means right, for both the player and the fish.
-- `IsSameDirection` succeeds when the player pushes **toward the side the fish is swimming**.
-  The HUD (`WBP_FishingStruggle.UpdateDirection`) shows an arrow on the fish's side, and it
-  turns green when you match.
+- `GetPlayerDirection`: `StruggleX < 0` gives 1 (left), `> 0` gives 2 (right).
+- `IsSameDirection` is true when the player's value equals `FishDirection`, and the HUD arrow
+  turns green.
 
-**For VR:** lean the rod **toward** the fish to match. That follows the fish, the opposite of
-real-world pulling against it. The bridge maps a rod lean of more than the threshold to stick X
-±1, with the sign equal to the lean side. Haptics should confirm a match.
+Where I went wrong: I took `FishDirection == 2` to mean "fish to the right" because it puts
+the fish at +Y in `GetFishMeshTargetOffset`. That offset is in the fish component's own frame,
+which evidently faces back toward the player. That flips Y, so `FishDirection` 2 is the fish
+going **left**, and the matching input is the opposite side.
+
+**For VR:** lean the rod **away** from the fish to match. The bridge maps a rod lean past the
+threshold to stick X ±1, with the sign equal to the lean side. That needs no inversion,
+because the game's "match" is already "pull opposite". Haptics should confirm a match.
 
 ## Hook gun
 
