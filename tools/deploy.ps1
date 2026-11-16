@@ -32,6 +32,10 @@ foreach ($f in Get-ChildItem (Join-Path $Repo 'src\scripts') -Filter *.lua) {
     if ($f.Name -eq 'm0_probe.lua' -and -not $Probe) { continue }
     $plan[(Join-Path $UevrDir "scripts\$($f.Name)")] = $f.FullName
 }
+# Modules live in scripts\lib so UEVR does not autoload them; main.lua requires them.
+foreach ($f in Get-ChildItem (Join-Path $Repo 'src\scripts\lib') -Filter *.lua) {
+    $plan[(Join-Path $UevrDir "scripts\lib\$($f.Name)")] = $f.FullName
+}
 $dataDir = Join-Path $Repo 'src\data'
 if (Test-Path $dataDir) {
     foreach ($f in Get-ChildItem $dataDir -File | Where-Object Name -ne '.gitkeep') {
