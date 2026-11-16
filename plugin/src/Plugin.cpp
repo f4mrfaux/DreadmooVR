@@ -1,15 +1,18 @@
-// DreadmoorVR.dll — Phase 1 native input adapter (read-only).
-// Loads in UEVR nightly 01143 (plugin SDK 2.39). Lists UEVR's OpenVR actions with handles, types and
-// Frame binding origins; logs passive action state changes; proves C++ <-> Lua delivery with a
-// ping/ack round trip. Never calls UpdateActionState / SetActionManifestPath, never edits bindings.
+// DreadmoorVR.dll — native Steam Frame input adapter (read-only). Phase 1 + Phase 2 telemetry.
+// Loads in UEVR nightly 01143 (plugin SDK 2.39). Never calls UpdateActionState / SetActionManifestPath,
+// never edits bindings, never modifies the gamepad state.
 //
 // Polling order (UEVR 4ee5c6b): Mods run VR -> PluginLoader -> LuaLoader. VR::on_pre_engine_tick
-// calls UpdateActionState at its end (VR.cpp:1386), so this plugin's on_pre_engine_tick reads data
-// refreshed in the same tick (one frame stale only on frames UEVR skips the update).
+// calls UpdateActionState at its end (VR.cpp:1386), so on_pre_engine_tick here reads data refreshed
+// in the same tick (one frame stale only on frames UEVR skips the update). on_xinput_get_state here
+// runs after VR's, so it sees the gamepad the game receives.
 #include <Windows.h>
 
 #include <chrono>
+#include <cmath>
 #include <fstream>
+#include <map>
+#include <mutex>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -25,32 +28,71 @@ using GetGenericInterfaceFn = void* (*)(const char*, vr::EVRInitError*);
 
 struct ActionInfo {
     dvr::ActionDecl decl;
+    std::string short_name;
     vr::VRActionHandle_t handle{vr::k_ulInvalidActionHandle};
 };
 
 const char* hand_name(int i) { return i == 0 ? "L" : "R"; }
+
+std::string fmt_float(float v) {
+    char b[24];
+    snprintf(b, sizeof(b), "%.2f", v);
+    return b;
+}
 } // namespace
 
 class DreadmoorVRPlugin : public Plugin {
 public:
     void on_initialize() override {
+        m_t0 = std::chrono::steady_clock::now();
         log("loaded; SDK %d.%d.%d; runtime openvr=%d openxr=%d", UEVR_PLUGIN_VERSION_MAJOR,
             UEVR_PLUGIN_VERSION_MINOR, UEVR_PLUGIN_VERSION_PATCH, (int)vr_fn()->is_openvr(),
             (int)vr_fn()->is_openxr());
-        log("persistent dir: %s", API::get()->get_persistent_dir().string().c_str());
+        auto dir = API::get()->get_persistent_dir();
+        log("persistent dir: %s", dir.string().c_str());
+
+        std::ifstream f(dir / "dreadmoorvr_telemetry.txt");
+        std::stringstream ss;
+        ss << f.rdbuf();
+        m_cfg = dvr::parse_config(ss.str());
+        m_digital = dvr::EdgeLog(m_cfg.digital_cap);
+        m_analog_log = dvr::EdgeLog(m_cfg.analog_cap);
+        m_filter = dvr::AnalogFilter(m_cfg.analog_step, m_cfg.analog_min_ms);
+        log("telemetry config (%s): analog_step=%.2f analog_min_ms=%d digital_cap=%zu analog_cap=%zu report_s=%d",
+            f.is_open() ? "file" : "defaults", m_cfg.analog_step, m_cfg.analog_min_ms, m_cfg.digital_cap,
+            m_cfg.analog_cap, m_cfg.report_s);
     }
 
     void on_pre_engine_tick(API::UGameEngine*, float) override {
         ping_lua();
         if (!m_inventoried) {
             if (!dvr::runtime_gate(vr_fn()->is_openvr(), vr_fn()->is_runtime_ready())) {
-                if (!m_logged_wait) { log("waiting: OpenVR not active/ready (Phase 1 is OpenVR-only)"); m_logged_wait = true; }
+                if (!m_logged_wait) { log("waiting: OpenVR not active/ready (OpenVR-only)"); m_logged_wait = true; }
                 return;
             }
             inventory();
             m_inventoried = true;
         }
-        if (m_input != nullptr) capture();
+        if (m_input == nullptr) return;
+        std::lock_guard lock{m_mtx};
+        capture();
+        if (now_ms() - m_last_report_ms >= (int64_t)m_cfg.report_s * 1000) {
+            m_last_report_ms = now_ms();
+            write_report();
+        }
+    }
+
+    // Observe only: the gamepad the game receives (runs after UEVR's VR mapping).
+    void on_xinput_get_state(uint32_t*, uint32_t user_index, XINPUT_STATE* state) override {
+        if (state == nullptr || user_index != 0 || !m_inventoried) return;
+        std::lock_guard lock{m_mtx};  // XInput thread vs game thread
+        const uint16_t pad = state->Gamepad.wButtons;
+        if (pad == m_last_pad) return;
+        m_last_pad = pad;
+        char b[16];
+        snprintf(b, sizeof(b), "0x%04X", pad);
+        if (auto line = m_digital.change("pad", b)) log("t=%lld %s down=[%s]", (long long)now_ms(), line->c_str(), joined_down().c_str());
+        m_map.observe(m_down, pad);
     }
 
     void on_custom_event(const char* name, const char* data) override {
@@ -66,6 +108,14 @@ private:
         API::get()->log_info(f.c_str(), args...);
     }
     static const UEVR_VRData* vr_fn() { return API::get()->param()->vr; }
+    int64_t now_ms() const {
+        return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - m_t0).count();
+    }
+    std::string joined_down() const {
+        std::string s;
+        for (auto& d : m_down) { if (!s.empty()) s += ","; s += d; }
+        return s;
+    }
 
     // C++ -> Lua: ping every 2 s until the Lua listener acks (Lua scripts load after plugins).
     void ping_lua() {
@@ -98,6 +148,8 @@ private:
             if (m_system && err2 == vr::VRInputError_None) {
                 m_system->GetStringTrackedDeviceProperty(info.trackedDeviceIndex, vr::Prop_ControllerType_String, type, sizeof(type));
             }
+            m_device[i] = info.trackedDeviceIndex;
+            m_type[i] = type;
             log("hand %s: source 0x%llx (err %d) device %u (err %d) controller_type=%s", hand_name(i),
                 (unsigned long long)m_source[i], (int)err, info.trackedDeviceIndex, (int)err2, type);
         }
@@ -110,7 +162,7 @@ private:
         log("manifest %s: %zu actions", manifest_path.string().c_str(), decls.size());
 
         for (auto& d : decls) {
-            ActionInfo a{d};
+            ActionInfo a{d, d.name.substr(d.name.find_last_of('/') + 1)};
             auto err = m_input->GetActionHandle(d.name.c_str(), &a.handle);
             std::string bound;
             vr::InputBindingInfo_t bi[8]{};
@@ -123,64 +175,144 @@ private:
             if (bound.empty()) bound = "unbound";
             log("action %s type=%s handle=0x%llx err=%d binding_err=%d -> %s", d.name.c_str(), d.type.c_str(),
                 (unsigned long long)a.handle, (int)err, (int)berr, bound.c_str());
+            if (a.short_name == "Pose") m_pose = a.handle;
             m_actions.push_back(a);
         }
     }
 
-    // Read-only capture of action state on both hands. Edge-triggered and capped.
+    // Read-only capture. Digital edges and analog changes have separate budgets so stick noise
+    // can never starve button edges.
     void capture() {
+        const int64_t t = now_ms();
+        ++m_ticks;
+        if (vr_fn()->is_hmd_active()) ++m_ticks_hmd;
+        if (vr_fn()->is_using_controllers()) ++m_ticks_ctl;
+
+        std::vector<std::string> down;
         for (auto& a : m_actions) {
             if (a.handle == vr::k_ulInvalidActionHandle) continue;
-            const auto short_name = a.decl.name.substr(a.decl.name.find_last_of('/') + 1);
             for (int i = 0; i < 2; ++i) {
-                std::string value;
+                const std::string key = a.short_name + "@" + hand_name(i);
                 if (a.decl.type == "boolean") {
                     vr::InputDigitalActionData_t d{};
                     auto err = m_input->GetDigitalActionData(a.handle, &d, sizeof(d), m_source[i]);
-                    value = err != vr::VRInputError_None ? "err" + std::to_string((int)err) : !d.bActive ? "inactive" : d.bState ? "1" : "0";
+                    std::string v = err != vr::VRInputError_None ? "err" + std::to_string((int)err) : !d.bActive ? "inactive" : d.bState ? "1" : "0";
+                    if (v == "1") down.push_back(key);
+                    if (auto line = m_digital.change(key, v)) {
+                        log("t=%lld dev=%u %s", (long long)t, m_device[i], line->c_str());
+                        if (v == "1") ++m_presses[key];
+                        first_change_to_lua(*line, v);
+                    }
                 } else if (a.decl.type == "vector1" || a.decl.type == "vector2") {
                     vr::InputAnalogActionData_t d{};
                     auto err = m_input->GetAnalogActionData(a.handle, &d, sizeof(d), m_source[i]);
-                    if (err != vr::VRInputError_None) value = "err" + std::to_string((int)err);
-                    else if (!d.bActive) value = "inactive";
-                    else {
-                        char buf[48];
-                        if (a.decl.type == "vector1") snprintf(buf, sizeof(buf), "%.1f", d.x);
-                        else snprintf(buf, sizeof(buf), "%.1f,%.1f", d.x, d.y);
-                        value = buf;
+                    if (err != vr::VRInputError_None || !d.bActive) {
+                        std::string v = err != vr::VRInputError_None ? "err" + std::to_string((int)err) : "inactive";
+                        if (auto line = m_analog_log.change(key, v)) log("t=%lld dev=%u %s", (long long)t, m_device[i], line->c_str());
+                        continue;
                     }
+                    m_analog_log.change(key, "active");
+                    analog(t, i, key + ".x", d.x);
+                    if (a.decl.type == "vector2") analog(t, i, key + ".y", d.y);
                 } else if (a.decl.type == "skeleton") {
-                    if (i != 0) continue; // skeleton actions are per hand already
+                    if ((i == 0) != (a.short_name.find("Left") != std::string::npos)) continue; // own hand only
                     vr::EVRSkeletalTrackingLevel lvl{};
                     auto err = m_input->GetSkeletalTrackingLevel(a.handle, &lvl);
-                    value = err != vr::VRInputError_None ? "err" + std::to_string((int)err) : "tracking_level=" + std::to_string((int)lvl);
-                } else {
-                    continue; // poses and haptics: not captured in Phase 1
-                }
-                if (auto line = m_edges.change(short_name + "@" + hand_name(i), value)) {
-                    log("input %s", line->c_str());
-                    if (!m_first_change_sent && value != "inactive" && value.rfind("err", 0) != 0) {
-                        m_first_change_sent = true;
-                        API::get()->dispatch_lua_event("dreadmoorvr_input", *line);
+                    std::string v = err != vr::VRInputError_None ? "err" + std::to_string((int)err) : "tracking_level=" + std::to_string((int)lvl);
+                    if (auto line = m_digital.change(key, v)) {
+                        log("t=%lld dev=%u %s", (long long)t, m_device[i], line->c_str());
+                        first_change_to_lua(*line, v);
                     }
                 }
             }
         }
-        if (m_edges.dropped() != m_reported_dropped && (m_edges.dropped() - m_reported_dropped) >= 50) {
-            m_reported_dropped = m_edges.dropped();
-            log("telemetry cap reached (%zu lines); %zu changes dropped so far", m_edges.count(), m_edges.dropped());
+        m_down = down;
+
+        // Tracking validity per hand from the Pose action.
+        if (m_pose != vr::k_ulInvalidActionHandle) {
+            for (int i = 0; i < 2; ++i) {
+                vr::InputPoseActionData_t pd{};
+                auto err = m_input->GetPoseActionDataRelativeToNow(m_pose, vr::TrackingUniverseStanding, 0.0f, &pd, sizeof(pd), m_source[i]);
+                bool valid = err == vr::VRInputError_None && pd.bActive && pd.pose.bPoseIsValid;
+                if (valid) ++m_pose_valid[i];
+                std::string v = err != vr::VRInputError_None ? "err" + std::to_string((int)err)
+                                : valid ? "valid" : "invalid(result=" + std::to_string((int)pd.pose.eTrackingResult) + ")";
+                if (auto line = m_digital.change(std::string("Pose@") + hand_name(i), v)) log("t=%lld dev=%u %s", (long long)t, m_device[i], line->c_str());
+            }
+        }
+
+        report_drops(m_digital, m_dropped_digital_reported, "digital");
+        report_drops(m_analog_log, m_dropped_analog_reported, "analog");
+    }
+
+    void analog(int64_t t, int hand, const std::string& key, float v) {
+        if (auto q = m_filter.feed(key, v, t)) {
+            if (auto line = m_analog_log.change(key, fmt_float(*q))) log("t=%lld dev=%u %s", (long long)t, m_device[hand], line->c_str());
         }
     }
 
+    void first_change_to_lua(const std::string& line, const std::string& v) {
+        if (m_first_change_sent || v == "inactive" || v.rfind("err", 0) == 0) return;
+        m_first_change_sent = true;
+        API::get()->dispatch_lua_event("dreadmoorvr_input", line);
+    }
+
+    void report_drops(const dvr::EdgeLog& e, size_t& reported, const char* budget) {
+        if (e.dropped() >= reported + 50) {
+            reported = e.dropped();
+            log("%s telemetry cap reached (%zu lines); %zu changes dropped so far", budget, e.count(), e.dropped());
+        }
+    }
+
+    void write_report() {
+        auto dir = API::get()->get_persistent_dir();
+        auto tmp = dir / "dreadmoorvr_input_report.tmp";
+        auto out = dir / "dreadmoorvr_input_report.txt";
+        {
+            std::ofstream r(tmp, std::ios::trunc);
+            if (!r) { if (!m_report_failed) { log("report write failed: %s", tmp.string().c_str()); m_report_failed = true; } return; }
+            auto pct = [&](size_t n) { return m_ticks ? 100.0 * (double)n / (double)m_ticks : 0.0; };
+            r << "DreadmoorVR input report (t=" << now_ms() / 1000 << " s since plugin load, " << m_ticks << " ticks)\n";
+            r << "config: analog_step=" << m_cfg.analog_step << " analog_min_ms=" << m_cfg.analog_min_ms
+              << " digital_cap=" << m_cfg.digital_cap << " analog_cap=" << m_cfg.analog_cap << " report_s=" << m_cfg.report_s << "\n";
+            for (int i = 0; i < 2; ++i)
+                r << "hand " << hand_name(i) << ": device " << m_device[i] << " type " << m_type[i]
+                  << " pose valid " << pct(m_pose_valid[i]) << "%\n";
+            r << "uevr: hmd_active " << pct(m_ticks_hmd) << "% of ticks, using_controllers " << pct(m_ticks_ctl) << "%\n";
+            r << "presses (digital action -> count):\n";
+            for (auto& [k, n] : m_presses) r << "  " << k << " " << n << "\n";
+            r << "mapping (single action down -> pad the game received): " << m_map.summary() << "\n";
+            r << "telemetry: digital " << m_digital.count() << " lines, " << m_digital.dropped() << " dropped; analog "
+              << m_analog_log.count() << " lines, " << m_analog_log.dropped() << " dropped\n";
+        }
+        if (!MoveFileExW(tmp.wstring().c_str(), out.wstring().c_str(), MOVEFILE_REPLACE_EXISTING) && !m_report_failed) {
+            log("report rename failed (%lu)", GetLastError());
+            m_report_failed = true;
+        }
+    }
+
+    std::mutex m_mtx;  // guards telemetry state shared with on_xinput_get_state
+    dvr::TelemetryConfig m_cfg{};
     vr::IVRInput* m_input{nullptr};
     vr::IVRSystem* m_system{nullptr};
     vr::VRInputValueHandle_t m_source[2]{};
+    vr::TrackedDeviceIndex_t m_device[2]{vr::k_unTrackedDeviceIndexInvalid, vr::k_unTrackedDeviceIndexInvalid};
+    std::string m_type[2]{"?", "?"};
+    vr::VRActionHandle_t m_pose{vr::k_ulInvalidActionHandle};
     std::vector<ActionInfo> m_actions;
-    dvr::EdgeLog m_edges{200};
-    size_t m_reported_dropped{0};
-    bool m_inventoried{false}, m_logged_wait{false}, m_first_change_sent{false}, m_acked{false};
+    dvr::EdgeLog m_digital{3000};
+    dvr::EdgeLog m_analog_log{600};
+    dvr::AnalogFilter m_filter{0.25f, 250};
+    dvr::MapAggregator m_map;
+    std::vector<std::string> m_down;
+    std::map<std::string, size_t> m_presses;
+    uint16_t m_last_pad{0xFFFF};
+    size_t m_ticks{0}, m_ticks_hmd{0}, m_ticks_ctl{0}, m_pose_valid[2]{0, 0};
+    size_t m_dropped_digital_reported{0}, m_dropped_analog_reported{0};
+    int64_t m_last_report_ms{0};
+    bool m_inventoried{false}, m_logged_wait{false}, m_first_change_sent{false}, m_acked{false}, m_report_failed{false};
     int m_pings{0};
-    std::chrono::steady_clock::time_point m_last_ping{};
+    std::chrono::steady_clock::time_point m_last_ping{}, m_t0{};
 };
 
 std::unique_ptr<DreadmoorVRPlugin> g_plugin{new DreadmoorVRPlugin()};
