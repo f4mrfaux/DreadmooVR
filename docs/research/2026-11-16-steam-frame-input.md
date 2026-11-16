@@ -176,3 +176,21 @@ it. Bob chose nightly 01143 plus a native Frame binding:
 - Build tools are present (VS 2022 Community and its CMake).
 - Over our binding, a port would add dedicated Start and Back buttons, bumpers separate from
   the grips, and the Lua grip-axis API.
+
+## Building UEVR ourselves: blocked
+
+- UEVR's repo is public, but `dependencies/submodules/UESDK` points to `praydog/UESDK`,
+  which is private. `git ls-remote` says "Repository not found" and the web page returns
+  404, while `CMakeLists.txt:62` does `add_subdirectory(dependencies/submodules/UESDK)`.
+  Official and fork binaries come from CI that has access to it.
+- No newer official nightly exists: 01143 (2026-08-30) is the latest, and upstream has no
+  Frame commits.
+- **Alternative: an earlier fork release with the Frame input and older rendering:**
+  - `100926TownFallp2` (2026-10-09, commit a5d0e2a) contains 1be3ffe and 01aa042 (Frame
+    input and the Lua controller API). It lacks 0a4dd9d, which only repairs the Touch
+    defaults. Its notes say "rendering remains unchanged".
+  - `100826steamframep2` (2026-10-07) is commit 01aa042 itself, with the notes
+    "Input-only: rendering, UObject/UESDK, and game compatibility fixes are intact".
+  - The fork's UE 5.6 Slate/Native Fix render reworks are dated 23 Oct onward.
+  - The fork still carried other render changes before October, so it's a better bet but not
+    a sure one.
