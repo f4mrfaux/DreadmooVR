@@ -19,3 +19,7 @@ __pycache__/
 # Session scratch
 .remember/
 .superpowers/
+# Stand-ins copied from UE 5.6 templates / renamed to game paths (never cooked, reproducible)
+unreal/Dreadmoor/Content/Characters/
+unreal/Dreadmoor/Content/3rdParty/
+unreal/Dreadmoor/Content/Dreadmoor/
