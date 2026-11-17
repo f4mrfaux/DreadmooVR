@@ -47,6 +47,7 @@ function tuning.merge(u)
         aim_method = int(u.aim_method, 0, 5),                     -- UEVR VR_AimMethod (VR.hpp:45)
         movement_orientation = int(u.movement_orientation, 0, 5), -- UEVR VR_MovementOrientation
         items_follow_hands = u.items_follow_hands == true,        -- held tools move onto the VR hands
+        level_torso = u.level_torso == true,                      -- the game's torso ignores look pitch
     }
 end
 

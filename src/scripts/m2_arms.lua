@@ -47,12 +47,13 @@ local actor = nil
 local sample_err_logged = false
 local solve_err_logged = false
 local items_err_logged = false
+local torso_err_logged = false
 
 -- Live tuning: <profile>\dreadmoorvr_arms_tuning.lua, reloaded every second, pushed into BP_VRArms
 -- float variables (names from tuning.flatten). Bad values fall back to defaults (tuning.merge).
 local TUNING_FILE = (lib_dir():gsub("scripts[/\\]lib[/\\]$", "")) .. "dreadmoorvr_arms_tuning.lua"
 local last_tuning_check, applied = -1, {}
-local fit = { shoulder_widen = 0, grip_back = 0, items_follow_hands = false }   -- live body-fit values (tuning.merge)
+local fit = { shoulder_widen = 0, grip_back = 0, items_follow_hands = false, level_torso = false }   -- live body-fit values (tuning.merge)
 local hand_states = {}                               -- UEVR MotionControllerStates, set at spawn
 local function apply_tuning(now)
     if now - last_tuning_check < 1.0 then return end
@@ -63,6 +64,7 @@ local function apply_tuning(now)
     local merged = tuning.merge(ok and user or nil)
     fit.shoulder_widen = merged.shoulder_widen
     fit.items_follow_hands = merged.items_follow_hands
+    fit.level_torso = merged.level_torso
     if merged.grip_back ~= fit.grip_back and hand_states.L ~= nil then
         -- MotionControllerState offset is in the controller's OpenVR frame (UObjectHook.cpp:925,
         -- cm); OpenVR grip forward is -Z, so +Z moves the target back toward the wrist.
@@ -212,6 +214,10 @@ local function sample_arms(pawn, now)
         log(string.format("fit eye_ahead=%.1f eye_above=%.1f shoulder_w=%.1f raw_span=%.3fm ue_span=%.1f scale=%.2f raw_eye_h=%.2fm raw_handL_below_eye=%.2fm raw_handR_below_eye=%.2fm",
             d.X * F.X + d.Y * F.Y, d.Z, dist(sl, sr), raw_span, ue_span, raw_span > 0.05 and ue_span / (raw_span * 100) or 0,
             rh.Y, rh.Y - rl.Y, rh.Y - rr.Y))
+        -- Torso levelling check: with level_torso on, spine pitch should stop following ctrl pitch.
+        -- Pawn.Controller Pawn.h:198, GetControlRotation Controller.h:159, GetSocketRotation SceneComponent.h:799.
+        log(string.format("torso ctrl_pitch=%.0f spine_pitch=%.0f level_torso=%s",
+            pawn.Controller:GetControlRotation().Pitch, pawn.Mesh:GetSocketRotation("spine_05").Pitch, tostring(fit.level_torso)))
     end)
     if now - last_summary >= SUMMARY_S then
         last_summary = now
@@ -307,6 +313,31 @@ local function follow_items(pawn, now)
     end
 end
 
+-- Level torso. The game's ABP_V03 copies control rotation into ControlRotaton every update
+-- (bp-dumps/ABP_V03.txt L0356), and its Control Rig CR_AimingRotation bends spine_05 by Pitch.
+-- The camera rides the head bone, so with aim on the hand, raising a hand bent the torso and moved
+-- the view into the face. After BlueprintUpdateAnimation we zero only that copy's pitch: the real
+-- control rotation, which the hook gun and melee aim with, is untouched. That the rig's Pitch pin
+-- reads ControlRotaton is likely but unverified (fast-path data); the fit line's spine pitch
+-- shows whether it works. UEVR: UFunction:hook_ptr(pre, post) ScriptContext.cpp:805, post gets
+-- (fn, obj, locals, result) :1209; a UE5 rotator property is a live Vector3d (x = Pitch),
+-- ScriptUtility.cpp:165.
+local ABP_UPDATE = "Function /Game/3rdParty/TFPMovement/Demo/Character/ABP_V03.ABP_V03_C:BlueprintUpdateAnimation"
+local torso_hooked, last_torso_try = false, -10
+local function install_torso_hook(now)
+    if torso_hooked or now - last_torso_try < 5 then return end
+    last_torso_try = now
+    local fn = uevr.api:find_uobject(ABP_UPDATE)
+    if fn == nil then return end   -- not loaded yet; try again in 5 s
+    fn:hook_ptr(nil, function(_, obj)
+        if not fit.level_torso then return end
+        local r = obj.ControlRotaton
+        if r ~= nil then r.x = 0 end
+    end)
+    torso_hooked = true
+    log("torso levelling on (ABP_V03.BlueprintUpdateAnimation post-hook)")
+end
+
 local clock = 0
 
 local hidden_on = nil  -- the game mesh whose bones we hid, so they can be restored
@@ -397,6 +428,10 @@ uevr.sdk.callbacks.on_pre_engine_tick(function(_, delta)
     end
     if flow.status == "active" and actor ~= nil then
         local okt, errt = pcall(apply_tuning, clock)
+        if fit.level_torso and not torso_hooked then
+            local okh, errh = pcall(install_torso_hook, clock)
+            if not okh and not torso_err_logged then torso_err_logged = true; log("torso hook FAILED: " .. tostring(errh)) end
+        end
         if not okt and not sample_err_logged then sample_err_logged = true; log("tuning FAILED: " .. tostring(errt)) end
     end
     if flow.status == "active" and actor ~= nil and mode == "walking" then

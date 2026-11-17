@@ -53,6 +53,12 @@ return {
         assert(tuning.merge({ items_follow_hands = "yes" }).items_follow_hands == false, "only a real true turns it on")
     end,
 
+    test_level_torso_is_off_unless_true = function()
+        assert(tuning.merge(nil).level_torso == false)
+        assert(tuning.merge({ level_torso = true }).level_torso == true)
+        assert(tuning.merge({ level_torso = 1 }).level_torso == false)
+    end,
+
     test_flatten_names_match_blueprint_variables = function()
         local f = tuning.flatten(tuning.merge({ right_rot = { y = -15 } }))
         assert(f.RightRotY == -15 and f.LeftRotP == 0 and f.ElbowOut == 30 and f.ArmLength == 50.7 and f.ShoulderFollow == 1)

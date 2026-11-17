@@ -159,6 +159,9 @@ local function make_world()
             get_engine = function() return { GameViewport = { World = {} } } end,
             find_uobject = function(_, name)
                 if name:find("BP_VRArms") then return arms_class end
+                if name == "Function /Game/3rdParty/TFPMovement/Demo/Character/ABP_V03.ABP_V03_C:BlueprintUpdateAnimation" then
+                    return { hook_ptr = function(_, pre, post) W.anim_post = post end }
+                end
                 return { get_class_default_object = function() return gs end }
             end,
             dispatch_custom_event = function(_, name, data)
@@ -178,6 +181,12 @@ local function run(W, seconds)
         end
         W.t = (W.t or 0) + 0.05
         W.callbacks.tick(nil, 0.05)
+        -- The game's anim update: ABP_V03 copies control rotation (pitch 35 = hand raised), then
+        -- any post-hook runs, then the Control Rig reads it.
+        W.anim = W.anim or { ControlRotaton = { x = 0, y = 90, z = 0 } }
+        W.anim.ControlRotaton.x = 35
+        if W.anim_post then W.anim_post(nil, W.anim) end
+        W.rig_pitch = W.anim.ControlRotaton.x
         if W.callbacks.xinput then
             local st = { Gamepad = { bRightTrigger = 0 } }
             W.callbacks.xinput(nil, 0, st)
@@ -197,7 +206,7 @@ end
 
 local TUNING_ON = [[
 return { grip_back = 8, shoulder_widen = 5, camera_forward = -30, camera_up = 0,
-         aim_method = 2, movement_orientation = 1, items_follow_hands = true }
+         aim_method = 2, movement_orientation = 1, items_follow_hands = true, level_torso = true }
 ]]
 
 -- Loads the given scripts the way UEVR does: no working require.
@@ -290,6 +299,16 @@ return {
         local later = {}
         for i, l in ipairs(W.logs) do if l:find("FAILED") and i > #W.logs - 50 then later[#later + 1] = l end end
         assert(#later == 0, "settled, no ongoing failures: " .. table.concat(later, " | "))
+    end,
+
+    test_level_torso_zeroes_the_anim_pitch_only = function()
+        local W = boot()
+        assert(W.rig_pitch == 0, "rig reads a level pitch, got " .. tostring(W.rig_pitch))
+        assert(W.anim.ControlRotaton.y == 90, "yaw untouched")
+        assert(has(W.logs, "torso levelling on"), "logged")
+        write(STAGE .. "dreadmoorvr_arms_tuning.lua", "return { level_torso = false }")
+        run(W, 2)
+        assert(W.rig_pitch == 35, "off again live, got " .. tostring(W.rig_pitch))
     end,
 
     test_same_pawn_new_lua_wrapper_is_not_a_new_pawn = function()

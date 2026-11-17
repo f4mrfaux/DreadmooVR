@@ -66,3 +66,7 @@ against that vendored header, and OpenVR calls against `plugin/third_party/openv
 | `USceneComponent::IsVisible` | Components/SceneComponent.h:834 | BlueprintCallable | hook gun `Hook` mesh: hidden = hook out (GA_HookGun L0488 / L0D51) |
 | `UActorComponent::GetOwner` | Components/ActorComponent.h:490 | BlueprintCallable | from the attached tool component to `BP_HookGunEquipment` |
 | UEVR `on_xinput_get_state(retval, user_index, state)`, `state.Gamepad.bRightTrigger` | ScriptContext.cpp:125 / :1219; lua-api datatypes/XInput.cpp:11 | Lua callback, writable member | virtual primary-use taps (right trigger = `IA_PrimaryUse`) |
+| UEVR `UFunction:hook_ptr(pre, post)`; post receives `(fn, obj, locals, result)` | ScriptContext.cpp:805 / :1209 | Lua API | post-hook `ABP_V03_C:BlueprintUpdateAnimation` to zero `ControlRotaton` pitch |
+| UE5 rotator property read from Lua | ScriptUtility.cpp:156-170 | Lua API | returns a live `Vector3d` (x = Pitch, y = Yaw, z = Roll); writing `x` changes the object |
+| `APawn::Controller`, `AController::GetControlRotation` | GameFramework/Pawn.h:198, Controller.h:159 | property, BlueprintCallable | harness torso check |
+| `USceneComponent::GetSocketRotation` | Components/SceneComponent.h:799 | BlueprintCallable | `spine_05` pitch in the harness |
