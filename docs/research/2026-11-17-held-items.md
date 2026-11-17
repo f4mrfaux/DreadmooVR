@@ -78,3 +78,18 @@ skeleton dump's name table shows lowercase `hand_r`. Unreal names compare case-i
 but Lua strings don't, so name checks in Lua must ignore case (`lib/itemfollow.lua` does now).
 The run also logged `BP_FirstAid_Equipment` attached at `Syringe_Socket` on `Hand_R`. The
 hook gun's attached component is its `SkeletalMesh`, not the actor root.
+
+## Correction 2: never re-parent tools (in game, 17:01-17:43)
+
+Re-parenting tools onto the VR arms broke the game's unequip. Step 6 above was wrong: the
+native `FL_InventoryFramework.GetComponentByTag` does not find a tool attached to our arms, so
+old tools were never destroyed and piled up in the hand. A UEVR `hook_ptr` pre-hook on
+`SO_ExecuteEquipmentData.ExecuteUnequipmentInformation` never fired, because Blueprint-to-Blueprint
+calls run the script directly and skip the function pointer UEVR hooks. (Hooks on events the
+engine calls through ProcessEvent, like `BlueprintUpdateAnimation`, do fire.)
+
+**Now:** tools stay attached to `CharacterMesh0` where the game put them. Each frame, in the
+stereo view callback (after the game tick, before rendering), each is placed with
+`K2_SetWorldTransform(ComposeTransforms(gripOffset, Body.GetSocketTransform(socket)))`, where
+`gripOffset` is the tool's own relative transform when it was first seen. The game's equip and
+unequip run untouched.

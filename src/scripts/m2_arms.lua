@@ -48,7 +48,6 @@ local sample_err_logged = false
 local solve_err_logged = false
 local items_err_logged = false
 local torso_err_logged = false
-local unequip_err_logged = false
 
 -- Live tuning: <profile>\dreadmoorvr_arms_tuning.lua, reloaded every second, pushed into BP_VRArms
 -- float variables (names from tuning.flatten). Bad values fall back to defaults (tuning.merge).
@@ -159,9 +158,12 @@ end
 
 -- Rendered eye position (world), from UEVR's post stereo-view callback (ScriptContext.cpp:157,
 -- :1367; UE5 passes Vector3d). Averaged over both eyes. Read-only.
+local place_items          -- defined with the held-item code below; called per frame from here
 local eye = { X = 0, Y = 0, Z = 0, n = 0 }
 uevr.sdk.callbacks.on_post_calculate_stereo_view_offset(function(_, view_index, _, position)
-    if view_index == 0 then eye.X, eye.Y, eye.Z, eye.n = position.x, position.y, position.z, 1
+    if view_index == 0 then
+        if place_items then place_items() end
+        eye.X, eye.Y, eye.Z, eye.n = position.x, position.y, position.z, 1
     elseif eye.n == 1 then eye.X, eye.Y, eye.Z = (eye.X + position.x) / 2, (eye.Y + position.y) / 2, (eye.Z + position.z) / 2; eye.n = 2 end
 end)
 
@@ -226,19 +228,21 @@ local function sample_arms(pawn, now)
     end
 end
 
--- Held items (game chain verified: docs/research/2026-11-17-held-items.md): the game attaches tools
--- to CharacterMesh0 at hand_r sockets with KeepRelative. Components it attached at a hand socket are
--- re-attached to the VR arms' Body at the same socket, KeepRelative so the game's grip offset
--- holds. Both meshes share the game skeleton, so the sockets match. Calls (validated, UE 5.6):
--- AttachChildren SceneComponent.h:116, GetAttachSocketName :687, GetAttachParent :683,
--- GetSocketBoneName SkinnedMeshComponent.h:1094, GetParentBone :1181, DoesSocketExist
--- SceneComponent.h:814, K2_AttachToComponent :747. Arrays reach Lua as tables (ScriptUtility.cpp:206).
-local KEEP_RELATIVE = 0
-local moved = {}          -- component address -> { comp, socket, from }
+-- Held items (game chain: docs/research/2026-11-17-held-items.md). The game attaches tools to
+-- CharacterMesh0 at hand sockets, and on unequip finds and destroys them through its own native,
+-- non-recursive search. Re-parenting tools onto the VR arms hid them from that search (in game
+-- 17:01-17:43: old tools piled up in the hand). So tools stay attached where the game put them,
+-- and every frame, after the game's tick and before rendering (stereo view callback), each is
+-- placed at the same socket on the VR arms' Body with the game's own grip offset.
+-- Calls (UE 5.6, validated): AttachChildren SceneComponent.h:116, GetAttachSocketName :687,
+-- GetAttachParent :683, GetRelativeTransform :446, K2_SetRelativeTransform :441,
+-- K2_SetWorldTransform :578, GetSocketTransform :782, GetSocketBoneName SkinnedMeshComponent.h:1094,
+-- GetParentBone :1181, KismetMathLibrary.ComposeTransforms KismetMathLibrary.h:3960.
+local RTS_WORLD = 0       -- ERelativeTransformSpace::RTS_World
+local moved = {}          -- component address -> { comp, socket, rel (game grip offset), side, name }
 local seen_children = {}  -- component address -> true (one discovery log line each)
-local take_count = {}     -- component address -> { n = quick take-backs in a row, t = last move time }
-local MAX_TAKES, QUICK_S = 3, 2.0   -- the game snatching it back within 2 s, 3 times running = a fight
 local last_item_scan = -1
+local kml = nil           -- KismetMathLibrary default object
 local function name_str(n)
     if type(n) == "string" then return n end
     local ok, v = pcall(function() return n:to_string() end)
@@ -247,32 +251,31 @@ end
 local function addr(o) local ok, a = pcall(function() return o:get_address() end); return ok and a or tostring(o) end
 local function full_name(o) local ok, v = pcall(function() return o:get_full_name() end); return ok and v or tostring(o) end
 
-local released = {}       -- component address -> true: handed back for the game's unequip; leave it
-
-local function restore_items(release)
-    for a, m in pairs(moved) do
-        pcall(function() m.comp:K2_AttachToComponent(m.from, m.socket, KEEP_RELATIVE, KEEP_RELATIVE, KEEP_RELATIVE, false) end)
-        if release then released[a] = true end
-    end
-    if next(moved) then log("held items returned to the game mesh") end
+-- Put every followed tool back on the game's hand (its original offset) and forget it.
+local function restore_items()
+    for _, m in pairs(moved) do pcall(function() m.comp:K2_SetRelativeTransform(m.rel, false, {}, true) end) end
+    if next(moved) then log("held items back on the game's hand") end
     moved = {}
-    take_count = {}   -- a fresh equip or a re-enable gets fresh attempts
 end
 
+-- 4 Hz: which tools are in a hand. Tools the game removed (or moved off its mesh) are forgotten.
 local function follow_items(pawn, now)
     if now - last_item_scan < 0.25 then return end
     last_item_scan = now
-    local mesh, body = pawn.Mesh, actor.Body
-    local body_addr = addr(body)
-    for a, m in pairs(moved) do   -- the game re-attached it elsewhere (unequip, swap): let it go
+    local mesh = pawn.Mesh
+    local mesh_addr, body_addr = addr(mesh), addr(actor.Body)
+    for a, m in pairs(moved) do
         local ok, parent = pcall(function() return m.comp:GetAttachParent() end)
-        if not ok or parent == nil or addr(parent) ~= body_addr then moved[a] = nil end
+        if not ok or parent == nil or addr(parent) ~= mesh_addr then moved[a] = nil; log("held item gone: " .. m.name) end
     end
-    local children, comps, present = {}, {}, {}
+    if not fit.items_follow_hands then
+        if next(moved) then restore_items() end
+        return
+    end
+    local children, comps = {}, {}
     for _, comp in ipairs(mesh.AttachChildren or {}) do
         local a = addr(comp)
-        present[a] = true
-        if comp ~= nil and a ~= body_addr and not released[a] then
+        if comp ~= nil and a ~= body_addr and moved[a] == nil then
             local ok, socket, bone = pcall(function()
                 local sk = name_str(comp:GetAttachSocketName())
                 return sk, sk ~= "None" and name_str(mesh:GetSocketBoneName(sk)) or "None"
@@ -288,33 +291,37 @@ local function follow_items(pawn, now)
             end
         end
     end
-    for a in pairs(released) do if not present[a] then released[a] = nil end end   -- the game removed it
-    if not fit.items_follow_hands then
-        if next(moved) then restore_items() end
-        return
-    end
     local plan = itemfollow.plan(children, function(b) return name_str(mesh:GetParentBone(b)) end)
     for _, m in ipairs(plan) do
         local comp = comps[m.id]
-        local a = addr(comp)
-        local tc = take_count[a] or { n = 0, t = -math.huge }
-        if moved[a] == nil and tc.n < MAX_TAKES then
-            tc.n = (now - tc.t < QUICK_S) and tc.n + 1 or 1   -- an ordinary re-equip starts the count over
-            tc.t = now
-            take_count[a] = tc
-            local ok, err = pcall(function()
-                if not body:DoesSocketExist(m.socket) then error("Body has no socket " .. m.socket) end
-                comp:K2_AttachToComponent(body, m.socket, KEEP_RELATIVE, KEEP_RELATIVE, KEEP_RELATIVE, false)
-            end)
-            if ok then
-                moved[a] = { comp = comp, socket = m.socket, from = mesh }
-                log(string.format("held item -> VR hand %s: %s socket=%s", m.side, full_name(comp), m.socket))
-            else
-                log("held item FAILED: " .. full_name(comp) .. ": " .. tostring(err))
-            end
-            if tc.n == MAX_TAKES then
-                log("held item " .. full_name(comp) .. " keeps re-attaching to the game mesh; leaving it to the game")
-            end
+        local ok, rel = pcall(function() return comp:GetRelativeTransform() end)
+        if ok and rel ~= nil then
+            moved[addr(comp)] = { comp = comp, socket = m.socket, rel = rel, side = m.side, name = full_name(comp) }
+            log(string.format("held item -> VR hand %s: %s socket=%s", m.side, full_name(comp), m.socket))
+        else
+            log("held item FAILED: " .. full_name(comp) .. ": " .. tostring(rel))
+        end
+    end
+end
+
+-- Every frame, before rendering: each followed tool goes to the VR hand.
+local place_err_logged, placing = false, false
+function place_items()
+    if not placing or actor == nil or next(moved) == nil then return end
+    if kml == nil then
+        local c = uevr.api:find_uobject("Class /Script/Engine.KismetMathLibrary")
+        kml = c and c:get_class_default_object()
+        if kml == nil then return end
+    end
+    local body = actor.Body
+    for a, m in pairs(moved) do
+        local ok, err = pcall(function()
+            local sock = body:GetSocketTransform(m.socket, RTS_WORLD)
+            m.comp:K2_SetWorldTransform(kml:ComposeTransforms(m.rel, sock), false, {}, true)
+        end)
+        if not ok then
+            moved[a] = nil
+            if not place_err_logged then place_err_logged = true; log("held item place FAILED: " .. tostring(err)) end
         end
     end
 end
@@ -352,30 +359,6 @@ local function install_torso_hook(pawn, now)
     end)
     torso_hooked = true
     log("torso levelling on (" .. name_str(cls:get_fname()) .. ".BlueprintUpdateAnimation post-hook)")
-end
-
--- Unequip. The game's SO_ExecuteEquipmentData.ExecuteUnequipmentInformation finds the equipment
--- through FL_InventoryFramework.GetComponentByTag and destroys it (bp-dumps L05E1..L08A0). That
--- native search does not reach a tool on the VR arms (in game 17:01 the gun stayed in hand after
--- switching to the sickle). A pre-hook hands every moved item back to the game mesh first and
--- marks it released so the scan does not grab it again while the game removes it.
--- UEVR: UStruct:find_function ScriptContext.cpp:720, UFunction:hook_ptr :805.
-local SO_EQUIP = "BlueprintGeneratedClass /InventoryFrameworkPlugin/Core/ActorParents/SubObjects/SO_ExecuteEquipmentData.SO_ExecuteEquipmentData_C"
-local unequip_hooked, last_unequip_try = false, -10
-local function install_unequip_hook(now)
-    if unequip_hooked or now - last_unequip_try < 5 then return end
-    last_unequip_try = now
-    local cls = uevr.api:find_uobject(SO_EQUIP)
-    local fn = cls ~= nil and cls:find_function("ExecuteUnequipmentInformation") or nil
-    if fn == nil then return end   -- not loaded until something is equipped; try again in 5 s
-    fn:hook_ptr(function()
-        if next(moved) then
-            local ok = pcall(restore_items, true)
-            log("game unequip: held items handed back" .. (ok and "" or " (FAILED)"))
-        end
-    end, nil)
-    unequip_hooked = true
-    log("unequip hook on (SO_ExecuteEquipmentData.ExecuteUnequipmentInformation)")
 end
 
 local clock = 0
@@ -477,15 +460,12 @@ uevr.sdk.callbacks.on_pre_engine_tick(function(_, delta)
     if flow.status == "active" and actor ~= nil and mode == "walking" then
         local oks, errs = pcall(solve_arms, pawn)
         if not oks and not solve_err_logged then solve_err_logged = true; log("solver FAILED: " .. tostring(errs)) end
-        if fit.items_follow_hands and not unequip_hooked then
-            local oku, erru = pcall(install_unequip_hook, clock)
-            if not oku and not unequip_err_logged then unequip_err_logged = true; log("unequip hook FAILED: " .. tostring(erru)) end
-        end
         local oki, erri = pcall(follow_items, pawn, clock)
         if not oki and not items_err_logged then items_err_logged = true; log("items FAILED: " .. tostring(erri)) end
         local ok, err = pcall(sample_arms, pawn, clock)
         if not ok and not sample_err_logged then sample_err_logged = true; log("harness FAILED: " .. tostring(err)) end
     end
+    placing = flow.status == "active" and actor ~= nil and mode == "walking"
     if mode ~= "walking" and next(moved) then restore_items() end   -- fishing, steering: game owns the hands
     if flow.status ~= before and (flow.status == "fail" or flow.status == "no_reply" or flow.status == "spawn_failed") then
         log("stopped: " .. flow.status .. (flow.reason and (" - " .. flow.reason) or ""))

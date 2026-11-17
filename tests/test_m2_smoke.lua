@@ -44,6 +44,7 @@ local function make_world()
         return obj({ name = name, hidden = {},
             GetSocketLocation = function(_, b) return BONES[b] or v(0, 0, 0) end,
             GetSocketRotation = function() return { Pitch = 0, Yaw = 0, Roll = 0 } end,
+            GetSocketTransform = function(self, s) return { socket = s, on = self.name } end,
             GetSocketBoneName = function(_, s) return fname(SOCKETS[s] or s) end,
             GetParentBone = function(_, b) return fname(PARENT[b] or "None") end,
             DoesSocketExist = function(_, s) return PARENT[s] ~= nil or SOCKETS[s] ~= nil end,
@@ -55,6 +56,10 @@ local function make_world()
         local c = obj({ name = name, parent = parent, socket = socket })
         c.GetAttachSocketName = function(self) return fname(self.socket) end
         c.GetAttachParent = function(self) return self.parent end
+        c.rel = { grip = name }   -- the game's grip offset (EquipTransform)
+        c.GetRelativeTransform = function(self) return self.rel end
+        c.K2_SetRelativeTransform = function(self, t) self.rel_set = t end
+        c.K2_SetWorldTransform = function(self, t) self.world = t; W.placements = (W.placements or 0) + 1 end
         -- Like the engine: moving a component takes it out of the old parent's AttachChildren and
         -- puts it in the new one's.
         c.K2_AttachToComponent = function(self, p, s)
@@ -80,6 +85,7 @@ local function make_world()
             find_function = function(_, n) return n == "BlueprintUpdateAnimation" and anim_fn or nil end } end }
     pawn_mesh.GetAnimInstance = function() return W.anim end
     W.camera = attachable("Camera", pawn_mesh, "head")
+    W.attachable = attachable
     W.gun = attachable("BP_HookGunEquipment.DefaultSceneRoot", pawn_mesh, "HookSimple")
     W.hook_visible = true   -- BP_HookGunEquipment.Hook: hidden while the hook is out
     local gun_actor = { Hook = { IsVisible = function() return W.hook_visible end } }
@@ -167,6 +173,10 @@ local function make_world()
             find_uobject = function(_, name)
                 if name:find("BP_VRArms") then return W.class_loaded ~= false and arms_class or nil end
                 if name:find("StaticMeshActor") or name:find("Sphere") or name:find("HitResult") then return nil end
+                if name == "Class /Script/Engine.KismetMathLibrary" then
+                    return { get_class_default_object = function() return {
+                        ComposeTransforms = function(_, a, b) return { a = a, b = b } end } end }
+                end
                 if name == "BlueprintGeneratedClass /InventoryFrameworkPlugin/Core/ActorParents/SubObjects/SO_ExecuteEquipmentData.SO_ExecuteEquipmentData_C" then
                     return { get_fname = function() return fname("SO_ExecuteEquipmentData_C") end,
                         find_function = function(_, n)
@@ -263,8 +273,12 @@ return {
 
     test_held_item_moves_to_vr_hand_and_camera_stays = function()
         local W = boot()
-        assert(W.gun.parent == W.body and W.gun.socket == "HookSimple", "hook gun rides the VR hand")
-        assert(W.camera.parent == W.pawn_mesh, "camera stays on the game head")
+        -- The tool stays where the game put it, so the game's own unequip can find it.
+        assert(W.gun.parent == W.pawn_mesh and W.gun.socket == "HookSimple", "stays attached to the game mesh")
+        local w = W.gun.world
+        assert(w and w.a == W.gun.rel and w.b.socket == "HookSimple" and w.b.on == W.body.name,
+            "placed every frame at the VR hand's HookSimple with the game's grip offset")
+        assert(W.camera.world == nil, "camera untouched")
         assert(has(W.logs, "held item %-> VR hand R"), "logged")
     end,
 
@@ -272,14 +286,17 @@ return {
         local W = boot()
         write(STAGE .. "dreadmoorvr_arms_tuning.lua", "return { items_follow_hands = false }\n")
         run(W, 2)
-        assert(W.gun.parent == W.pawn_mesh and W.gun.socket == "HookSimple", "hook gun back on the game mesh")
+        assert(W.gun.rel_set == W.gun.rel, "back at the game's own grip offset")
+        local n = W.placements
+        run(W, 1)
+        assert(W.placements == n, "no longer placed")
     end,
 
     test_arms_and_gestures_together_crank_reels_the_moved_gun = function()
         -- The real pairing: m2 moves the gun onto the VR hand, m3 must still find it there.
         local W = boot({ "m2_arms", "m3_gestures" })
-        assert(W.gun.parent == W.body, "gun on the VR hand")
-        assert(has(W.logs, "tool in hand: hookgun"), "m3 found the moved gun")
+        assert(W.gun.world ~= nil, "gun placed at the VR hand")
+        assert(has(W.logs, "tool in hand: hookgun"), "m3 found the gun")
         W.presses = 0
         W.pose = function(i, t)   -- right hand still; left hand circles the crank point at 360 deg/s
             if i ~= 1 then return v(0, 1.2, -0.3) end
@@ -323,31 +340,7 @@ return {
         assert(W.rig_pitch == 35, "off again live, got " .. tostring(W.rig_pitch))
     end,
 
-    test_unequip_lets_the_game_find_and_remove_the_moved_tool = function()
-        -- In game 17:01: switching from the gun to the sickle left the gun in the VR hand. The
-        -- game's unequip searches the player's mesh for its equipment (native, not recursive),
-        -- so a tool on the VR arms is never found or destroyed.
-        local W = boot()
-        assert(W.gun.parent == W.body, "gun on the VR hand")
-        assert(W.unequip_pre, "unequip hook installed")
-        W.unequip_pre()                                     -- the game starts unequipping
-        local found = false                                 -- its search: direct children only
-        for i, c in ipairs(W.pawn_mesh.AttachChildren) do
-            if c == W.gun then found = true; table.remove(W.pawn_mesh.AttachChildren, i); W.gun.destroyed = true; break end
-        end
-        assert(found, "the game finds the gun on its own mesh")
-        run(W, 2)
-        assert(W.gun.parent ~= W.body, "not grabbed back while it is being removed")
-        local f = failures(W.logs)
-        assert(f == "", "FAILED lines: " .. f)
-    end,
 
-    test_a_released_item_is_not_taken_back_before_the_game_removes_it = function()
-        local W = boot()
-        W.unequip_pre()
-        run(W, 2)                                           -- game slow to destroy it (montage)
-        assert(W.gun.parent == W.pawn_mesh, "left with the game during its unequip")
-    end,
 
     test_same_pawn_new_lua_wrapper_is_not_a_new_pawn = function()
         -- UEVR can hand Lua a fresh wrapper for the same pawn (tostring differs, address doesn't).
@@ -375,52 +368,33 @@ return {
         load_scripts(W, { "m2_arms" })
         package.path = saved
         run(W, 15)
-        assert(W.gun.parent == W.body, "hook gun still moved past the broken component")
+        assert(W.gun.world ~= nil, "hook gun still followed past the broken component")
         local f = failures(W.logs)
         assert(not f:find("items FAILED"), "per-item errors stay per-item:\n" .. f)
     end,
 
-    test_gives_up_on_an_item_the_game_keeps_taking_back = function()
-        stage(TUNING_ON)
-        local saved = package.path
-        package.path = STAGE .. "scripts/?.lua;" .. saved
-        local W = make_world()
-        load_scripts(W, { "m2_arms" })
-        package.path = saved
-        local tick = W.callbacks.tick
-        W.callbacks.tick = function(...)   -- the game snaps the hook gun back to its own hand every frame
-            W.gun:K2_AttachToComponent(W.pawn_mesh, "HookSimple")
-            return tick(...)
-        end
-        run(W, 15)
-        local moves = 0
-        for _, l in ipairs(W.logs) do if l:find("held item %-> VR hand") then moves = moves + 1 end end
-        assert(moves <= 5, "stops fighting the game, moved " .. moves .. " times")
-        assert(has(W.logs, "keeps re%-attaching"), "says why it stopped")
-    end,
 
-    test_normal_re_equips_keep_following = function()
-        stage(TUNING_ON)
-        local saved = package.path
-        package.path = STAGE .. "scripts/?.lua;" .. saved
-        local W = make_world()
-        load_scripts(W, { "m2_arms" })
-        package.path = saved
-        local tick, t = W.callbacks.tick, 0
-        W.callbacks.tick = function(e, d)   -- re-equip the hook gun every 5 s, like a player swapping tools
-            t = t + d
-            if t >= 5 then t = 0; W.gun:K2_AttachToComponent(W.pawn_mesh, "HookSimple") end
-            return tick(e, d)
-        end
-        run(W, 40)
-        assert(W.gun.parent == W.body, "still following after many re-equips")
-        assert(not has(W.logs, "keeps re%-attaching"), "re-equips are not a fight")
+
+    test_game_swaps_tools_old_one_forgotten_new_one_follows = function()
+        -- In game 17:01-17:43 old tools piled up in the hand. Now the game removes the old tool
+        -- from its own mesh (its unequip can find it) and the new one follows.
+        local W = boot()
+        assert(W.gun.world ~= nil)
+        for i, c in ipairs(W.pawn_mesh.AttachChildren) do if c == W.gun then table.remove(W.pawn_mesh.AttachChildren, i); break end end
+        W.gun.parent = nil                                   -- destroyed by the game
+        local sickle = W.attachable("BP_Sickle_Equipment.StaticMesh", W.pawn_mesh, "KnifeSocket")
+        table.insert(W.pawn_mesh.AttachChildren, sickle)
+        run(W, 2)
+        assert(has(W.logs, "held item gone"), "old gun forgotten")
+        assert(sickle.world and sickle.world.b.socket == "KnifeSocket", "sickle follows")
+        local f = failures(W.logs)
+        assert(f == "", "FAILED lines: " .. f)
     end,
 
     test_script_reset_restores_items_and_body = function()
         local W = boot()
         W.callbacks.reset()
-        assert(W.gun.parent == W.pawn_mesh, "hook gun returned on reset")
+        assert(W.gun.rel_set == W.gun.rel, "hook gun back at the game's grip on reset")
         assert(next(W.pawn_mesh.hidden) == nil, "game bones unhidden")
         assert(W.arms.destroyed, "arms actor destroyed")
     end,
