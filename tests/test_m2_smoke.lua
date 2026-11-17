@@ -167,6 +167,13 @@ local function make_world()
             find_uobject = function(_, name)
                 if name:find("BP_VRArms") then return W.class_loaded ~= false and arms_class or nil end
                 if name:find("StaticMeshActor") or name:find("Sphere") or name:find("HitResult") then return nil end
+                if name == "BlueprintGeneratedClass /InventoryFrameworkPlugin/Core/ActorParents/SubObjects/SO_ExecuteEquipmentData.SO_ExecuteEquipmentData_C" then
+                    return { get_fname = function() return fname("SO_ExecuteEquipmentData_C") end,
+                        find_function = function(_, n)
+                            if n ~= "ExecuteUnequipmentInformation" then return nil end
+                            return { hook_ptr = function(_, pre) W.unequip_pre = pre end }
+                        end }
+                end
 
                 return { get_class_default_object = function() return gs end }
             end,
@@ -314,6 +321,32 @@ return {
         write(STAGE .. "dreadmoorvr_arms_tuning.lua", "return { level_torso = false }")
         run(W, 2)
         assert(W.rig_pitch == 35, "off again live, got " .. tostring(W.rig_pitch))
+    end,
+
+    test_unequip_lets_the_game_find_and_remove_the_moved_tool = function()
+        -- In game 17:01: switching from the gun to the sickle left the gun in the VR hand. The
+        -- game's unequip searches the player's mesh for its equipment (native, not recursive),
+        -- so a tool on the VR arms is never found or destroyed.
+        local W = boot()
+        assert(W.gun.parent == W.body, "gun on the VR hand")
+        assert(W.unequip_pre, "unequip hook installed")
+        W.unequip_pre()                                     -- the game starts unequipping
+        local found = false                                 -- its search: direct children only
+        for i, c in ipairs(W.pawn_mesh.AttachChildren) do
+            if c == W.gun then found = true; table.remove(W.pawn_mesh.AttachChildren, i); W.gun.destroyed = true; break end
+        end
+        assert(found, "the game finds the gun on its own mesh")
+        run(W, 2)
+        assert(W.gun.parent ~= W.body, "not grabbed back while it is being removed")
+        local f = failures(W.logs)
+        assert(f == "", "FAILED lines: " .. f)
+    end,
+
+    test_a_released_item_is_not_taken_back_before_the_game_removes_it = function()
+        local W = boot()
+        W.unequip_pre()
+        run(W, 2)                                           -- game slow to destroy it (montage)
+        assert(W.gun.parent == W.pawn_mesh, "left with the game during its unequip")
     end,
 
     test_same_pawn_new_lua_wrapper_is_not_a_new_pawn = function()

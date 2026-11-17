@@ -48,6 +48,7 @@ local sample_err_logged = false
 local solve_err_logged = false
 local items_err_logged = false
 local torso_err_logged = false
+local unequip_err_logged = false
 
 -- Live tuning: <profile>\dreadmoorvr_arms_tuning.lua, reloaded every second, pushed into BP_VRArms
 -- float variables (names from tuning.flatten). Bad values fall back to defaults (tuning.merge).
@@ -246,9 +247,12 @@ end
 local function addr(o) local ok, a = pcall(function() return o:get_address() end); return ok and a or tostring(o) end
 local function full_name(o) local ok, v = pcall(function() return o:get_full_name() end); return ok and v or tostring(o) end
 
-local function restore_items()
-    for _, m in pairs(moved) do
+local released = {}       -- component address -> true: handed back for the game's unequip; leave it
+
+local function restore_items(release)
+    for a, m in pairs(moved) do
         pcall(function() m.comp:K2_AttachToComponent(m.from, m.socket, KEEP_RELATIVE, KEEP_RELATIVE, KEEP_RELATIVE, false) end)
+        if release then released[a] = true end
     end
     if next(moved) then log("held items returned to the game mesh") end
     moved = {}
@@ -264,10 +268,11 @@ local function follow_items(pawn, now)
         local ok, parent = pcall(function() return m.comp:GetAttachParent() end)
         if not ok or parent == nil or addr(parent) ~= body_addr then moved[a] = nil end
     end
-    local children, comps = {}, {}
+    local children, comps, present = {}, {}, {}
     for _, comp in ipairs(mesh.AttachChildren or {}) do
         local a = addr(comp)
-        if comp ~= nil and a ~= body_addr then
+        present[a] = true
+        if comp ~= nil and a ~= body_addr and not released[a] then
             local ok, socket, bone = pcall(function()
                 local sk = name_str(comp:GetAttachSocketName())
                 return sk, sk ~= "None" and name_str(mesh:GetSocketBoneName(sk)) or "None"
@@ -283,6 +288,7 @@ local function follow_items(pawn, now)
             end
         end
     end
+    for a in pairs(released) do if not present[a] then released[a] = nil end end   -- the game removed it
     if not fit.items_follow_hands then
         if next(moved) then restore_items() end
         return
@@ -346,6 +352,30 @@ local function install_torso_hook(pawn, now)
     end)
     torso_hooked = true
     log("torso levelling on (" .. name_str(cls:get_fname()) .. ".BlueprintUpdateAnimation post-hook)")
+end
+
+-- Unequip. The game's SO_ExecuteEquipmentData.ExecuteUnequipmentInformation finds the equipment
+-- through FL_InventoryFramework.GetComponentByTag and destroys it (bp-dumps L05E1..L08A0). That
+-- native search does not reach a tool on the VR arms (in game 17:01 the gun stayed in hand after
+-- switching to the sickle). A pre-hook hands every moved item back to the game mesh first and
+-- marks it released so the scan does not grab it again while the game removes it.
+-- UEVR: UStruct:find_function ScriptContext.cpp:720, UFunction:hook_ptr :805.
+local SO_EQUIP = "BlueprintGeneratedClass /InventoryFrameworkPlugin/Core/ActorParents/SubObjects/SO_ExecuteEquipmentData.SO_ExecuteEquipmentData_C"
+local unequip_hooked, last_unequip_try = false, -10
+local function install_unequip_hook(now)
+    if unequip_hooked or now - last_unequip_try < 5 then return end
+    last_unequip_try = now
+    local cls = uevr.api:find_uobject(SO_EQUIP)
+    local fn = cls ~= nil and cls:find_function("ExecuteUnequipmentInformation") or nil
+    if fn == nil then return end   -- not loaded until something is equipped; try again in 5 s
+    fn:hook_ptr(function()
+        if next(moved) then
+            local ok = pcall(restore_items, true)
+            log("game unequip: held items handed back" .. (ok and "" or " (FAILED)"))
+        end
+    end, nil)
+    unequip_hooked = true
+    log("unequip hook on (SO_ExecuteEquipmentData.ExecuteUnequipmentInformation)")
 end
 
 local clock = 0
@@ -447,6 +477,10 @@ uevr.sdk.callbacks.on_pre_engine_tick(function(_, delta)
     if flow.status == "active" and actor ~= nil and mode == "walking" then
         local oks, errs = pcall(solve_arms, pawn)
         if not oks and not solve_err_logged then solve_err_logged = true; log("solver FAILED: " .. tostring(errs)) end
+        if fit.items_follow_hands and not unequip_hooked then
+            local oku, erru = pcall(install_unequip_hook, clock)
+            if not oku and not unequip_err_logged then unequip_err_logged = true; log("unequip hook FAILED: " .. tostring(erru)) end
+        end
         local oki, erri = pcall(follow_items, pawn, clock)
         if not oki and not items_err_logged then items_err_logged = true; log("items FAILED: " .. tostring(erri)) end
         local ok, err = pcall(sample_arms, pawn, clock)
