@@ -75,6 +75,10 @@ local last_sample, last_summary = 0, 0
 local function f3(v) return string.format("%.0f,%.0f,%.0f", v.X, v.Y, v.Z) end
 local function r3(r) return string.format("%.0f,%.0f,%.0f", r.Pitch, r.Yaw, r.Roll) end
 
+local function arms_ready()
+    return actor ~= nil and actor.Body ~= nil and actor.LeftHandTarget ~= nil and actor.RightHandTarget ~= nil
+end
+
 -- UBIK solver, every frame: elbow joint targets and clavicle offsets (world) -> BP_VRArms floats
 -- read by ABP_VRArms. The shift we applied last frame is subtracted to get rest positions.
 local calib = ubik.calibration.new()
@@ -86,6 +90,7 @@ local function vlen(a) return math.sqrt(a.X * a.X + a.Y * a.Y + a.Z * a.Z) end
 local function vdot(a, b) return a.X * b.X + a.Y * b.Y + a.Z * b.Z end
 
 local function solve_arms(pawn)
+    if not arms_ready() then return end
     local yaw = math.rad(pawn:K2_GetActorRotation().Yaw)
     local F = { X = math.cos(yaw), Y = math.sin(yaw), Z = 0 }
     local Rv = { X = -math.sin(yaw), Y = math.cos(yaw), Z = 0 }
@@ -122,6 +127,7 @@ local function solve_arms(pawn)
 end
 
 local function sample_arms(pawn, now)
+    if not arms_ready() then return end
     if now - last_sample < SAMPLE_S then return end
     last_sample = now
     local head = pawn.Mesh:GetSocketLocation("head")
