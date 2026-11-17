@@ -292,6 +292,21 @@ return {
         assert(#later == 0, "settled, no ongoing failures: " .. table.concat(later, " | "))
     end,
 
+    test_same_pawn_new_lua_wrapper_is_not_a_new_pawn = function()
+        -- UEVR can hand Lua a fresh wrapper for the same pawn (tostring differs, address doesn't).
+        -- In game that looked like a new pawn every so often and triggered reattaches.
+        stage(TUNING_ON)
+        local W = make_world()
+        load_scripts(W, { "m2_arms" })
+        local real = W.pawn
+        uevr.api.get_local_pawn = function()
+            return setmetatable({}, { __index = real })   -- new table each call, same object
+        end
+        run(W, 15)
+        assert(not has(W.logs, "reattached") and not has(W.logs, "arms lost"), "no false pawn change")
+        assert(W.spawns == 1, "one spawn, got " .. W.spawns)
+    end,
+
     test_one_broken_component_does_not_stop_the_scan = function()
         stage(TUNING_ON)
         local saved = package.path

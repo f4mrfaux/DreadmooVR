@@ -369,7 +369,9 @@ uevr.sdk.callbacks.on_pre_engine_tick(function(_, delta)
     local pawn = gameapi.local_pawn()
     local mode = pawn and modes.classify(gameapi.class_chain(pawn)) or nil
     local before = flow.status
-    local action = flow:step(clock, mode, pawn and tostring(pawn) or nil)
+    -- Identity by object address: tostring() names the Lua wrapper, which UEVR can replace for
+    -- the same pawn (seen in game as false "new pawn" reattaches).
+    local action = flow:step(clock, mode, pawn and addr(pawn) or nil)
     if action == "request" then
         log("requesting BP_VRArms from DreadmoorVR.dll (attempt " .. flow.load.requests .. ")")
         pcall(function() uevr.api:dispatch_custom_event("dreadmoorvr_request_class", ARMS) end)
