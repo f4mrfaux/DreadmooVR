@@ -7,9 +7,9 @@ return {
     elbow_down = 70,       -- cm down
     arm_length = 50.7,     -- cm, shoulder to hand (measured)
     shoulder_follow = 0,   -- 0..1, shoulder moves toward an out-of-reach hand
-    shoulder_widen = 5,    -- cm each shoulder moves outward (you are wider than the character)
+    shoulder_widen = 8,    -- cm each shoulder moves outward (you are wider than the character)
     grip_back = 8,         -- cm from the controller grip back to your wrist
-    camera_forward = -30,  -- cm, UEVR camera forward offset: view sat ~40 cm ahead of the shoulders (real ~10)
+    camera_forward = -24,  -- cm, UEVR camera forward offset: view sat ~40 cm ahead of the shoulders (real ~10)
     level_torso = true,          -- the game's torso and head ignore look pitch (keeps the view out of the face)
     items_follow_hands = true,   -- held tools ride on the VR hands (false = game's own hand position)
     aim_method = 2,              -- UEVR: 1 = head, 2 = right controller (aim + hook gun follow the hand)

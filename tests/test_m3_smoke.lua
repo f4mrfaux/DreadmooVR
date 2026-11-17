@@ -45,7 +45,9 @@ local function world(tool_socket, on_body)
     local ksl = { LineTraceSingle = function(_, ctx, start, finish, chan, complex, ignore, dbg, hit)
         W.trace_calls[#W.trace_calls + 1] = { start = start, finish = finish, chan = chan, ignore = ignore }
         if finish.X < 800 then return false end
-        hit.ImpactPoint = { x = 800, y = 0, z = 170 }
+        -- FHitResult.ImpactPoint is FVector_NetQuantize: UEVR hands it back as a struct with X/Y/Z
+        -- (only the exact FVector type becomes x/y/z). In game the reticle crashed on this (17:51).
+        hit.ImpactPoint = { X = 800, Y = 0, Z = 170 }
         return true
     end }
     local objs = {

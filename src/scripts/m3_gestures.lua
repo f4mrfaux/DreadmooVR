@@ -207,8 +207,10 @@ local function dot_update(pawn)
     local clear = { R = 0, G = 0, B = 0, A = 0 }
     local blocked = dot.ksl:LineTraceSingle(pawn, start, finish, 0, false, { pawn }, 0, dot.hit, true, clear, clear, 0)
     if not blocked then dot_show(false); return end   -- nothing to hook onto
+    -- ImpactPoint is FVector_NetQuantize: UEVR returns it as a struct with X/Y/Z, not the
+    -- x/y/z of a plain FVector (in game 17:51 this crashed the reticle). Accept either.
     local p = dot.hit.ImpactPoint
-    local point = { X = p.x, Y = p.y, Z = p.z }
+    local point = { X = p.X or p.x, Y = p.Y or p.y, Z = p.Z or p.z }
     local d = math.sqrt((point.X - start.X) ^ 2 + (point.Y - start.Y) ^ 2 + (point.Z - start.Z) ^ 2)
     dot.actor:K2_SetActorLocation(point, false, {}, true)
     local sc = reticle.dot_scale(d)
