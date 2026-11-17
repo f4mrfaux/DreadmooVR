@@ -8,6 +8,7 @@ return {
     arm_length = 50.7,     -- cm, shoulder to hand (measured)
     shoulder_follow = 0,   -- 0..1, shoulder moves toward an out-of-reach hand
     shoulder_widen = 8,    -- cm each shoulder moves outward (you are wider than the character)
+    shoulder_swing = 0.3,  -- 0..1 of the forward shoulder turn when reaching (1 = full UBIK)
     grip_back = 8,         -- cm from the controller grip back to your wrist
     camera_forward = -24,  -- cm, UEVR camera forward offset: view sat ~40 cm ahead of the shoulders (real ~10)
     level_torso = true,          -- the game's torso and head ignore look pitch (keeps the view out of the face)

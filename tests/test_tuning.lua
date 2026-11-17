@@ -59,6 +59,12 @@ return {
         assert(tuning.merge({ level_torso = 1 }).level_torso == false)
     end,
 
+    test_shoulder_swing_scales_the_forward_shoulder_turn = function()
+        assert(tuning.merge(nil).shoulder_swing == 1, "full UBIK by default")
+        assert(tuning.merge({ shoulder_swing = 0.3 }).shoulder_swing == 0.3)
+        assert(tuning.merge({ shoulder_swing = 2 }).shoulder_swing == 1, "0..1 only")
+    end,
+
     test_flatten_names_match_blueprint_variables = function()
         local f = tuning.flatten(tuning.merge({ right_rot = { y = -15 } }))
         assert(f.RightRotY == -15 and f.LeftRotP == 0 and f.ElbowOut == 30 and f.ArmLength == 50.7 and f.ShoulderFollow == 1)
