@@ -73,6 +73,11 @@ local function make_world()
     end
 
     local pawn_mesh = mesh("GameMesh")
+    local anim_fn = { hook_ptr = function(_, pre, post) W.anim_post = post end }
+    W.anim = { ControlRotaton = { x = 0, y = 90, z = 0 },
+        get_class = function() return { get_fname = function() return fname("ABP_V03_C") end,
+            find_function = function(_, n) return n == "BlueprintUpdateAnimation" and anim_fn or nil end } end }
+    pawn_mesh.GetAnimInstance = function() return W.anim end
     W.camera = attachable("Camera", pawn_mesh, "head")
     W.gun = attachable("BP_HookGunEquipment.DefaultSceneRoot", pawn_mesh, "HookSimple")
     W.hook_visible = true   -- BP_HookGunEquipment.Hook: hidden while the hook is out
@@ -159,9 +164,7 @@ local function make_world()
             get_engine = function() return { GameViewport = { World = {} } } end,
             find_uobject = function(_, name)
                 if name:find("BP_VRArms") then return arms_class end
-                if name == "Function /Game/3rdParty/TFPMovement/Demo/Character/ABP_V03.ABP_V03_C:BlueprintUpdateAnimation" then
-                    return { hook_ptr = function(_, pre, post) W.anim_post = post end }
-                end
+
                 return { get_class_default_object = function() return gs end }
             end,
             dispatch_custom_event = function(_, name, data)
@@ -183,7 +186,6 @@ local function run(W, seconds)
         W.callbacks.tick(nil, 0.05)
         -- The game's anim update: ABP_V03 copies control rotation (pitch 35 = hand raised), then
         -- any post-hook runs, then the Control Rig reads it.
-        W.anim = W.anim or { ControlRotaton = { x = 0, y = 90, z = 0 } }
         W.anim.ControlRotaton.x = 35
         if W.anim_post then W.anim_post(nil, W.anim) end
         W.rig_pitch = W.anim.ControlRotaton.x

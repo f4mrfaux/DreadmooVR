@@ -322,20 +322,30 @@ end
 -- shows whether it works. UEVR: UFunction:hook_ptr(pre, post) ScriptContext.cpp:805, post gets
 -- (fn, obj, locals, result) :1209; a UE5 rotator property is a live Vector3d (x = Pitch),
 -- ScriptUtility.cpp:165.
-local ABP_UPDATE = "Function /Game/3rdParty/TFPMovement/Demo/Character/ABP_V03.ABP_V03_C:BlueprintUpdateAnimation"
-local torso_hooked, last_torso_try = false, -10
-local function install_torso_hook(now)
+-- The function is taken from the live anim instance's class: in game, find_uobject by path
+-- returned nothing (16:33). GetAnimInstance SkeletalMeshComponent.h:1016; UStruct:find_function
+-- ScriptContext.cpp:720.
+local torso_hooked, last_torso_try, torso_missing_logged = false, -10, false
+local function install_torso_hook(pawn, now)
     if torso_hooked or now - last_torso_try < 5 then return end
     last_torso_try = now
-    local fn = uevr.api:find_uobject(ABP_UPDATE)
-    if fn == nil then return end   -- not loaded yet; try again in 5 s
+    local anim = pawn.Mesh:GetAnimInstance()
+    local cls = anim ~= nil and anim:get_class() or nil
+    local fn = cls ~= nil and cls:find_function("BlueprintUpdateAnimation") or nil
+    if fn == nil then
+        if not torso_missing_logged then
+            torso_missing_logged = true
+            log("torso levelling waiting: no BlueprintUpdateAnimation on " .. (cls and name_str(cls:get_fname()) or "no anim instance"))
+        end
+        return
+    end
     fn:hook_ptr(nil, function(_, obj)
         if not fit.level_torso then return end
         local r = obj.ControlRotaton
         if r ~= nil then r.x = 0 end
     end)
     torso_hooked = true
-    log("torso levelling on (ABP_V03.BlueprintUpdateAnimation post-hook)")
+    log("torso levelling on (" .. name_str(cls:get_fname()) .. ".BlueprintUpdateAnimation post-hook)")
 end
 
 local clock = 0
@@ -428,8 +438,8 @@ uevr.sdk.callbacks.on_pre_engine_tick(function(_, delta)
     end
     if flow.status == "active" and actor ~= nil then
         local okt, errt = pcall(apply_tuning, clock)
-        if fit.level_torso and not torso_hooked then
-            local okh, errh = pcall(install_torso_hook, clock)
+        if fit.level_torso and not torso_hooked and pawn ~= nil then
+            local okh, errh = pcall(install_torso_hook, pawn, clock)
             if not okh and not torso_err_logged then torso_err_logged = true; log("torso hook FAILED: " .. tostring(errh)) end
         end
         if not okt and not sample_err_logged then sample_err_logged = true; log("tuning FAILED: " .. tostring(errt)) end
