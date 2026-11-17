@@ -1,8 +1,8 @@
 -- Arms lifecycle (pure): load the class via the plugin (same request/retry rules as m1flow),
 -- spawn once on foot, then hide off foot, show on return, reattach when the walking pawn changes.
 -- step() returns "request", "spawn", "hide", "show", "reattach" or nil.
--- lost(): the arms actor is gone (it can die with a replaced pawn); the next step on foot spawns
--- fresh arms, up to MAX_RESPAWNS times, then the flow stops instead of looping.
+-- lost(): the arms actor is gone (it can die with a replaced pawn); the flow reloads the class and
+-- spawns fresh arms on foot, up to MAX_RESPAWNS times, then stops instead of looping.
 local armsflow = {}
 armsflow.__index = armsflow
 armsflow.MAX_RESPAWNS = 5
@@ -13,9 +13,13 @@ local function m1flow_new()
     return require("m1flow").new()
 end
 
-function armsflow.new(deps)
+local function new_load(deps)
     local m1 = type(deps) == "table" and deps.m1flow or nil
-    return setmetatable({ load = m1 and m1.new() or m1flow_new(), status = "loading",
+    return m1 and m1.new() or m1flow_new()
+end
+
+function armsflow.new(deps)
+    return setmetatable({ deps = deps, load = new_load(deps), status = "loading",
         visible = true, pawn = nil, reason = nil }, armsflow)
 end
 
@@ -28,11 +32,6 @@ function armsflow:step(now, mode, pawn)
         end
         if action == "spawn" then self.pawn = pawn end
         return action
-    end
-    if self.status == "respawn" then
-        if mode ~= "walking" then return nil end
-        self.pawn, self.visible = pawn, true
-        return "spawn"
     end
     if self.status ~= "active" then return nil end
 
@@ -57,7 +56,9 @@ function armsflow:lost()
     if self.respawns > armsflow.MAX_RESPAWNS then
         self.status, self.reason = "fail", "arms lost " .. self.respawns .. " times"
     else
-        self.status = "respawn"
+        -- The engine can unload BP_VRArms with the old pawn (in game 2026-11-17 16:42), so go
+        -- through the whole load again: plugin request, reply, spawn.
+        self.load, self.status, self.visible = new_load(self.deps), "loading", true
     end
 end
 

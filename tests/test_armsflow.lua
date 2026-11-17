@@ -42,22 +42,33 @@ return {
         assert(f:step(5.0, "walking", "pawnB") == "reattach")
         f:lost()
         assert(f:step(5.1, "boat", "pawnC") == nil, "waits until on foot")
-        assert(f:step(5.2, "walking", "pawnB") == "spawn", "fresh arms")
+        -- The class can be unloaded with the old pawn (in game 16:42): load it again, then spawn.
+        local a
+        for t = 5.2, 9, 0.1 do a = f:step(t, "walking", "pawnB"); if a then break end end
+        assert(a == "request", "asks the plugin again, got " .. tostring(a))
+        f:on_reply("ok|x")
+        assert(f:step(9.5, "walking", "pawnB") == "spawn", "fresh arms")
         f:spawned(true)
-        assert(f.status == "active" and f:step(5.3, "walking", "pawnB") == nil)
+        assert(f.status == "active" and f:step(9.6, "walking", "pawnB") == nil)
     end,
 
     test_respawning_gives_up_after_repeated_losses = function()
         local f = armsflow.new()
         walk_until_request(f)
         f:on_reply("ok|x"); f:step(2.1, "walking", "pawnA"); f:spawned(true)
+        local t = 3
         for i = 1, armsflow.MAX_RESPAWNS do
             f:lost()
-            assert(f:step(3 + i, "walking", "pawnA") == "spawn", "respawn " .. i)
+            local a
+            repeat t = t + 0.5; a = f:step(t, "walking", "pawnA") until a ~= nil or t > 100
+            assert(a == "request", "reload " .. i)
+            f:on_reply("ok|x")
+            t = t + 0.1
+            assert(f:step(t, "walking", "pawnA") == "spawn", "respawn " .. i)
             f:spawned(true)
         end
         f:lost()
-        assert(f:step(20, "walking", "pawnA") == nil and f.status == "fail", "stops instead of looping")
+        assert(f:step(t + 5, "walking", "pawnA") == nil and f.status == "fail", "stops instead of looping")
     end,
 
     test_failed_spawn_stops = function()

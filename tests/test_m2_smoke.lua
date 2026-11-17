@@ -96,6 +96,7 @@ local function make_world()
     -- A replacement pawn (respawn, level load): a fresh mesh with nothing attached.
     W.new_pawn = function()
         local m = mesh("GameMesh2"); m.AttachChildren = {}
+        W.class_loaded = false   -- the engine unloads BP_VRArms with the old pawn (in game 16:42)
         W.pawn = obj({ name = "Pawn2", Mesh = m, get_class = W.pawn.get_class,
             GetTransform = W.pawn.GetTransform, K2_GetActorRotation = W.pawn.K2_GetActorRotation })
         return W.pawn
@@ -163,12 +164,12 @@ local function make_world()
             get_local_pawn = function() return W.pawn end,
             get_engine = function() return { GameViewport = { World = {} } } end,
             find_uobject = function(_, name)
-                if name:find("BP_VRArms") then return arms_class end
+                if name:find("BP_VRArms") then return W.class_loaded ~= false and arms_class or nil end
 
                 return { get_class_default_object = function() return gs end }
             end,
             dispatch_custom_event = function(_, name, data)
-                if name == "dreadmoorvr_request_class" then W.pending_reply = "ok|" .. data end
+                if name == "dreadmoorvr_request_class" then W.class_loaded = true; W.pending_reply = "ok|" .. data end
             end,
         },
     }
