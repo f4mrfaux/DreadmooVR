@@ -14,4 +14,13 @@ return {
     aim_method = 2,              -- UEVR: 1 = head, 2 = right controller (aim + hook gun follow the hand)
     movement_orientation = 1,    -- UEVR: 0 = game aim, 1 = head (walking follows where you look)
     camera_up = 0,         -- cm, UEVR camera up offset (profile had 34: view + hands sat ~32 cm above the body)
+    -- M3 gestures (m3_gestures.lua). Distances in metres, SteamVR space, gun hand's frame
+    -- (x right, y up, z back). The crank only presses while the hook is out.
+    gestures = {
+        enabled = true,
+        crank_offset = { x = -0.06, y = 0.0, z = 0.04 },  -- crank point beside the gun
+        crank_r_min = 0.04, crank_r_max = 0.25,           -- left hand distance from the crank axis
+        crank_min_deg_s = 180, crank_step_deg = 90,       -- one reel press per 90 degrees turned
+        swing_min_m_s = 2.0, swing_frames = 3, swing_cooldown_s = 0.4,
+    },
 }

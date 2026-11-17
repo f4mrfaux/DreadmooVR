@@ -63,3 +63,6 @@ against that vendored header, and OpenVR calls against `plugin/third_party/openv
 | UEVR `uevr.params.vr.set_mod_value(key, string)` | uevr/API.h; Lua ScriptContext.cpp:481 | Lua API | `VR_CameraForwardOffset`, `VR_CameraUpOffset`, `VR_AimMethod` (VR.hpp:45: 1 head, 2 right controller), `VR_MovementOrientation` |
 | UEVR `uevr.params.vr.get_pose(index, UEVR_Vector3f, UEVR_Quaternionf)` | ScriptContext.cpp:456; PluginLoader get_pose = `VR::get_transform` | Lua API | raw SteamVR tracking space, metres |
 | UEVR `on_post_calculate_stereo_view_offset(device, view_index, world_to_meters, position, rotation, is_double)` | ScriptContext.cpp:157 / :1367 | Lua callback | UE5 passes Vector3d; eye world position, but disagreed with hand-derived numbers, so treat as approximate |
+| `USceneComponent::IsVisible` | Components/SceneComponent.h:834 | BlueprintCallable | hook gun `Hook` mesh: hidden = hook out (GA_HookGun L0488 / L0D51) |
+| `UActorComponent::GetOwner` | Components/ActorComponent.h:490 | BlueprintCallable | from the attached tool component to `BP_HookGunEquipment` |
+| UEVR `on_xinput_get_state(retval, user_index, state)`, `state.Gamepad.bRightTrigger` | ScriptContext.cpp:125 / :1219; lua-api datatypes/XInput.cpp:11 | Lua callback, writable member | virtual primary-use taps (right trigger = `IA_PrimaryUse`) |
