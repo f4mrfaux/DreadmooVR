@@ -1,0 +1,441 @@
+# /InventoryFrameworkPlugin/Core/ActorParents/TraitsAndComponents/Equipment/IC_Equipment
+# file: Dreadmoor/Plugins/InventoryFrameworkPlugin/Content/Core/ActorParents/TraitsAndComponents/Equipment/IC_Equipment.uasset
+
+## imported packages (2)
+  /InventoryFrameworkPlugin/Core/ActorParents/SubObjects/SO_ExecuteEquipmentData
+  /InventoryFrameworkPlugin/Core/ActorParents/TraitsAndComponents/Equipment/IT_Equipment
+
+## exports (11)
+  [0] IC_Equipment_C : BlueprintGeneratedClass (outer None) super=ItemComponent size=1187
+  [10] Default__IC_Equipment_C : IC_Equipment_C (outer None) size=74
+        refs: name:None, name:BoolProperty, exp:Equipped
+
+## function EquipExecutionFinished  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Object_1 = Object
+  L0012: IC_Equipment_C.ExecuteUbergraph_IC_Equipment(9089)
+  L0021: return
+
+## function Equipped  flags=0x0C420800
+  L0000: frame.K2Node_Event_TriggerFilters_1 = TriggerFilters
+  L0012: IC_Equipment_C.ExecuteUbergraph_IC_Equipment(9236)
+  L0021: return
+
+## function ExecuteUbergraph_IC_Equipment  flags=0x00808001
+  L0000: push L2918
+  L0005: goto computed(EntryPoint)
+  L000F: push L00AA
+  L0014: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(self.AnimationsToLoad, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item_4)
+  L004F: bind(K2Node_CreateDelegate_OutputDelegate_3, self, 'OnLoaded_EF146D9C426B5F2D5B2982BA66BD7EB1')
+  L0066: KismetSystemLibrary.LoadAsset(self, CallFunc_Array_Get_Item_4, K2Node_CreateDelegate_OutputDelegate_3, LatentActionInfo{-1, 64469659, 'ExecuteUbergraph_IC_Equipment', self})
+  L00A9: pop-flow
+  L00AA: CallFunc_Add_IntInt_ReturnValue = Add_IntInt(Temp_int_Loop_Counter_Variable, 1)
+  L00D4: Temp_int_Loop_Counter_Variable = CallFunc_Add_IntInt_ReturnValue
+  L00EF: CallFunc_Array_Length_ReturnValue_4 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(self.AnimationsToLoad)
+  L012A: CallFunc_Less_IntInt_ReturnValue_3 = Less_IntInt(Temp_int_Loop_Counter_Variable, CallFunc_Array_Length_ReturnValue_4)
+  L0150: if not (CallFunc_Less_IntInt_ReturnValue_3) pop-flow
+  L015A: Temp_int_Array_Index_Variable = Temp_int_Loop_Counter_Variable
+  L0175: goto L000F
+  L017A: push L06B6
+  L017F: Temp_int_Loop_Counter_Variable_7 = 0
+  L0196: Temp_int_Array_Index_Variable_9 = 0
+  L01AD: CallFunc_Array_Length_ReturnValue_5 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(K2Node_Event_TriggerFilters_1)
+  L01E8: CallFunc_Less_IntInt_ReturnValue_4 = Less_IntInt(Temp_int_Loop_Counter_Variable_7, CallFunc_Array_Length_ReturnValue_5)
+  L020E: if not (CallFunc_Less_IntInt_ReturnValue_4) pop-flow
+  L0218: Temp_int_Array_Index_Variable_9 = Temp_int_Loop_Counter_Variable_7
+  L0233: push L0FE9
+  L0238: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(K2Node_DynamicCast_AsEquipment_1.self.Equipment Data.EquipInformation, Temp_int_Array_Index_Variable_3, CallFunc_Array_Get_Item)
+  L0292: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(K2Node_Event_TriggerFilters_1, Temp_int_Array_Index_Variable_9, CallFunc_Array_Get_Item_5)
+  L02CD: CallFunc_Array_Contains_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Contains(CallFunc_Array_Get_Item.TriggerFilter, CallFunc_Array_Get_Item_5)
+  L0312: if not (CallFunc_Array_Contains_ReturnValue) pop-flow
+  L031C: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(K2Node_DynamicCast_AsEquipment_1.self.Equipment Data.EquipInformation, Temp_int_Array_Index_Variable_3, CallFunc_Array_Get_Item)
+  L0376: CallFunc_Array_Add_ReturnValue_2 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Add(self.TotalEquipInformation, CallFunc_Array_Get_Item)
+  L03BA: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(K2Node_DynamicCast_AsEquipment_1.self.Equipment Data.EquipInformation, Temp_int_Array_Index_Variable_3, CallFunc_Array_Get_Item)
+  L0414: CallFunc_IsValidSoftObjectReference_ReturnValue = KismetSystemLibrary.IsValidSoftObjectReference(CallFunc_Array_Get_Item.EquipAnimation)
+  L043A: if not (CallFunc_IsValidSoftObjectReference_ReturnValue) pop-flow
+  L0444: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(K2Node_DynamicCast_AsEquipment_1.self.Equipment Data.EquipInformation, Temp_int_Array_Index_Variable_3, CallFunc_Array_Get_Item)
+  L049E: CallFunc_NotEqual_NameName_ReturnValue = NotEqual_NameName(CallFunc_Array_Get_Item.PlayAnimationOnMeshWithTag, 'None')
+  L04D1: if not (CallFunc_NotEqual_NameName_ReturnValue) pop-flow
+  L04DB: CallFunc_Add_IntInt_ReturnValue_10 = Add_IntInt(self.LoadAmount, 1)
+  L0505: Temp_int_Variable_4 = CallFunc_Add_IntInt_ReturnValue_10
+  L0520: self.LoadAmount = Temp_int_Variable_4
+  L053B: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(K2Node_DynamicCast_AsEquipment_1.self.Equipment Data.EquipInformation, Temp_int_Array_Index_Variable_3, CallFunc_Array_Get_Item)
+  L0595: CallFunc_Array_Add_ReturnValue_3 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Add(self.AnimationsToLoad, CallFunc_Array_Get_Item.EquipAnimation)
+  L05E2: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(K2Node_DynamicCast_AsEquipment_1.self.Equipment Data.EquipInformation, Temp_int_Array_Index_Variable_3, CallFunc_Array_Get_Item)
+  L063C: if not (CallFunc_Array_Get_Item.RemovesItemFromNetworkQueue) pop-flow
+  L064F: CallFunc_GetItemData_ReturnValue = ItemComponent.GetItemData()
+  L066B: CallFunc_GetInventoryComponent_ReturnValue_1 = ItemComponent.GetInventoryComponent()
+  L067F: CallFunc_GetInventoryComponent_ReturnValue_1.C_AddItemToNetworkQueue(CallFunc_GetItemData_ReturnValue.UniqueID)
+  L06B5: pop-flow
+  L06B6: CallFunc_Add_IntInt_ReturnValue_3 = Add_IntInt(Temp_int_Loop_Counter_Variable_3, 1)
+  L06E0: Temp_int_Loop_Counter_Variable_3 = CallFunc_Add_IntInt_ReturnValue_3
+  L06FB: CallFunc_Array_Length_ReturnValue_1 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(K2Node_DynamicCast_AsEquipment_1.self.Equipment Data.EquipInformation)
+  L0755: CallFunc_Less_IntInt_ReturnValue = Less_IntInt(Temp_int_Loop_Counter_Variable_3, CallFunc_Array_Length_ReturnValue_1)
+  L077B: if not (CallFunc_Less_IntInt_ReturnValue) goto L07A9
+  L0789: Temp_int_Array_Index_Variable_3 = Temp_int_Loop_Counter_Variable_3
+  L07A4: goto L017A
+  L07A9: CallFunc_Array_IsValidIndex_ReturnValue_1 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_IsValidIndex(self.AnimationsToLoad, 0)
+  L07E1: if not (CallFunc_Array_IsValidIndex_ReturnValue_1) goto L0822
+  L07EF: Temp_int_Loop_Counter_Variable = 0
+  L0806: Temp_int_Array_Index_Variable = 0
+  L081D: goto L00EF
+  L0822: Temp_int_Loop_Counter_Variable_5 = 0
+  L0839: Temp_int_Array_Index_Variable_5 = 0
+  L0850: CallFunc_Array_Length_ReturnValue_3 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(self.TotalEquipInformation)
+  L088B: CallFunc_Less_IntInt_ReturnValue_2 = Less_IntInt(Temp_int_Loop_Counter_Variable_5, CallFunc_Array_Length_ReturnValue_3)
+  L08B1: if not (CallFunc_Less_IntInt_ReturnValue_2) goto L0D98
+  L08BF: Temp_int_Array_Index_Variable_5 = Temp_int_Loop_Counter_Variable_5
+  L08DA: push L1033
+  L08DF: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(self.TotalEquipInformation, Temp_int_Array_Index_Variable_5, CallFunc_Array_Get_Item_3)
+  L091A: Process Tags(CallFunc_Array_Get_Item_3.TagsToAdd, CallFunc_Array_Get_Item_3.TagsToRemove, 1)
+  L094E: CallFunc_GetInventoryComponent_ReturnValue = ItemComponent.GetInventoryComponent()
+  L0962: CallFunc_GetItemData_ReturnValue_2 = ItemComponent.GetItemData()
+  L097E: CallFunc_GetParentItems_ParentItems = []
+  L0989: CallFunc_GetInventoryComponent_ReturnValue.AC_Inventory.GetParentItems(CallFunc_GetItemData_ReturnValue_2, CallFunc_GetParentItems_ParentItems)
+  L09BB: CallFunc_Array_IsValidIndex_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_IsValidIndex(CallFunc_GetParentItems_ParentItems, 0)
+  L09F3: if not (CallFunc_Array_IsValidIndex_ReturnValue) goto L107D
+  L0A01: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetParentItems_ParentItems, 0, CallFunc_Array_Get_Item_1)
+  L0A38: self.Owning Unique ID = CallFunc_Array_Get_Item_1.Item.UniqueID
+  L0A65: CallFunc_GetOwner_ReturnValue_1 = ActorComponent.GetOwner()
+  L0A79: CallFunc_SpawnObject_ReturnValue = GameplayStatics.SpawnObject(SO_ExecuteEquipmentData_C, CallFunc_GetOwner_ReturnValue_1)
+  L0A9F: CallFunc_GetItemData_ReturnValue_2 = ItemComponent.GetItemData()
+  L0ABB: Default__KismetSystemLibrary.KismetSystemLibrary.SetStructurePropertyByName(CallFunc_SpawnObject_ReturnValue, 'UniqueID', CallFunc_GetItemData_ReturnValue_2.UniqueID)
+  L0B03: Default__KismetSystemLibrary.KismetSystemLibrary.SetStructurePropertyByName(CallFunc_SpawnObject_ReturnValue, 'Owning UniqueID', self.Owning Unique ID)
+  L0B42: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(self.TotalEquipInformation, Temp_int_Array_Index_Variable_5, CallFunc_Array_Get_Item_3)
+  L0B7D: Default__KismetSystemLibrary.KismetSystemLibrary.SetStructurePropertyByName(CallFunc_SpawnObject_ReturnValue, 'EquipmentInformation', CallFunc_Array_Get_Item_3)
+  L0BBC: Default__KismetSystemLibrary.KismetSystemLibrary.SetStructurePropertyByName(CallFunc_SpawnObject_ReturnValue, 'UnequipInformation', Temp_struct_Variable)
+  L0BFB: K2Node_DynamicCast_AsEquipment = cast<IT_Equipment_C>(self.DataObject)
+  L0C1F: K2Node_DynamicCast_bSuccess_1 = K2Node_DynamicCast_AsEquipment
+  L0C3C: KismetSystemLibrary.SetBytePropertyByName(CallFunc_SpawnObject_ReturnValue, 'EquipmentMesh', K2Node_DynamicCast_AsEquipment.self.Equipment Data.EquipmentMesh)
+  L0C84: CallFunc_GetItemData_ReturnValue_2 = ItemComponent.GetItemData()
+  L0CA0: KismetSystemLibrary.SetObjectPropertyByName(CallFunc_SpawnObject_ReturnValue, 'ParentItem', CallFunc_GetItemData_ReturnValue_2.ItemAsset)
+  L0CD2: CallFunc_GetOwner_ReturnValue = ActorComponent.GetOwner()
+  L0CE6: CallFunc_SpawnObject_ReturnValue.SetOwner(CallFunc_GetOwner_ReturnValue)
+  L0D13: CallFunc_Array_Add_ReturnValue_1 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Add(self.EquipObjects, CallFunc_SpawnObject_ReturnValue)
+  L0D57: bind(K2Node_CreateDelegate_OutputDelegate, self, 'EquipExecutionFinished')
+  L0D6E: CallFunc_SpawnObject_ReturnValue.self.ExecutionFinished += K2Node_CreateDelegate_OutputDelegate
+  L0D97: pop-flow
+  L0D98: Temp_int_Loop_Counter_Variable_6 = 0
+  L0DAF: Temp_int_Array_Index_Variable_6 = 0
+  L0DC6: CallFunc_Array_Length_ReturnValue_2 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(self.EquipObjects)
+  L0E01: CallFunc_Less_IntInt_ReturnValue_1 = Less_IntInt(Temp_int_Loop_Counter_Variable_6, CallFunc_Array_Length_ReturnValue_2)
+  L0E27: if not (CallFunc_Less_IntInt_ReturnValue_1) pop-flow
+  L0E31: Temp_int_Array_Index_Variable_6 = Temp_int_Loop_Counter_Variable_6
+  L0E4C: push L0F9F
+  L0E51: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(self.EquipObjects, Temp_int_Array_Index_Variable_6, CallFunc_Array_Get_Item_2)
+  L0E8C: CallFunc_Array_Get_Item_2.self.OtherObjects = self.EquipObjects
+  L0EBD: CallFunc_GetItemData_ReturnValue_1 = ItemComponent.GetItemData()
+  L0ED9: CallFunc_Conv_IntToString_ReturnValue = KismetStringLibrary.Conv_IntToString(CallFunc_GetItemData_ReturnValue_1.UniqueID.IdentityNumber)
+  L0F10: CallFunc_Conv_StringToName_ReturnValue = KismetStringLibrary.Conv_StringToName(CallFunc_Conv_IntToString_ReturnValue)
+  L0F35: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(self.EquipObjects, Temp_int_Array_Index_Variable_6, CallFunc_Array_Get_Item_2)
+  L0F70: CallFunc_Array_Get_Item_2.ExecuteEquipmentInformation(false, CallFunc_Conv_StringToName_ReturnValue)
+  L0F9E: pop-flow
+  L0F9F: CallFunc_Add_IntInt_ReturnValue_7 = Add_IntInt(Temp_int_Loop_Counter_Variable_6, 1)
+  L0FC9: Temp_int_Loop_Counter_Variable_6 = CallFunc_Add_IntInt_ReturnValue_7
+  L0FE4: goto L0DC6
+  L0FE9: CallFunc_Add_IntInt_ReturnValue_6 = Add_IntInt(Temp_int_Loop_Counter_Variable_7, 1)
+  L1013: Temp_int_Loop_Counter_Variable_7 = CallFunc_Add_IntInt_ReturnValue_6
+  L102E: goto L01AD
+  L1033: CallFunc_Add_IntInt_ReturnValue_5 = Add_IntInt(Temp_int_Loop_Counter_Variable_5, 1)
+  L105D: Temp_int_Loop_Counter_Variable_5 = CallFunc_Add_IntInt_ReturnValue_5
+  L1078: goto L0850
+  L107D: K2Node_MakeStruct_S_UniqueID.IdentityNumber = 0
+  L109D: K2Node_MakeStruct_S_UniqueID.ParentComponent = null
+  L10B1: self.Owning Unique ID = K2Node_MakeStruct_S_UniqueID
+  L10CC: goto L0A65
+  L10D1: push L1208
+  L10D6: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(self.EquipObjects, Temp_int_Array_Index_Variable_1, CallFunc_Array_Get_Item_7)
+  L1111: CallFunc_Array_Get_Item_7.self.OtherObjects = self.EquipObjects
+  L1142: CallFunc_Conv_IntToString_ReturnValue_1 = KismetStringLibrary.Conv_IntToString(self.TempItemData.UniqueID.IdentityNumber)
+  L1179: CallFunc_Conv_StringToName_ReturnValue_1 = KismetStringLibrary.Conv_StringToName(CallFunc_Conv_IntToString_ReturnValue_1)
+  L119E: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(self.EquipObjects, Temp_int_Array_Index_Variable_1, CallFunc_Array_Get_Item_7)
+  L11D9: CallFunc_Array_Get_Item_7.ExecuteUnequipmentInformation(false, CallFunc_Conv_StringToName_ReturnValue_1)
+  L1207: pop-flow
+  L1208: CallFunc_Add_IntInt_ReturnValue_1 = Add_IntInt(Temp_int_Loop_Counter_Variable_1, 1)
+  L1232: Temp_int_Loop_Counter_Variable_1 = CallFunc_Add_IntInt_ReturnValue_1
+  L124D: CallFunc_Array_Length_ReturnValue_8 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(self.EquipObjects)
+  L1288: CallFunc_Less_IntInt_ReturnValue_6 = Less_IntInt(Temp_int_Loop_Counter_Variable_1, CallFunc_Array_Length_ReturnValue_8)
+  L12AE: if not (CallFunc_Less_IntInt_ReturnValue_6) pop-flow
+  L12B8: Temp_int_Array_Index_Variable_1 = Temp_int_Loop_Counter_Variable_1
+  L12D3: goto L10D1
+  L12D8: Temp_int_Loop_Counter_Variable_1 = 0
+  L12EF: Temp_int_Array_Index_Variable_1 = 0
+  L1306: goto L124D
+  L130B: push L161D
+  L1310: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(self.TotalUnequipInformation, Temp_int_Array_Index_Variable_2, CallFunc_Array_Get_Item_8)
+  L134B: Process Tags(CallFunc_Array_Get_Item_8.TagsToAdd, CallFunc_Array_Get_Item_8.TagsToRemove, 1)
+  L137F: CallFunc_SpawnObject_ReturnValue_1 = GameplayStatics.SpawnObject(SO_ExecuteEquipmentData_C, self)
+  L139D: Default__KismetSystemLibrary.KismetSystemLibrary.SetStructurePropertyByName(CallFunc_SpawnObject_ReturnValue_1, 'UniqueID', self.TempItemData.UniqueID)
+  L13E5: Default__KismetSystemLibrary.KismetSystemLibrary.SetStructurePropertyByName(CallFunc_SpawnObject_ReturnValue_1, 'Owning UniqueID', Temp_struct_Variable_1)
+  L1424: Default__KismetSystemLibrary.KismetSystemLibrary.SetStructurePropertyByName(CallFunc_SpawnObject_ReturnValue_1, 'EquipmentInformation', Temp_struct_Variable_2)
+  L1463: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(self.TotalUnequipInformation, Temp_int_Array_Index_Variable_2, CallFunc_Array_Get_Item_8)
+  L149E: Default__KismetSystemLibrary.KismetSystemLibrary.SetStructurePropertyByName(CallFunc_SpawnObject_ReturnValue_1, 'UnequipInformation', CallFunc_Array_Get_Item_8)
+  L14DD: K2Node_DynamicCast_AsEquipment_2 = cast<IT_Equipment_C>(self.DataObject)
+  L1501: K2Node_DynamicCast_bSuccess_4 = K2Node_DynamicCast_AsEquipment_2
+  L151E: KismetSystemLibrary.SetBytePropertyByName(CallFunc_SpawnObject_ReturnValue_1, 'EquipmentMesh', K2Node_DynamicCast_AsEquipment_2.self.Equipment Data.EquipmentMesh)
+  L1566: KismetSystemLibrary.SetObjectPropertyByName(CallFunc_SpawnObject_ReturnValue_1, 'ParentItem', self.TempItemData.ItemAsset)
+  L1598: CallFunc_Array_Add_ReturnValue_5 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Add(self.EquipObjects, CallFunc_SpawnObject_ReturnValue_1)
+  L15DC: bind(K2Node_CreateDelegate_OutputDelegate_2, self, 'UnequipExecutionFinished')
+  L15F3: CallFunc_SpawnObject_ReturnValue_1.self.ExecutionFinished += K2Node_CreateDelegate_OutputDelegate_2
+  L161C: pop-flow
+  L161D: CallFunc_Add_IntInt_ReturnValue_2 = Add_IntInt(Temp_int_Loop_Counter_Variable_2, 1)
+  L1647: Temp_int_Loop_Counter_Variable_2 = CallFunc_Add_IntInt_ReturnValue_2
+  L1662: CallFunc_Array_Length_ReturnValue_9 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(self.TotalUnequipInformation)
+  L169D: CallFunc_Less_IntInt_ReturnValue_7 = Less_IntInt(Temp_int_Loop_Counter_Variable_2, CallFunc_Array_Length_ReturnValue_9)
+  L16C3: if not (CallFunc_Less_IntInt_ReturnValue_7) goto L12D8
+  L16D1: Temp_int_Array_Index_Variable_2 = Temp_int_Loop_Counter_Variable_2
+  L16EC: goto L130B
+  L16F1: Temp_int_Loop_Counter_Variable_2 = 0
+  L1708: Temp_int_Array_Index_Variable_2 = 0
+  L171F: goto L1662
+  L1724: Temp_int_Loop_Counter_Variable_3 = 0
+  L173B: Temp_int_Array_Index_Variable_3 = 0
+  L1752: goto L06FB
+  L1757: Temp_int_Loop_Counter_Variable_4 = 0
+  L176E: Temp_int_Array_Index_Variable_4 = 0
+  L1785: CallFunc_Array_Length_ReturnValue_10 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(self.AnimationsToLoad)
+  L17C0: CallFunc_Less_IntInt_ReturnValue_8 = Less_IntInt(Temp_int_Loop_Counter_Variable_4, CallFunc_Array_Length_ReturnValue_10)
+  L17E6: if not (CallFunc_Less_IntInt_ReturnValue_8) pop-flow
+  L17F0: Temp_int_Array_Index_Variable_4 = Temp_int_Loop_Counter_Variable_4
+  L180B: push L18A6
+  L1810: bind(K2Node_CreateDelegate_OutputDelegate_1, self, 'OnLoaded_663E80054D9EF6E01BE613B236B6F470')
+  L1827: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(self.AnimationsToLoad, Temp_int_Array_Index_Variable_4, CallFunc_Array_Get_Item_9)
+  L1862: KismetSystemLibrary.LoadAsset(self, CallFunc_Array_Get_Item_9, K2Node_CreateDelegate_OutputDelegate_1, LatentActionInfo{-1, 2100235255, 'ExecuteUbergraph_IC_Equipment', self})
+  L18A5: pop-flow
+  L18A6: CallFunc_Add_IntInt_ReturnValue_4 = Add_IntInt(Temp_int_Loop_Counter_Variable_4, 1)
+  L18D0: Temp_int_Loop_Counter_Variable_4 = CallFunc_Add_IntInt_ReturnValue_4
+  L18EB: goto L1785
+  L18F0: ItemComponent.StopComponent(K2Node_Event_StopResponse)
+  L1903: ActorComponent.K2_DestroyComponent(self)
+  L190E: pop-flow
+  L190F: Temp_object_Variable = K2Node_CustomEvent_Loaded_1
+  L1922: K2Node_DynamicCast_AsAnim_Montage = cast<AnimMontage>(Temp_object_Variable)
+  L1946: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsAnim_Montage
+  L1963: if not (K2Node_DynamicCast_bSuccess) pop-flow
+  L196D: CallFunc_Array_Add_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Add(self.LoadedAnimations, K2Node_DynamicCast_AsAnim_Montage)
+  L19B1: CallFunc_Add_IntInt_ReturnValue_11 = Add_IntInt(self.LoadCounter, 1)
+  L19DB: Temp_int_Variable_2 = CallFunc_Add_IntInt_ReturnValue_11
+  L19F6: self.LoadCounter = Temp_int_Variable_2
+  L1A11: CallFunc_EqualEqual_IntInt_ReturnValue_1 = EqualEqual_IntInt(self.LoadCounter, self.LoadAmount)
+  L1A37: if not (CallFunc_EqualEqual_IntInt_ReturnValue_1) pop-flow
+  L1A41: self.LoadCounter = 0
+  L1A58: self.LoadAmount = 0
+  L1A6F: goto L0822
+  L1A74: Temp_int_Loop_Counter_Variable_8 = 0
+  L1A8B: Temp_int_Array_Index_Variable_7 = 0
+  L1AA2: CallFunc_Array_Length_ReturnValue_7 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(K2Node_DynamicCast_AsEquipment_3.self.Equipment Data.UnequipInformation)
+  L1AFC: CallFunc_Less_IntInt_ReturnValue_5 = Less_IntInt(Temp_int_Loop_Counter_Variable_8, CallFunc_Array_Length_ReturnValue_7)
+  L1B22: if not (CallFunc_Less_IntInt_ReturnValue_5) goto L2048
+  L1B30: Temp_int_Array_Index_Variable_7 = Temp_int_Loop_Counter_Variable_8
+  L1B4B: push L1FFE
+  L1B50: Temp_int_Loop_Counter_Variable_9 = 0
+  L1B67: Temp_int_Array_Index_Variable_8 = 0
+  L1B7E: CallFunc_Array_Length_ReturnValue_11 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(K2Node_Event_TriggerFilters)
+  L1BB9: CallFunc_Less_IntInt_ReturnValue_9 = Less_IntInt(Temp_int_Loop_Counter_Variable_9, CallFunc_Array_Length_ReturnValue_11)
+  L1BDF: if not (CallFunc_Less_IntInt_ReturnValue_9) pop-flow
+  L1BE9: Temp_int_Array_Index_Variable_8 = Temp_int_Loop_Counter_Variable_9
+  L1C04: push L1FB4
+  L1C09: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(K2Node_DynamicCast_AsEquipment_3.self.Equipment Data.UnequipInformation, Temp_int_Array_Index_Variable_7, CallFunc_Array_Get_Item_6)
+  L1C63: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(K2Node_Event_TriggerFilters, Temp_int_Array_Index_Variable_8, CallFunc_Array_Get_Item_10)
+  L1C9E: CallFunc_Array_Contains_ReturnValue_1 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Contains(CallFunc_Array_Get_Item_6.TriggerFilter, CallFunc_Array_Get_Item_10)
+  L1CE3: if not (CallFunc_Array_Contains_ReturnValue_1) pop-flow
+  L1CED: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(K2Node_DynamicCast_AsEquipment_3.self.Equipment Data.UnequipInformation, Temp_int_Array_Index_Variable_7, CallFunc_Array_Get_Item_6)
+  L1D47: CallFunc_Array_Add_ReturnValue_6 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Add(self.TotalUnequipInformation, CallFunc_Array_Get_Item_6)
+  L1D8B: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(K2Node_DynamicCast_AsEquipment_3.self.Equipment Data.UnequipInformation, Temp_int_Array_Index_Variable_7, CallFunc_Array_Get_Item_6)
+  L1DE5: CallFunc_IsValidSoftObjectReference_ReturnValue_1 = KismetSystemLibrary.IsValidSoftObjectReference(CallFunc_Array_Get_Item_6.UnequipAnimation)
+  L1E0B: if not (CallFunc_IsValidSoftObjectReference_ReturnValue_1) pop-flow
+  L1E15: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(K2Node_DynamicCast_AsEquipment_3.self.Equipment Data.UnequipInformation, Temp_int_Array_Index_Variable_7, CallFunc_Array_Get_Item_6)
+  L1E6F: CallFunc_NotEqual_NameName_ReturnValue_1 = NotEqual_NameName(CallFunc_Array_Get_Item_6.PlayAnimationOnMeshWithTag, 'None')
+  L1EA2: if not (CallFunc_NotEqual_NameName_ReturnValue_1) pop-flow
+  L1EAC: CallFunc_Add_IntInt_ReturnValue_15 = Add_IntInt(self.LoadAmount, 1)
+  L1ED6: Temp_int_Variable_3 = CallFunc_Add_IntInt_ReturnValue_15
+  L1EF1: self.LoadAmount = Temp_int_Variable_3
+  L1F0C: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(K2Node_DynamicCast_AsEquipment_3.self.Equipment Data.UnequipInformation, Temp_int_Array_Index_Variable_7, CallFunc_Array_Get_Item_6)
+  L1F66: CallFunc_Array_AddUnique_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_AddUnique(self.AnimationsToLoad, CallFunc_Array_Get_Item_6.UnequipAnimation)
+  L1FB3: pop-flow
+  L1FB4: CallFunc_Add_IntInt_ReturnValue_12 = Add_IntInt(Temp_int_Loop_Counter_Variable_9, 1)
+  L1FDE: Temp_int_Loop_Counter_Variable_9 = CallFunc_Add_IntInt_ReturnValue_12
+  L1FF9: goto L1B7E
+  L1FFE: CallFunc_Add_IntInt_ReturnValue_8 = Add_IntInt(Temp_int_Loop_Counter_Variable_8, 1)
+  L2028: Temp_int_Loop_Counter_Variable_8 = CallFunc_Add_IntInt_ReturnValue_8
+  L2043: goto L1AA2
+  L2048: CallFunc_Array_IsValidIndex_ReturnValue_2 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_IsValidIndex(self.AnimationsToLoad, 0)
+  L2080: if not (CallFunc_Array_IsValidIndex_ReturnValue_2) goto L16F1
+  L208E: goto L1757
+  L2093: CallFunc_Array_Length_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(self.EquipObjects)
+  L20CE: CallFunc_EqualEqual_IntInt_ReturnValue = EqualEqual_IntInt(CallFunc_Array_Length_ReturnValue, self.Objects Finished)
+  L20F4: if not (CallFunc_EqualEqual_IntInt_ReturnValue) pop-flow
+  L20FE: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Clear(self.AnimationsToLoad)
+  L2127: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Clear(self.LoadedAnimations)
+  L2150: Process Tags(K2Node_CustomEvent_Object_1.self.EquipmentInformation.TagsToAdd, K2Node_CustomEvent_Object_1.self.EquipmentInformation.TagsToRemove, 2)
+  L21B0: BroadcastItemComponentFinished(GameplayTag{'IFP.Event.ItemEquipped'})
+  L21D9: StopComponent(GameplayTag{'None'})
+  L2202: pop-flow
+  L2203: push L220D
+  L2208: goto L2093
+  L220D: K2Node_CustomEvent_Object_1.RemoveObject()
+  L2231: pop-flow
+  L2232: self.LoadAmount = 0
+  L2249: CallFunc_GetItemData_ReturnValue_3 = ItemComponent.GetItemData()
+  L2265: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(CallFunc_GetItemData_ReturnValue_3.ItemAsset)
+  L228B: if not (CallFunc_IsValid_ReturnValue) pop-flow
+  L2295: K2Node_DynamicCast_AsEquipment_1 = cast<IT_Equipment_C>(self.DataObject)
+  L22B9: K2Node_DynamicCast_bSuccess_2 = K2Node_DynamicCast_AsEquipment_1
+  L22D6: if not (K2Node_DynamicCast_bSuccess_2) pop-flow
+  L22E0: goto L1724
+  L22E5: self.LoadCounter = 0
+  L22FC: goto L2232
+  L2301: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Clear(self.EquipObjects)
+  L232A: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Clear(self.AnimationsToLoad)
+  L2353: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Clear(self.LoadedAnimations)
+  L237C: goto L22E5
+  L2381: CallFunc_Add_IntInt_ReturnValue_9 = Add_IntInt(self.Objects Finished, 1)
+  L23AB: Temp_int_Variable_5 = CallFunc_Add_IntInt_ReturnValue_9
+  L23C6: self.Objects Finished = Temp_int_Variable_5
+  L23E1: goto L2203
+  L23E6: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Clear(self.TotalEquipInformation)
+  L240F: goto L2301
+  L2414: ItemComponent.Equipped(K2Node_Event_TriggerFilters_1)
+  L2427: goto L23E6
+  L242C: Temp_object_Variable_1 = K2Node_CustomEvent_Loaded
+  L243F: K2Node_DynamicCast_AsAnim_Montage_1 = cast<AnimMontage>(Temp_object_Variable_1)
+  L2463: K2Node_DynamicCast_bSuccess_3 = K2Node_DynamicCast_AsAnim_Montage_1
+  L2480: if not (K2Node_DynamicCast_bSuccess_3) pop-flow
+  L248A: CallFunc_Array_Add_ReturnValue_4 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Add(self.LoadedAnimations, K2Node_DynamicCast_AsAnim_Montage_1)
+  L24CE: CallFunc_Add_IntInt_ReturnValue_14 = Add_IntInt(self.LoadCounter, 1)
+  L24F8: Temp_int_Variable = CallFunc_Add_IntInt_ReturnValue_14
+  L2513: self.LoadCounter = Temp_int_Variable
+  L252E: CallFunc_EqualEqual_IntInt_ReturnValue_3 = EqualEqual_IntInt(self.LoadCounter, self.LoadAmount)
+  L2554: if not (CallFunc_EqualEqual_IntInt_ReturnValue_3) pop-flow
+  L255E: self.LoadCounter = 0
+  L2575: self.LoadAmount = 0
+  L258C: goto L16F1
+  L2591: CallFunc_Array_Length_ReturnValue_6 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(self.EquipObjects)
+  L25CC: CallFunc_EqualEqual_IntInt_ReturnValue_2 = EqualEqual_IntInt(CallFunc_Array_Length_ReturnValue_6, self.Objects Finished)
+  L25F2: if not (CallFunc_EqualEqual_IntInt_ReturnValue_2) pop-flow
+  L25FC: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Clear(self.AnimationsToLoad)
+  L2625: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Clear(self.LoadedAnimations)
+  L264E: Process Tags(K2Node_CustomEvent_Object.self.UnequipInformation.TagsToAdd, K2Node_CustomEvent_Object.self.UnequipInformation.TagsToRemove, 2)
+  L26AE: BroadcastItemComponentFinished(GameplayTag{'IFP.Event.ItemUnequipped'})
+  L26D7: StopComponent(GameplayTag{'None'})
+  L2700: pop-flow
+  L2701: self.Objects Finished = Temp_int_Variable_1
+  L271C: push L2726
+  L2721: goto L2591
+  L2726: K2Node_CustomEvent_Object.RemoveObject()
+  L274A: pop-flow
+  L274B: CallFunc_Add_IntInt_ReturnValue_13 = Add_IntInt(self.Objects Finished, 1)
+  L2775: Temp_int_Variable_1 = CallFunc_Add_IntInt_ReturnValue_13
+  L2790: goto L2701
+  L2795: K2Node_DynamicCast_AsEquipment_3 = cast<IT_Equipment_C>(self.DataObject)
+  L27B9: K2Node_DynamicCast_bSuccess_5 = K2Node_DynamicCast_AsEquipment_3
+  L27D6: if not (K2Node_DynamicCast_bSuccess_5) pop-flow
+  L27E0: CallFunc_GetItemData_ReturnValue_4 = ItemComponent.GetItemData()
+  L27FC: CallFunc_IsItemValid_ReturnValue = FL_InventoryFramework.IsItemValid(K2Node_Event_OldItemData)
+  L2819: Temp_bool_Variable = CallFunc_IsItemValid_ReturnValue
+  L282C: self.TempItemData = switch(Temp_bool_Variable){false: CallFunc_GetItemData_ReturnValue_4; true: K2Node_Event_OldItemData; default: K2Node_Select_Default}
+  L2873: goto L1A74
+  L2878: goto L274B
+  L287D: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Clear(self.TotalUnequipInformation)
+  L28A6: CallFunc_GetItemData_ReturnValue_4 = ItemComponent.GetItemData()
+  L28C2: CallFunc_IsValid_ReturnValue_1 = KismetSystemLibrary.IsValid(CallFunc_GetItemData_ReturnValue_4.ItemAsset)
+  L28E8: if not (CallFunc_IsValid_ReturnValue_1) pop-flow
+  L28F2: goto L2795
+  L28F7: ItemComponent.Unequipped(K2Node_Event_TriggerFilters, K2Node_Event_OldItemData)
+  L2913: goto L287D
+  L2918: return
+
+## function OnLoaded_663E80054D9EF6E01BE613B236B6F470  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Loaded = Loaded
+  L0012: IC_Equipment_C.ExecuteUbergraph_IC_Equipment(9260)
+  L0021: return
+
+## function OnLoaded_EF146D9C426B5F2D5B2982BA66BD7EB1  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Loaded_1 = Loaded
+  L0012: IC_Equipment_C.ExecuteUbergraph_IC_Equipment(6415)
+  L0021: return
+
+## function Process Tags  flags=0x0CC20000
+  L0000: push L07F7
+  L0005: Temp_int_Loop_Counter_Variable_1 = 0
+  L001C: Temp_int_Array_Index_Variable_2 = 0
+  L0033: CallFunc_Array_Length_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(Tags to Remove)
+  L006E: CallFunc_Less_IntInt_ReturnValue_1 = Less_IntInt(Temp_int_Loop_Counter_Variable_1, CallFunc_Array_Length_ReturnValue)
+  L0094: if not (CallFunc_Less_IntInt_ReturnValue_1) goto L036C
+  L00A2: Temp_int_Array_Index_Variable_2 = Temp_int_Loop_Counter_Variable_1
+  L00BD: push L0719
+  L00C2: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(Tags to Remove, Temp_int_Array_Index_Variable_2, CallFunc_Array_Get_Item_1)
+  L00FD: CallFunc_EqualEqual_ByteByte_ReturnValue_1 = EqualEqual_ByteByte(CallFunc_Array_Get_Item_1.WhenToProcess, Process)
+  L012C: if not (CallFunc_EqualEqual_ByteByte_ReturnValue_1) pop-flow
+  L0136: Temp_int_Loop_Counter_Variable_2 = 0
+  L014D: Temp_int_Array_Index_Variable_1 = 0
+  L0164: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(Tags to Remove, Temp_int_Array_Index_Variable_2, CallFunc_Array_Get_Item_1)
+  L019F: CallFunc_BreakGameplayTagContainer_GameplayTags_1 = []
+  L01AA: BlueprintGameplayTagLibrary.BreakGameplayTagContainer(CallFunc_Array_Get_Item_1.Tags, CallFunc_BreakGameplayTagContainer_GameplayTags_1)
+  L01CF: CallFunc_Array_Length_ReturnValue_3 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(CallFunc_BreakGameplayTagContainer_GameplayTags_1)
+  L020A: CallFunc_Less_IntInt_ReturnValue_2 = Less_IntInt(Temp_int_Loop_Counter_Variable_2, CallFunc_Array_Length_ReturnValue_3)
+  L0230: if not (CallFunc_Less_IntInt_ReturnValue_2) pop-flow
+  L023A: Temp_int_Array_Index_Variable_1 = Temp_int_Loop_Counter_Variable_2
+  L0255: push L0763
+  L025A: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(Tags to Remove, Temp_int_Array_Index_Variable_2, CallFunc_Array_Get_Item_1)
+  L0295: CallFunc_BreakGameplayTagContainer_GameplayTags_1 = []
+  L02A0: BlueprintGameplayTagLibrary.BreakGameplayTagContainer(CallFunc_Array_Get_Item_1.Tags, CallFunc_BreakGameplayTagContainer_GameplayTags_1)
+  L02C5: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_BreakGameplayTagContainer_GameplayTags_1, Temp_int_Array_Index_Variable_1, CallFunc_Array_Get_Item_2)
+  L0300: CallFunc_GetItemData_ReturnValue_1 = ItemComponent.GetItemData()
+  L031C: CallFunc_RemoveTagFromItem_ReturnValue = CallFunc_GetItemData_ReturnValue_1.UniqueID.ParentComponent.AC_Inventory.RemoveTagFromItem(CallFunc_GetItemData_ReturnValue_1, CallFunc_Array_Get_Item_2, true)
+  L036B: pop-flow
+  L036C: Temp_int_Loop_Counter_Variable = 0
+  L0383: Temp_int_Array_Index_Variable = 0
+  L039A: CallFunc_Array_Length_ReturnValue_1 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(Tags to Add)
+  L03D5: CallFunc_Less_IntInt_ReturnValue = Less_IntInt(Temp_int_Loop_Counter_Variable, CallFunc_Array_Length_ReturnValue_1)
+  L03FB: if not (CallFunc_Less_IntInt_ReturnValue) pop-flow
+  L0405: Temp_int_Array_Index_Variable = Temp_int_Loop_Counter_Variable
+  L0420: push L06CF
+  L0425: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(Tags to Add, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L0460: CallFunc_EqualEqual_ByteByte_ReturnValue = EqualEqual_ByteByte(CallFunc_Array_Get_Item.WhenToProcess, Process)
+  L048F: if not (CallFunc_EqualEqual_ByteByte_ReturnValue) pop-flow
+  L0499: Temp_int_Loop_Counter_Variable_3 = 0
+  L04B0: Temp_int_Array_Index_Variable_3 = 0
+  L04C7: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(Tags to Add, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L0502: CallFunc_BreakGameplayTagContainer_GameplayTags = []
+  L050D: BlueprintGameplayTagLibrary.BreakGameplayTagContainer(CallFunc_Array_Get_Item.Tags, CallFunc_BreakGameplayTagContainer_GameplayTags)
+  L0532: CallFunc_Array_Length_ReturnValue_2 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(CallFunc_BreakGameplayTagContainer_GameplayTags)
+  L056D: CallFunc_Less_IntInt_ReturnValue_3 = Less_IntInt(Temp_int_Loop_Counter_Variable_3, CallFunc_Array_Length_ReturnValue_2)
+  L0593: if not (CallFunc_Less_IntInt_ReturnValue_3) pop-flow
+  L059D: Temp_int_Array_Index_Variable_3 = Temp_int_Loop_Counter_Variable_3
+  L05B8: push L07AD
+  L05BD: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(Tags to Add, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L05F8: CallFunc_BreakGameplayTagContainer_GameplayTags = []
+  L0603: BlueprintGameplayTagLibrary.BreakGameplayTagContainer(CallFunc_Array_Get_Item.Tags, CallFunc_BreakGameplayTagContainer_GameplayTags)
+  L0628: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_BreakGameplayTagContainer_GameplayTags, Temp_int_Array_Index_Variable_3, CallFunc_Array_Get_Item_3)
+  L0663: CallFunc_GetItemData_ReturnValue = ItemComponent.GetItemData()
+  L067F: CallFunc_AddTagToItem_ReturnValue = CallFunc_GetItemData_ReturnValue.UniqueID.ParentComponent.AC_Inventory.AddTagToItem(CallFunc_GetItemData_ReturnValue, CallFunc_Array_Get_Item_3, true)
+  L06CE: pop-flow
+  L06CF: CallFunc_Add_IntInt_ReturnValue = Add_IntInt(Temp_int_Loop_Counter_Variable, 1)
+  L06F9: Temp_int_Loop_Counter_Variable = CallFunc_Add_IntInt_ReturnValue
+  L0714: goto L039A
+  L0719: CallFunc_Add_IntInt_ReturnValue_1 = Add_IntInt(Temp_int_Loop_Counter_Variable_1, 1)
+  L0743: Temp_int_Loop_Counter_Variable_1 = CallFunc_Add_IntInt_ReturnValue_1
+  L075E: goto L0033
+  L0763: CallFunc_Add_IntInt_ReturnValue_2 = Add_IntInt(Temp_int_Loop_Counter_Variable_2, 1)
+  L078D: Temp_int_Loop_Counter_Variable_2 = CallFunc_Add_IntInt_ReturnValue_2
+  L07A8: goto L0164
+  L07AD: CallFunc_Add_IntInt_ReturnValue_3 = Add_IntInt(Temp_int_Loop_Counter_Variable_3, 1)
+  L07D7: Temp_int_Loop_Counter_Variable_3 = CallFunc_Add_IntInt_ReturnValue_3
+  L07F2: goto L04C7
+  L07F7: return
+
+## function StopComponent  flags=0x0C020800
+  L0000: frame.K2Node_Event_StopResponse = StopResponse
+  L0012: IC_Equipment_C.ExecuteUbergraph_IC_Equipment(6384)
+  L0021: return
+
+## function UnequipExecutionFinished  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Object = Object
+  L0012: IC_Equipment_C.ExecuteUbergraph_IC_Equipment(10360)
+  L0021: return
+
+## function Unequipped  flags=0x0C420800
+  L0000: frame.K2Node_Event_TriggerFilters = TriggerFilters
+  L0012: frame.K2Node_Event_OldItemData = OldItemData
+  L0024: IC_Equipment_C.ExecuteUbergraph_IC_Equipment(10487)
+  L0033: return

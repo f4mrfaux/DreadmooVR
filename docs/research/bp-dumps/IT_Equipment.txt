@@ -1,0 +1,92 @@
+# /InventoryFrameworkPlugin/Core/ActorParents/TraitsAndComponents/Equipment/IT_Equipment
+# file: Dreadmoor/Plugins/InventoryFrameworkPlugin/Content/Core/ActorParents/TraitsAndComponents/Equipment/IT_Equipment.uasset
+
+## imported packages (0)
+
+## exports (3)
+  [0] IT_Equipment_C : BlueprintGeneratedClass (outer None) super=IT_ItemComponentTrait size=193
+  [2] Default__IT_Equipment_C : IT_Equipment_C (outer None) size=39
+        refs: name:CallFunc_IsValidClass_ReturnValue, name:IC_Equipment_C
+
+## function VerifyData  flags=0x0CC20800
+  L0000: push L09AE
+  L0005: push L060C
+  L000A: push L00B2
+  L000F: K2Node_SwitchEnum_CmpSuccess = NotEqual_ByteByte(self.Equipment Data.EquipmentMesh, 0)
+  L0037: if not (K2Node_SwitchEnum_CmpSuccess) goto L062C
+  L0045: K2Node_SwitchEnum_CmpSuccess = NotEqual_ByteByte(self.Equipment Data.EquipmentMesh, 1)
+  L006D: if not (K2Node_SwitchEnum_CmpSuccess) goto L06F7
+  L007B: K2Node_SwitchEnum_CmpSuccess = NotEqual_ByteByte(self.Equipment Data.EquipmentMesh, 2)
+  L00A3: if not (K2Node_SwitchEnum_CmpSuccess) goto L07C4
+  L00B1: pop-flow
+  L00B2: push L0318
+  L00B7: CallFunc_Array_IsValidIndex_ReturnValue_1 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_IsValidIndex(self.Equipment Data.EquipInformation, 0)
+  L00F8: if not (CallFunc_Array_IsValidIndex_ReturnValue_1) goto L088B
+  L0106: Temp_int_Loop_Counter_Variable = 0
+  L011D: Temp_int_Array_Index_Variable = 0
+  L0134: CallFunc_Array_Length_ReturnValue_1 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(self.Equipment Data.EquipInformation)
+  L0178: CallFunc_Less_IntInt_ReturnValue_1 = Less_IntInt(Temp_int_Loop_Counter_Variable, CallFunc_Array_Length_ReturnValue_1)
+  L019E: if not (CallFunc_Less_IntInt_ReturnValue_1) pop-flow
+  L01A8: Temp_int_Array_Index_Variable = Temp_int_Loop_Counter_Variable
+  L01C3: push L091A
+  L01C8: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(self.Equipment Data.EquipInformation, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item_1)
+  L020C: CallFunc_Array_IsEmpty_ReturnValue_1 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_IsEmpty(CallFunc_Array_Get_Item_1.TriggerFilter)
+  L0248: if not (CallFunc_Array_IsEmpty_ReturnValue_1) pop-flow
+  L0252: CallFunc_Conv_IntToString_ReturnValue = KismetStringLibrary.Conv_IntToString(Temp_int_Array_Index_Variable)
+  L0277: CallFunc_Concat_StrStr_ReturnValue = KismetStringLibrary.Concat_StrStr("No trigger filters added for EquipInformation index: ", CallFunc_Conv_IntToString_ReturnValue)
+  L02D3: CallFunc_Array_Add_ReturnValue_1 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Add(L Error Messages, CallFunc_Concat_StrStr_ReturnValue)
+  L0317: pop-flow
+  L0318: CallFunc_Array_IsValidIndex_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_IsValidIndex(self.Equipment Data.UnequipInformation, 0)
+  L0359: if not (CallFunc_Array_IsValidIndex_ReturnValue) goto L057B
+  L0367: Temp_int_Loop_Counter_Variable_1 = 0
+  L037E: Temp_int_Array_Index_Variable_1 = 0
+  L0395: CallFunc_Array_Length_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(self.Equipment Data.UnequipInformation)
+  L03D9: CallFunc_Less_IntInt_ReturnValue = Less_IntInt(Temp_int_Loop_Counter_Variable_1, CallFunc_Array_Length_ReturnValue)
+  L03FF: if not (CallFunc_Less_IntInt_ReturnValue) pop-flow
+  L0409: Temp_int_Array_Index_Variable_1 = Temp_int_Loop_Counter_Variable_1
+  L0424: push L0964
+  L0429: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(self.Equipment Data.UnequipInformation, Temp_int_Array_Index_Variable_1, CallFunc_Array_Get_Item)
+  L046D: CallFunc_Array_IsEmpty_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_IsEmpty(CallFunc_Array_Get_Item.TriggerFilter)
+  L04A9: if not (CallFunc_Array_IsEmpty_ReturnValue) pop-flow
+  L04B3: CallFunc_Conv_IntToString_ReturnValue_1 = KismetStringLibrary.Conv_IntToString(Temp_int_Array_Index_Variable_1)
+  L04D8: CallFunc_Concat_StrStr_ReturnValue_1 = KismetStringLibrary.Concat_StrStr("No trigger filters added for UnequipInformation index: ", CallFunc_Conv_IntToString_ReturnValue_1)
+  L0536: CallFunc_Array_Add_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Add(L Error Messages, CallFunc_Concat_StrStr_ReturnValue_1)
+  L057A: pop-flow
+  L057B: Temp_string_Variable_4 = "At least one index for @UnequipInformation
+is required."
+  L05C7: CallFunc_Array_Add_ReturnValue_2 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Add(L Error Messages, Temp_string_Variable_4)
+  L060B: pop-flow
+  L060C: ReturnValue = L Error Messages
+  L0627: goto L09AE
+  L062C: CallFunc_IsValidClass_ReturnValue = KismetSystemLibrary.IsValidClass(self.Equipment Data.Blueprint)
+  L0652: if not (CallFunc_IsValidClass_ReturnValue) goto L0661
+  L0660: pop-flow
+  L0661: Temp_string_Variable = "@EquipmentMesh is set to Blueprint,
+but @Blueprint is empty."
+  L06B2: CallFunc_Array_Add_ReturnValue_6 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Add(L Error Messages, Temp_string_Variable)
+  L06F6: pop-flow
+  L06F7: CallFunc_IsValid_ReturnValue_1 = KismetSystemLibrary.IsValid(self.Equipment Data.Skeleton)
+  L071D: if not (CallFunc_IsValid_ReturnValue_1) goto L072C
+  L072B: pop-flow
+  L072C: Temp_string_Variable_1 = "@EquipmentMesh is set to SkeletalMesh,
+but @Skeleton is empty."
+  L077F: CallFunc_Array_Add_ReturnValue_5 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Add(L Error Messages, Temp_string_Variable_1)
+  L07C3: pop-flow
+  L07C4: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(self.Equipment Data.Mesh)
+  L07EA: if not (CallFunc_IsValid_ReturnValue) goto L07F9
+  L07F8: pop-flow
+  L07F9: Temp_string_Variable_2 = "@EquipmentMesh is set to StaticMesh,
+but @Mesh is empty."
+  L0846: CallFunc_Array_Add_ReturnValue_4 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Add(L Error Messages, Temp_string_Variable_2)
+  L088A: pop-flow
+  L088B: Temp_string_Variable_3 = "At least one index for @EquipInformation
+is required."
+  L08D5: CallFunc_Array_Add_ReturnValue_3 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Add(L Error Messages, Temp_string_Variable_3)
+  L0919: pop-flow
+  L091A: CallFunc_Add_IntInt_ReturnValue = Add_IntInt(Temp_int_Loop_Counter_Variable, 1)
+  L0944: Temp_int_Loop_Counter_Variable = CallFunc_Add_IntInt_ReturnValue
+  L095F: goto L0134
+  L0964: CallFunc_Add_IntInt_ReturnValue_1 = Add_IntInt(Temp_int_Loop_Counter_Variable_1, 1)
+  L098E: Temp_int_Loop_Counter_Variable_1 = CallFunc_Add_IntInt_ReturnValue_1
+  L09A9: goto L0395
+  L09AE: return ReturnValue

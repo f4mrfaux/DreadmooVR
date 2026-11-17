@@ -1,0 +1,202 @@
+# /InventoryFrameworkPlugin/Core/Components/BP_AC_EquipmentHelper
+# file: Dreadmoor/Plugins/InventoryFrameworkPlugin/Content/Core/Components/BP_AC_EquipmentHelper.uasset
+
+## imported packages (3)
+  /InventoryFrameworkPlugin/Core/Data/FunctionLibrary/BPFL_ItemHelpers
+  /InventoryFrameworkPlugin/Core/Data/Interfaces/BPI_IFP_Helpers
+  /InventoryFrameworkPlugin/Core/Widgets/WBP_InventoryItem
+
+## exports (16)
+  [0] BP_AC_EquipmentHelper_C : BlueprintGeneratedClass (outer None) super=ActorComponent size=788
+  [1] Default__BP_AC_EquipmentHelper_C : BP_AC_EquipmentHelper_C (outer None) size=14
+        refs: exp:C_ItemEquippedNotify
+
+## function C_ItemEquippedNotify  flags=0x0D000040
+  L0000: frame.K2Node_CustomEvent_Item_Data = Item Data
+  L0012: BP_AC_EquipmentHelper_C.ExecuteUbergraph_BP_AC_EquipmentHelper(3659)
+  L0021: return
+
+## function C_ItemUnequippedNotify  flags=0x0D000040
+  L0000: frame.K2Node_CustomEvent_Item_Data_1 = Item Data
+  L0012: BP_AC_EquipmentHelper_C.ExecuteUbergraph_BP_AC_EquipmentHelper(2899)
+  L0021: return
+
+## function ExecuteUbergraph_BP_AC_EquipmentHelper  flags=0x00808001
+  L0000: push L0ECA
+  L0005: goto computed(EntryPoint)
+  L000F: pop-flow
+  L0010: pop-flow
+  L0011: pop-flow
+  L0012: pop-flow
+  L0013: Get Inventory(CallFunc_Get_Inventory_Inventory)
+  L002A: bind(K2Node_CreateDelegate_OutputDelegate, self, 'On Item Equipped')
+  L0041: CallFunc_Get_Inventory_Inventory.self.ItemEquipped += K2Node_CreateDelegate_OutputDelegate
+  L006A: Get Inventory(CallFunc_Get_Inventory_Inventory)
+  L0081: bind(K2Node_CreateDelegate_OutputDelegate_1, self, 'On Item Unequipped')
+  L0098: CallFunc_Get_Inventory_Inventory.self.ItemUnequipped += K2Node_CreateDelegate_OutputDelegate_1
+  L00C1: pop-flow
+  L00C2: Temp_int_Array_Index_Variable = 0
+  L00D9: CallFunc_Array_Length_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(CallFunc_GetParentItems_ParentItems)
+  L0114: CallFunc_Less_IntInt_ReturnValue_1 = Less_IntInt(Temp_int_Loop_Counter_Variable, CallFunc_Array_Length_ReturnValue)
+  L013A: if not (CallFunc_Less_IntInt_ReturnValue_1) goto L0309
+  L0148: Temp_int_Array_Index_Variable = Temp_int_Loop_Counter_Variable
+  L0163: push L034C
+  L0168: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetParentItems_ParentItems, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L01A3: CallFunc_GetWidgetForItem_ReturnValue = FL_InventoryFramework.GetWidgetForItem(CallFunc_Array_Get_Item.Item)
+  L01C9: K2Node_DynamicCast_AsWBP_Inventory_Item = cast<WBP_InventoryItem_C>(CallFunc_GetWidgetForItem_ReturnValue)
+  L01ED: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsWBP_Inventory_Item
+  L020A: if not (K2Node_DynamicCast_bSuccess) pop-flow
+  L0214: K2Node_DynamicCast_AsI_External_Objects = iface<I_ExternalObjects>(K2Node_DynamicCast_AsWBP_Inventory_Item)
+  L0238: K2Node_DynamicCast_bSuccess_1 = K2Node_DynamicCast_AsI_External_Objects
+  L0255: if not (K2Node_DynamicCast_bSuccess_1) goto L0291
+  L0263: K2Node_DynamicCast_AsI_External_Objects.ImageUpdated(K2Node_CustomEvent_Item_Data)
+  L0291: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(K2Node_DynamicCast_AsWBP_Inventory_Item.self.Inspect Widget)
+  L02C4: if not (CallFunc_IsValid_ReturnValue) pop-flow
+  L02CE: K2Node_DynamicCast_AsWBP_Inventory_Item.self.Inspect Widget.Create Actor Preview()
+  L0308: pop-flow
+  L0309: CallFunc_GetOwner_ReturnValue_3 = ActorComponent.GetOwner()
+  L031D: Default__BPFL_ItemHelpers_C.Call Update Preview(CallFunc_GetOwner_ReturnValue_3, self)
+  L034B: pop-flow
+  L034C: CallFunc_Add_IntInt_ReturnValue_1 = Add_IntInt(Temp_int_Loop_Counter_Variable, 1)
+  L0376: Temp_int_Loop_Counter_Variable = CallFunc_Add_IntInt_ReturnValue_1
+  L0391: goto L00D9
+  L0396: CallFunc_IsServer_ReturnValue = KismetSystemLibrary.IsServer(self)
+  L03AB: if not (CallFunc_IsServer_ReturnValue) pop-flow
+  L03B5: CallFunc_GetOwner_ReturnValue = ActorComponent.GetOwner()
+  L03C9: CallFunc_Array_IsValidIndex_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_IsValidIndex(K2Node_CustomEvent_CustomTriggerFilters_1, 0)
+  L0401: Temp_bool_Variable = CallFunc_Array_IsValidIndex_ReturnValue
+  L0414: CallFunc_GetItemsParentContainer_ReturnValue = FL_InventoryFramework.GetItemsParentContainer(K2Node_CustomEvent_ItemData_1)
+  L0439: CallFunc_GetTagName_ReturnValue_2 = BlueprintGameplayTagLibrary.GetTagName(CallFunc_GetItemsParentContainer_ReturnValue.ContainerIdentifier)
+  L0467: K2Node_MakeArray_Array_2 = [CallFunc_GetTagName_ReturnValue_2]
+  L047B: Default__BPFL_ItemHelpers_C.Activate Equipment Component By Trigger Filter(K2Node_CustomEvent_ItemData_1, switch(Temp_bool_Variable){false: K2Node_MakeArray_Array_2; true: K2Node_CustomEvent_CustomTriggerFilters_1; default: K2Node_Select_Default}, CallFunc_GetOwner_ReturnValue, true, S_InventoryItem{soft("None"), null, -1, -1, -1, 0, IntPoint{-1, -1}, 0, GameplayTagContainer{[]}, [], S_UniqueID{0, null}, S_ItemOverwriteSettings{Text(""), Text(""), soft("None"), [], 0}, [], [], null, [], null}, self, CallFunc_Activate_Equipment_Component_By_Trigger_Filter_Success_1)
+  L05CB: if not (CallFunc_Activate_Equipment_Component_By_Trigger_Filter_Success_1) pop-flow
+  L05D5: Get Inventory(CallFunc_Get_Inventory_Inventory_5)
+  L05EC: CallFunc_GetChildrenItems_AssociatedItems = []
+  L05F7: CallFunc_Get_Inventory_Inventory_5.AC_Inventory.GetChildrenItems(K2Node_CustomEvent_ItemData_1, CallFunc_GetChildrenItems_AssociatedItems)
+  L0629: Temp_int_Loop_Counter_Variable_1 = 0
+  L0640: Temp_int_Array_Index_Variable_1 = 0
+  L0657: CallFunc_Array_Length_ReturnValue_2 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(CallFunc_GetChildrenItems_AssociatedItems)
+  L0692: CallFunc_Less_IntInt_ReturnValue = Less_IntInt(Temp_int_Loop_Counter_Variable_1, CallFunc_Array_Length_ReturnValue_2)
+  L06B8: if not (CallFunc_Less_IntInt_ReturnValue) goto L0969
+  L06C6: Temp_int_Array_Index_Variable_1 = Temp_int_Loop_Counter_Variable_1
+  L06E1: push L091F
+  L06E6: CallFunc_GetOwner_ReturnValue_2 = ActorComponent.GetOwner()
+  L06FA: Get Inventory(CallFunc_Get_Inventory_Inventory_4)
+  L0711: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetChildrenItems_AssociatedItems, Temp_int_Array_Index_Variable_1, CallFunc_Array_Get_Item_2)
+  L074C: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_Get_Inventory_Inventory_4.self.ContainerSettings, CallFunc_Array_Get_Item_2.Item.ContainerIndex, CallFunc_Array_Get_Item_3)
+  L07AF: CallFunc_GetTagName_ReturnValue_1 = BlueprintGameplayTagLibrary.GetTagName(CallFunc_Array_Get_Item_3.ContainerIdentifier)
+  L07DD: K2Node_MakeArray_Array_1 = [CallFunc_GetTagName_ReturnValue_1]
+  L07F1: Default__BPFL_ItemHelpers_C.Activate Equipment Component By Trigger Filter(CallFunc_Array_Get_Item_2.Item, K2Node_MakeArray_Array_1, CallFunc_GetOwner_ReturnValue_2, true, S_InventoryItem{soft("None"), null, -1, -1, -1, 0, IntPoint{-1, -1}, 0, GameplayTagContainer{[]}, [], S_UniqueID{0, null}, S_ItemOverwriteSettings{Text(""), Text(""), soft("None"), [], 0}, [], [], null, [], null}, self, CallFunc_Activate_Equipment_Component_By_Trigger_Filter_Success)
+  L091E: pop-flow
+  L091F: CallFunc_Add_IntInt_ReturnValue = Add_IntInt(Temp_int_Loop_Counter_Variable_1, 1)
+  L0949: Temp_int_Loop_Counter_Variable_1 = CallFunc_Add_IntInt_ReturnValue
+  L0964: goto L0657
+  L0969: C_ItemEquippedNotify(K2Node_CustomEvent_ItemData_1)
+  L0980: pop-flow
+  L0981: CallFunc_IsServer_ReturnValue_1 = KismetSystemLibrary.IsServer(self)
+  L0996: if not (CallFunc_IsServer_ReturnValue_1) pop-flow
+  L09A0: CallFunc_GetOwner_ReturnValue_1 = ActorComponent.GetOwner()
+  L09B4: Get Inventory(CallFunc_Get_Inventory_Inventory_2)
+  L09CB: CallFunc_Array_IsValidIndex_ReturnValue_1 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_IsValidIndex(K2Node_CustomEvent_CustomTriggerFilters, 0)
+  L0A03: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_Get_Inventory_Inventory_2.self.ContainerSettings, K2Node_CustomEvent_OldItemData.ContainerIndex, CallFunc_Array_Get_Item_1)
+  L0A5D: CallFunc_GetTagName_ReturnValue = BlueprintGameplayTagLibrary.GetTagName(CallFunc_Array_Get_Item_1.ContainerIdentifier)
+  L0A8B: K2Node_MakeArray_Array = [CallFunc_GetTagName_ReturnValue]
+  L0A9F: Temp_bool_Variable_1 = CallFunc_Array_IsValidIndex_ReturnValue_1
+  L0AB2: Default__BPFL_ItemHelpers_C.Activate Equipment Component By Trigger Filter(K2Node_CustomEvent_ItemData, switch(Temp_bool_Variable_1){false: K2Node_MakeArray_Array; true: K2Node_CustomEvent_CustomTriggerFilters; default: K2Node_Select_Default_1}, CallFunc_GetOwner_ReturnValue_1, false, K2Node_CustomEvent_OldItemData, self, CallFunc_Activate_Equipment_Component_By_Trigger_Filter_Success_2)
+  L0B31: if not (CallFunc_Activate_Equipment_Component_By_Trigger_Filter_Success_2) pop-flow
+  L0B3B: C_ItemUnequippedNotify(K2Node_CustomEvent_OldItemData)
+  L0B52: pop-flow
+  L0B53: Get Inventory(CallFunc_Get_Inventory_Inventory_3)
+  L0B6A: CallFunc_GetParentItems_ParentItems_1 = []
+  L0B75: CallFunc_Get_Inventory_Inventory_3.AC_Inventory.GetParentItems(K2Node_CustomEvent_Item_Data_1, CallFunc_GetParentItems_ParentItems_1)
+  L0BA7: Temp_int_Loop_Counter_Variable_2 = 0
+  L0BBE: Temp_int_Array_Index_Variable_2 = 0
+  L0BD5: CallFunc_Array_Length_ReturnValue_1 = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(CallFunc_GetParentItems_ParentItems_1)
+  L0C10: CallFunc_Less_IntInt_ReturnValue_2 = Less_IntInt(Temp_int_Loop_Counter_Variable_2, CallFunc_Array_Length_ReturnValue_1)
+  L0C36: if not (CallFunc_Less_IntInt_ReturnValue_2) pop-flow
+  L0C40: Temp_int_Array_Index_Variable_2 = Temp_int_Loop_Counter_Variable_2
+  L0C5B: push L0E01
+  L0C60: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetParentItems_ParentItems_1, Temp_int_Array_Index_Variable_2, CallFunc_Array_Get_Item_4)
+  L0C9B: CallFunc_GetWidgetForItem_ReturnValue_1 = FL_InventoryFramework.GetWidgetForItem(CallFunc_Array_Get_Item_4.Item)
+  L0CC1: K2Node_DynamicCast_AsWBP_Inventory_Item_1 = cast<WBP_InventoryItem_C>(CallFunc_GetWidgetForItem_ReturnValue_1)
+  L0CE5: K2Node_DynamicCast_bSuccess_2 = K2Node_DynamicCast_AsWBP_Inventory_Item_1
+  L0D02: if not (K2Node_DynamicCast_bSuccess_2) pop-flow
+  L0D0C: K2Node_DynamicCast_AsI_External_Objects_1 = iface<I_ExternalObjects>(K2Node_DynamicCast_AsWBP_Inventory_Item_1)
+  L0D30: K2Node_DynamicCast_bSuccess_3 = K2Node_DynamicCast_AsI_External_Objects_1
+  L0D4D: if not (K2Node_DynamicCast_bSuccess_3) goto L0D89
+  L0D5B: K2Node_DynamicCast_AsI_External_Objects_1.ImageUpdated(K2Node_CustomEvent_Item_Data_1)
+  L0D89: CallFunc_IsValid_ReturnValue_1 = KismetSystemLibrary.IsValid(K2Node_DynamicCast_AsWBP_Inventory_Item_1.self.Inspect Widget)
+  L0DBC: if not (CallFunc_IsValid_ReturnValue_1) pop-flow
+  L0DC6: K2Node_DynamicCast_AsWBP_Inventory_Item_1.self.Inspect Widget.Create Actor Preview()
+  L0E00: pop-flow
+  L0E01: CallFunc_Add_IntInt_ReturnValue_2 = Add_IntInt(Temp_int_Loop_Counter_Variable_2, 1)
+  L0E2B: Temp_int_Loop_Counter_Variable_2 = CallFunc_Add_IntInt_ReturnValue_2
+  L0E46: goto L0BD5
+  L0E4B: Get Inventory(CallFunc_Get_Inventory_Inventory_1)
+  L0E62: CallFunc_GetParentItems_ParentItems = []
+  L0E6D: CallFunc_Get_Inventory_Inventory_1.AC_Inventory.GetParentItems(K2Node_CustomEvent_Item_Data, CallFunc_GetParentItems_ParentItems)
+  L0E9F: Temp_int_Loop_Counter_Variable = 0
+  L0EB6: goto L00C2
+  L0EBB: goto L0396
+  L0EC0: goto L0981
+  L0EC5: goto L0013
+  L0ECA: return
+
+## function Get Inventory  flags=0x1C420000
+  L0000: CallFunc_GetOwner_ReturnValue = ActorComponent.GetOwner()
+  L0014: K2Node_DynamicCast_AsI_Inventory = iface<I_Inventory>(CallFunc_GetOwner_ReturnValue)
+  L0038: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsI_Inventory
+  L0055: if not (K2Node_DynamicCast_bSuccess) goto L00A9
+  L0063: K2Node_DynamicCast_AsI_Inventory.GetInventoryComponent(CallFunc_GetInventoryComponent_Component)
+  L0091: Inventory = CallFunc_GetInventoryComponent_Component
+  L00A4: goto L00B9
+  L00A9: CallFunc_GetInventoryComponent_Component = null
+  L00B4: goto L0091
+  L00B9: return
+
+## function GetAnimationData  flags=0x0C420000
+  L0000: Animation Data = []
+  L0020: return
+
+## function On Item Equipped  flags=0x0C400000
+  L0000: frame.K2Node_CustomEvent_ItemData_1 = ItemData
+  L0012: frame.K2Node_CustomEvent_CustomTriggerFilters_1 = CustomTriggerFilters
+  L0024: BP_AC_EquipmentHelper_C.ExecuteUbergraph_BP_AC_EquipmentHelper(3771)
+  L0033: return
+
+## function On Item Moved  !! disassembly failed: bad field path length 18944
+
+## function On Item Unequipped  flags=0x0C400000
+  L0000: frame.K2Node_CustomEvent_ItemData = ItemData
+  L0012: frame.K2Node_CustomEvent_OldItemData = OldItemData
+  L0024: frame.K2Node_CustomEvent_CustomTriggerFilters = CustomTriggerFilters
+  L0036: BP_AC_EquipmentHelper_C.ExecuteUbergraph_BP_AC_EquipmentHelper(3776)
+  L0045: return
+
+## function PostInventoryComponentInitialized  flags=0x08020800
+  L0000: frame.K2Node_Event_Inventory_1 = Inventory
+  L0012: BP_AC_EquipmentHelper_C.ExecuteUbergraph_BP_AC_EquipmentHelper(15)
+  L0021: return
+
+## function PreInventoryComponentInitialized  flags=0x08020800
+  L0000: frame.K2Node_Event_Inventory = Inventory
+  L0012: BP_AC_EquipmentHelper_C.ExecuteUbergraph_BP_AC_EquipmentHelper(3781)
+  L0021: return
+
+## function Set Allow Physics  flags=0x0C020000
+  L0000: frame.K2Node_Event_Allow_ = Allow 
+  L0012: BP_AC_EquipmentHelper_C.ExecuteUbergraph_BP_AC_EquipmentHelper(17)
+  L0021: return
+
+## function Setup Interactable Widget  flags=0x0C020000
+  L0000: frame.K2Node_Event_Widget = Widget
+  L0012: BP_AC_EquipmentHelper_C.ExecuteUbergraph_BP_AC_EquipmentHelper(16)
+  L0021: return
+
+## function Update Collisions  flags=0x0C420000
+  L0000: Return = false
+  L000B: return
+
+## function UpdatePreview  flags=0x0C020000
+  L0000: BP_AC_EquipmentHelper_C.ExecuteUbergraph_BP_AC_EquipmentHelper(18)
+  L000F: return

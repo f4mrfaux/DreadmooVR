@@ -55,3 +55,11 @@ Load(Asset=0, Ret=40 size=48)`, and `LoadAsset_Blocking` returned the class.
 **UEVR SDK calls** (plugin SDK 2.39, `plugin/third_party/uevr/API.h` at 4ee5c6b) are checked
 against that vendored header, and OpenVR calls against `plugin/third_party/openvr/openvr.h`
 (`IVRInput_010`, `IVRSystem_022`).
+| `USceneComponent::AttachChildren` | Components/SceneComponent.h:116 | property (Transient) | read from Lua as a 1-based table, nil when empty (UEVR ScriptUtility.cpp:206) |
+| `USceneComponent::GetAttachParent` / `GetAttachSocketName` | Components/SceneComponent.h:683 / :687 | BlueprintCallable | held-item scan; FName returns use `:to_string()` |
+| `USkinnedMeshComponent::GetSocketBoneName` / `GetParentBone` | Components/SkinnedMeshComponent.h:1094 / :1181 | BlueprintCallable | `GetParentBone` returns `None` at the root |
+| `USceneComponent::DoesSocketExist` | Components/SceneComponent.h:814 | BlueprintCallable | checked on `Body` before re-attaching |
+| UEVR `MotionControllerState:set_location_offset(Vector3f)` | UEVR ScriptContext.cpp:967; applied in UObjectHook.cpp:925 | Lua API | controller OpenVR frame, cm; +Z = back toward the wrist |
+| UEVR `uevr.params.vr.set_mod_value(key, string)` | uevr/API.h; Lua ScriptContext.cpp:481 | Lua API | `VR_CameraForwardOffset`, `VR_CameraUpOffset`, `VR_AimMethod` (VR.hpp:45: 1 head, 2 right controller), `VR_MovementOrientation` |
+| UEVR `uevr.params.vr.get_pose(index, UEVR_Vector3f, UEVR_Quaternionf)` | ScriptContext.cpp:456; PluginLoader get_pose = `VR::get_transform` | Lua API | raw SteamVR tracking space, metres |
+| UEVR `on_post_calculate_stereo_view_offset(device, view_index, world_to_meters, position, rotation, is_double)` | ScriptContext.cpp:157 / :1367 | Lua callback | UE5 passes Vector3d; eye world position, but disagreed with hand-derived numbers, so treat as approximate |

@@ -39,24 +39,51 @@ local armstats = load_module("armstats")
 local tuning = load_module("tuning")
 local wristfit = load_module("wristfit")
 local ubik = load_module("ubik")
+local itemfollow = load_module("itemfollow")
 local stats = armstats.new()
 log("loaded")
 
 local actor = nil
 local sample_err_logged = false
 local solve_err_logged = false
+local items_err_logged = false
 
 -- Live tuning: <profile>\dreadmoorvr_arms_tuning.lua, reloaded every second, pushed into BP_VRArms
 -- float variables (names from tuning.flatten). Bad values fall back to defaults (tuning.merge).
 local TUNING_FILE = (lib_dir():gsub("scripts[/\\]lib[/\\]$", "")) .. "dreadmoorvr_arms_tuning.lua"
 local last_tuning_check, applied = -1, {}
+local fit = { shoulder_widen = 0, grip_back = 0, items_follow_hands = false }   -- live body-fit values (tuning.merge)
+local hand_states = {}                               -- UEVR MotionControllerStates, set at spawn
 local function apply_tuning(now)
     if now - last_tuning_check < 1.0 then return end
     last_tuning_check = now
     local chunk = loadfile(TUNING_FILE, "t", {})
     local ok, user = false, nil
     if chunk then ok, user = pcall(chunk) end
-    local flat = tuning.flatten(tuning.merge(ok and user or nil))
+    local merged = tuning.merge(ok and user or nil)
+    fit.shoulder_widen = merged.shoulder_widen
+    fit.items_follow_hands = merged.items_follow_hands
+    if merged.grip_back ~= fit.grip_back and hand_states.L ~= nil then
+        -- MotionControllerState offset is in the controller's OpenVR frame (UObjectHook.cpp:925,
+        -- cm); OpenVR grip forward is -Z, so +Z moves the target back toward the wrist.
+        local ok2, err = pcall(function()
+            hand_states.L:set_location_offset(Vector3f.new(0, 0, merged.grip_back))
+            hand_states.R:set_location_offset(Vector3f.new(0, 0, merged.grip_back))
+        end)
+        if ok2 then fit.grip_back = merged.grip_back; log("grip_back=" .. merged.grip_back)
+        else log("grip_back FAILED: " .. tostring(err)) end
+    end
+    -- Eye position relative to the character's shoulders: UEVR's own camera offsets, set live
+    -- through the plugin API's set_mod_value (uevr/API.h; Lua binding ScriptContext.cpp:481).
+    for key, mod in pairs({ camera_forward = "VR_CameraForwardOffset", camera_up = "VR_CameraUpOffset",
+                             aim_method = "VR_AimMethod", movement_orientation = "VR_MovementOrientation" }) do
+        local v = merged[key]
+        if v ~= nil and v ~= fit[key] then
+            local ok3, err = pcall(function() uevr.params.vr.set_mod_value(mod, key:find("^camera_") and string.format("%.6f", v) or string.format("%d", v)) end)
+            if ok3 then fit[key] = v; log(mod .. "=" .. v) else log(mod .. " FAILED: " .. tostring(err)) end
+        end
+    end
+    local flat = tuning.flatten(merged)
     local changed = {}
     for k, v in pairs(flat) do
         if applied[k] ~= v then
@@ -111,7 +138,8 @@ local function solve_arms(pawn)
         local outward = side == "L" and { X = -Rv.X, Y = -Rv.Y, Z = 0 } or Rv
         local rel = vsub(hands[side], rest[side])
         local cyaw, croll = ubik.clavicle_angles(vdot(rel, F), vdot(rel, UP), arm_len)
-        shift[side] = ubik.shoulder_shift({ clavicle = clav[side], rest = rest[side], yaw = cyaw, roll = croll, forward = F, up = UP })
+        shift[side] = vadd(ubik.shoulder_shift({ clavicle = clav[side], rest = rest[side], yaw = cyaw, roll = croll, forward = F, up = UP }),
+            { X = outward.X * fit.shoulder_widen, Y = outward.Y * fit.shoulder_widen, Z = 0 })
         local shoulder = vadd(rest[side], shift[side])
         local swivel = ubik.base_swivel(vdot(vsub(hands[side], shoulder), outward), arm_len)
         local e = ubik.elbow({ shoulder = shoulder, hand = hands[side], upper = upper, lower = lower, swivel = swivel, outward = outward })
@@ -124,6 +152,22 @@ local function solve_arms(pawn)
         last_calib_logged = a
         log(string.format("calibration: player arm %.1f cm (character %.1f)", a, upper + lower))
     end
+end
+
+-- Rendered eye position (world), from UEVR's post stereo-view callback (ScriptContext.cpp:157,
+-- :1367; UE5 passes Vector3d). Averaged over both eyes. Read-only.
+local eye = { X = 0, Y = 0, Z = 0, n = 0 }
+uevr.sdk.callbacks.on_post_calculate_stereo_view_offset(function(_, view_index, _, position)
+    if view_index == 0 then eye.X, eye.Y, eye.Z, eye.n = position.x, position.y, position.z, 1
+    elseif eye.n == 1 then eye.X, eye.Y, eye.Z = (eye.X + position.x) / 2, (eye.Y + position.y) / 2, (eye.Z + position.z) / 2; eye.n = 2 end
+end)
+
+-- Raw SteamVR device position in metres (tracking space), uevr.params.vr.get_pose
+-- (ScriptContext.cpp:456, PluginLoader get_pose = VR::get_transform).
+local function raw_pos(index)
+    local p, q = UEVR_Vector3f.new(), UEVR_Quaternionf.new()
+    uevr.params.vr.get_pose(index, p, q)
+    return { X = p.x, Y = p.y, Z = p.z }
 end
 
 local function sample_arms(pawn, now)
@@ -152,9 +196,114 @@ local function sample_arms(pawn, now)
             side, f3(s.target), f3(s.hand), f3(s.elbow), f3(s.shoulder), f3(head), m.reach_err, m.shoulder_to_target, m.arm_len,
             m.d_pitch, m.d_yaw, m.d_roll, r3(s.target_rot), r3(s.hand_rot)))
     end
+    -- Body fit: where the eyes sit relative to the character's shoulders (cm, body frame), and
+    -- SteamVR's raw hand span (m) against the in-game target span (cm) = effective world scale.
+    pcall(function()
+        local yaw = math.rad(pawn:K2_GetActorRotation().Yaw)
+        local F = { X = math.cos(yaw), Y = math.sin(yaw), Z = 0 }
+        local sl, sr = actor.Body:GetSocketLocation("upperarm_l"), actor.Body:GetSocketLocation("upperarm_r")
+        local mid = { X = (sl.X + sr.X) / 2, Y = (sl.Y + sr.Y) / 2, Z = (sl.Z + sr.Z) / 2 }
+        local d = { X = eye.X - mid.X, Y = eye.Y - mid.Y, Z = eye.Z - mid.Z }
+        local vr = uevr.params.vr
+        local rl, rr, rh = raw_pos(vr.get_left_controller_index()), raw_pos(vr.get_right_controller_index()), raw_pos(vr.get_hmd_index())
+        local function dist(a, b) return math.sqrt((a.X - b.X) ^ 2 + (a.Y - b.Y) ^ 2 + (a.Z - b.Z) ^ 2) end
+        local tl, tr = actor.LeftHandTarget:K2_GetComponentLocation(), actor.RightHandTarget:K2_GetComponentLocation()
+        local raw_span, ue_span = dist(rl, rr), dist(tl, tr)
+        log(string.format("fit eye_ahead=%.1f eye_above=%.1f shoulder_w=%.1f raw_span=%.3fm ue_span=%.1f scale=%.2f raw_eye_h=%.2fm raw_handL_below_eye=%.2fm raw_handR_below_eye=%.2fm",
+            d.X * F.X + d.Y * F.Y, d.Z, dist(sl, sr), raw_span, ue_span, raw_span > 0.05 and ue_span / (raw_span * 100) or 0,
+            rh.Y, rh.Y - rl.Y, rh.Y - rr.Y))
+    end)
     if now - last_summary >= SUMMARY_S then
         last_summary = now
         log("arms summary " .. stats:summary("L") .. " | " .. stats:summary("R"))
+    end
+end
+
+-- Held items (game chain verified: docs/research/2026-11-17-held-items.md): the game attaches tools
+-- to CharacterMesh0 at hand_r sockets with KeepRelative. Components it attached at a hand socket are
+-- re-attached to the VR arms' Body at the same socket, KeepRelative so the game's grip offset
+-- holds. Both meshes share the game skeleton, so the sockets match. Calls (validated, UE 5.6):
+-- AttachChildren SceneComponent.h:116, GetAttachSocketName :687, GetAttachParent :683,
+-- GetSocketBoneName SkinnedMeshComponent.h:1094, GetParentBone :1181, DoesSocketExist
+-- SceneComponent.h:814, K2_AttachToComponent :747. Arrays reach Lua as tables (ScriptUtility.cpp:206).
+local KEEP_RELATIVE = 0
+local moved = {}          -- component address -> { comp, socket, from }
+local seen_children = {}  -- component address -> true (one discovery log line each)
+local take_count = {}     -- component address -> { n = quick take-backs in a row, t = last move time }
+local MAX_TAKES, QUICK_S = 3, 2.0   -- the game snatching it back within 2 s, 3 times running = a fight
+local last_item_scan = -1
+local function name_str(n)
+    if type(n) == "string" then return n end
+    local ok, v = pcall(function() return n:to_string() end)
+    return ok and v or tostring(n)
+end
+local function addr(o) local ok, a = pcall(function() return o:get_address() end); return ok and a or tostring(o) end
+local function full_name(o) local ok, v = pcall(function() return o:get_full_name() end); return ok and v or tostring(o) end
+
+local function restore_items()
+    for _, m in pairs(moved) do
+        pcall(function() m.comp:K2_AttachToComponent(m.from, m.socket, KEEP_RELATIVE, KEEP_RELATIVE, KEEP_RELATIVE, false) end)
+    end
+    if next(moved) then log("held items returned to the game mesh") end
+    moved = {}
+    take_count = {}   -- a fresh equip or a re-enable gets fresh attempts
+end
+
+local function follow_items(pawn, now)
+    if now - last_item_scan < 0.25 then return end
+    last_item_scan = now
+    local mesh, body = pawn.Mesh, actor.Body
+    local body_addr = addr(body)
+    for a, m in pairs(moved) do   -- the game re-attached it elsewhere (unequip, swap): let it go
+        local ok, parent = pcall(function() return m.comp:GetAttachParent() end)
+        if not ok or parent == nil or addr(parent) ~= body_addr then moved[a] = nil end
+    end
+    local children, comps = {}, {}
+    for _, comp in ipairs(mesh.AttachChildren or {}) do
+        local a = addr(comp)
+        if comp ~= nil and a ~= body_addr then
+            local ok, socket, bone = pcall(function()
+                local sk = name_str(comp:GetAttachSocketName())
+                return sk, sk ~= "None" and name_str(mesh:GetSocketBoneName(sk)) or "None"
+            end)
+            if not seen_children[a] then
+                seen_children[a] = true
+                log(ok and string.format("attached to game mesh: %s socket=%s bone=%s", full_name(comp), socket, bone)
+                    or ("attached to game mesh: " .. full_name(comp) .. " unreadable: " .. tostring(socket)))
+            end
+            if ok then
+                comps[#comps + 1] = comp
+                children[#children + 1] = { id = #comps, socket = socket, bone = bone }
+            end
+        end
+    end
+    if not fit.items_follow_hands then
+        if next(moved) then restore_items() end
+        return
+    end
+    local plan = itemfollow.plan(children, function(b) return name_str(mesh:GetParentBone(b)) end)
+    for _, m in ipairs(plan) do
+        local comp = comps[m.id]
+        local a = addr(comp)
+        local tc = take_count[a] or { n = 0, t = -math.huge }
+        if moved[a] == nil and tc.n < MAX_TAKES then
+            tc.n = (now - tc.t < QUICK_S) and tc.n + 1 or 1   -- an ordinary re-equip starts the count over
+            tc.t = now
+            take_count[a] = tc
+            local ok, err = pcall(function()
+                if not body:DoesSocketExist(m.socket) then error("Body has no socket " .. m.socket) end
+                comp:K2_AttachToComponent(body, m.socket, KEEP_RELATIVE, KEEP_RELATIVE, KEEP_RELATIVE, false)
+            end)
+            if ok then
+                moved[a] = { comp = comp, socket = m.socket, from = mesh }
+                log(string.format("held item -> VR hand %s: %s socket=%s", m.side, full_name(comp), m.socket))
+            else
+                log("held item FAILED: " .. full_name(comp) .. ": " .. tostring(err))
+            end
+            if tc.n == MAX_TAKES then
+                log("held item " .. full_name(comp) .. " keeps re-attaching to the game mesh; leaving it to the game")
+            end
+        end
     end
 end
 
@@ -190,6 +339,8 @@ local function spawn(pawn)
         if l == nil or r == nil then error("motion controller state unavailable") end
         l:set_hand(HAND_LEFT); l:set_permanent(true)
         r:set_hand(HAND_RIGHT); r:set_permanent(true)
+        hand_states.L, hand_states.R = l, r
+        fit.grip_back = 0   -- fresh states have no offset; next tuning check re-applies it
         log("spawned BP_VRArms; hand targets bound to controllers; game arms/head hidden")
     end)
     if not ok then
@@ -232,15 +383,19 @@ uevr.sdk.callbacks.on_pre_engine_tick(function(_, delta)
     if flow.status == "active" and actor ~= nil and mode == "walking" then
         local oks, errs = pcall(solve_arms, pawn)
         if not oks and not solve_err_logged then solve_err_logged = true; log("solver FAILED: " .. tostring(errs)) end
+        local oki, erri = pcall(follow_items, pawn, clock)
+        if not oki and not items_err_logged then items_err_logged = true; log("items FAILED: " .. tostring(erri)) end
         local ok, err = pcall(sample_arms, pawn, clock)
         if not ok and not sample_err_logged then sample_err_logged = true; log("harness FAILED: " .. tostring(err)) end
     end
+    if mode ~= "walking" and next(moved) then restore_items() end   -- fishing, steering: game owns the hands
     if flow.status ~= before and (flow.status == "fail" or flow.status == "no_reply" or flow.status == "spawn_failed") then
         log("stopped: " .. flow.status .. (flow.reason and (" - " .. flow.reason) or ""))
     end
 end)
 
 uevr.sdk.callbacks.on_script_reset(function()
+    restore_items()
     restore_game_body()
     if actor ~= nil then pcall(function() actor:K2_DestroyActor() end) end
     actor = nil

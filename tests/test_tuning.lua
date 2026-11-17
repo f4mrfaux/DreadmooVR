@@ -20,6 +20,39 @@ return {
         assert(t.shoulder_follow == 0, "clamped to 0..1")
     end,
 
+    test_body_fit_values_default_to_zero_and_clamp = function()
+        local t = tuning.merge(nil)
+        assert(t.shoulder_widen == 0 and t.grip_back == 0, "defaults leave the body as built")
+        local u = tuning.merge({ shoulder_widen = 8, grip_back = 9 })
+        assert(u.shoulder_widen == 8 and u.grip_back == 9)
+        local bad = tuning.merge({ shoulder_widen = 500, grip_back = "far" })
+        assert(bad.shoulder_widen == 0 and bad.grip_back == 0, "out of range falls back")
+    end,
+
+    test_camera_offsets_are_optional = function()
+        local t = tuning.merge(nil)
+        assert(t.camera_forward == nil and t.camera_up == nil, "absent = leave UEVR's own setting alone")
+        local u = tuning.merge({ camera_forward = 10, camera_up = 42 })
+        assert(u.camera_forward == 10 and u.camera_up == 42)
+        local bad = tuning.merge({ camera_forward = 900, camera_up = "x" })
+        assert(bad.camera_forward == nil and bad.camera_up == nil, "bad values are ignored, not defaulted")
+    end,
+
+    test_aim_and_movement_methods_are_optional_integers = function()
+        local t = tuning.merge(nil)
+        assert(t.aim_method == nil and t.movement_orientation == nil)
+        local u = tuning.merge({ aim_method = 2, movement_orientation = 1 })
+        assert(u.aim_method == 2 and u.movement_orientation == 1)
+        local bad = tuning.merge({ aim_method = 9, movement_orientation = 1.5 })
+        assert(bad.aim_method == nil and bad.movement_orientation == nil, "UEVR AimMethod is 0..5, whole numbers")
+    end,
+
+    test_items_follow_hands_is_off_unless_true = function()
+        assert(tuning.merge(nil).items_follow_hands == false)
+        assert(tuning.merge({ items_follow_hands = true }).items_follow_hands == true)
+        assert(tuning.merge({ items_follow_hands = "yes" }).items_follow_hands == false, "only a real true turns it on")
+    end,
+
     test_flatten_names_match_blueprint_variables = function()
         local f = tuning.flatten(tuning.merge({ right_rot = { y = -15 } }))
         assert(f.RightRotY == -15 and f.LeftRotP == 0 and f.ElbowOut == 30 and f.ArmLength == 50.7 and f.ShoulderFollow == 1)
