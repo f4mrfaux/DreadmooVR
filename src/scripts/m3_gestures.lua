@@ -44,6 +44,7 @@ local TUNING_FILE = (lib_dir():gsub("scripts[/\\]lib[/\\]$", "")) .. "dreadmoorv
 local DEFAULTS = {
     enabled = true,
     reticle = true,
+    hide_game_dot = true,
     crank_offset = { x = -0.06, y = 0.0, z = 0.04 },   -- m, in the gun hand's frame (OpenVR: x right, y up, z back)
     crank_r_min = 0.04, crank_r_max = 0.25, crank_min_deg_s = 180, crank_step_deg = 90,
     swing_min_m_s = 2.0, swing_frames = 3, swing_cooldown_s = 0.4,
@@ -61,6 +62,7 @@ local function read_cfg()
     return {
         enabled = g.enabled ~= false,
         reticle = g.reticle ~= false,
+        hide_game_dot = g.hide_game_dot ~= false,
         crank_offset = { x = num(off.x, -0.5, 0.5, d.crank_offset.x), y = num(off.y, -0.5, 0.5, d.crank_offset.y), z = num(off.z, -0.5, 0.5, d.crank_offset.z) },
         crank_r_min = num(g.crank_r_min, 0, 0.5, d.crank_r_min), crank_r_max = num(g.crank_r_max, 0.01, 1, d.crank_r_max),
         crank_min_deg_s = num(g.crank_min_deg_s, 0, 2000, d.crank_min_deg_s), crank_step_deg = num(g.crank_step_deg, 10, 360, d.crank_step_deg),
@@ -172,10 +174,27 @@ local function dot_setup(pawn)
     return true
 end
 
+-- The game's own 2D crosshair (WBP_Cross: a Dot image plus hook-state icons, bp WBP_Cross L0582..
+-- L0632) points where the head looks, so it is faded out while our dot is up and restored after.
+-- Render opacity is never touched by the game. GetAllWidgetsOfClass WidgetBlueprintLibrary.h:302
+-- (array out-param into an empty table, UEVR ScriptUtility.cpp:748), SetRenderOpacity Widget.h.
+local WBP_CROSS = "WidgetBlueprintGeneratedClass /Game/Dreadmoor/UI/HUD/WBP_Cross.WBP_Cross_C"
+local function set_game_dot(opacity)
+    pcall(function()
+        local cls = uevr.api:find_uobject(WBP_CROSS)
+        local wbl = uevr.api:find_uobject("Class /Script/UMG.WidgetBlueprintLibrary")
+        if cls == nil or wbl == nil then return end
+        local found = {}
+        wbl:get_class_default_object():GetAllWidgetsOfClass(uevr.api:get_local_pawn(0), found, cls, false)
+        for _, w in ipairs(found) do w:SetRenderOpacity(opacity) end
+    end)
+end
+
 local function dot_show(on)
     if dot.actor ~= nil and on ~= dot.shown then
         dot.shown = on
         dot.actor:SetActorHiddenInGame(not on)
+        if cfg.hide_game_dot then set_game_dot(on and 0 or 1) end
     end
 end
 
@@ -270,6 +289,7 @@ uevr.sdk.callbacks.on_xinput_get_state(function(retval, user_index, state)
 end)
 
 uevr.sdk.callbacks.on_script_reset(function()
+    if dot.shown then set_game_dot(1) end
     if dot.actor ~= nil then pcall(function() dot.actor:K2_DestroyActor() end) end
     tool, tool_comp, hook_out = nil, nil, false
 end)

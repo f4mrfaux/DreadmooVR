@@ -60,6 +60,11 @@ local function world(tool_socket, on_body)
             BeginDeferredActorSpawnFromClass = function() return W.dot end,
             FinishSpawningActor = function(_, a) return a end } end },
     }
+    -- The game's 2D crosshair widget (WBP_Cross), found through WidgetBlueprintLibrary.
+    W.cross = { opacity = 1, SetRenderOpacity = function(self, o) self.opacity = o end }
+    objs["WidgetBlueprintGeneratedClass /Game/Dreadmoor/UI/HUD/WBP_Cross.WBP_Cross_C"] = {}
+    objs["Class /Script/UMG.WidgetBlueprintLibrary"] = { get_class_default_object = function() return {
+        GetAllWidgetsOfClass = function(_, ctx, out, cls, top) out[1] = W.cross end } end }
     _G.StructObject = { new = function() return {} end }
     -- Poses: W.left / W.right are functions of time returning a position (m); right faces -Z.
     W.left = function() return v(0, 1.2, -0.3) end
@@ -176,9 +181,11 @@ return {
         assert(c.start.Z == 170 and c.finish.X == 3000, "from the camera, TraceLength along the view")
         assert(c.chan == 0 and c.ignore[1] == W.pawn, "Visibility channel, ignoring the player (as GA_HookGun)")
         assert(W.dot_scale > 0.04 and W.dot_scale < 0.08, "about 0.4 degrees at 8 m: " .. W.dot_scale)
+        assert(W.cross.opacity == 0, "game's 2D dot hidden while ours is up")
         W.hook_visible = false
         run(W, 0.6)
         assert(W.dot.hidden, "hidden while the hook is out")
+        assert(W.cross.opacity == 1, "game's 2D dot back when ours is down")
     end,
 
     test_no_reticle_without_the_gun = function()
