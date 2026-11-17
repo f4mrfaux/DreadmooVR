@@ -2,7 +2,7 @@
 -- the real one) and a fake game. Real names: tools sit at HookSimple / KnifeSocket, and the hook
 -- gun's Hook mesh is hidden while the hook is out (docs/research/2026-11-17-remaining-hooks.md).
 local STAGE = "build/smoke3/"
-local LIBS = { "gameapi", "modes", "gestures" }
+local LIBS = { "gameapi", "modes", "gestures", "reticle", "armsloader" }
 local DT = 1 / 60
 
 local function copy(src, dst)
@@ -30,7 +30,37 @@ local function world(tool_socket, on_body)
         if i > #chain then return nil end
         return { get_fname = function() return fname(chain[i]) end, get_super_struct = function() return class_at(i + 1) end }
     end
-    W.pawn = { Mesh = mesh, get_class = function() return class_at(1) end }
+    -- Camera at (0,0,170) looking along +X; a wall 800 cm ahead.
+    W.trace_calls = {}
+    local pcm = { GetCameraLocation = function() return { x = 0, y = 0, z = 170 } end,
+                  GetCameraRotation = function() return { x = 0, y = 0, z = 0 } end }
+    W.pawn = { Mesh = mesh, get_class = function() return class_at(1) end,
+        Controller = { PlayerCameraManager = pcm }, GetTransform = function() return {} end }
+    W.dot = { hidden = true, StaticMeshComponent = { SetStaticMesh = function() end, SetMaterial = function() end,
+        SetCollisionEnabled = function() end, SetCastShadow = function() end,
+        SetWorldScale3D = function(self, sc) W.dot_scale = sc.X end } }
+    W.dot.SetActorHiddenInGame = function(self, h) self.hidden = h end
+    W.dot.K2_SetActorLocation = function(self, p) self.loc = p end
+    W.dot.K2_DestroyActor = function(self) self.destroyed = true end
+    local ksl = { LineTraceSingle = function(_, ctx, start, finish, chan, complex, ignore, dbg, hit)
+        W.trace_calls[#W.trace_calls + 1] = { start = start, finish = finish, chan = chan, ignore = ignore }
+        if finish.X < 800 then return false end
+        hit.ImpactPoint = { x = 800, y = 0, z = 170 }
+        return true
+    end }
+    local objs = {
+        ["Class /Script/Engine.StaticMeshActor"] = { get_class_default_object = function() return {} end },
+        ["StaticMesh /Engine/BasicShapes/Sphere.Sphere"] = {},
+        ["Material /Engine/EngineMaterials/EmissiveMeshMaterial.EmissiveMeshMaterial"] = {},
+        ["ScriptStruct /Script/Engine.HitResult"] = {},
+        ["Class /Script/Engine.KismetSystemLibrary"] = { get_class_default_object = function() return ksl end },
+        ["BlueprintGeneratedClass /Game/Dreadmoor/Core/Features/Hook/GAS/GA_HookGun.GA_HookGun_C"] =
+            { get_class_default_object = function() return { TraceLength = 3000 } end },
+        ["Class /Script/Engine.GameplayStatics"] = { get_class_default_object = function() return {
+            BeginDeferredActorSpawnFromClass = function() return W.dot end,
+            FinishSpawningActor = function(_, a) return a end } end },
+    }
+    _G.StructObject = { new = function() return {} end }
     -- Poses: W.left / W.right are functions of time returning a position (m); right faces -Z.
     W.left = function() return v(0, 1.2, -0.3) end
     W.right = function() return v(0.2, 1.2, -0.3) end
@@ -50,7 +80,9 @@ local function world(tool_socket, on_body)
             },
         },
         sdk = { callbacks = { on_pre_engine_tick = reg("tick"), on_xinput_get_state = reg("xinput"), on_script_reset = reg("reset") } },
-        api = { get_local_pawn = function() return W.pawn end },
+        api = { get_local_pawn = function() return W.pawn end,
+                find_uobject = function(_, n) return objs[n] end,
+                get_engine = function() return { GameViewport = { World = {} } } end },
     }
     local saved_path, saved_require = package.path, require
     package.path = STAGE .. "scripts/?.lua;" .. saved_path
@@ -131,6 +163,28 @@ return {
         assert(presses == 1, "one swing, one attack; got " .. presses)
         assert(has(W, "swing %-> attack"))
         no_failures(W)
+    end,
+
+    test_reticle_sits_where_the_hook_will_go = function()
+        local W = world("HookSimple", false)
+        run(W, 1)
+        no_failures(W)
+        assert(has(W, "reticle ready %(TraceLength 3000%)"), "uses the game's TraceLength")
+        assert(not W.dot.hidden, "shown while aiming")
+        assert(W.dot.loc and W.dot.loc.X == 800 and W.dot.loc.Z == 170, "on the hit point")
+        local c = W.trace_calls[#W.trace_calls]
+        assert(c.start.Z == 170 and c.finish.X == 3000, "from the camera, TraceLength along the view")
+        assert(c.chan == 0 and c.ignore[1] == W.pawn, "Visibility channel, ignoring the player (as GA_HookGun)")
+        assert(W.dot_scale > 0.04 and W.dot_scale < 0.08, "about 0.4 degrees at 8 m: " .. W.dot_scale)
+        W.hook_visible = false
+        run(W, 0.6)
+        assert(W.dot.hidden, "hidden while the hook is out")
+    end,
+
+    test_no_reticle_without_the_gun = function()
+        local W = world("KnifeSocket", false)
+        run(W, 1)
+        assert(#W.trace_calls == 0 and W.dot.hidden, "no trace, no dot")
     end,
 
     test_real_trigger_passes_through_when_idle = function()

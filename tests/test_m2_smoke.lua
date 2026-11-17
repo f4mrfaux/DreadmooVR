@@ -2,7 +2,7 @@
 -- for ~15 s of frames. Checks the whole bridge wires up without errors, pushes the tuning into
 -- UEVR, moves a hand-held item onto the VR arms and gives it back. Staged under build/smoke.
 local STAGE = "build/smoke/"
-local LIBS = { "gameapi", "modes", "armsloader", "m1flow", "armsflow", "armstats", "tuning", "wristfit", "ubik", "itemfollow", "gestures" }
+local LIBS = { "gameapi", "modes", "armsloader", "m1flow", "armsflow", "armstats", "tuning", "wristfit", "ubik", "itemfollow", "gestures", "reticle" }
 
 local function copy(src, dst)
     local i = assert(io.open(src, "rb")); local s = i:read("a"); i:close()
@@ -166,6 +166,7 @@ local function make_world()
             get_engine = function() return { GameViewport = { World = {} } } end,
             find_uobject = function(_, name)
                 if name:find("BP_VRArms") then return W.class_loaded ~= false and arms_class or nil end
+                if name:find("StaticMeshActor") or name:find("Sphere") or name:find("HitResult") then return nil end
 
                 return { get_class_default_object = function() return gs end }
             end,

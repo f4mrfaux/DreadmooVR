@@ -35,12 +35,15 @@ end
 local gameapi = load_module("gameapi")
 local modes = load_module("modes")
 local gestures = load_module("gestures")
+local reticle = load_module("reticle")
+local armsloader = load_module("armsloader")
 log("loaded")
 
 local TUNING_FILE = (lib_dir():gsub("scripts[/\\]lib[/\\]$", "")) .. "dreadmoorvr_arms_tuning.lua"
 -- Defaults; the tuning file's `gestures = { ... }` table overrides any of them live.
 local DEFAULTS = {
     enabled = true,
+    reticle = true,
     crank_offset = { x = -0.06, y = 0.0, z = 0.04 },   -- m, in the gun hand's frame (OpenVR: x right, y up, z back)
     crank_r_min = 0.04, crank_r_max = 0.25, crank_min_deg_s = 180, crank_step_deg = 90,
     swing_min_m_s = 2.0, swing_frames = 3, swing_cooldown_s = 0.4,
@@ -57,6 +60,7 @@ local function read_cfg()
     local d = DEFAULTS
     return {
         enabled = g.enabled ~= false,
+        reticle = g.reticle ~= false,
         crank_offset = { x = num(off.x, -0.5, 0.5, d.crank_offset.x), y = num(off.y, -0.5, 0.5, d.crank_offset.y), z = num(off.z, -0.5, 0.5, d.crank_offset.z) },
         crank_r_min = num(g.crank_r_min, 0, 0.5, d.crank_r_min), crank_r_max = num(g.crank_r_max, 0.01, 1, d.crank_r_max),
         crank_min_deg_s = num(g.crank_min_deg_s, 0, 2000, d.crank_min_deg_s), crank_step_deg = num(g.crank_step_deg, 10, 360, d.crank_step_deg),
@@ -123,6 +127,76 @@ local function hook_is_out()
     return ok and out or false
 end
 
+-- Hook gun reticle: a small glowing sphere on the point the hook will fly to. Same trace as the
+-- game (GA_HookGun.CalculateLaunchTransform): from the camera, along the camera rotation, for
+-- GA_HookGun's TraceLength, Visibility channel, ignoring the player. Shown while the gun is in
+-- hand and the hook is home. Calls (UE 5.6): PlayerController.PlayerCameraManager
+-- PlayerController.h:285, GetCameraLocation/Rotation PlayerCameraManager.h:706/702,
+-- LineTraceSingle KismetSystemLibrary.h:1243 (OutHit via StructObject, UEVR ScriptUtility.cpp:720),
+-- StaticMeshActor.StaticMeshComponent StaticMeshActor.h:29, SetStaticMesh StaticMeshComponent.h:426,
+-- SetMaterial / SetCollisionEnabled / SetCastShadow PrimitiveComponent.h:1516/1942/1881,
+-- SetWorldScale3D SceneComponent.h:565, K2_SetActorLocation Actor.h:1575.
+local GA_HOOKGUN = "BlueprintGeneratedClass /Game/Dreadmoor/Core/Features/Hook/GAS/GA_HookGun.GA_HookGun_C"
+local SPHERE = "StaticMesh /Engine/BasicShapes/Sphere.Sphere"
+local GLOW = "Material /Engine/EngineMaterials/EmissiveMeshMaterial.EmissiveMeshMaterial"
+local FALLBACK_TRACE_LENGTH = 5000
+local dot = { actor = nil, comp = nil, shown = false, failed = false, trace_length = nil, hit = nil, ksl = nil }
+
+local function dot_setup(pawn)
+    if dot.actor ~= nil or dot.failed then return dot.actor ~= nil end
+    local cls = uevr.api:find_uobject("Class /Script/Engine.StaticMeshActor")
+    local mesh = uevr.api:find_uobject(SPHERE)
+    local mat = uevr.api:find_uobject(GLOW)
+    local hit_struct = uevr.api:find_uobject("ScriptStruct /Script/Engine.HitResult")
+    local ksl_cls = uevr.api:find_uobject("Class /Script/Engine.KismetSystemLibrary")
+    if not (cls and mesh and hit_struct and ksl_cls) then
+        dot.failed = true
+        log(string.format("reticle off: missing %s%s%s%s", cls and "" or "StaticMeshActor ", mesh and "" or "Sphere ",
+            hit_struct and "" or "HitResult ", ksl_cls and "" or "KismetSystemLibrary"))
+        return false
+    end
+    local a = armsloader.spawn(cls, pawn:GetTransform())
+    if a == nil then dot.failed = true; log("reticle off: spawn failed"); return false end
+    local c = a.StaticMeshComponent
+    c:SetStaticMesh(mesh)
+    if mat then c:SetMaterial(0, mat) else log("reticle: glow material not loaded, using the sphere's own") end
+    c:SetCollisionEnabled(0)    -- ECollisionEnabled::NoCollision
+    c:SetCastShadow(false)
+    a:SetActorHiddenInGame(true)
+    dot.actor, dot.comp, dot.hit, dot.ksl = a, c, StructObject.new(hit_struct), ksl_cls:get_class_default_object()
+    local ga = uevr.api:find_uobject(GA_HOOKGUN)
+    local cdo = ga and ga:get_class_default_object()
+    local len = cdo and cdo.TraceLength
+    dot.trace_length = (type(len) == "number" and len > 0) and len or FALLBACK_TRACE_LENGTH
+    log(string.format("reticle ready (TraceLength %.0f%s)", dot.trace_length, (type(len) == "number" and len > 0) and "" or ", fallback"))
+    return true
+end
+
+local function dot_show(on)
+    if dot.actor ~= nil and on ~= dot.shown then
+        dot.shown = on
+        dot.actor:SetActorHiddenInGame(not on)
+    end
+end
+
+local function dot_update(pawn)
+    if not dot_setup(pawn) then return end
+    local pcm = pawn.Controller.PlayerCameraManager
+    local loc, rot = pcm:GetCameraLocation(), pcm:GetCameraRotation()
+    local start = { X = loc.x, Y = loc.y, Z = loc.z }
+    local finish = reticle.trace_end(start, rot.x, rot.y, dot.trace_length)
+    local clear = { R = 0, G = 0, B = 0, A = 0 }
+    local blocked = dot.ksl:LineTraceSingle(pawn, start, finish, 0, false, { pawn }, 0, dot.hit, true, clear, clear, 0)
+    if not blocked then dot_show(false); return end   -- nothing to hook onto
+    local p = dot.hit.ImpactPoint
+    local point = { X = p.x, Y = p.y, Z = p.z }
+    local d = math.sqrt((point.X - start.X) ^ 2 + (point.Y - start.Y) ^ 2 + (point.Z - start.Z) ^ 2)
+    dot.actor:K2_SetActorLocation(point, false, {}, true)
+    local sc = reticle.dot_scale(d)
+    dot.comp:SetWorldScale3D({ X = sc, Y = sc, Z = sc })
+    dot_show(true)
+end
+
 local function step(pawn)
     if clock - last_cfg >= 1.0 then
         last_cfg = clock
@@ -143,6 +217,13 @@ local function step(pawn)
     end
     local out = hook_is_out()
     if out ~= hook_out then hook_out = out; log(out and "hook out: crank live" or "hook home: crank off"); crank:reset() end
+
+    if tool == "hookgun" and not hook_out and cfg.reticle then
+        local okd, errd = pcall(dot_update, pawn)
+        if not okd then dot_show(false); if not dot.err_logged then dot.err_logged = true; log("reticle FAILED: " .. tostring(errd)) end end
+    else
+        dot_show(false)
+    end
 
     local vr = uevr.params.vr
     if tool == "hookgun" and hook_out then
@@ -169,6 +250,7 @@ uevr.sdk.callbacks.on_pre_engine_tick(function(_, delta)
     local pawn = gameapi.local_pawn()
     local mode = pawn and modes.classify(gameapi.class_chain(pawn)) or nil
     if mode ~= "walking" then
+        dot_show(false)
         if tool ~= nil then log("tool in hand: nil (left walking mode)") end
         tool, tool_comp, hook_out = nil, nil, false
         return
@@ -188,5 +270,6 @@ uevr.sdk.callbacks.on_xinput_get_state(function(retval, user_index, state)
 end)
 
 uevr.sdk.callbacks.on_script_reset(function()
+    if dot.actor ~= nil then pcall(function() dot.actor:K2_DestroyActor() end) end
     tool, tool_comp, hook_out = nil, nil, false
 end)
