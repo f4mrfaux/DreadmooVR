@@ -2,7 +2,7 @@
 -- for ~15 s of frames. Checks the whole bridge wires up without errors, pushes the tuning into
 -- UEVR, moves a hand-held item onto the VR arms and gives it back. Staged under build/smoke.
 local STAGE = "build/smoke/"
-local LIBS = { "gameapi", "modes", "armsloader", "m1flow", "armsflow", "armstats", "tuning", "wristfit", "ubik", "itemfollow" }
+local LIBS = { "gameapi", "modes", "armsloader", "m1flow", "armsflow", "armstats", "tuning", "wristfit", "ubik", "itemfollow", "gestures" }
 
 local function copy(src, dst)
     local i = assert(io.open(src, "rb")); local s = i:read("a"); i:close()
@@ -13,6 +13,7 @@ local function write(path, s) local o = assert(io.open(path, "wb")); o:write(s);
 local function stage(tuning_text)
     os.execute('mkdir "build\\smoke\\scripts\\lib" 2>nul')
     copy("src/scripts/m2_arms.lua", STAGE .. "scripts/m2_arms.lua")
+    copy("src/scripts/m3_gestures.lua", STAGE .. "scripts/m3_gestures.lua")
     for _, m in ipairs(LIBS) do copy("src/scripts/lib/" .. m .. ".lua", STAGE .. "scripts/lib/" .. m .. ".lua") end
     write(STAGE .. "dreadmoorvr_arms_tuning.lua", tuning_text)
 end
@@ -53,7 +54,15 @@ local function make_world()
         local c = obj({ name = name, parent = parent, socket = socket })
         c.GetAttachSocketName = function(self) return fname(self.socket) end
         c.GetAttachParent = function(self) return self.parent end
-        c.K2_AttachToComponent = function(self, p, s) self.parent = p; self.socket = s; return true end
+        -- Like the engine: moving a component takes it out of the old parent's AttachChildren and
+        -- puts it in the new one's.
+        c.K2_AttachToComponent = function(self, p, s)
+            local old = self.parent and self.parent.AttachChildren
+            if old then for i = #old, 1, -1 do if old[i] == self then table.remove(old, i) end end end
+            p.AttachChildren = p.AttachChildren or {}
+            table.insert(p.AttachChildren, self)
+            self.parent = p; self.socket = s; return true
+        end
         return c
     end
     local function target(loc)
@@ -66,6 +75,9 @@ local function make_world()
     local pawn_mesh = mesh("GameMesh")
     W.camera = attachable("Camera", pawn_mesh, "head")
     W.gun = attachable("BP_HookGunEquipment.DefaultSceneRoot", pawn_mesh, "HookSimple")
+    W.hook_visible = true   -- BP_HookGunEquipment.Hook: hidden while the hook is out
+    local gun_actor = { Hook = { IsVisible = function() return W.hook_visible end } }
+    W.gun.GetOwner = function() return gun_actor end
     pawn_mesh.AttachChildren = { W.camera, W.gun }
     W.pawn_mesh = pawn_mesh
 
@@ -99,7 +111,11 @@ local function make_world()
     _G.UEVR_Vector3f = { new = function() return { x = 0, y = 0, z = 0 } end }
     _G.UEVR_Quaternionf = { new = function() return { x = 0, y = 0, z = 0, w = 1 } end }
     _G.UEVR_UObjectHook = { activate = function() end, get_or_add_motion_controller_state = function(o) return state(o) end }
-    local function reg(name) return function(fn) W.callbacks[name] = fn end end
+    -- UEVR calls every script's callback, so registrations chain.
+    local function reg(name) return function(fn)
+        local prev = W.callbacks[name]
+        W.callbacks[name] = prev and function(...) prev(...); return fn(...) end or fn
+    end end
     _G.uevr = {
         params = {
             functions = { log_info = function(s) W.logs[#W.logs + 1] = s end },
@@ -108,12 +124,16 @@ local function make_world()
                 get_hmd_index = function() return 0 end,
                 get_left_controller_index = function() return 1 end,
                 get_right_controller_index = function() return 2 end,
-                get_pose = function(i, p) p.x, p.y, p.z = (i == 1 and -0.2 or i == 2 and 0.2 or 0), (i == 0 and 1.6 or 1.2), -0.3 end,
+                get_pose = function(i, p, q)
+                    if W.pose then local r = W.pose(i, W.t or 0); p.x, p.y, p.z = r.X, r.Y, r.Z
+                    else p.x, p.y, p.z = (i == 1 and -0.2 or i == 2 and 0.2 or 0), (i == 0 and 1.6 or 1.2), -0.3 end
+                    if q then q.x, q.y, q.z, q.w = 0, 0, 0, 1 end
+                end,
             },
         },
         sdk = { callbacks = {
             on_lua_event = reg("lua_event"), on_pre_engine_tick = reg("tick"), on_script_reset = reg("reset"),
-            on_post_calculate_stereo_view_offset = reg("view"),
+            on_post_calculate_stereo_view_offset = reg("view"), on_xinput_get_state = reg("xinput"),
         } },
         api = {
             get_local_pawn = function() return W.pawn end,
@@ -137,7 +157,15 @@ local function run(W, seconds)
             W.callbacks.view(nil, 0, 100, { x = 10, y = 0, z = 170 }, { x = 0, y = 0, z = 0 }, true)
             W.callbacks.view(nil, 1, 100, { x = 10, y = 0, z = 170 }, { x = 0, y = 0, z = 0 }, true)
         end
+        W.t = (W.t or 0) + 0.05
         W.callbacks.tick(nil, 0.05)
+        if W.callbacks.xinput then
+            local st = { Gamepad = { bRightTrigger = 0 } }
+            W.callbacks.xinput(nil, 0, st)
+            local down = st.Gamepad.bRightTrigger > 128
+            if down and not W.was_down then W.presses = (W.presses or 0) + 1 end
+            W.was_down = down
+        end
     end
 end
 
@@ -153,14 +181,22 @@ return { grip_back = 8, shoulder_widen = 5, camera_forward = -30, camera_up = 0,
          aim_method = 2, movement_orientation = 1, items_follow_hands = true }
 ]]
 
-local function boot()
-    stage(TUNING_ON)
-    local saved = package.path
+-- Loads the given scripts the way UEVR does: no working require.
+local function load_scripts(W, scripts)
+    local saved, saved_require = package.path, require
     package.path = STAGE .. "scripts/?.lua;" .. saved
+    _G.require = function(n) error("UEVR has no working require (asked for " .. tostring(n) .. ")") end
+    local ok, err = pcall(function()
+        for _, sc in ipairs(scripts) do assert(loadfile(STAGE .. "scripts/" .. sc .. ".lua"))() end
+    end)
+    _G.require, package.path = saved_require, saved
+    assert(ok, "load failed: " .. tostring(err))
+end
+
+local function boot(scripts)
+    stage(TUNING_ON)
     local W = make_world()
-    local chunk = assert(loadfile(STAGE .. "scripts/m2_arms.lua"))
-    chunk()
-    package.path = saved
+    load_scripts(W, scripts or { "m2_arms" })
     run(W, 15)
     return W
 end
@@ -198,6 +234,26 @@ return {
         assert(W.gun.parent == W.pawn_mesh and W.gun.socket == "HookSimple", "hook gun back on the game mesh")
     end,
 
+    test_arms_and_gestures_together_crank_reels_the_moved_gun = function()
+        -- The real pairing: m2 moves the gun onto the VR hand, m3 must still find it there.
+        local W = boot({ "m2_arms", "m3_gestures" })
+        assert(W.gun.parent == W.body, "gun on the VR hand")
+        assert(has(W.logs, "tool in hand: hookgun"), "m3 found the moved gun")
+        W.presses = 0
+        W.pose = function(i, t)   -- right hand still; left hand circles the crank point at 360 deg/s
+            if i ~= 1 then return v(0, 1.2, -0.3) end
+            local a = math.rad(360 * t)
+            return v(-0.06, 1.2 + 0.10 * math.cos(a), -0.3 + 0.04 + 0.10 * math.sin(a))
+        end
+        run(W, 2)
+        assert(W.presses == 0, "hook home: cranking must not fire, pressed " .. W.presses)
+        W.hook_visible = false
+        run(W, 2)
+        assert(W.presses >= 5, "hook out: crank reels, pressed " .. W.presses)
+        local f = failures(W.logs)
+        assert(f == "", "FAILED lines: " .. f)
+    end,
+
     test_one_broken_component_does_not_stop_the_scan = function()
         stage(TUNING_ON)
         local saved = package.path
@@ -206,7 +262,7 @@ return {
         local broken = { get_address = function() return 0x9999 end,
             GetAttachSocketName = function() error("component is gone") end }
         table.insert(W.pawn_mesh.AttachChildren, 1, broken)
-        assert(loadfile(STAGE .. "scripts/m2_arms.lua"))()
+        load_scripts(W, { "m2_arms" })
         package.path = saved
         run(W, 15)
         assert(W.gun.parent == W.body, "hook gun still moved past the broken component")
@@ -219,11 +275,11 @@ return {
         local saved = package.path
         package.path = STAGE .. "scripts/?.lua;" .. saved
         local W = make_world()
-        assert(loadfile(STAGE .. "scripts/m2_arms.lua"))()
+        load_scripts(W, { "m2_arms" })
         package.path = saved
         local tick = W.callbacks.tick
         W.callbacks.tick = function(...)   -- the game snaps the hook gun back to its own hand every frame
-            W.gun.parent, W.gun.socket = W.pawn_mesh, "HookSimple"
+            W.gun:K2_AttachToComponent(W.pawn_mesh, "HookSimple")
             return tick(...)
         end
         run(W, 15)
@@ -238,12 +294,12 @@ return {
         local saved = package.path
         package.path = STAGE .. "scripts/?.lua;" .. saved
         local W = make_world()
-        assert(loadfile(STAGE .. "scripts/m2_arms.lua"))()
+        load_scripts(W, { "m2_arms" })
         package.path = saved
         local tick, t = W.callbacks.tick, 0
         W.callbacks.tick = function(e, d)   -- re-equip the hook gun every 5 s, like a player swapping tools
             t = t + d
-            if t >= 5 then t = 0; W.gun.parent, W.gun.socket = W.pawn_mesh, "HookSimple" end
+            if t >= 5 then t = 0; W.gun:K2_AttachToComponent(W.pawn_mesh, "HookSimple") end
             return tick(e, d)
         end
         run(W, 40)
