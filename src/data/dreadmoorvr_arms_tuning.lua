@@ -11,6 +11,7 @@ return {
     shoulder_swing = 0.3,  -- 0..1 of the forward shoulder turn when reaching (1 = full UBIK)
     grip_back = 8,         -- cm from the controller grip back to your wrist
     camera_forward = -24,  -- cm, UEVR camera forward offset: view sat ~40 cm ahead of the shoulders (real ~10)
+    item_rot = { p = 0, y = 180, r = 0 },  -- held tools turned in the hand (deg); gun was ~180 off
     level_torso = true,          -- the game's torso and head ignore look pitch (keeps the view out of the face)
     items_follow_hands = true,   -- held tools ride on the VR hands (false = game's own hand position)
     aim_method = 2,              -- UEVR: 1 = head, 2 = right controller (aim + hook gun follow the hand)

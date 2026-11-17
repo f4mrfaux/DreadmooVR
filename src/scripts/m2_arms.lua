@@ -66,6 +66,7 @@ local function apply_tuning(now)
     fit.items_follow_hands = merged.items_follow_hands
     fit.level_torso = merged.level_torso
     fit.shoulder_swing = merged.shoulder_swing
+    fit.item_rot = merged.item_rot
     if merged.grip_back ~= fit.grip_back and hand_states.L ~= nil then
         -- MotionControllerState offset is in the controller's OpenVR frame (UObjectHook.cpp:925,
         -- cm); OpenVR grip forward is -Z, so +Z moves the target back toward the wrist.
@@ -308,6 +309,7 @@ end
 
 -- Every frame, before rendering: each followed tool goes to the VR hand.
 local place_err_logged, placing = false, false
+local item_off, item_off_key = nil, nil   -- MakeTransform of fit.item_rot (KismetMathLibrary.h:3930)
 function place_items()
     if not placing or actor == nil or next(moved) == nil then return end
     if kml == nil then
@@ -315,11 +317,19 @@ function place_items()
         kml = c and c:get_class_default_object()
         if kml == nil then return end
     end
+    -- Our hand bone is turned to fit the controller, unlike the game's, so tools can sit turned in
+    -- the hand (in game 18:20 the gun was about 180 off). item_rot turns them about the grip.
+    local r = fit.item_rot or { p = 0, y = 0, r = 0 }
+    local key = r.p .. "," .. r.y .. "," .. r.r
+    if key ~= item_off_key then
+        item_off = kml:MakeTransform({ X = 0, Y = 0, Z = 0 }, { Pitch = r.p, Yaw = r.y, Roll = r.r }, { X = 1, Y = 1, Z = 1 })
+        item_off_key = key
+    end
     local body = actor.Body
     for a, m in pairs(moved) do
         local ok, err = pcall(function()
             local sock = body:GetSocketTransform(m.socket, RTS_WORLD)
-            m.comp:K2_SetWorldTransform(kml:ComposeTransforms(m.rel, sock), false, {}, true)
+            m.comp:K2_SetWorldTransform(kml:ComposeTransforms(m.rel, kml:ComposeTransforms(item_off, sock)), false, {}, true)
         end)
         if not ok then
             moved[a] = nil

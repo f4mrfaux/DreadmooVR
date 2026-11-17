@@ -65,6 +65,13 @@ return {
         assert(tuning.merge({ shoulder_swing = 2 }).shoulder_swing == 1, "0..1 only")
     end,
 
+    test_item_rot_defaults_to_none_and_clamps = function()
+        local t = tuning.merge(nil)
+        assert(t.item_rot.p == 0 and t.item_rot.y == 0 and t.item_rot.r == 0)
+        local u = tuning.merge({ item_rot = { y = 180 } })
+        assert(u.item_rot.y == 180 and u.item_rot.p == 0)
+    end,
+
     test_flatten_names_match_blueprint_variables = function()
         local f = tuning.flatten(tuning.merge({ right_rot = { y = -15 } }))
         assert(f.RightRotY == -15 and f.LeftRotP == 0 and f.ElbowOut == 30 and f.ArmLength == 50.7 and f.ShoulderFollow == 1)

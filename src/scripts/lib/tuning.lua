@@ -48,6 +48,7 @@ function tuning.merge(u)
         movement_orientation = int(u.movement_orientation, 0, 5), -- UEVR VR_MovementOrientation
         items_follow_hands = u.items_follow_hands == true,        -- held tools move onto the VR hands
         shoulder_swing = num(u.shoulder_swing, 0, 1, 1),          -- 0..1 of UBIK's forward clavicle turn
+        item_rot = rot(u.item_rot, { p = 0, y = 0, r = 0 }),       -- held tools, turned in the hand's frame (deg)
         level_torso = u.level_torso == true,                      -- the game's torso ignores look pitch
     }
 end

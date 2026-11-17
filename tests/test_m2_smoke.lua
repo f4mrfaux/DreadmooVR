@@ -175,7 +175,8 @@ local function make_world()
                 if name:find("StaticMeshActor") or name:find("Sphere") or name:find("HitResult") then return nil end
                 if name == "Class /Script/Engine.KismetMathLibrary" then
                     return { get_class_default_object = function() return {
-                        ComposeTransforms = function(_, a, b) return { a = a, b = b } end } end }
+                        ComposeTransforms = function(_, a, b) return { a = a, b = b } end,
+                        MakeTransform = function(_, loc, rot, sc) return { rot = rot } end } end }
                 end
                 if name == "BlueprintGeneratedClass /InventoryFrameworkPlugin/Core/ActorParents/SubObjects/SO_ExecuteEquipmentData.SO_ExecuteEquipmentData_C" then
                     return { get_fname = function() return fname("SO_ExecuteEquipmentData_C") end,
@@ -228,7 +229,8 @@ end
 
 local TUNING_ON = [[
 return { grip_back = 8, shoulder_widen = 5, camera_forward = -30, camera_up = 0,
-         aim_method = 2, movement_orientation = 1, items_follow_hands = true, level_torso = true }
+         aim_method = 2, movement_orientation = 1, items_follow_hands = true, level_torso = true,
+         item_rot = { y = 180 } }
 ]]
 
 -- Loads the given scripts the way UEVR does: no working require.
@@ -276,8 +278,9 @@ return {
         -- The tool stays where the game put it, so the game's own unequip can find it.
         assert(W.gun.parent == W.pawn_mesh and W.gun.socket == "HookSimple", "stays attached to the game mesh")
         local w = W.gun.world
-        assert(w and w.a == W.gun.rel and w.b.socket == "HookSimple" and w.b.on == W.body.name,
+        assert(w and w.a == W.gun.rel and w.b.b.socket == "HookSimple" and w.b.b.on == W.body.name,
             "placed every frame at the VR hand's HookSimple with the game's grip offset")
+        assert(w.b.a.rot.Yaw == 180, "turned by item_rot in the hand's frame (gun was 180 off, 18:20)")
         assert(W.camera.world == nil, "camera untouched")
         assert(has(W.logs, "held item %-> VR hand R"), "logged")
     end,
@@ -386,7 +389,7 @@ return {
         table.insert(W.pawn_mesh.AttachChildren, sickle)
         run(W, 2)
         assert(has(W.logs, "held item gone"), "old gun forgotten")
-        assert(sickle.world and sickle.world.b.socket == "KnifeSocket", "sickle follows")
+        assert(sickle.world and sickle.world.b.b.socket == "KnifeSocket", "sickle follows")
         local f = failures(W.logs)
         assert(f == "", "FAILED lines: " .. f)
     end,
