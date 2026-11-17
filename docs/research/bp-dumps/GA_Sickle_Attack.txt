@@ -1,0 +1,490 @@
+# /Game/Dreadmoor/InventoryFramework/Items/Weapon/Sickle/GAS/GA_Sickle_Attack
+# file: Dreadmoor/Content/Dreadmoor/InventoryFramework/Items/Weapon/Sickle/GAS/GA_Sickle_Attack.uasset
+
+## imported packages (10)
+  /Game/3rdParty/TFPMovement/Player/Blueprint/Effects/Headbob/BP_Attack_01
+  /Game/Dreadmoor/Art/VFX/Niagara/Blood/NS_BloodBurst_Ghoul_01
+  /Game/Dreadmoor/Audio/Attenuation/ATT_HarpoonProjectile
+  /Game/Dreadmoor/Audio/SFX/Hook/SMS_HookHit
+  /Game/Dreadmoor/Core/Features/ActionPlayer/BP_ActionPlayer
+  /Game/Dreadmoor/Core/Features/Hook/GAS/GE_HarpoonDamage
+  /Game/Dreadmoor/Core/Features/InteractableContainers/Destructible/BP_Destructible_Base
+  /Game/Dreadmoor/Core/Features/PlayerCharacter/BP_PlayerCharacter
+  /Game/Dreadmoor/Core/Features/PlayerCharacter/GAS/BPFL_GasFunctions
+  /Game/Dreadmoor/Core/Features/UpgradeDock/Components/BP_SlotTracerComponent
+
+## exports (31)
+  [0] GA_Sickle_Attack_C : BlueprintGeneratedClass (outer None) super=DrdGameplayAbility size=1368
+  [30] Default__GA_Sickle_Attack_C : GA_Sickle_Attack_C (outer None) size=339
+        refs: exp:GetAttack, name:SurfaceType5, name:P_Impact_Metal_Small_01, name:SurfaceType3, name:P_Impact_Stone_Small_01, name:SurfaceType2, name:P_Impact_Wood_Small_01, name:SurfaceType1, name:SurfaceType6, name:SurfaceType7, name:SurfaceType8, name:SurfaceType9, name:SurfaceType_Default, name:Ability.Attack, name:Ability.Block
+
+## function ApplyDamage  flags=0x0C820000
+  L0000: CallFunc_GetActorInfo_ReturnValue = GameplayAbility.GetActorInfo()
+  L001C: CallFunc_DrdApplyDamage_Damage_ImplicitCast = self.Damage
+  L0039: Default__BPFL_GasFunctions_C.DrdApplyDamage(CallFunc_GetActorInfo_ReturnValue.AvatarActor, Target, GE_HarpoonDamage_C, Hit, CallFunc_DrdApplyDamage_Damage_ImplicitCast, self)
+  L0094: return
+
+## function ApplyHitEffects  flags=0x0CC20000
+  L0000: CallFunc_GetActorInfo_ReturnValue = GameplayAbility.GetActorInfo()
+  L001C: CallFunc_PlayControllerFeedback_ReturnValue = DrdControllerFeedbackLibrary.PlayControllerFeedback(CallFunc_GetActorInfo_ReturnValue.PlayerController, 0, 1)
+  L0049: GameplayStatics.BreakHitResult(Hit, CallFunc_BreakHitResult_bBlockingHit, CallFunc_BreakHitResult_bInitialOverlap, CallFunc_BreakHitResult_Time, CallFunc_BreakHitResult_Distance, CallFunc_BreakHitResult_Location, CallFunc_BreakHitResult_ImpactPoint, CallFunc_BreakHitResult_Normal, CallFunc_BreakHitResult_ImpactNormal, CallFunc_BreakHitResult_PhysMat, CallFunc_BreakHitResult_HitActor, CallFunc_BreakHitResult_HitComponent, CallFunc_BreakHitResult_HitBoneName, CallFunc_BreakHitResult_BoneName, CallFunc_BreakHitResult_HitItem, CallFunc_BreakHitResult_ElementIndex, CallFunc_BreakHitResult_FaceIndex, CallFunc_BreakHitResult_TraceStart, CallFunc_BreakHitResult_TraceEnd)
+  L00FE: CallFunc_ObjectIsA_ReturnValue = GameplayStatics.ObjectIsA(CallFunc_BreakHitResult_HitActor, BP_Destructible_Base_C)
+  L0124: if not (CallFunc_ObjectIsA_ReturnValue) goto L017C
+  L0132: CallFunc_GetSurfaceType_ReturnValue = GameplayStatics.GetSurfaceType(Hit)
+  L0157: AsyncSpawnHitFX(CallFunc_GetSurfaceType_ReturnValue, Hit)
+  L0177: goto L0505
+  L017C: GameplayStatics.BreakHitResult(Hit, CallFunc_BreakHitResult_bBlockingHit, CallFunc_BreakHitResult_bInitialOverlap, CallFunc_BreakHitResult_Time, CallFunc_BreakHitResult_Distance, CallFunc_BreakHitResult_Location, CallFunc_BreakHitResult_ImpactPoint, CallFunc_BreakHitResult_Normal, CallFunc_BreakHitResult_ImpactNormal, CallFunc_BreakHitResult_PhysMat, CallFunc_BreakHitResult_HitActor, CallFunc_BreakHitResult_HitComponent, CallFunc_BreakHitResult_HitBoneName, CallFunc_BreakHitResult_BoneName, CallFunc_BreakHitResult_HitItem, CallFunc_BreakHitResult_ElementIndex, CallFunc_BreakHitResult_FaceIndex, CallFunc_BreakHitResult_TraceStart, CallFunc_BreakHitResult_TraceEnd)
+  L0231: CallFunc_SpawnSoundAtLocation_ReturnValue = GameplayStatics.SpawnSoundAtLocation(self, SMS_HookHit, CallFunc_BreakHitResult_Location, Rot(0,0,0), 1, 1, 0, ATT_HarpoonProjectile, null, true)
+  L028B: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(CallFunc_SpawnSoundAtLocation_ReturnValue)
+  L02A8: if not (CallFunc_IsValid_ReturnValue) goto L0505
+  L02B6: CallFunc_GetSurfaceType_ReturnValue = GameplayStatics.GetSurfaceType(Hit)
+  L02DB: Temp_name_Variable = 'Metal'
+  L02FA: Temp_name_Variable_1 = 'None'
+  L0319: Temp_name_Variable_2 = 'Default'
+  L0338: Temp_name_Variable_3 = 'Wood'
+  L0357: Temp_name_Variable_4 = 'Default'
+  L0376: Temp_name_Variable_5 = 'Default'
+  L0395: Temp_name_Variable_6 = 'Default'
+  L03B4: Temp_name_Variable_7 = 'Default'
+  L03D3: Temp_name_Variable_8 = 'Default'
+  L03F2: Temp_name_Variable_9 = 'Flesh'
+  L0411: Temp_byte_Variable = CallFunc_GetSurfaceType_ReturnValue
+  L042C: CallFunc_SpawnSoundAtLocation_ReturnValue.SetTriggerParameter(switch(Temp_byte_Variable){0: Temp_name_Variable_5; 1: Temp_name_Variable_4; 2: Temp_name_Variable_3; 3: Temp_name_Variable_2; 4: Temp_name_Variable_1; 5: Temp_name_Variable; 6: Temp_name_Variable_6; 7: Temp_name_Variable_7; 8: Temp_name_Variable_8; 9: Temp_name_Variable_9; default: K2Node_Select_Default})
+  L0500: goto L0132
+  L0505: return
+
+## function AsyncSpawnHitFX  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_SufraceType = SufraceType
+  L0012: frame.K2Node_CustomEvent_Hit = Hit
+  L0024: GA_Sickle_Attack_C.ExecuteUbergraph_GA_Sickle_Attack(3608)
+  L0033: return
+
+## function CachedVars  flags=0x0C820000
+  L0000: self.Damage = 0
+  L0017: CallFunc_GetDrdConfigSubsystem_ReturnValue = DrdConfigsSubsystem.GetDrdConfigSubsystem()
+  L002B: CallFunc_GetDrdSickleConfig_ReturnValue = CallFunc_GetDrdConfigSubsystem_ReturnValue.DrdConfigsSubsystem.GetDrdSickleConfig()
+  L005D: self.Attacks = CallFunc_GetDrdSickleConfig_ReturnValue.Attacks
+  L0081: CallFunc_Array_Length_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(self.Attacks)
+  L00BC: self.MaxAttacks = CallFunc_Array_Length_ReturnValue
+  L00D7: self.AttackIndex = 0
+  L00EE: self.bTransitionToNextCombo = false
+  L00F9: CallFunc_GetAvatarActorFromActorInfo_ReturnValue = GameplayAbility.GetAvatarActorFromActorInfo()
+  L010D: CallFunc_GetComponentsByTag_ReturnValue = CallFunc_GetAvatarActorFromActorInfo_ReturnValue.Actor.GetComponentsByTag(SkeletalMeshComponent, 'PlayerMesh')
+  L0155: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetComponentsByTag_ReturnValue, 0, CallFunc_Array_Get_Item)
+  L018C: self.SkeletalMesh = CallFunc_Array_Get_Item
+  L019F: return
+
+## function ClearWaitTorelease  flags=0x0C000000
+  L0000: GA_Sickle_Attack_C.ExecuteUbergraph_GA_Sickle_Attack(3519)
+  L000F: return
+
+## function ExecuteUbergraph_GA_Sickle_Attack  flags=0x00808001
+  L0000: push L1181
+  L0005: goto computed(EntryPoint)
+  L000F: push L00E2
+  L0014: Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_GetKeyValueByIndex(CallFunc_GetHitActors_HitActors, Temp_int_Variable, CallFunc_Map_GetKeyValueByIndex_Key, CallFunc_Map_GetKeyValueByIndex_Value)
+  L0058: ApplyHitEffects(CallFunc_Map_GetKeyValueByIndex_Value)
+  L006F: Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_GetKeyValueByIndex(CallFunc_GetHitActors_HitActors, Temp_int_Variable, CallFunc_Map_GetKeyValueByIndex_Key, CallFunc_Map_GetKeyValueByIndex_Value)
+  L00B3: ApplyDamage(CallFunc_Map_GetKeyValueByIndex_Key, CallFunc_Map_GetKeyValueByIndex_Value)
+  L00D3: TryReduceWeaponModuleHealth()
+  L00E1: pop-flow
+  L00E2: CallFunc_Add_IntInt_ReturnValue = Add_IntInt(Temp_int_Variable, 1)
+  L010C: Temp_int_Variable = CallFunc_Add_IntInt_ReturnValue
+  L0127: CallFunc_Map_Length_ReturnValue = Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_Length(CallFunc_GetHitActors_HitActors)
+  L0162: CallFunc_Less_IntInt_ReturnValue = Less_IntInt(Temp_int_Variable, CallFunc_Map_Length_ReturnValue)
+  L0188: if not (CallFunc_Less_IntInt_ReturnValue) pop-flow
+  L0192: goto L000F
+  L0197: Temp_int_Variable = 0
+  L01AE: goto L0127
+  L01B3: Temp_real_Variable = K2Node_CustomEvent_TimeWaited
+  L01CE: self.bTransitionToNextCombo = true
+  L01D9: FinishWaitInputForCombo()
+  L01E7: pop-flow
+  L01E8: CallFunc_WaitInputPress_ReturnValue = AbilityTask_WaitInputPress.WaitInputPress(self, false)
+  L01FE: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(CallFunc_WaitInputPress_ReturnValue)
+  L021B: if not (CallFunc_IsValid_ReturnValue) goto L0289
+  L0229: bind(K2Node_CreateDelegate_OutputDelegate_1, self, 'OnPress_31EFD82046B19163F43E3D9A1AC32454')
+  L0240: CallFunc_WaitInputPress_ReturnValue.self.OnPress += K2Node_CreateDelegate_OutputDelegate_1
+  L0269: CallFunc_WaitInputPress_ReturnValue.GameplayTask.ReadyForActivation()
+  L0289: self.Async Task = CallFunc_WaitInputPress_ReturnValue
+  L029C: pop-flow
+  L029D: CallFunc_IsValid_ReturnValue_1 = KismetSystemLibrary.IsValid(self.Async Task)
+  L02BA: if not (CallFunc_IsValid_ReturnValue_1) goto L02E8
+  L02C8: self.Async Task.GameplayTask.EndTask()
+  L02E8: self.Async Task = null
+  L02F3: pop-flow
+  L02F4: CallFunc_IsValid_ReturnValue_2 = KismetSystemLibrary.IsValid(self.Async Task)
+  L0311: if not (CallFunc_IsValid_ReturnValue_2) goto L01E8
+  L031F: pop-flow
+  L0320: Temp_real_Variable_1 = K2Node_CustomEvent_TimeHeld
+  L033B: self.bReleased = true
+  L0346: pop-flow
+  L0347: CallFunc_WaitInputRelease_ReturnValue = AbilityTask_WaitInputRelease.WaitInputRelease(self, false)
+  L035D: CallFunc_IsValid_ReturnValue_3 = KismetSystemLibrary.IsValid(CallFunc_WaitInputRelease_ReturnValue)
+  L037A: if not (CallFunc_IsValid_ReturnValue_3) goto L03E8
+  L0388: bind(K2Node_CreateDelegate_OutputDelegate_2, self, 'OnRelease_3DCD915B424232B766D06A88341B2F58')
+  L039F: CallFunc_WaitInputRelease_ReturnValue.self.OnRelease += K2Node_CreateDelegate_OutputDelegate_2
+  L03C8: CallFunc_WaitInputRelease_ReturnValue.GameplayTask.ReadyForActivation()
+  L03E8: self.Async Task Wait Release = CallFunc_WaitInputRelease_ReturnValue
+  L03FB: pop-flow
+  L03FC: if not (self.bReleased) goto L0419
+  L040A: K2_EndAbility()
+  L0418: pop-flow
+  L0419: CallFunc_WaitDelay_ReturnValue = AbilityTask_WaitDelay.WaitDelay(self, 0.02)
+  L0433: CallFunc_IsValid_ReturnValue_5 = KismetSystemLibrary.IsValid(CallFunc_WaitDelay_ReturnValue)
+  L0450: if not (CallFunc_IsValid_ReturnValue_5) pop-flow
+  L045A: bind(K2Node_CreateDelegate_OutputDelegate_3, self, 'OnFinish_939147F64E7519C1C486C2B7DB99F175')
+  L0471: CallFunc_WaitDelay_ReturnValue.self.OnFinish += K2Node_CreateDelegate_OutputDelegate_3
+  L049A: CallFunc_WaitDelay_ReturnValue.GameplayTask.ReadyForActivation()
+  L04BA: pop-flow
+  L04BB: self.Async Task Wait Release.GameplayTask.EndTask()
+  L04DB: self.Async Task Wait Release = null
+  L04E6: pop-flow
+  L04E7: CallFunc_IsValid_ReturnValue_4 = KismetSystemLibrary.IsValid(self.Async Task Wait Release)
+  L0504: if not (CallFunc_IsValid_ReturnValue_4) pop-flow
+  L050E: goto L04BB
+  L0513: Temp_object_Variable = K2Node_CustomEvent_Loaded
+  L0526: K2Node_DynamicCast_AsParticle_System = cast<ParticleSystem>(Temp_object_Variable)
+  L054A: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsParticle_System
+  L0567: if not (K2Node_DynamicCast_bSuccess) pop-flow
+  L0571: GameplayStatics.BreakHitResult(K2Node_CustomEvent_Hit, CallFunc_BreakHitResult_bBlockingHit, CallFunc_BreakHitResult_bInitialOverlap, CallFunc_BreakHitResult_Time, CallFunc_BreakHitResult_Distance, CallFunc_BreakHitResult_Location, CallFunc_BreakHitResult_ImpactPoint, CallFunc_BreakHitResult_Normal, CallFunc_BreakHitResult_ImpactNormal, CallFunc_BreakHitResult_PhysMat, CallFunc_BreakHitResult_HitActor, CallFunc_BreakHitResult_HitComponent, CallFunc_BreakHitResult_HitBoneName, CallFunc_BreakHitResult_BoneName, CallFunc_BreakHitResult_HitItem, CallFunc_BreakHitResult_ElementIndex, CallFunc_BreakHitResult_FaceIndex, CallFunc_BreakHitResult_TraceStart, CallFunc_BreakHitResult_TraceEnd)
+  L0626: CallFunc_FindLookAtRotation_ReturnValue = FindLookAtRotation(CallFunc_BreakHitResult_TraceStart, CallFunc_BreakHitResult_ImpactPoint)
+  L0654: CallFunc_SpawnEmitterAtLocation_ReturnValue = GameplayStatics.SpawnEmitterAtLocation(self, K2Node_DynamicCast_AsParticle_System, CallFunc_BreakHitResult_ImpactPoint, CallFunc_FindLookAtRotation_ReturnValue, Vec(4,4,4), true, 0, true)
+  L06A1: pop-flow
+  L06A2: bind(K2Node_CreateDelegate_OutputDelegate_6, self, 'OnLoaded_F625730048522B2352EC9188AB4FADB9')
+  L06B9: CallFunc_Map_Find_ReturnValue = Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_Find(self.HitFXMap, K2Node_CustomEvent_SufraceType, CallFunc_Map_Find_Value)
+  L06FE: KismetSystemLibrary.LoadAsset(self, CallFunc_Map_Find_Value, K2Node_CreateDelegate_OutputDelegate_6, LatentActionInfo{-1, 1712100426, 'ExecuteUbergraph_GA_Sickle_Attack', self})
+  L0741: pop-flow
+  L0742: GameplayAbility.K2_ActivateAbility()
+  L074C: CachedVars()
+  L075A: CallFunc_IsValid_ReturnValue_6 = KismetSystemLibrary.IsValid(self.SkeletalMesh)
+  L0777: if not (CallFunc_IsValid_ReturnValue_6) goto L07BC
+  L0785: SetAnimIsUpperBody(true)
+  L0794: self.bReleased = false
+  L079F: WaitToRelease()
+  L07AD: StartAttack()
+  L07BB: pop-flow
+  L07BC: K2_EndAbility()
+  L07CA: pop-flow
+  L07CB: self.bTransitionToNextCombo = false
+  L07D6: GetAttack(CallFunc_GetAttack_Valid, CallFunc_GetAttack_AttackMontage, CallFunc_GetAttack_DamageMult, CallFunc_GetAttack_Stamina_Cost)
+  L0808: if not (CallFunc_GetAttack_Valid) goto L0926
+  L0816: GetWeaponModuleDamage(CallFunc_GetWeaponModuleDamage_ModuleDamage)
+  L082D: CallFunc_Multiply_DoubleDouble_A_ImplicitCast = CallFunc_GetAttack_DamageMult
+  L084A: CallFunc_Multiply_DoubleDouble_ReturnValue = Multiply_DoubleDouble(CallFunc_Multiply_DoubleDouble_A_ImplicitCast, CallFunc_GetWeaponModuleDamage_ModuleDamage)
+  L0878: K2Node_VariableSet_Damage_ImplicitCast = CallFunc_Multiply_DoubleDouble_ReturnValue
+  L0895: self.Damage = K2Node_VariableSet_Damage_ImplicitCast
+  L08B0: self.Stamina Cost = CallFunc_GetAttack_Stamina_Cost
+  L08CB: bind(K2Node_CreateDelegate_OutputDelegate_7, self, 'OnLoaded_B97AFA8C433EAED88B6816B2290B1CFE')
+  L08E2: KismetSystemLibrary.LoadAsset(self, CallFunc_GetAttack_AttackMontage, K2Node_CreateDelegate_OutputDelegate_7, LatentActionInfo{-1, -394291209, 'ExecuteUbergraph_GA_Sickle_Attack', self})
+  L0925: pop-flow
+  L0926: K2_EndAbility()
+  L0934: pop-flow
+  L0935: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue = PlayMontageCallbackProxy.CreateProxyObjectForPlayMontage(self.SkeletalMesh, self.PlayerMontage, 1, 0, 'None', true)
+  L0973: CallFunc_IsValid_ReturnValue_7 = KismetSystemLibrary.IsValid(CallFunc_CreateProxyObjectForPlayMontage_ReturnValue)
+  L0990: if not (CallFunc_IsValid_ReturnValue_7) goto L0ADE
+  L099E: bind(K2Node_CreateDelegate_OutputDelegate_8, self, 'OnCompleted_873810B743A559924559AF9B350A9E76')
+  L09B5: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue.self.OnCompleted += K2Node_CreateDelegate_OutputDelegate_8
+  L09DE: bind(K2Node_CreateDelegate_OutputDelegate_9, self, 'OnBlendOut_873810B743A559924559AF9B350A9E76')
+  L09F5: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue.self.OnBlendOut += K2Node_CreateDelegate_OutputDelegate_9
+  L0A1E: bind(K2Node_CreateDelegate_OutputDelegate, self, 'OnInterrupted_873810B743A559924559AF9B350A9E76')
+  L0A35: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue.self.OnInterrupted += K2Node_CreateDelegate_OutputDelegate
+  L0A5E: bind(K2Node_CreateDelegate_OutputDelegate_4, self, 'OnNotifyBegin_873810B743A559924559AF9B350A9E76')
+  L0A75: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue.self.OnNotifyBegin += K2Node_CreateDelegate_OutputDelegate_4
+  L0A9E: bind(K2Node_CreateDelegate_OutputDelegate_5, self, 'OnNotifyEnd_873810B743A559924559AF9B350A9E76')
+  L0AB5: CallFunc_CreateProxyObjectForPlayMontage_ReturnValue.self.OnNotifyEnd += K2Node_CreateDelegate_OutputDelegate_5
+  L0ADE: push L0B57
+  L0AE3: CallFunc_GetAvatarActorFromActorInfo_ReturnValue = GameplayAbility.GetAvatarActorFromActorInfo()
+  L0AF7: CallFunc_K2_GetActorLocation_ReturnValue = CallFunc_GetAvatarActorFromActorInfo_ReturnValue.Actor.K2_GetActorLocation()
+  L0B29: GameplayStatics.PlayWorldCameraShake(self, BP_Attack_01_C, CallFunc_K2_GetActorLocation_ReturnValue, 70, 150, 1, false)
+  L0B56: pop-flow
+  L0B57: CallFunc_IsGameplayAbilityActive_ReturnValue_1 = AbilitySystemBlueprintLibrary.IsGameplayAbilityActive(self)
+  L0B6C: if not (CallFunc_IsGameplayAbilityActive_ReturnValue_1) pop-flow
+  L0B76: HasNextAttackInCombo(CallFunc_HasNextAttackInCombo_Has)
+  L0B8D: if not (CallFunc_HasNextAttackInCombo_Has) pop-flow
+  L0B97: StartWaitInputForCombo()
+  L0BA5: pop-flow
+  L0BA6: K2Node_SwitchName_CmpSuccess = NotEqual_NameName(K2Node_CustomEvent_Notify, 'Attack')
+  L0BD0: if not (K2Node_SwitchName_CmpSuccess) goto L0BDF
+  L0BDE: pop-flow
+  L0BDF: GetHitActors(CallFunc_GetHitActors_HitActors)
+  L0BF6: goto L0197
+  L0BFB: K2_EndAbility()
+  L0C09: pop-flow
+  L0C0A: goto L02F4
+  L0C0F: goto L029D
+  L0C14: Temp_name_Variable = K2Node_CustomEvent_NotifyName_4
+  L0C2F: pop-flow
+  L0C30: Temp_name_Variable = K2Node_CustomEvent_NotifyName_3
+  L0C4B: MontageNotify(Temp_name_Variable)
+  L0C62: pop-flow
+  L0C63: FinishWaitInputForCombo()
+  L0C71: goto L0BFB
+  L0C76: if not (self.bTransitionToNextCombo) goto L03FC
+  L0C84: CallFunc_Add_IntInt_ReturnValue_1 = Add_IntInt(self.AttackIndex, 1)
+  L0CAE: Temp_int_Variable_1 = CallFunc_Add_IntInt_ReturnValue_1
+  L0CC9: self.AttackIndex = Temp_int_Variable_1
+  L0CE4: FinishWaitInputForCombo()
+  L0CF2: StartAttack()
+  L0D00: pop-flow
+  L0D01: K2_EndAbility()
+  L0D0F: pop-flow
+  L0D10: CallFunc_IsGameplayAbilityActive_ReturnValue = AbilitySystemBlueprintLibrary.IsGameplayAbilityActive(self)
+  L0D25: if not (CallFunc_IsGameplayAbilityActive_ReturnValue) pop-flow
+  L0D2F: K2Node_DynamicCast_AsAnim_Montage = cast<AnimMontage>(Temp_object_Variable_1)
+  L0D53: K2Node_DynamicCast_bSuccess_1 = K2Node_DynamicCast_AsAnim_Montage
+  L0D70: if not (K2Node_DynamicCast_bSuccess_1) goto L0D01
+  L0D7E: self.PlayerMontage = K2Node_DynamicCast_AsAnim_Montage
+  L0D91: goto L0935
+  L0D96: CallFunc_IsGameplayAbilityActive_ReturnValue_2 = AbilitySystemBlueprintLibrary.IsGameplayAbilityActive(self)
+  L0DAB: if not (CallFunc_IsGameplayAbilityActive_ReturnValue_2) pop-flow
+  L0DB5: goto L0C76
+  L0DBA: goto L0347
+  L0DBF: goto L04E7
+  L0DC4: Temp_object_Variable_1 = K2Node_CustomEvent_Loaded_1
+  L0DD7: goto L0D10
+  L0DDC: Temp_name_Variable = K2Node_CustomEvent_NotifyName
+  L0DF7: goto L0D96
+  L0DFC: Temp_name_Variable = K2Node_CustomEvent_NotifyName_1
+  L0E17: pop-flow
+  L0E18: K2Node_SwitchEnum_CmpSuccess = NotEqual_ByteByte(K2Node_CustomEvent_SufraceType, 0)
+  L0E37: if not (K2Node_SwitchEnum_CmpSuccess) goto L110D
+  L0E45: K2Node_SwitchEnum_CmpSuccess = NotEqual_ByteByte(K2Node_CustomEvent_SufraceType, 1)
+  L0E64: if not (K2Node_SwitchEnum_CmpSuccess) goto L110D
+  L0E72: K2Node_SwitchEnum_CmpSuccess = NotEqual_ByteByte(K2Node_CustomEvent_SufraceType, 2)
+  L0E91: if not (K2Node_SwitchEnum_CmpSuccess) goto L110D
+  L0E9F: K2Node_SwitchEnum_CmpSuccess = NotEqual_ByteByte(K2Node_CustomEvent_SufraceType, 3)
+  L0EBE: if not (K2Node_SwitchEnum_CmpSuccess) goto L110D
+  L0ECC: K2Node_SwitchEnum_CmpSuccess = NotEqual_ByteByte(K2Node_CustomEvent_SufraceType, 4)
+  L0EEB: if not (K2Node_SwitchEnum_CmpSuccess) goto L110D
+  L0EF9: K2Node_SwitchEnum_CmpSuccess = NotEqual_ByteByte(K2Node_CustomEvent_SufraceType, 5)
+  L0F18: if not (K2Node_SwitchEnum_CmpSuccess) goto L110D
+  L0F26: K2Node_SwitchEnum_CmpSuccess = NotEqual_ByteByte(K2Node_CustomEvent_SufraceType, 6)
+  L0F45: if not (K2Node_SwitchEnum_CmpSuccess) goto L110D
+  L0F53: K2Node_SwitchEnum_CmpSuccess = NotEqual_ByteByte(K2Node_CustomEvent_SufraceType, 7)
+  L0F72: if not (K2Node_SwitchEnum_CmpSuccess) goto L110D
+  L0F80: K2Node_SwitchEnum_CmpSuccess = NotEqual_ByteByte(K2Node_CustomEvent_SufraceType, 8)
+  L0F9F: if not (K2Node_SwitchEnum_CmpSuccess) goto L110D
+  L0FAD: K2Node_SwitchEnum_CmpSuccess = NotEqual_ByteByte(K2Node_CustomEvent_SufraceType, 9)
+  L0FCC: if not (K2Node_SwitchEnum_CmpSuccess) goto L0FDB
+  L0FDA: pop-flow
+  L0FDB: GameplayStatics.BreakHitResult(K2Node_CustomEvent_Hit, CallFunc_BreakHitResult_bBlockingHit, CallFunc_BreakHitResult_bInitialOverlap, CallFunc_BreakHitResult_Time, CallFunc_BreakHitResult_Distance, CallFunc_BreakHitResult_Location, CallFunc_BreakHitResult_ImpactPoint, CallFunc_BreakHitResult_Normal, CallFunc_BreakHitResult_ImpactNormal, CallFunc_BreakHitResult_PhysMat, CallFunc_BreakHitResult_HitActor, CallFunc_BreakHitResult_HitComponent, CallFunc_BreakHitResult_HitBoneName, CallFunc_BreakHitResult_BoneName, CallFunc_BreakHitResult_HitItem, CallFunc_BreakHitResult_ElementIndex, CallFunc_BreakHitResult_FaceIndex, CallFunc_BreakHitResult_TraceStart, CallFunc_BreakHitResult_TraceEnd)
+  L1090: CallFunc_FindLookAtRotation_ReturnValue = FindLookAtRotation(CallFunc_BreakHitResult_TraceStart, CallFunc_BreakHitResult_ImpactPoint)
+  L10BE: CallFunc_SpawnSystemAtLocation_ReturnValue = NiagaraFunctionLibrary.SpawnSystemAtLocation(self, NS_BloodBurst_Ghoul_01, CallFunc_BreakHitResult_ImpactPoint, CallFunc_FindLookAtRotation_ReturnValue, Vec(1,1,1), true, true, 0, true)
+  L110C: pop-flow
+  L110D: CallFunc_Map_Find_ReturnValue = Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_Find(self.HitFXMap, K2Node_CustomEvent_SufraceType, CallFunc_Map_Find_Value)
+  L1152: if not (CallFunc_Map_Find_ReturnValue) pop-flow
+  L115C: goto L06A2
+  L1161: Temp_name_Variable = K2Node_CustomEvent_NotifyName_2
+  L117C: goto L0C63
+  L1181: return
+
+## function FinishWaitInputForCombo  flags=0x0C000000
+  L0000: GA_Sickle_Attack_C.ExecuteUbergraph_GA_Sickle_Attack(3087)
+  L000F: return
+
+## function GetAttack  flags=0x0CC40000
+  L0000: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Random(self.Attacks, CallFunc_Array_Random_OutItem, CallFunc_Array_Random_OutIndex)
+  L003B: Valid = true
+  L0046: AttackMontage = CallFunc_Array_Random_OutItem.AttackMontage
+  L006A: DamageMult = CallFunc_Array_Random_OutItem.DamageMultiplayer
+  L008E: Stamina Cost = CallFunc_Array_Random_OutItem.StaminaCost
+  L00B2: return
+
+## function GetHitActors  flags=0x0CC20000
+  L0000: push L092A
+  L0005: CallFunc_Conv_DoubleToVector_ReturnValue = Conv_DoubleToVector(50)
+  L002A: CallFunc_GetAvatarActorFromActorInfo_ReturnValue = GameplayAbility.GetAvatarActorFromActorInfo()
+  L003E: K2Node_MakeArray_Array = [CallFunc_GetAvatarActorFromActorInfo_ReturnValue]
+  L0052: CallFunc_GetAvatarActorFromActorInfo_ReturnValue_1 = GameplayAbility.GetAvatarActorFromActorInfo()
+  L0066: K2Node_MakeArray_Array_1 = [2, 1]
+  L0075: CallFunc_K2_GetActorLocation_ReturnValue = CallFunc_GetAvatarActorFromActorInfo_ReturnValue_1.Actor.K2_GetActorLocation()
+  L00A7: CallFunc_Conv_DoubleToVector_ReturnValue_1 = Conv_DoubleToVector(100)
+  L00CC: CallFunc_Add_VectorVector_ReturnValue = Add_VectorVector(CallFunc_K2_GetActorLocation_ReturnValue, Vec(0,0,50))
+  L010A: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L0124: CallFunc_GetControlRotation_ReturnValue = CallFunc_GetPlayerController_ReturnValue.GetControlRotation()
+  L015A: CallFunc_Conv_RotatorToVector_ReturnValue = Conv_RotatorToVector(CallFunc_GetControlRotation_ReturnValue)
+  L017F: CallFunc_Multiply_VectorVector_ReturnValue = Multiply_VectorVector(CallFunc_Conv_RotatorToVector_ReturnValue, CallFunc_Conv_DoubleToVector_ReturnValue)
+  L01AD: CallFunc_Multiply_VectorVector_ReturnValue_1 = Multiply_VectorVector(CallFunc_Conv_RotatorToVector_ReturnValue, CallFunc_Conv_DoubleToVector_ReturnValue_1)
+  L01DB: CallFunc_Add_VectorVector_ReturnValue_1 = Add_VectorVector(CallFunc_Add_VectorVector_ReturnValue, CallFunc_Multiply_VectorVector_ReturnValue)
+  L0209: CallFunc_Add_VectorVector_ReturnValue_2 = Add_VectorVector(CallFunc_Add_VectorVector_ReturnValue, CallFunc_Multiply_VectorVector_ReturnValue_1)
+  L0237: CallFunc_SphereTraceMultiForObjects_OutHits = []
+  L0242: CallFunc_SphereTraceMultiForObjects_ReturnValue = KismetSystemLibrary.SphereTraceMultiForObjects(self, CallFunc_Add_VectorVector_ReturnValue_1, CallFunc_Add_VectorVector_ReturnValue_2, 75, K2Node_MakeArray_Array_1, false, K2Node_MakeArray_Array, 0, CallFunc_SphereTraceMultiForObjects_OutHits, true, LinearColor{1, 0, 0, 1}, LinearColor{0, 1, 0, 1}, 1)
+  L02D6: Temp_int_Loop_Counter_Variable = 0
+  L02ED: Temp_int_Array_Index_Variable = 0
+  L0304: CallFunc_Array_Length_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_Length(CallFunc_SphereTraceMultiForObjects_OutHits)
+  L033F: CallFunc_Less_IntInt_ReturnValue = Less_IntInt(Temp_int_Loop_Counter_Variable, CallFunc_Array_Length_ReturnValue)
+  L0365: if not (CallFunc_Less_IntInt_ReturnValue) goto L0794
+  L0373: Temp_int_Array_Index_Variable = Temp_int_Loop_Counter_Variable
+  L038E: push L07B4
+  L0393: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_SphereTraceMultiForObjects_OutHits, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L03CE: GameplayStatics.BreakHitResult(CallFunc_Array_Get_Item, CallFunc_BreakHitResult_bBlockingHit, CallFunc_BreakHitResult_bInitialOverlap, CallFunc_BreakHitResult_Time, CallFunc_BreakHitResult_Distance, CallFunc_BreakHitResult_Location, CallFunc_BreakHitResult_ImpactPoint, CallFunc_BreakHitResult_Normal, CallFunc_BreakHitResult_ImpactNormal, CallFunc_BreakHitResult_PhysMat, CallFunc_BreakHitResult_HitActor, CallFunc_BreakHitResult_HitComponent, CallFunc_BreakHitResult_HitBoneName, CallFunc_BreakHitResult_BoneName, CallFunc_BreakHitResult_HitItem, CallFunc_BreakHitResult_ElementIndex, CallFunc_BreakHitResult_FaceIndex, CallFunc_BreakHitResult_TraceStart, CallFunc_BreakHitResult_TraceEnd)
+  L0483: CallFunc_GetComponentByClass_ReturnValue = CallFunc_BreakHitResult_HitActor.Actor.GetComponentByClass(DrdActorTagComponent)
+  L04B6: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(CallFunc_GetComponentByClass_ReturnValue)
+  L04D3: if not (CallFunc_IsValid_ReturnValue) pop-flow
+  L04DD: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_SphereTraceMultiForObjects_OutHits, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L0518: GameplayStatics.BreakHitResult(CallFunc_Array_Get_Item, CallFunc_BreakHitResult_bBlockingHit, CallFunc_BreakHitResult_bInitialOverlap, CallFunc_BreakHitResult_Time, CallFunc_BreakHitResult_Distance, CallFunc_BreakHitResult_Location, CallFunc_BreakHitResult_ImpactPoint, CallFunc_BreakHitResult_Normal, CallFunc_BreakHitResult_ImpactNormal, CallFunc_BreakHitResult_PhysMat, CallFunc_BreakHitResult_HitActor, CallFunc_BreakHitResult_HitComponent, CallFunc_BreakHitResult_HitBoneName, CallFunc_BreakHitResult_BoneName, CallFunc_BreakHitResult_HitItem, CallFunc_BreakHitResult_ElementIndex, CallFunc_BreakHitResult_FaceIndex, CallFunc_BreakHitResult_TraceStart, CallFunc_BreakHitResult_TraceEnd)
+  L05CD: CallFunc_GetComponentByClass_ReturnValue = CallFunc_BreakHitResult_HitActor.Actor.GetComponentByClass(DrdActorTagComponent)
+  L0600: CallFunc_HasTag_ReturnValue = BlueprintGameplayTagLibrary.HasTag(CallFunc_GetComponentByClass_ReturnValue.self.Tags, GameplayTag{'GameEntities.Enemy.CanBeDamaged'}, false)
+  L064F: if not (CallFunc_HasTag_ReturnValue) pop-flow
+  L0659: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_SphereTraceMultiForObjects_OutHits, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L0694: GameplayStatics.BreakHitResult(CallFunc_Array_Get_Item, CallFunc_BreakHitResult_bBlockingHit, CallFunc_BreakHitResult_bInitialOverlap, CallFunc_BreakHitResult_Time, CallFunc_BreakHitResult_Distance, CallFunc_BreakHitResult_Location, CallFunc_BreakHitResult_ImpactPoint, CallFunc_BreakHitResult_Normal, CallFunc_BreakHitResult_ImpactNormal, CallFunc_BreakHitResult_PhysMat, CallFunc_BreakHitResult_HitActor, CallFunc_BreakHitResult_HitComponent, CallFunc_BreakHitResult_HitBoneName, CallFunc_BreakHitResult_BoneName, CallFunc_BreakHitResult_HitItem, CallFunc_BreakHitResult_ElementIndex, CallFunc_BreakHitResult_FaceIndex, CallFunc_BreakHitResult_TraceStart, CallFunc_BreakHitResult_TraceEnd)
+  L0749: CallFunc_Map_Contains_ReturnValue = Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_Contains(locHitActors, CallFunc_BreakHitResult_HitActor)
+  L0785: if not (CallFunc_Map_Contains_ReturnValue) goto L07FE
+  L0793: pop-flow
+  L0794: HitActors = locHitActors
+  L07AF: goto L092A
+  L07B4: CallFunc_Add_IntInt_ReturnValue = Add_IntInt(Temp_int_Loop_Counter_Variable, 1)
+  L07DE: Temp_int_Loop_Counter_Variable = CallFunc_Add_IntInt_ReturnValue
+  L07F9: goto L0304
+  L07FE: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_SphereTraceMultiForObjects_OutHits, Temp_int_Array_Index_Variable, CallFunc_Array_Get_Item)
+  L0839: GameplayStatics.BreakHitResult(CallFunc_Array_Get_Item, CallFunc_BreakHitResult_bBlockingHit, CallFunc_BreakHitResult_bInitialOverlap, CallFunc_BreakHitResult_Time, CallFunc_BreakHitResult_Distance, CallFunc_BreakHitResult_Location, CallFunc_BreakHitResult_ImpactPoint, CallFunc_BreakHitResult_Normal, CallFunc_BreakHitResult_ImpactNormal, CallFunc_BreakHitResult_PhysMat, CallFunc_BreakHitResult_HitActor, CallFunc_BreakHitResult_HitComponent, CallFunc_BreakHitResult_HitBoneName, CallFunc_BreakHitResult_BoneName, CallFunc_BreakHitResult_HitItem, CallFunc_BreakHitResult_ElementIndex, CallFunc_BreakHitResult_FaceIndex, CallFunc_BreakHitResult_TraceStart, CallFunc_BreakHitResult_TraceEnd)
+  L08EE: Default__BlueprintMapLibrary.BlueprintMapLibrary.Map_Add(locHitActors, CallFunc_BreakHitResult_HitActor, CallFunc_Array_Get_Item)
+  L0929: pop-flow
+  L092A: return
+
+## function GetWeaponModuleDamage  flags=0x1CC20000
+  L0000: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L001A: K2Node_DynamicCast_AsI_Inventory = iface<I_Inventory>(CallFunc_GetPlayerController_ReturnValue)
+  L003E: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsI_Inventory
+  L005B: if not (K2Node_DynamicCast_bSuccess) goto L0256
+  L0069: K2Node_DynamicCast_AsI_Inventory.GetInventoryComponent(CallFunc_GetInventoryComponent_Component)
+  L0097: CallFunc_GetInventoryComponent_Component.AC_Inventory.GetContainerByIdentifier(GameplayTag{'IFP.Container.Identifier.Slot.Blade'}, CallFunc_GetInventoryComponent_Component.self.ContainerSettings, true, CallFunc_GetContainerByIdentifier_FoundContainer, CallFunc_GetContainerByIdentifier_Container, CallFunc_GetContainerByIdentifier_ContainerIndex)
+  L010D: if not (CallFunc_GetContainerByIdentifier_FoundContainer) goto L0266
+  L011B: CallFunc_Array_IsValidIndex_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_IsValidIndex(CallFunc_GetContainerByIdentifier_Container.Items, 0)
+  L015C: if not (CallFunc_Array_IsValidIndex_ReturnValue) goto L0266
+  L016A: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetContainerByIdentifier_Container.Items, 0, CallFunc_Array_Get_Item)
+  L01AA: CallFunc_GetItemsTagValues_ReturnValue = FL_InventoryFramework.GetItemsTagValues(CallFunc_Array_Get_Item, true)
+  L01D0: CallFunc_GetValueForTag_ReturnValue = FL_InventoryFramework.GetValueForTag(CallFunc_GetItemsTagValues_ReturnValue, GameplayTag{'IFP.Items.Stat.Damage'})
+  L0210: K2Node_FunctionResult_ModuleDamage_ImplicitCast = CallFunc_GetValueForTag_ReturnValue.Value
+  L0236: ModuleDamage = K2Node_FunctionResult_ModuleDamage_ImplicitCast
+  L0251: goto L0281
+  L0256: CallFunc_GetInventoryComponent_Component = null
+  L0261: goto L0097
+  L0266: ModuleDamage = 10
+  L0281: return
+
+## function HasNextAttackInCombo  flags=0x0C440000
+  L0000: Has = false
+  L000B: return
+
+## function K2_ActivateAbility  flags=0x08080800
+  L0000: GA_Sickle_Attack_C.ExecuteUbergraph_GA_Sickle_Attack(1858)
+  L000F: return
+
+## function K2_OnEndAbility  flags=0x0C080800
+  L0000: push L00D5
+  L0005: push L00C1
+  L000A: push L0041
+  L000F: push L0024
+  L0014: SetAnimIsUpperBody(false)
+  L0023: pop-flow
+  L0024: FinishWaitInputForCombo()
+  L0032: ClearWaitTorelease()
+  L0040: pop-flow
+  L0041: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(self.PlayerMontage)
+  L005E: if not (CallFunc_IsValid_ReturnValue) pop-flow
+  L0068: CallFunc_GetAnimInstance_ReturnValue = self.SkeletalMesh.SkeletalMeshComponent.GetAnimInstance()
+  L0092: CallFunc_GetAnimInstance_ReturnValue.AnimInstance.Montage_Stop(0.1, self.PlayerMontage)
+  L00C0: pop-flow
+  L00C1: GameplayAbility.K2_OnEndAbility(bWasCancelled)
+  L00D4: pop-flow
+  L00D5: return
+
+## function MontageNotify  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Notify = Notify
+  L0012: GA_Sickle_Attack_C.ExecuteUbergraph_GA_Sickle_Attack(2982)
+  L0021: return
+
+## function OnBlendOut_873810B743A559924559AF9B350A9E76  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_NotifyName_1 = NotifyName
+  L0012: GA_Sickle_Attack_C.ExecuteUbergraph_GA_Sickle_Attack(3580)
+  L0021: return
+
+## function OnCompleted_873810B743A559924559AF9B350A9E76  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_NotifyName = NotifyName
+  L0012: GA_Sickle_Attack_C.ExecuteUbergraph_GA_Sickle_Attack(3548)
+  L0021: return
+
+## function OnFinish_939147F64E7519C1C486C2B7DB99F175  flags=0x0C000000
+  L0000: GA_Sickle_Attack_C.ExecuteUbergraph_GA_Sickle_Attack(1020)
+  L000F: return
+
+## function OnInterrupted_873810B743A559924559AF9B350A9E76  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_NotifyName_2 = NotifyName
+  L0012: GA_Sickle_Attack_C.ExecuteUbergraph_GA_Sickle_Attack(4449)
+  L0021: return
+
+## function OnLoaded_B97AFA8C433EAED88B6816B2290B1CFE  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Loaded_1 = Loaded
+  L0012: GA_Sickle_Attack_C.ExecuteUbergraph_GA_Sickle_Attack(3524)
+  L0021: return
+
+## function OnLoaded_F625730048522B2352EC9188AB4FADB9  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_Loaded = Loaded
+  L0012: GA_Sickle_Attack_C.ExecuteUbergraph_GA_Sickle_Attack(1299)
+  L0021: return
+
+## function OnNotifyBegin_873810B743A559924559AF9B350A9E76  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_NotifyName_3 = NotifyName
+  L0012: GA_Sickle_Attack_C.ExecuteUbergraph_GA_Sickle_Attack(3120)
+  L0021: return
+
+## function OnNotifyEnd_873810B743A559924559AF9B350A9E76  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_NotifyName_4 = NotifyName
+  L0012: GA_Sickle_Attack_C.ExecuteUbergraph_GA_Sickle_Attack(3092)
+  L0021: return
+
+## function OnPress_31EFD82046B19163F43E3D9A1AC32454  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_TimeWaited = TimeWaited
+  L0012: GA_Sickle_Attack_C.ExecuteUbergraph_GA_Sickle_Attack(435)
+  L0021: return
+
+## function OnRelease_3DCD915B424232B766D06A88341B2F58  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_TimeHeld = TimeHeld
+  L0012: GA_Sickle_Attack_C.ExecuteUbergraph_GA_Sickle_Attack(800)
+  L0021: return
+
+## function SetAnimIsUpperBody  flags=0x0C020000
+  L0000: CallFunc_GetAvatarActorFromActorInfo_ReturnValue = GameplayAbility.GetAvatarActorFromActorInfo()
+  L0014: K2Node_DynamicCast_AsBP_Player_Character = cast<BP_PlayerCharacter_C>(CallFunc_GetAvatarActorFromActorInfo_ReturnValue)
+  L0038: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsBP_Player_Character
+  L0055: if not (K2Node_DynamicCast_bSuccess) goto L008C
+  L0063: K2Node_DynamicCast_AsBP_Player_Character.self.IsUpperBody = IsUpperBody
+  L008C: return
+
+## function StartAttack  flags=0x0C000000
+  L0000: GA_Sickle_Attack_C.ExecuteUbergraph_GA_Sickle_Attack(1995)
+  L000F: return
+
+## function StartWaitInputForCombo  flags=0x0C000000
+  L0000: GA_Sickle_Attack_C.ExecuteUbergraph_GA_Sickle_Attack(3082)
+  L000F: return
+
+## function TryReduceWeaponModuleHealth  flags=0x0C820000
+  L0000: CallFunc_GetPlayerController_ReturnValue = GameplayStatics.GetPlayerController(self, 0)
+  L001A: K2Node_DynamicCast_AsI_Inventory = iface<I_Inventory>(CallFunc_GetPlayerController_ReturnValue)
+  L003E: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsI_Inventory
+  L005B: if not (K2Node_DynamicCast_bSuccess) goto L0346
+  L0069: K2Node_DynamicCast_AsI_Inventory.GetInventoryComponent(CallFunc_GetInventoryComponent_Component)
+  L0097: CallFunc_GetInventoryComponent_Component.AC_Inventory.GetContainerByIdentifier(GameplayTag{'IFP.Container.Identifier.Slot.Blade'}, CallFunc_GetInventoryComponent_Component.self.ContainerSettings, true, CallFunc_GetContainerByIdentifier_FoundContainer, CallFunc_GetContainerByIdentifier_Container, CallFunc_GetContainerByIdentifier_ContainerIndex)
+  L010D: if not (CallFunc_GetContainerByIdentifier_FoundContainer) goto L0356
+  L011B: CallFunc_Array_IsValidIndex_ReturnValue = Default__KismetArrayLibrary.KismetArrayLibrary.Array_IsValidIndex(CallFunc_GetContainerByIdentifier_Container.Items, 0)
+  L015C: if not (CallFunc_Array_IsValidIndex_ReturnValue) goto L0356
+  L016A: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetContainerByIdentifier_Container.Items, 0, CallFunc_Array_Get_Item)
+  L01AA: CallFunc_GetItemsTagValues_ReturnValue = FL_InventoryFramework.GetItemsTagValues(CallFunc_Array_Get_Item, true)
+  L01D0: CallFunc_GetValueForTag_ReturnValue = FL_InventoryFramework.GetValueForTag(CallFunc_GetItemsTagValues_ReturnValue, GameplayTag{'IFP.Items.Stat.Durability.Current'})
+  L0210: CallFunc_GetValueForTag_ReturnValue_1 = FL_InventoryFramework.GetValueForTag(CallFunc_GetItemsTagValues_ReturnValue, GameplayTag{'IFP.Items.Stat.Durability.DamagePerHit'})
+  L0250: CallFunc_Subtract_DoubleDouble_A_ImplicitCast = CallFunc_GetValueForTag_ReturnValue.Value
+  L0276: CallFunc_Subtract_DoubleDouble_B_ImplicitCast = CallFunc_GetValueForTag_ReturnValue_1.Value
+  L029C: CallFunc_Subtract_DoubleDouble_ReturnValue = Subtract_DoubleDouble(CallFunc_Subtract_DoubleDouble_A_ImplicitCast, CallFunc_Subtract_DoubleDouble_B_ImplicitCast)
+  L02CA: CallFunc_SetTagValueForItem_Value_ImplicitCast = CallFunc_Subtract_DoubleDouble_ReturnValue
+  L02E7: CallFunc_SetTagValueForItem_ReturnValue = CallFunc_GetInventoryComponent_Component.AC_Inventory.SetTagValueForItem(CallFunc_Array_Get_Item, GameplayTag{'IFP.Items.Stat.Durability.Current'}, CallFunc_SetTagValueForItem_Value_ImplicitCast, false, null, false)
+  L0341: goto L0356
+  L0346: CallFunc_GetInventoryComponent_Component = null
+  L0351: goto L0097
+  L0356: return
+
+## function WaitToRelease  flags=0x0C000000
+  L0000: GA_Sickle_Attack_C.ExecuteUbergraph_GA_Sickle_Attack(3514)
+  L000F: return

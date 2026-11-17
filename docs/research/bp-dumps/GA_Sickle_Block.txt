@@ -1,0 +1,53 @@
+# /Game/Dreadmoor/InventoryFramework/Items/Weapon/Sickle/GAS/GA_Sickle_Block
+# file: Dreadmoor/Content/Dreadmoor/InventoryFramework/Items/Weapon/Sickle/GAS/GA_Sickle_Block.uasset
+
+## imported packages (1)
+  /Game/Dreadmoor/Core/Features/Hook/Animation/BPI_AnimWeapon
+
+## exports (5)
+  [0] GA_Sickle_Block_C : BlueprintGeneratedClass (outer None) super=DrdGameplayAbility size=207
+  [4] Default__GA_Sickle_Block_C : GA_Sickle_Block_C (outer None) size=66
+        refs: name:Ability.Block
+
+## function ExecuteUbergraph_GA_Sickle_Block  flags=0x00808001
+  L0000: goto computed(EntryPoint)
+  L000A: CallFunc_WaitInputRelease_ReturnValue = AbilityTask_WaitInputRelease.WaitInputRelease(self, false)
+  L0020: CallFunc_IsValid_ReturnValue = KismetSystemLibrary.IsValid(CallFunc_WaitInputRelease_ReturnValue)
+  L003D: if not (CallFunc_IsValid_ReturnValue) goto L0400
+  L004B: bind(K2Node_CreateDelegate_OutputDelegate, self, 'OnRelease_65CCB0FF41F58EBFBCE41B809F8A9FB8')
+  L0062: CallFunc_WaitInputRelease_ReturnValue.self.OnRelease += K2Node_CreateDelegate_OutputDelegate
+  L008B: CallFunc_WaitInputRelease_ReturnValue.GameplayTask.ReadyForActivation()
+  L00AB: goto L0400
+  L00B0: CallFunc_GetAvatarActorFromActorInfo_ReturnValue = GameplayAbility.GetAvatarActorFromActorInfo()
+  L00C4: CallFunc_GetComponentsByTag_ReturnValue = CallFunc_GetAvatarActorFromActorInfo_ReturnValue.Actor.GetComponentsByTag(SkeletalMeshComponent, 'PlayerMesh')
+  L010C: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetComponentsByTag_ReturnValue, 0, CallFunc_Array_Get_Item)
+  L0143: CallFunc_GetAnimInstance_ReturnValue = CallFunc_Array_Get_Item.SkeletalMeshComponent.GetAnimInstance()
+  L016D: CallFunc_GetLinkedAnimGraphInstanceByTag_ReturnValue = CallFunc_GetAnimInstance_ReturnValue.AnimInstance.GetLinkedAnimGraphInstanceByTag('UpperBody')
+  L01A4: K2Node_DynamicCast_AsBPI_Anim_Weapon_1 = iface<BPI_AnimWeapon_C>(CallFunc_GetLinkedAnimGraphInstanceByTag_ReturnValue)
+  L01C8: K2Node_DynamicCast_bSuccess_1 = K2Node_DynamicCast_AsBPI_Anim_Weapon_1
+  L01E5: if not (K2Node_DynamicCast_bSuccess_1) goto L000A
+  L01F3: K2Node_DynamicCast_AsBPI_Anim_Weapon_1.UpdateState(GameplayTag{'Anim.State.Block'}, 1)
+  L023C: goto L000A
+  L0241: K2_EndAbility()
+  L024F: goto L0400
+  L0254: Temp_real_Variable = K2Node_CustomEvent_TimeHeld
+  L026F: CallFunc_GetAvatarActorFromActorInfo_ReturnValue = GameplayAbility.GetAvatarActorFromActorInfo()
+  L0283: CallFunc_GetComponentsByTag_ReturnValue = CallFunc_GetAvatarActorFromActorInfo_ReturnValue.Actor.GetComponentsByTag(SkeletalMeshComponent, 'PlayerMesh')
+  L02CB: Default__KismetArrayLibrary.KismetArrayLibrary.Array_Get(CallFunc_GetComponentsByTag_ReturnValue, 0, CallFunc_Array_Get_Item)
+  L0302: CallFunc_GetAnimInstance_ReturnValue = CallFunc_Array_Get_Item.SkeletalMeshComponent.GetAnimInstance()
+  L032C: CallFunc_GetLinkedAnimGraphInstanceByTag_ReturnValue = CallFunc_GetAnimInstance_ReturnValue.AnimInstance.GetLinkedAnimGraphInstanceByTag('UpperBody')
+  L0363: K2Node_DynamicCast_AsBPI_Anim_Weapon = iface<BPI_AnimWeapon_C>(CallFunc_GetLinkedAnimGraphInstanceByTag_ReturnValue)
+  L0387: K2Node_DynamicCast_bSuccess = K2Node_DynamicCast_AsBPI_Anim_Weapon
+  L03A4: if not (K2Node_DynamicCast_bSuccess) goto L0241
+  L03B2: K2Node_DynamicCast_AsBPI_Anim_Weapon.UpdateState(GameplayTag{'None'}, 1)
+  L03FB: goto L0241
+  L0400: return
+
+## function K2_ActivateAbility  flags=0x08080800
+  L0000: GA_Sickle_Block_C.ExecuteUbergraph_GA_Sickle_Block(176)
+  L000F: return
+
+## function OnRelease_65CCB0FF41F58EBFBCE41B809F8A9FB8  flags=0x0C000000
+  L0000: frame.K2Node_CustomEvent_TimeHeld = TimeHeld
+  L0012: GA_Sickle_Block_C.ExecuteUbergraph_GA_Sickle_Block(596)
+  L0021: return
