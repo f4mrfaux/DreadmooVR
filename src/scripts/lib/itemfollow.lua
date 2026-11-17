@@ -13,8 +13,10 @@ local MAX_DEPTH = 64   -- skeletons are far shallower; guards against a malforme
 function itemfollow.hand_side(bone, parent_of)
     local b = bone
     for _ = 1, MAX_DEPTH do
-        if b == nil or b == "None" or b == "" then return nil end
-        if HANDS[b] then return HANDS[b] end
+        if b == nil or b == "" or b:lower() == "none" then return nil end
+        -- Unreal names compare case-insensitively; the game reports "Hand_R" (seen in game).
+        local side = HANDS[b:lower()]
+        if side then return side end
         b = parent_of(b)
     end
     return nil

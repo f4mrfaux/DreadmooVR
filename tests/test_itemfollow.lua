@@ -20,6 +20,14 @@ return {
         assert(itemfollow.hand_side("None", parent_of) == nil)
     end,
 
+    test_hand_side_ignores_case_like_unreal_names = function()
+        -- In game the bone came back as "Hand_R" (log 16:50:13); FNames compare case-insensitively.
+        assert(itemfollow.hand_side("Hand_R", parent_of) == "R")
+        assert(itemfollow.hand_side("HAND_L", parent_of) == "L")
+        local upper = function(b) local p = PARENT[b:lower()]; return p and p:upper() or "None" end
+        assert(itemfollow.hand_side("INDEX_01_R", upper) == "R", "walks a differently-cased chain")
+    end,
+
     test_hand_side_survives_a_cycle = function()
         local loop = function(b) return b == "a" and "b" or "a" end
         assert(itemfollow.hand_side("a", loop) == nil)

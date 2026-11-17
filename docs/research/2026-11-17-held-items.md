@@ -70,3 +70,11 @@ Read from the game's own Blueprint bytecode and asset data (Steam build 26670657
 - Whether `MC_ReattachItem` fires during normal play or only on network and equip-notify paths.
   The first in-game run's `held item` log lines will show it.
 - The projectile origin when aiming with the hand (step 7).
+
+## Correction from the first in-game run (16:50)
+
+At runtime `GetSocketBoneName` returns **`Hand_R`** and **`Head`**, capitalised. The
+skeleton dump's name table shows lowercase `hand_r`. Unreal names compare case-insensitively
+but Lua strings don't, so name checks in Lua must ignore case (`lib/itemfollow.lua` does now).
+The run also logged `BP_FirstAid_Equipment` attached at `Syringe_Socket` on `Hand_R`. The
+hook gun's attached component is its `SkeletalMesh`, not the actor root.

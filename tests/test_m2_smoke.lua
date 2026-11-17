@@ -32,7 +32,8 @@ local function make_world()
         clavicle_l = "spine_01", upperarm_l = "clavicle_l", lowerarm_l = "upperarm_l", hand_l = "lowerarm_l",
         clavicle_r = "spine_01", upperarm_r = "clavicle_r", lowerarm_r = "upperarm_r", hand_r = "lowerarm_r" }
     -- Skeleton sockets -> bone, from SK_DreadMoreSkeleton (docs/research/2026-11-17-held-items.md).
-    local SOCKETS = { HookSimple = "hand_r", KnifeSocket = "hand_r", Harpoon_Socket = "hand_r", Camera = "head" }
+    -- Bone names as the live game reports them (log 16:50): Hand_R, Head.
+    local SOCKETS = { HookSimple = "Hand_R", KnifeSocket = "Hand_R", Harpoon_Socket = "Hand_R", Camera = "Head" }
     local BONES = { head = v(0, 0, 165), clavicle_l = v(0, -5, 145), upperarm_l = v(0, -20, 145),
         lowerarm_l = v(0, -20, 117), hand_l = v(0, -20, 91), clavicle_r = v(0, 5, 145),
         upperarm_r = v(0, 20, 145), lowerarm_r = v(0, 20, 117), hand_r = v(0, 20, 91) }
