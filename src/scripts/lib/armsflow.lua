@@ -1,8 +1,11 @@
 -- Arms lifecycle (pure): load the class via the plugin (same request/retry rules as m1flow),
 -- spawn once on foot, then hide off foot, show on return, reattach when the walking pawn changes.
 -- step() returns "request", "spawn", "hide", "show", "reattach" or nil.
+-- lost(): the arms actor is gone (it can die with a replaced pawn); the next step on foot spawns
+-- fresh arms, up to MAX_RESPAWNS times, then the flow stops instead of looping.
 local armsflow = {}
 armsflow.__index = armsflow
+armsflow.MAX_RESPAWNS = 5
 
 local function m1flow_new()
     local loaded = package and package.loaded and package.loaded.m1flow
@@ -26,6 +29,11 @@ function armsflow:step(now, mode, pawn)
         if action == "spawn" then self.pawn = pawn end
         return action
     end
+    if self.status == "respawn" then
+        if mode ~= "walking" then return nil end
+        self.pawn, self.visible = pawn, true
+        return "spawn"
+    end
     if self.status ~= "active" then return nil end
 
     local walking = mode == "walking"
@@ -42,6 +50,15 @@ end
 function armsflow:on_reply(data)
     self.load:on_reply(data)
     if self.load.status == "fail" then self.status, self.reason = "fail", self.load.reason end
+end
+
+function armsflow:lost()
+    self.respawns = (self.respawns or 0) + 1
+    if self.respawns > armsflow.MAX_RESPAWNS then
+        self.status, self.reason = "fail", "arms lost " .. self.respawns .. " times"
+    else
+        self.status = "respawn"
+    end
 end
 
 function armsflow:spawned(ok)

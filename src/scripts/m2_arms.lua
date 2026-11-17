@@ -319,8 +319,11 @@ end
 
 local function attach_and_hide(pawn)
     restore_game_body()
-    actor.Body:K2_AttachToComponent(pawn.Mesh, "None", SNAP_TO_TARGET, SNAP_TO_TARGET, SNAP_TO_TARGET, false)
+    -- Hide the game body first: if anything below throws (a dead arms actor), the camera is still
+    -- not left inside the character's head.
     for _, bone in ipairs(GAME_BONES_TO_HIDE) do pawn.Mesh:HideBoneByName(bone, PBO_NONE) end
+    hidden_on = pawn.Mesh
+    actor.Body:K2_AttachToComponent(pawn.Mesh, "None", SNAP_TO_TARGET, SNAP_TO_TARGET, SNAP_TO_TARGET, false)
     -- Body is a full copy of the character; its head must go too, or the view sits inside it
     -- (camera_forward pulls the eyes back into the head). Hiding a bone hides its children.
     actor.Body:HideBoneByName("neck_01", PBO_NONE)
@@ -377,7 +380,18 @@ uevr.sdk.callbacks.on_pre_engine_tick(function(_, delta)
         log(action .. (ok and "" or (" FAILED: " .. tostring(err))))
     elseif action == "reattach" then
         local ok, err = pcall(function() attach_and_hide(pawn); actor:SetActorHiddenInGame(false) end)
-        log("reattached to new walking pawn" .. (ok and "" or (" FAILED: " .. tostring(err))))
+        if ok then
+            log("reattached to new walking pawn")
+        else
+            -- The arms actor died with the old pawn (seen in game 2026-11-17). Drop it and let the
+            -- flow spawn fresh arms on the next tick.
+            log("arms lost with the old pawn (" .. tostring(err) .. "); spawning fresh arms")
+            restore_items()
+            pcall(function() actor:K2_DestroyActor() end)
+            actor, hand_states = nil, {}
+            solve_err_logged, items_err_logged, sample_err_logged = false, false, false
+            flow:lost()
+        end
     end
     if flow.status == "active" and actor ~= nil then
         local okt, errt = pcall(apply_tuning, clock)

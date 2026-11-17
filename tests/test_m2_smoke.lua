@@ -88,15 +88,34 @@ local function make_world()
     end
     W.pawn = obj({ name = "Pawn", Mesh = pawn_mesh, get_class = function() return class_at(1) end,
         GetTransform = function() return {} end, K2_GetActorRotation = function() return { Pitch = 0, Yaw = 0, Roll = 0 } end })
+    -- A replacement pawn (respawn, level load): a fresh mesh with nothing attached.
+    W.new_pawn = function()
+        local m = mesh("GameMesh2"); m.AttachChildren = {}
+        W.pawn = obj({ name = "Pawn2", Mesh = m, get_class = W.pawn.get_class,
+            GetTransform = W.pawn.GetTransform, K2_GetActorRotation = W.pawn.K2_GetActorRotation })
+        return W.pawn
+    end
 
-    W.body = mesh("Body")
-    W.body.K2_AttachToComponent = function(self, p) self.parent = p; return true end
-    W.arms = obj({ name = "BP_VRArms", Body = W.body,
-        LeftHandTarget = target(v(30, -25, 110)), RightHandTarget = target(v(30, 25, 110)),
-        SetActorHiddenInGame = function() end, K2_DestroyActor = function(self) self.destroyed = true end })
-    pawn_mesh.AttachChildren[#pawn_mesh.AttachChildren + 1] = W.body   -- Body rides the game mesh too
+    -- Each spawn makes a new arms actor. A dead one (it died with its pawn) throws on use.
+    W.spawns = 0
+    local function new_arms()
+        W.spawns = W.spawns + 1
+        local body = mesh("Body" .. W.spawns)
+        body.K2_AttachToComponent = function(self, p)
+            if self.dead then error("arms actor is gone") end
+            local old = self.parent and self.parent.AttachChildren
+            if old then for i = #old, 1, -1 do if old[i] == self then table.remove(old, i) end end end
+            p.AttachChildren = p.AttachChildren or {}; table.insert(p.AttachChildren, self)
+            self.parent = p; return true
+        end
+        W.body = body
+        W.arms = obj({ name = "BP_VRArms", Body = body,
+            LeftHandTarget = target(v(30, -25, 110)), RightHandTarget = target(v(30, 25, 110)),
+            SetActorHiddenInGame = function() end, K2_DestroyActor = function(self) self.destroyed = true end })
+        return W.arms
+    end
 
-    local gs = { BeginDeferredActorSpawnFromClass = function() return W.arms end,
+    local gs = { BeginDeferredActorSpawnFromClass = function() return new_arms() end,
         FinishSpawningActor = function(_, a) return a end }
     local arms_class = { get_class_default_object = function() return {} end }
     local function state(hand)
@@ -253,6 +272,24 @@ return {
         assert(W.presses >= 5, "hook out: crank reels, pressed " .. W.presses)
         local f = failures(W.logs)
         assert(f == "", "FAILED lines: " .. f)
+    end,
+
+    test_pawn_replaced_and_arms_died_spawns_fresh_arms = function()
+        -- In game 2026-11-17 16:08: the pawn was replaced, the old arms died with it, the reattach
+        -- threw before hiding the new head, and the view sat inside the character's face.
+        local W = boot()
+        local old_arms = W.arms
+        W.body.dead = true
+        local p2 = W.new_pawn()
+        run(W, 5)
+        assert(p2.Mesh.hidden.neck_01, "new pawn's head hidden even though the reattach threw")
+        assert(W.spawns == 2 and W.arms ~= old_arms, "fresh arms spawned, spawns=" .. W.spawns)
+        assert(W.body.parent == p2.Mesh, "fresh arms ride the new pawn")
+        assert(old_arms.destroyed, "dead arms cleaned up")
+        assert(has(W.logs, "arms lost with the old pawn"), "logged")
+        local later = {}
+        for i, l in ipairs(W.logs) do if l:find("FAILED") and i > #W.logs - 50 then later[#later + 1] = l end end
+        assert(#later == 0, "settled, no ongoing failures: " .. table.concat(later, " | "))
     end,
 
     test_one_broken_component_does_not_stop_the_scan = function()

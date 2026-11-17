@@ -33,6 +33,33 @@ return {
         assert(f:step(5.1, "walking", "pawnB") == nil)
     end,
 
+    test_lost_arms_respawn_on_foot = function()
+        -- In game 2026-11-17: the pawn was replaced, the old arms actor died with it and the
+        -- reattach threw. The flow must spawn fresh arms, not keep using the dead one.
+        local f = armsflow.new()
+        walk_until_request(f)
+        f:on_reply("ok|x"); f:step(2.1, "walking", "pawnA"); f:spawned(true)
+        assert(f:step(5.0, "walking", "pawnB") == "reattach")
+        f:lost()
+        assert(f:step(5.1, "boat", "pawnC") == nil, "waits until on foot")
+        assert(f:step(5.2, "walking", "pawnB") == "spawn", "fresh arms")
+        f:spawned(true)
+        assert(f.status == "active" and f:step(5.3, "walking", "pawnB") == nil)
+    end,
+
+    test_respawning_gives_up_after_repeated_losses = function()
+        local f = armsflow.new()
+        walk_until_request(f)
+        f:on_reply("ok|x"); f:step(2.1, "walking", "pawnA"); f:spawned(true)
+        for i = 1, armsflow.MAX_RESPAWNS do
+            f:lost()
+            assert(f:step(3 + i, "walking", "pawnA") == "spawn", "respawn " .. i)
+            f:spawned(true)
+        end
+        f:lost()
+        assert(f:step(20, "walking", "pawnA") == nil and f.status == "fail", "stops instead of looping")
+    end,
+
     test_failed_spawn_stops = function()
         local f = armsflow.new()
         walk_until_request(f)
