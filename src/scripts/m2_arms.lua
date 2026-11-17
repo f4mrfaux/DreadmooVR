@@ -321,6 +321,9 @@ local function attach_and_hide(pawn)
     restore_game_body()
     actor.Body:K2_AttachToComponent(pawn.Mesh, "None", SNAP_TO_TARGET, SNAP_TO_TARGET, SNAP_TO_TARGET, false)
     for _, bone in ipairs(GAME_BONES_TO_HIDE) do pawn.Mesh:HideBoneByName(bone, PBO_NONE) end
+    -- Body is a full copy of the character; its head must go too, or the view sits inside it
+    -- (camera_forward pulls the eyes back into the head). Hiding a bone hides its children.
+    actor.Body:HideBoneByName("neck_01", PBO_NONE)
     hidden_on = pawn.Mesh
 end
 

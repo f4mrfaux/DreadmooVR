@@ -207,6 +207,7 @@ return {
         local f = failures(W.logs)
         assert(f == "", "FAILED lines:\n" .. f)
         assert(has(W.logs, "spawned BP_VRArms"), "arms spawned")
+        assert(W.body.hidden.neck_01, "VR arms' own head hidden, or the view sits inside it")
         assert(has(W.logs, "tuning applied"), "tuning pushed into BP_VRArms")
         assert(has(W.logs, "arm L target="), "harness sampled")
         assert(has(W.logs, "fit eye_ahead="), "fit line logged")
