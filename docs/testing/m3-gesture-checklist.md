@@ -23,8 +23,9 @@ be limited to a combination that passes this checklist.
 4. **First-person small boat:** enter the `BP_SmallBoat_V2` helm while on foot. Check the VR arms
    remain visible even though the game hides the diver actor. The left hand should sit on the
    wheel's authored `LHand_Socket`; the right should sit on the throttle's `RHand` socket. Move the
-   left hand through a left/right arc to steer; about 22 cm of horizontal travel reaches full
-   steering by default. HMD movement should look around; first-person right-stick camera look is
+   left hand through a left/right arc to steer. The first 2 cm around center is ignored, then input
+   builds gently and reaches full steering at about 22 cm by default; light smoothing should keep
+   tracking jitter from flicking the helm. HMD movement should look around; first-person right-stick camera look is
    suppressed because it rotates the game control frame underneath the tracked hands. Third-person
    camera look remains native.
    Also watch the selected wheel cosmetic overlay while steering fully left and right: it should
@@ -133,9 +134,10 @@ timed out or accepted input.
   plausible tracking-space bounds, a near-unit quaternion, and implausible per-frame hand jumps;
   missing controller tracking fails to neutral and requires recalibration. The throttle uses a stable-hand polling delay on entry
   and a 120 ms detent debounce to reduce accidental movement while the right hand is settling.
-  Tune live in the gestures table: boat_steer_range_m controls the horizontal travel to full
-  rudder, boat_throttle_enter_m chooses forward/reverse, boat_throttle_release_m defines neutral,
-  and boat_throttle_turnaround_m sets the hysteresis when changing direction.
+  Tune live in the gestures table: boat_steer_range_m controls horizontal travel to full rudder,
+  boat_steer_deadzone_m ignores center noise, boat_steer_curve shapes the center response, and
+  boat_steer_smoothing_s controls low-pass filtering. The throttle uses boat_throttle_enter_m for
+  forward/reverse, boat_throttle_release_m for neutral, and a 120 ms stable detent before changes.
 
   On the craft bench, craft_cursor_span_m changes how much hand movement spans the viewport.
 

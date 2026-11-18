@@ -52,7 +52,8 @@ local DEFAULTS = {
     guard_enabled = true, guard_enter_z = -0.65, guard_exit_z = -0.50,
     guard_front_z = -0.05, guard_min_y = -0.65, guard_max_y = 0.10, guard_max_x = 0.45,
     fishing_fight_deadzone_m = 0.08, fishing_fight_range_m = 0.28,
-    craft_cursor_span_m = 0.40, boat_steer_range_m = 0.22,
+    craft_cursor_span_m = 0.40, boat_steer_range_m = 0.22, boat_steer_deadzone_m = 0.02,
+    boat_steer_curve = 1.25, boat_steer_smoothing_s = 0.08,
     boat_throttle_enter_m = 0.14, boat_throttle_release_m = 0.055, boat_throttle_turnaround_m = 0.08,
     aim_method = 2,
 }
@@ -87,6 +88,9 @@ local function read_cfg()
         fishing_fight_range_m = num(g.fishing_fight_range_m, 0.08, 0.8, d.fishing_fight_range_m),
         craft_cursor_span_m = num(g.craft_cursor_span_m, 0.1, 1.5, d.craft_cursor_span_m),
         boat_steer_range_m = num(g.boat_steer_range_m, 0.05, 0.8, d.boat_steer_range_m),
+        boat_steer_deadzone_m = num(g.boat_steer_deadzone_m, 0, 0.1, d.boat_steer_deadzone_m),
+        boat_steer_curve = num(g.boat_steer_curve, 0.75, 2.5, d.boat_steer_curve),
+        boat_steer_smoothing_s = num(g.boat_steer_smoothing_s, 0, 0.5, d.boat_steer_smoothing_s),
         boat_throttle_enter_m = num(g.boat_throttle_enter_m, 0.06, 0.4, d.boat_throttle_enter_m),
         boat_throttle_release_m = num(g.boat_throttle_release_m, 0.01, 0.15, d.boat_throttle_release_m),
         boat_throttle_turnaround_m = num(g.boat_throttle_turnaround_m, 0.02, 0.2, d.boat_throttle_turnaround_m),
@@ -194,9 +198,11 @@ local boat_axis_x, boat_axis_y = 0, 0
 local boat_neutral_lx, boat_neutral_ry
 local boat_reference_inv, boat_camera_state
 local boat_throttle = nil
+local boat_throttle_last_direction = 0
 local boat_calibration_started, boat_stable_since, boat_calibration_sample
 local boat_throttle_candidate, boat_throttle_candidate_since
 local boat_last_motion_sample
+local boat_steer_filtered, boat_steer_last_update = 0, nil
 local boat_pose_error_last_log = -math.huge
 local boat_anchor_retry_ticks, boat_anchor_attempt = 0, 0
 local boat_anchors_logged = false
@@ -340,10 +346,12 @@ local function deactivate()
     fishing_axis_x, fishing_axis_y = 0, 0
     boat_axis_x, boat_axis_y = 0, 0
     boat_neutral_lx, boat_neutral_ry, boat_throttle = nil, nil, nil
+    boat_throttle_last_direction = 0
     boat_reference_inv, boat_camera_state = nil, nil
     boat_calibration_started, boat_stable_since, boat_calibration_sample = nil, nil, nil
     boat_throttle_candidate, boat_throttle_candidate_since = nil, nil
     boat_last_motion_sample = nil
+    boat_steer_filtered, boat_steer_last_update = 0, nil
     if guarding then
         guard_release_until = clock + 0.1
         pcall(function() uevr.params.vr.set_mod_value("VR_AimMethod", string.format("%d", math.floor(cfg.aim_method))) end)
@@ -454,10 +462,12 @@ local function step_boat(pawn)
         if boat_neutral_lx ~= nil then log("boat gestures paused; native axes restored") end
         boat_axis_x, boat_axis_y = 0, 0
         boat_neutral_lx, boat_neutral_ry, boat_throttle = nil, nil, nil
+        boat_throttle_last_direction = 0
         boat_reference_inv = nil
         boat_calibration_started, boat_stable_since, boat_calibration_sample = nil, nil, nil
         boat_throttle_candidate, boat_throttle_candidate_since = nil, nil
         boat_last_motion_sample = nil
+        boat_steer_filtered, boat_steer_last_update = 0, nil
         boat_anchor_retry_ticks, boat_anchor_attempt, boat_anchors_logged = 0, 0, false
         boat_pose_sample_ticks = 0
         return
@@ -471,9 +481,11 @@ local function step_boat(pawn)
     if not ok_tracking or tracking ~= true or l == nil or r == nil or h == nil then
         boat_axis_x, boat_axis_y, boat_throttle = 0, 0, 0
         boat_neutral_lx, boat_neutral_ry = nil, nil
+        boat_throttle_last_direction = 0
         boat_calibration_started, boat_stable_since, boat_calibration_sample = nil, nil, nil
         boat_throttle_candidate, boat_throttle_candidate_since = nil, nil
         boat_last_motion_sample = nil
+        boat_steer_filtered, boat_steer_last_update = 0, nil
         if clock - boat_pose_error_last_log >= 1 then
             boat_pose_error_last_log = clock
             log("boat controls fail-safe: controller tracking=" .. tostring(ok_tracking and tracking)
@@ -500,9 +512,11 @@ local function step_boat(pawn)
             if dl > 8 or dr > 8 then
                 boat_axis_x, boat_axis_y, boat_throttle = 0, 0, 0
                 boat_neutral_lx, boat_neutral_ry = nil, nil
+                boat_throttle_last_direction = 0
                 boat_calibration_started, boat_stable_since, boat_calibration_sample = nil, nil, nil
                 boat_throttle_candidate, boat_throttle_candidate_since = nil, nil
                 boat_last_motion_sample = nil
+            boat_steer_filtered, boat_steer_last_update = 0, nil
                 if clock - boat_pose_error_last_log >= 1 then
                     boat_pose_error_last_log = clock
                     log(string.format("boat controls fail-safe: implausible pose jump (left %.1f m/s, right %.1f m/s)", dl, dr))
@@ -523,6 +537,7 @@ local function step_boat(pawn)
         -- Let the player place hands on wheel and throttle; capture neutral only after they hold still.
         if clock - boat_calibration_started >= 1.0 and boat_stable_since ~= nil and clock - boat_stable_since >= 0.4 then
             boat_neutral_lx, boat_neutral_ry = lx, ry
+            boat_throttle_last_direction = 0
             boat_calibration_started, boat_stable_since, boat_calibration_sample = nil, nil, nil
             boat_throttle_candidate, boat_throttle_candidate_since = 0, clock
             log("boat gestures calibrated after stable hand placement; left=steering right=throttle")
@@ -537,14 +552,28 @@ local function step_boat(pawn)
     log_boat_anchors(pawn)
     -- Horizontal left-hand travel maps to the boat's full steering input.
     local steer = lx - boat_neutral_lx
-    boat_axis_x = math.max(-1, math.min(1, steer / cfg.boat_steer_range_m))
-    if math.abs(boat_axis_x) < 0.10 then boat_axis_x = 0 end
+    local steer_magnitude = math.abs(steer)
+    local steer_span = math.max(0.001, cfg.boat_steer_range_m - cfg.boat_steer_deadzone_m)
+    local steer_amount = steer_magnitude <= cfg.boat_steer_deadzone_m and 0
+        or math.min(1, (steer_magnitude - cfg.boat_steer_deadzone_m) / steer_span)
+    local steer_target = (steer < 0 and -1 or 1) * (steer_amount ^ cfg.boat_steer_curve)
+    local dt = boat_steer_last_update and math.max(0, clock - boat_steer_last_update) or 0
+    boat_steer_last_update = clock
+    if cfg.boat_steer_smoothing_s > 0 and dt > 0 then
+        local alpha = 1 - math.exp(-dt / cfg.boat_steer_smoothing_s)
+        boat_steer_filtered = boat_steer_filtered + (steer_target - boat_steer_filtered) * alpha
+    else
+        boat_steer_filtered = steer_target
+    end
+    boat_axis_x = boat_steer_filtered
     -- Three physical detents. Hysteresis prevents chatter around neutral/full travel.
     local lift = ry - boat_neutral_ry
     local previous = boat_throttle or 0
     local candidate = previous
     if previous == 0 then
-        if lift >= cfg.boat_throttle_enter_m then candidate = 1
+        if boat_throttle_last_direction == 1 and lift <= -cfg.boat_throttle_turnaround_m then candidate = -1
+        elseif boat_throttle_last_direction == -1 and lift >= cfg.boat_throttle_turnaround_m then candidate = 1
+        elseif lift >= cfg.boat_throttle_enter_m then candidate = 1
         elseif lift <= -cfg.boat_throttle_enter_m then candidate = -1 end
     elseif previous == 1 and lift < cfg.boat_throttle_release_m then
         candidate = 0
@@ -556,6 +585,8 @@ local function step_boat(pawn)
             boat_throttle_candidate, boat_throttle_candidate_since = candidate, clock
         elseif clock - (boat_throttle_candidate_since or clock) >= 0.12 then
             boat_throttle = candidate
+            if candidate ~= 0 then boat_throttle_last_direction = candidate
+            elseif previous ~= 0 then boat_throttle_last_direction = previous end
             boat_throttle_candidate, boat_throttle_candidate_since = candidate, clock
             boat_axis_y = candidate
             log("boat throttle detent: " .. (candidate == 1 and "forward" or candidate == -1 and "reverse" or "neutral"))

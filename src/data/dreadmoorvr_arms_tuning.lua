@@ -34,6 +34,9 @@ return {
         fishing_fight_deadzone_m = 0.08, fishing_fight_range_m = 0.28,
         craft_cursor_span_m = 0.40,                        -- hand travel across full screen
         boat_steer_range_m = 0.22,                         -- left hand travel to full rudder
+        boat_steer_deadzone_m = 0.02,                      -- ignore small center noise (2 cm)
+        boat_steer_curve = 1.25,                           -- softer center, still reaches full rudder
+        boat_steer_smoothing_s = 0.08,                     -- light low-pass smoothing for tracking noise
         boat_throttle_enter_m = 0.14,                       -- right hand travel to a throttle detent
         boat_throttle_release_m = 0.055,                    -- return to neutral inside this range
         boat_throttle_turnaround_m = 0.08,                  -- cross through neutral to change direction
