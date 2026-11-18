@@ -6,13 +6,16 @@ answer too.
 
 ## Before the headset
 
-- [ ] The probe is already deployed to `%APPDATA%\UnrealVRMod\Dreadmoor-Win64-Shipping\`. Check
-      that `scripts\m0_probe.lua` is there.
+- [ ] The beta profile contains `plugins\DreadmoorVR.dll`, `scripts\m2_arms.lua`,
+      `scripts\m3_gestures.lua`, the `scripts\lib` directory, and `dreadmoorvr_arms_tuning.lua`.
+      The production beta intentionally omits the M0 diagnostic probe.
 - [ ] Start SteamVR streaming to the Frame.
+- [ ] Turn Steam Frame passthrough off before testing. A previous runtime report showed UEVR
+      marking the HMD active for only 4.98% of ticks, which can suppress controller input.
 - [ ] Start Dreadmoor and load a save where you are on foot, near a fishing spot.
 - [ ] Run `Downloads\UEVR\UEVRInjector.exe`, pick `Dreadmoor-Win64-Shipping`, OpenXR, Inject.
-- [ ] Check that the file `dreadmoorvr_m0.log` now exists in the profile folder.
-      *If it doesn't, scripts are not loading. Note that and carry on.*
+- [ ] In the UEVR `log.txt`, confirm `[DreadmoorVR M2] loaded` and `[DreadmoorVR M3] loaded`.
+      When the pawn appears, confirm M2 spawns `BP_VRArms`. Record any `FAILED` line.
 
 ## In the headset
 

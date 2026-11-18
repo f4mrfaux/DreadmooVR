@@ -8,7 +8,9 @@ Steam Frame input, and game feel still require a headset run.
 ## Morning run: fishing and helm first
 
 Before the run, record the Dreadmoor build, UEVR version/commit, SteamVR version, Frame firmware,
-and Windows build. V1 support will be limited to a combination that passes this checklist.
+and Windows build. Turn Steam Frame passthrough off before injecting UEVR; a previous runtime
+report showed only 4.98% HMD-active ticks, which can suppress controller input. V1 support will
+be limited to a combination that passes this checklist.
 
 1. **Fishing fight:** enter the fish fight, leave the left stick untouched, then lean the right
    hand left and right. Confirm the fight indicator responds in the intended direction. The pose
