@@ -29,7 +29,7 @@ code compares against. The state tree could hold more tags that no Blueprint nam
 | Bite | `IA_Fishing_Cast` | right trigger | **Read**: `WBP_QTE_FishingBite` listens for it; `IMC_Fishing` |
 | Land (`WBP_QTE_FishLand`) | `IA_QTE_Interact` | A (keyboard F) | **Inferred**: `IMC_QTE` holds only F, A, left stick, right trigger and left mouse, and Interact pairs with F/A |
 | Reel timing (`WBP_QTE_Reel`) | `IA_QTE_Interact` | A | same |
-| Directional drag | `IA_QTE_LMB` held + `IA_QTE_Look` | A held + left stick | **Read**: `IMC_QTE_Drag` holds only A, left stick and left mouse |
+| Directional drag | `IA_QTE_LMB` held + `IA_QTE_Look` | A held + left stick (inferred; headset check pending) | Widget bindings read; `imc.py` heuristic finds left mouse + left stick, but may miss an additional gamepad mapping |
 | Reeling | `IA_Fishing_Cast` held | right trigger held | **Read** |
 
 ## Fight direction

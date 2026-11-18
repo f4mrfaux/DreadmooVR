@@ -51,6 +51,7 @@ local DEFAULTS = {
     tap_hold = 0.06, tap_gap = 0.06,
     guard_enabled = true, guard_enter_z = -0.65, guard_exit_z = -0.50,
     guard_front_z = -0.05, guard_min_y = -0.65, guard_max_y = 0.10, guard_max_x = 0.45,
+    fishing_fight_deadzone_m = 0.08, fishing_fight_range_m = 0.28,
 }
 local cfg = DEFAULTS
 local function num(v, lo, hi, d) return (type(v) == "number" and v == v and v >= lo and v <= hi) and v or d end
@@ -78,6 +79,8 @@ local function read_cfg()
         guard_min_y = num(g.guard_min_y, -1.5, 0, d.guard_min_y),
         guard_max_y = num(g.guard_max_y, -0.5, 0.5, d.guard_max_y),
         guard_max_x = num(g.guard_max_x, 0.1, 1.5, d.guard_max_x),
+        fishing_fight_deadzone_m = num(g.fishing_fight_deadzone_m, 0.02, 0.3, d.fishing_fight_deadzone_m),
+        fishing_fight_range_m = num(g.fishing_fight_range_m, 0.08, 0.8, d.fishing_fight_range_m),
     }
 end
 
@@ -130,6 +133,9 @@ local tool, tool_comp, hook_out = nil, nil, false
 local pawn_id, tool_id, input_active, trigger_owned = nil, nil, false, false
 local guarding, guard_since, guard_release_until = false, nil, -math.huge
 local fishing_reeling = false
+local fishing_fish_id, fishing_neutral_x, fishing_neutral_y = nil, nil, nil
+local fishing_qte_tag, fishing_qte_neutral_x, fishing_qte_neutral_y = nil, nil, nil
+local fishing_axis_x, fishing_axis_y = 0, 0
 local last_log = 0
 local function identity(obj)
     if obj == nil then return nil end
@@ -223,6 +229,9 @@ end
 local function deactivate()
     input_active = false
     trigger_owned, fishing_reeling = false, false
+    fishing_fish_id, fishing_neutral_x, fishing_neutral_y = nil, nil, nil
+    fishing_qte_tag, fishing_qte_neutral_x, fishing_qte_neutral_y = nil, nil, nil
+    fishing_axis_x, fishing_axis_y = 0, 0
     if guarding then guard_release_until = clock + 0.1 end
     guarding, guard_since = false, nil
     rebuild()
@@ -237,34 +246,106 @@ local function value_name(v)
     return tostring(v)
 end
 
-local function fishing_has_fish(pawn)
+local function fishing_fish(pawn)
     local ok, fish = pcall(function() return pawn.StrugglingFish end)
-    if not ok or fish == nil or fish == false or value_name(fish) == "None" then return false end
+    if not ok or fish == nil or fish == false or value_name(fish) == "None" then return nil end
     local ok_name, full = pcall(function() return fish:get_full_name() end)
-    return ok_name and type(full) == "string" and full ~= "" and full ~= "None"
+    return ok_name and type(full) == "string" and full ~= "" and full ~= "None" and fish or nil
 end
 
-local function fishing_has_qte(pawn)
+local function fishing_qte(pawn)
     local ok, qte = pcall(function() return pawn.CurrentQTE end)
-    return not ok or qte == nil or value_name(qte) ~= "None"
+    if not ok or qte == nil then return "Unknown" end
+    return value_name(qte)
+end
+
+local function lean_axis(delta)
+    local amount = math.abs(delta)
+    if amount <= cfg.fishing_fight_deadzone_m then return 0 end
+    local span = math.max(0.001, cfg.fishing_fight_range_m - cfg.fishing_fight_deadzone_m)
+    local value = math.min(1, (amount - cfg.fishing_fight_deadzone_m) / span)
+    return delta < 0 and -value or value
 end
 
 local function step_fishing(pawn)
     if clock - last_cfg >= 1.0 then
         last_cfg = clock
         local ok, c = pcall(read_cfg)
-        if ok then cfg = c end
+        if ok then
+            local changed = false
+            for k, v in pairs(c) do if type(v) ~= "table" and cfg[k] ~= v then changed = true end end
+            cfg = c
+            if changed then rebuild() end
+        end
     end
-    if not cfg.enabled or not fishing_has_fish(pawn) or fishing_has_qte(pawn) then
+    if not cfg.enabled then
         if fishing_reeling then log("fishing crank: released (no fish or QTE active)") end
         fishing_reeling = false
         input_active, trigger_owned = false, false
+        fishing_fish_id, fishing_neutral_x, fishing_neutral_y = nil, nil, nil
+        fishing_qte_tag, fishing_qte_neutral_x, fishing_qte_neutral_y = nil, nil, nil
+        fishing_axis_x, fishing_axis_y = 0, 0
         crank:reset()
         return
     end
+
+    local fish = fishing_fish(pawn)
+    if fish == nil then
+        if fishing_reeling then log("fishing crank: released (no fish)") end
+        fishing_reeling = false
+        input_active, trigger_owned = false, false
+        fishing_fish_id, fishing_neutral_x, fishing_neutral_y = nil, nil, nil
+        fishing_qte_tag, fishing_qte_neutral_x, fishing_qte_neutral_y = nil, nil, nil
+        fishing_axis_x, fishing_axis_y = 0, 0
+        crank:reset()
+        return
+    end
+
     local vr = uevr.params.vr
     local lpos = raw_pose(vr.get_left_controller_index())
     local rpos, rq = raw_pose(vr.get_right_controller_index())
+    local hmd, hmd_q = raw_pose(vr.get_hmd_index())
+    local hand_from_head = { X = rpos.X - hmd.X, Y = rpos.Y - hmd.Y, Z = rpos.Z - hmd.Z }
+    local head_right = rotate(hmd_q, { X = 1, Y = 0, Z = 0 })
+    local head_up = rotate(hmd_q, { X = 0, Y = 1, Z = 0 })
+    local relative_x = hand_from_head.X * head_right.X + hand_from_head.Y * head_right.Y + hand_from_head.Z * head_right.Z
+    local relative_y = hand_from_head.X * head_up.X + hand_from_head.Y * head_up.Y + hand_from_head.Z * head_up.Z
+    local id = identity(fish)
+    if id ~= fishing_fish_id then
+        fishing_fish_id = id
+        fishing_neutral_x, fishing_neutral_y = relative_x, relative_y
+        fishing_qte_tag, fishing_qte_neutral_x, fishing_qte_neutral_y = nil, nil, nil
+        log("fishing fight gesture: calibrated")
+    end
+
+    local qte = fishing_qte(pawn)
+    local directional_drag = qte == "QTE.Type.DirectionalDrag"
+    if qte ~= fishing_qte_tag then
+        fishing_qte_tag = qte
+        if directional_drag then
+            fishing_qte_neutral_x, fishing_qte_neutral_y = relative_x, relative_y
+            log("fishing QTE: directional drag")
+        elseif qte ~= "None" then
+            log("fishing QTE: physical input " .. qte)
+        end
+    end
+
+    fishing_axis_x, fishing_axis_y = 0, 0
+    if qte == "None" then
+        fishing_axis_x = lean_axis(relative_x - fishing_neutral_x)
+    elseif directional_drag then
+        fishing_axis_x = lean_axis(relative_x - fishing_qte_neutral_x)
+        fishing_axis_y = lean_axis(relative_y - fishing_qte_neutral_y)
+    end
+
+    if qte ~= "None" then
+        if fishing_reeling then log("fishing crank: released (QTE active)") end
+        fishing_reeling = false
+        crank:reset()
+        input_active, trigger_owned = false, false
+        return
+    end
+
     local o = cfg.crank_offset
     local off = rotate(rq, { X = o.x, Y = o.y, Z = o.z })
     local pivot = { X = rpos.X + off.X, Y = rpos.Y + off.Y, Z = rpos.Z + off.Z }
@@ -434,6 +515,14 @@ end)
 -- player's own trigger passes through untouched.
 uevr.sdk.callbacks.on_xinput_get_state(function(retval, user_index, state)
     if user_index ~= 0 or state == nil then return end
+    if fishing_fish_id ~= nil then
+        local gamepad = state.Gamepad
+        if fishing_axis_x ~= 0 then gamepad.sThumbLX = math.floor(fishing_axis_x * 32767) end
+        if fishing_qte_tag == "QTE.Type.DirectionalDrag" and (fishing_axis_x ~= 0 or fishing_axis_y ~= 0) then
+            gamepad.sThumbLX = math.floor(fishing_axis_x * 32767)
+            gamepad.sThumbLY = math.floor(fishing_axis_y * 32767)
+        end
+    end
     if trigger_owned then
         state.Gamepad.bRightTrigger = (guarding or fishing_reeling) and 255 or 0
         return
