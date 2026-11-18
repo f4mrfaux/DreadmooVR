@@ -236,6 +236,25 @@ local function dot_update(pawn)
     dot_show(true)
 end
 
+-- Gun alignment check: the barrel runs from the gun's grip (its attached root) to its Hook mesh
+-- at the tip (BP_HookGunEquipment.Hook). Compared once a second with the aim the shots follow
+-- (control rotation), as degrees: dyaw > 0 = barrel right of the aim, dpitch > 0 = barrel above.
+-- K2_GetComponentLocation SceneComponent.h, GetControlRotation Controller.h:159.
+local last_aim_log = -1
+local function log_gun_aim(pawn)
+    if clock - last_aim_log < 1.0 or tool_comp == nil then return end
+    last_aim_log = clock
+    local gun = tool_comp:GetOwner()
+    local tip, grip = gun.Hook:K2_GetComponentLocation(), tool_comp:K2_GetComponentLocation()
+    local bx, by, bz = tip.x - grip.x, tip.y - grip.y, tip.z - grip.z
+    local cr = pawn.Controller:GetControlRotation()
+    local function wrap(a) a = (a + 180) % 360; return a - 180 end
+    local byaw = math.deg(math.atan(by, bx))
+    local bpitch = math.deg(math.atan(bz, math.sqrt(bx * bx + by * by)))
+    log(string.format("gun aim: dyaw=%.0f dpitch=%.0f (barrel %.0f/%.0f, aim %.0f/%.0f)",
+        wrap(byaw - cr.y), wrap(bpitch - cr.x), byaw, bpitch, wrap(cr.y), wrap(cr.x)))
+end
+
 local function step(pawn)
     if clock - last_cfg >= 1.0 then
         last_cfg = clock
