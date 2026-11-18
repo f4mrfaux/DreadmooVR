@@ -18,36 +18,37 @@ local function with_defaults(cfg, d) local o = {} for k, val in pairs(d) do o[k]
 gestures.CRANK = { r_min = 0.04, r_max = 0.25, min_deg_s = 180, step_deg = 90, grace_s = 0.25 }
 local Crank = {}; Crank.__index = Crank
 function gestures.crank(cfg)
-    return setmetatable({ cfg = with_defaults(cfg, gestures.CRANK), last = nil, t = nil, acc = 0, dir = 0, slow_since = nil }, Crank)
+    return setmetatable({ cfg = with_defaults(cfg, gestures.CRANK), last = nil, t = nil, acc = 0, dir = 0, slow_since = nil, active_until = -math.huge }, Crank)
 end
-function Crank:reset() self.last, self.t, self.acc, self.dir, self.slow_since = nil, nil, 0, 0, nil end
+function Crank:reset() self.last, self.t, self.acc, self.dir, self.slow_since, self.active_until = nil, nil, 0, 0, nil, -math.huge end
 -- Returns the number of clicks this update (usually 0 or 1).
 function Crank:update(t, hand, pivot, axis, up)
     local c = self.cfg
     local ax = norm(axis)
     local e1 = ax and norm(reject(up, ax))
-    if not ax or not e1 then self:reset(); return 0 end
+    if not ax or not e1 then self:reset(); return 0, false end
     local e2 = cross(ax, e1)
     local r = reject(sub(hand, pivot), ax)
     local rl = len(r)
-    if rl < c.r_min or rl > c.r_max then self:reset(); return 0 end
+    if rl < c.r_min or rl > c.r_max then self:reset(); return 0, false end
     local angle = math.atan(dot(r, e2), dot(r, e1))
-    if self.last == nil or self.t == nil or t <= self.t then self.last, self.t = angle, t; return 0 end
+    if self.last == nil or self.t == nil or t <= self.t then self.last, self.t = angle, t; return 0, false end
     local d = wrap(angle - self.last)
     local speed = math.deg(math.abs(d)) / (t - self.t)
     self.last, self.t = angle, t
     if speed < c.min_deg_s then
         self.slow_since = self.slow_since or t
         if t - self.slow_since > c.grace_s then self.acc, self.dir = 0, 0 end
-        return 0
+        return 0, t <= self.active_until
     end
     self.slow_since = nil
+    self.active_until = t + c.grace_s
     local dir = d > 0 and 1 or -1
     if dir ~= self.dir then self.acc, self.dir = 0, dir end
     self.acc = self.acc + math.deg(math.abs(d))
     local clicks = 0
     while self.acc >= c.step_deg do self.acc = self.acc - c.step_deg; clicks = clicks + 1 end
-    return clicks
+    return clicks, true
 end
 
 -- Swing: hand speed above `min_m_s` for `frames` updates in a row, then quiet for `cooldown_s`.

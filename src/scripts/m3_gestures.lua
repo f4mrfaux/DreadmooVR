@@ -49,6 +49,8 @@ local DEFAULTS = {
     crank_r_min = 0.04, crank_r_max = 0.25, crank_min_deg_s = 180, crank_step_deg = 90,
     swing_min_m_s = 2.0, swing_frames = 3, swing_cooldown_s = 0.4,
     tap_hold = 0.06, tap_gap = 0.06,
+    guard_enabled = true, guard_enter_z = -0.65, guard_exit_z = -0.50,
+    guard_front_z = -0.05, guard_min_y = -0.65, guard_max_y = 0.10, guard_max_x = 0.45,
 }
 local cfg = DEFAULTS
 local function num(v, lo, hi, d) return (type(v) == "number" and v == v and v >= lo and v <= hi) and v or d end
@@ -69,6 +71,13 @@ local function read_cfg()
         swing_min_m_s = num(g.swing_min_m_s, 0.5, 10, d.swing_min_m_s), swing_frames = num(g.swing_frames, 1, 30, d.swing_frames),
         swing_cooldown_s = num(g.swing_cooldown_s, 0, 5, d.swing_cooldown_s),
         tap_hold = num(g.tap_hold, 0.01, 0.5, d.tap_hold), tap_gap = num(g.tap_gap, 0.01, 0.5, d.tap_gap),
+        guard_enabled = g.guard_enabled ~= false,
+        guard_enter_z = num(g.guard_enter_z, -1, -0.1, d.guard_enter_z),
+        guard_exit_z = num(g.guard_exit_z, -1, -0.1, d.guard_exit_z),
+        guard_front_z = num(g.guard_front_z, -0.5, 0.5, d.guard_front_z),
+        guard_min_y = num(g.guard_min_y, -1.5, 0, d.guard_min_y),
+        guard_max_y = num(g.guard_max_y, -0.5, 0.5, d.guard_max_y),
+        guard_max_x = num(g.guard_max_x, 0.1, 1.5, d.guard_max_x),
     }
 end
 
@@ -118,7 +127,9 @@ end
 
 local clock, last_cfg = 0, -1
 local tool, tool_comp, hook_out = nil, nil, false
-local pawn_id, tool_id, input_active = nil, nil, false
+local pawn_id, tool_id, input_active, trigger_owned = nil, nil, false, false
+local guarding, guard_since, guard_release_until = false, nil, -math.huge
+local fishing_reeling = false
 local last_log = 0
 local function identity(obj)
     if obj == nil then return nil end
@@ -211,9 +222,83 @@ end
 
 local function deactivate()
     input_active = false
+    trigger_owned, fishing_reeling = false, false
+    if guarding then guard_release_until = clock + 0.1 end
+    guarding, guard_since = false, nil
     rebuild()
     tool, tool_comp, tool_id, hook_out = nil, nil, nil, false
     dot_show(false)
+end
+
+local function value_name(v)
+    if v == nil then return "None" end
+    local ok, s = pcall(function() return v:to_string() end)
+    if ok and type(s) == "string" then return s end
+    return tostring(v)
+end
+
+local function fishing_has_fish(pawn)
+    local ok, fish = pcall(function() return pawn.StrugglingFish end)
+    if not ok or fish == nil or fish == false or value_name(fish) == "None" then return false end
+    local ok_name, full = pcall(function() return fish:get_full_name() end)
+    return ok_name and type(full) == "string" and full ~= "" and full ~= "None"
+end
+
+local function fishing_has_qte(pawn)
+    local ok, qte = pcall(function() return pawn.CurrentQTE end)
+    return not ok or qte == nil or value_name(qte) ~= "None"
+end
+
+local function step_fishing(pawn)
+    if clock - last_cfg >= 1.0 then
+        last_cfg = clock
+        local ok, c = pcall(read_cfg)
+        if ok then cfg = c end
+    end
+    if not cfg.enabled or not fishing_has_fish(pawn) or fishing_has_qte(pawn) then
+        if fishing_reeling then log("fishing crank: released (no fish or QTE active)") end
+        fishing_reeling = false
+        input_active, trigger_owned = false, false
+        crank:reset()
+        return
+    end
+    local vr = uevr.params.vr
+    local lpos = raw_pose(vr.get_left_controller_index())
+    local rpos, rq = raw_pose(vr.get_right_controller_index())
+    local o = cfg.crank_offset
+    local off = rotate(rq, { X = o.x, Y = o.y, Z = o.z })
+    local pivot = { X = rpos.X + off.X, Y = rpos.Y + off.Y, Z = rpos.Z + off.Z }
+    local _, active = crank:update(clock, lpos, pivot,
+        rotate(rq, { X = 1, Y = 0, Z = 0 }), rotate(rq, { X = 0, Y = 1, Z = 0 }))
+    if active ~= fishing_reeling then
+        fishing_reeling = active
+        log(active and "fishing crank: reel held" or "fishing crank: reel released")
+    end
+    input_active, trigger_owned = active, active
+end
+
+-- Thumb-down proxy: controller forward points toward the floor while the hand is low and
+-- in front of the torso. UEVR exposes controller orientation, not individual finger curls.
+local function step_guard(pawn)
+    if not cfg.guard_enabled or tool ~= "melee" then
+        guard_since = nil
+        return false
+    end
+    local vr = uevr.params.vr
+    local hand, hand_q = raw_pose(vr.get_right_controller_index())
+    local head = raw_pose(vr.get_hmd_index())
+    local forward = rotate(hand_q, { X = 0, Y = 0, Z = -1 })
+    local dx, dy, dz = hand.X - head.X, hand.Y - head.Y, hand.Z - head.Z
+    local positioned = dz < cfg.guard_front_z and dy >= cfg.guard_min_y and dy <= cfg.guard_max_y
+        and math.abs(dx) <= cfg.guard_max_x
+    local threshold = guarding and cfg.guard_exit_z or cfg.guard_enter_z
+    local candidate = positioned and forward.Y <= threshold
+    if candidate then
+        guard_since = guard_since or clock
+    else
+        guard_since = nil
+    end
+    return candidate and clock - guard_since >= 0.10
 end
 
 local function dot_update(pawn)
@@ -313,6 +398,11 @@ uevr.sdk.callbacks.on_pre_engine_tick(function(_, delta)
     local mode = pawn and modes.classify(gameapi.class_chain(pawn)) or nil
     local id = identity(pawn)
     if id ~= pawn_id then deactivate(); pawn_id = id end
+    if mode == "fishing" then
+        local ok, err = pcall(step_fishing, pawn)
+        if not ok then deactivate(); log("fishing gesture FAILED: " .. tostring(err)) end
+        return
+    end
     if mode ~= "walking" then
         if tool ~= nil then log("tool in hand: nil (left walking mode)") end
         deactivate()
@@ -320,13 +410,36 @@ uevr.sdk.callbacks.on_pre_engine_tick(function(_, delta)
     end
     local ok, err = pcall(step, pawn)
     if not ok then deactivate(); log("FAILED: " .. tostring(err)) end
+    if ok then
+        local okg, blocked = pcall(step_guard, pawn)
+        if okg then
+            local was_guarding = guarding
+            if blocked ~= was_guarding then
+                log(blocked and "guard held" or "guard released")
+                rebuild()
+                if was_guarding then guard_release_until = clock + 0.1 end
+            end
+            guarding = blocked
+            trigger_owned = blocked
+            input_active = input_active or blocked
+        else
+            guarding, trigger_owned = false, false
+            log("guard gesture FAILED: " .. tostring(blocked))
+        end
+    end
 end)
 
 -- The virtual press: while a tap is down the right trigger reads fully pressed; during the gap
 -- between taps it reads released, so taps stay distinct even over a held trigger. Otherwise the
 -- player's own trigger passes through untouched.
 uevr.sdk.callbacks.on_xinput_get_state(function(retval, user_index, state)
-    if not input_active or user_index ~= 0 or state == nil then return end
+    if user_index ~= 0 or state == nil then return end
+    if trigger_owned then
+        state.Gamepad.bRightTrigger = (guarding or fishing_reeling) and 255 or 0
+        return
+    end
+    if clock < guard_release_until then state.Gamepad.bRightTrigger = 0; return end
+    if not input_active then return end
     local down = tapper:pressed(clock)
     if down then state.Gamepad.bRightTrigger = 255
     elseif tapper.phase == "gap" then state.Gamepad.bRightTrigger = 0 end
