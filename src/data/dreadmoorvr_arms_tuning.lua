@@ -12,7 +12,7 @@ return {
     shoulder_swing = 0.3,  -- 0..1 of the forward shoulder turn when reaching (1 = full UBIK)
     grip_back = 8,         -- cm from the controller grip back to your wrist
     camera_forward = -12,  -- cm, recent harness measured eye 2 cm behind shoulders; move 12 cm forward
-    item_rot = { p = 0, y = 90, r = 0 },   -- held tools turned in the hand (deg); yaw 90 picked from a live sweep (18:39)
+    item_rot = { p = 0, y = 15, r = 0 },    -- Claude's final live sweep (2026-11-17); turns the barrel toward the observed hook-shot line
     level_torso = true,          -- the game's torso and head ignore look pitch (keeps the view out of the face)
     items_follow_hands = true,   -- held tools ride on the VR hands (false = game's own hand position)
     aim_method = 2,              -- UEVR: 1 = head, 2 = right controller (aim + hook gun follow the hand)

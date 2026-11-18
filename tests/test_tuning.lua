@@ -74,6 +74,12 @@ return {
         assert(u.item_rot.y == 180 and u.item_rot.p == 0)
     end,
 
+    test_project_hook_gun_alignment_calibration_stays_at_yaw_15 = function()
+        local config = assert(loadfile("src/data/dreadmoorvr_arms_tuning.lua"))()
+        assert(config.item_rot.p == 0 and config.item_rot.y == 15 and config.item_rot.r == 0,
+            "live-confirmed hook-gun barrel alignment is yaw 15; do not replace with the earlier 0/90 visual sweep")
+    end,
+
     test_flatten_names_match_blueprint_variables = function()
         local f = tuning.flatten(tuning.merge({ right_rot = { y = -15 } }))
         assert(f.RightRotY == -15 and f.LeftRotP == 0 and f.ElbowOut == 30 and f.ArmLength == 50.7
