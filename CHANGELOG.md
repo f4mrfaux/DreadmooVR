@@ -24,6 +24,9 @@ pending has not passed headset acceptance.
   address; the address had made a non-QTE state appear continuously active and suppressed reeling.
 - Added a separate first-person helm camera offset and runtime finger AnimBP property readback
   diagnostics to guide the next headset check.
+- Reworked first-person throttle around the intended hand poses: hip-fire neutral, hand low at
+  the hip for reverse, and a straight-elbow diagonal reach for forward. Added projected-travel
+  telemetry and a pose-sequence smoke test.
 - Removed the automatic M1 debug-cube spawn from the production bridge.
 - Local Lua and native test suites pass. Headset acceptance for fishing, boat steering/throttle,
   arms/shoulders, crafting, and the target Steam Frame input setup is still pending. The reported

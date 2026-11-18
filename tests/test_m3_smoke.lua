@@ -182,14 +182,15 @@ local function move_left_x(W, target, speed)
     run(W, duration + 0.25)
 end
 
-local function move_right_y(W, target, speed)
+local function move_right_pose(W, target_y, target_z, speed)
     speed = speed or 1.0
-    local start = W.right(W.t).Y
+    local start = W.right(W.t)
+    local distance = math.sqrt((target_y - start.Y) ^ 2 + (target_z - start.Z) ^ 2)
     local start_time = W.t
-    local duration = math.abs(target - start) / speed
+    local duration = distance / speed
     W.right = function(t)
         local a = duration > 0 and math.min(1, math.max(0, (t - start_time) / duration)) or 1
-        return v(0.2, start + (target - start) * a, -0.3)
+        return v(0.2, start.Y + (target_y - start.Y) * a, start.Z + (target_z - start.Z) * a)
     end
     run(W, duration + 0.25)
 end
@@ -234,7 +235,7 @@ return {
         assert(state.Gamepad.sThumbLX == 0 and state.Gamepad.sThumbLY == 0,
             "first-person calibration holds both axes neutral instead of leaking physical sticks")
         move_left_x(W, 0.11)
-        move_right_y(W, 1.38)
+        move_right_pose(W, 1.32, -0.42) -- up and forward: straight-elbow diagonal reach
         W.callbacks.xinput(nil, 0, state)
         assert(state.Gamepad.sThumbLX > 7500 and state.Gamepad.sThumbLX < 14000,
             "curved, smoothed left-hand travel steers through IA_BoatMove X (got " .. tostring(state.Gamepad.sThumbLX) .. ")")
@@ -242,10 +243,10 @@ return {
         assert(W.haptic and W.haptic[2] == 0.025 and W.haptic[3] == 150 and W.haptic[4] == 0.45,
             "right controller gets a short haptic click on throttle transition")
         assert(has(W, "boat throttle detent: forward"))
-        move_right_y(W, 1.2)
+        move_right_pose(W, 1.2, -0.3) -- return to hip-fire neutral
         W.callbacks.xinput(nil, 0, state)
         assert(state.Gamepad.sThumbLY == 0, "returning the hand to its calibrated height selects neutral")
-        move_right_y(W, 1.0)
+        move_right_pose(W, 1.02, -0.26) -- hand low by hip, slightly back
         W.callbacks.xinput(nil, 0, state)
         assert(state.Gamepad.sThumbLY == -32767, "lowering the right hand selects full reverse")
         assert(W.haptics == 3, "forward, neutral, and reverse each give one click")

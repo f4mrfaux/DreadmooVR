@@ -41,10 +41,12 @@ be limited to a combination that passes this checklist.
    Also watch the selected wheel cosmetic overlay while steering fully left and right: it should
    remain aligned with and rotate together with the base `Small_Boat_Steerwheel`, without lag or
    snapping back. This sync is implemented in M3 but has no live validation yet.
-5. **Throttle:** on entering first-person helm, keep both hands on their controls and still through
-   the brief calibration poll (at least 1.4 s, including 0.4 s of stable pose). No axes should be
-   sent during calibration. Keep the right hand near its captured height for neutral. Raise it
-   about 14 cm for forward, return through neutral, then lower it about 14 cm for reverse. Each
+5. **Throttle:** on entering first-person helm, hold the right hand in a comfortable hip-fire pose
+   for neutral, and keep both hands still through the brief calibration poll (at least 1.4 s,
+   including 0.4 s of stable pose). No axes should be sent during calibration. Move the right hand
+   low beside the hip for reverse; return to the hip-fire pose for neutral; then extend the right
+   arm diagonally forward with a straight elbow for forward. The gesture projects hand motion onto
+   an up-and-forward axis, so the diagonal reach counts even when the hand does not rise much. Each
    detent must remain requested for 120 ms before it is accepted and produces one right-controller
    haptic click. Invalid/out-of-range poses must zero the axes and restart calibration. Other boat
    types intentionally retain their native stick. First-person mode must keep gamepad LX/LY at
@@ -153,7 +155,8 @@ timed out or accepted input.
   face button's overlapping recipe action. The top face button opens recipes.
 - **Small boat:** confirm the third-person view keeps the game's native stick steering/throttle.
   Switch to the BP_SmallBoat_V2 first-person helm view: left-hand horizontal travel
-  steers through IA_BoatMove.X; right hand vertical travel selects reverse, neutral, or forward.
+  steers through IA_BoatMove.X; after calibrating with the right hand in a hip-fire neutral pose,
+  lower the right hand to the hip for reverse or extend it diagonally forward for forward.
   Switching back to third-person must immediately restore the native stick axes. Other boat types
   always keep their native controls.
   Each detent transition requests a short click on the right controller. The transition logs the

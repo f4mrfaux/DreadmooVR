@@ -38,8 +38,8 @@ return {
         boat_steer_deadzone_m = 0.02,                      -- ignore small center noise (2 cm)
         boat_steer_curve = 1.25,                           -- softer center, still reaches full rudder
         boat_steer_smoothing_s = 0.08,                     -- light low-pass smoothing for tracking noise
-        boat_throttle_enter_m = 0.14,                       -- right hand travel to a throttle detent
-        boat_throttle_release_m = 0.055,                    -- return to neutral inside this range
-        boat_throttle_turnaround_m = 0.08,                  -- cross through neutral to change direction
+        boat_throttle_enter_m = 0.10,                       -- projected diagonal hand travel from hip-fire neutral
+        boat_throttle_release_m = 0.04,                     -- return to neutral inside this range
+        boat_throttle_turnaround_m = 0.06,                  -- cross through neutral to change direction
     },
 }
