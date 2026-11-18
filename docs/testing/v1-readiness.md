@@ -14,14 +14,14 @@ desk harness is not mistaken for headset acceptance.
 | Boat steering and throttle | Implemented and smoke-tested | Harness covers native third-person stick pass-through, first-person gesture takeover/release, rudder, throttle detents and cosmetic actor rotation. A helm playtest is still needed for steering sign/range, haptics, arms visibility, and cosmetic alignment in both directions. |
 | Craft bench cursor | Implemented and smoke-tested | Headset check required for viewport reach and mapped face-button actions. |
 | Cooked pak | Present and content-allowlist checked | `list_container.py` reports only the three `/Game/DreadmoorVR` assets. Recook if any Unreal assets change. |
-| Install / release package | Beta tester candidate assembled | `dist/DreadmoorVR-1.0.0-beta.1-DIRTY-CANDIDATE.zip` contains 28 payload files, including the M0 and M3 checklists. The manifest count and every SHA-256 were verified. It is marked dirty and has not passed headset acceptance. |
+| Install / release package | Beta tester candidate assembled | `dist/DreadmoorVR-1.0.0-beta.1.zip` contains 28 payload files, including the M0 and M3 checklists. The clean archive manifest records its source commit; every payload SHA-256 was verified. Headset acceptance is pending. |
 
 The production bridge no longer spawns the historical M1 debug cube. The cooked probe asset stays
 available for explicit diagnostics through `src/probes/m1_probe.lua`.
 
 Latest local verification on 2026-11-18: 132 Lua tests and 9 native tests pass; the Release plugin
 build succeeds; the pak allowlist contains only the three `/Game/DreadmoorVR` assets. The current
-pak was cooked after the latest `ABP_VRArms.uasset` edit. The `1.0.0-beta.1` dirty tester archive
+pak was cooked after the latest `ABP_VRArms.uasset` edit. The clean `1.0.0-beta.1` tester archive
 contains 28 payload files; all manifest hashes match and both referenced smoke checklists are
 included. The optional legacy `main.lua` settings bridge is excluded by default, matching the
 development deploy. The Frame binding has 20 controller sources and 16 outputs, all found in the
