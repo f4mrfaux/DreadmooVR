@@ -56,7 +56,8 @@ local torso_err_logged = false
 -- float variables (names from tuning.flatten). Bad values fall back to defaults (tuning.merge).
 local TUNING_FILE = (lib_dir():gsub("scripts[/\\]lib[/\\]$", "")) .. "dreadmoorvr_arms_tuning.lua"
 local last_tuning_check, applied = -1, {}
-local fit = { shoulder_widen = 0, grip_back = 0, items_follow_hands = false, level_torso = false, shoulder_swing = 1 }   -- live body-fit values (tuning.merge)
+local fit = { shoulder_widen = 0, shoulder_follow = 0.5, shoulder_follow_max = 12, grip_back = 0,
+    items_follow_hands = false, level_torso = false, shoulder_swing = 1 }   -- live body-fit values (tuning.merge)
 local hand_states = {}                               -- UEVR MotionControllerStates, set at spawn
 local function apply_tuning(now, mode)
     if now - last_tuning_check < 1.0 then return end
@@ -66,6 +67,8 @@ local function apply_tuning(now, mode)
     if chunk then ok, user = pcall(chunk) end
     local merged = tuning.merge(ok and user or nil)
     fit.shoulder_widen = merged.shoulder_widen
+    fit.shoulder_follow = merged.shoulder_follow
+    fit.shoulder_follow_max = merged.shoulder_follow_max
     fit.items_follow_hands = merged.items_follow_hands
     fit.level_torso = merged.level_torso
     fit.shoulder_swing = merged.shoulder_swing
@@ -146,9 +149,14 @@ local function solve_arms(pawn)
         local rel = vsub(hands[side], rest[side])
         local cyaw, croll = ubik.clavicle_angles(vdot(rel, F), vdot(rel, UP), arm_len)
         cyaw = cyaw * fit.shoulder_swing   -- full UBIK swing read as a V from above (Bob, 18:02)
-        shift[side] = vadd(ubik.shoulder_shift({ clavicle = clav[side], rest = rest[side], yaw = cyaw, roll = croll, forward = F, up = UP }),
+        local shoulder_shift = vadd(ubik.shoulder_shift({ clavicle = clav[side], rest = rest[side], yaw = cyaw, roll = croll, forward = F, up = UP }),
             { X = outward.X * fit.shoulder_widen, Y = outward.Y * fit.shoulder_widen, Z = 0 })
-        local shoulder = vadd(rest[side], shift[side])
+        local shoulder = vadd(rest[side], shoulder_shift)
+        local follow = ubik.shoulder_follow_shift(shoulder, hands[side], arm_len,
+            fit.shoulder_follow, fit.shoulder_follow_max)
+        shoulder_shift = vadd(shoulder_shift, follow)
+        shift[side] = shoulder_shift  -- subtract the complete offset next frame to prevent drift
+        shoulder = vadd(shoulder, follow)
         local swivel = ubik.base_swivel(vdot(vsub(hands[side], shoulder), outward), arm_len)
         local e = ubik.elbow({ shoulder = shoulder, hand = hands[side], upper = upper, lower = lower, swivel = swivel, outward = outward })
         actor[side .. "ElbowX"], actor[side .. "ElbowY"], actor[side .. "ElbowZ"] = e.X, e.Y, e.Z

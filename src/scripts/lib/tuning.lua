@@ -8,7 +8,8 @@ tuning.DEFAULTS = {
     elbow_out = 30,                        -- elbow hint: cm outward from the body
     elbow_down = 45,                       -- elbow hint: cm down
     arm_length = 50.7,                     -- shoulder to hand (cm), measured in game 2026-11-16
-    shoulder_follow = 1,                   -- 0..1: how much the shoulder moves toward an out-of-reach hand
+    shoulder_follow = 0.5,                 -- 0..1: capped Lua shoulder follow for an out-of-reach hand
+    shoulder_follow_max = 12,              -- cm: hard cap, prevents the old runaway shoulder lift
     shoulder_widen = 0,                    -- cm each shoulder moves outward (player wider than character)
     grip_back = 0,                         -- cm from the controller grip back to the wrist (IK target)
 }
@@ -40,6 +41,7 @@ function tuning.merge(u)
         elbow_down = num(u.elbow_down, -100, 100, d.elbow_down),
         arm_length = num(u.arm_length, 20, 120, d.arm_length),
         shoulder_follow = sf,
+        shoulder_follow_max = num(u.shoulder_follow_max, 0, 30, d.shoulder_follow_max),
         shoulder_widen = num(u.shoulder_widen, -10, 30, d.shoulder_widen),
         grip_back = num(u.grip_back, -20, 20, d.grip_back),
         camera_forward = num(u.camera_forward, -100, 100, nil),   -- UEVR VR_CameraForwardOffset (cm)
@@ -58,7 +60,10 @@ function tuning.flatten(t)
         LeftRotP = t.left_rot.p, LeftRotY = t.left_rot.y, LeftRotR = t.left_rot.r,
         RightRotP = t.right_rot.p, RightRotY = t.right_rot.y, RightRotR = t.right_rot.r,
         ElbowOut = t.elbow_out, ElbowDown = t.elbow_down,
-        ArmLength = t.arm_length, ShoulderFollow = t.shoulder_follow,
+        ArmLength = t.arm_length,
+        -- The BP's legacy AnimBP follow has no distance cap. M2 applies the bounded equivalent
+        -- itself and keeps this actor property at zero to prevent double-follow.
+        ShoulderFollow = 0,
     }
 end
 

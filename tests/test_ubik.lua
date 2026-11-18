@@ -60,6 +60,16 @@ return {
         assert(near(dist(v(K.X, K.Y, K.Z), v(P0.X + s1.X, P0.Y + s1.Y, P0.Z + s1.Z)), 15, 1e-3), "stays on the clavicle radius")
     end,
 
+    test_shoulder_follow_is_proportional_then_hard_capped = function()
+        local S = v(0, 0, 0)
+        local small = ubik.shoulder_follow_shift(S, v(60, 0, 0), 50, 0.5, 12)
+        assert(near(small.X, 5) and small.Y == 0 and small.Z == 0, "small overreach follows by influence")
+        local far = ubik.shoulder_follow_shift(S, v(500, 0, 0), 50, 0.5, 12)
+        assert(near(far.X, 12) and far.Y == 0 and far.Z == 0, "tracking spikes cannot exceed the cap")
+        local inward = ubik.shoulder_follow_shift(S, v(40, 0, 0), 50, 0.5, 12)
+        assert(inward.X == 0 and inward.Y == 0 and inward.Z == 0, "no shift while the arm is in reach")
+    end,
+
     test_calibration_tracks_widest_span = function()
         local c = ubik.calibration.new()
         c:add(v(0, -60, 140), v(0, 60, 140), 30)   -- span 120, shoulders 30 apart -> arm 45

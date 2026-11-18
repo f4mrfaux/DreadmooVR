@@ -78,6 +78,20 @@ function ubik.shoulder_shift(p)
     return sub(moved, p.rest)
 end
 
+-- Move the shoulder toward an over-reached hand, with a hard world-space cap. This replaces the
+-- AnimBP's uncapped ShoulderFollow path: tracking-origin jumps must never pull the clavicle across
+-- the chest or toward the HMD. Units are centimetres, matching the UE component-space rig.
+function ubik.shoulder_follow_shift(shoulder, hand, arm_len, influence, max_shift)
+    local delta = sub(hand, shoulder)
+    local distance = len(delta)
+    if distance <= 1e-6 or type(arm_len) ~= "number" or type(influence) ~= "number"
+        or type(max_shift) ~= "number" or influence <= 0 or max_shift <= 0 then
+        return { X = 0, Y = 0, Z = 0 }
+    end
+    local amount = math.min(math.max(0, distance - arm_len) * math.min(influence, 1), max_shift)
+    return scale(delta, amount / distance)
+end
+
 -- Arm-length calibration (VRIK/FRIK convention): the widest hand span seen.
 ubik.calibration = {}
 ubik.calibration.__index = ubik.calibration
