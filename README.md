@@ -1,62 +1,44 @@
-<div align="center">
-
-<img src="docs/assets/dreadmoovr-kraken-storm.png" alt="DreadmoorVR — a fishing boat in a kraken storm" width="100%">
-
 # DreadmoorVR
 
-### A deep-sea survival game, rebuilt for room-scale VR.
+<img src="docs/assets/dreadmoovr-kraken-storm.png" alt="DreadmoorVR logo" width="420">
 
-**Developer & ethical hacker · VR systems · Authorized reverse engineering · Input engineering**
+A VR mod for **Dreadmoor** (Unreal Engine 5.6) using UEVR and Steam Frame. It adds tracked arms and gesture controls for grappling, melee guard, fishing, crafting, and small-boat steering.
 
-[Project status](docs/testing/v1-readiness.md) · [Install notes](docs/release/INSTALL.md) · [Changelog](CHANGELOG.md) · [Research notebook](docs/research)
+**Status:** private beta candidate. Local checks are in place; final headset acceptance is still pending. See [v1 readiness](docs/testing/v1-readiness.md).
 
-</div>
+## Features
 
-I’m building a full-body VR mod for **Dreadmoor** on **UE 5.6** and **Steam Frame**. It connects tracked hands and headset motion to the game’s existing systems: grappling, melee guard, fishing, crafting, and boat controls. The work spans native input, Lua runtime hooks, Unreal assets, and reverse engineering the shipped game code.
+- Tracked VR arms and held-item alignment
+- Gesture-based grappling and melee guard
+- Fishing gestures for fish fights, reeling, and directional QTEs
+- Crafting-bench cursor control
+- First-person boat steering and throttle gestures with haptic detents
+- Native third-person boat controls remain available
 
-> **Current state:** private beta candidate. Local smoke checks are in place; fishing, boat handling, and the target Steam Frame setup still need final headset acceptance. See [v1 readiness](docs/testing/v1-readiness.md) for evidence and open gates.
+## Implementation
 
-## What’s in the build
+The mod is made of three parts:
 
-| VR feature | What it does |
-|---|---|
-| **Tracked arms and held tools** | Fits the in-game arms to tracked poses and aligns held equipment to the hand. |
-| **Gesture combat** | Adds a physical melee guard and hand-directed grappling interactions. |
-| **Fishing and crafting** | Maps tracked-hand motion to fish-fight, reel, QTE, and crafting cursor actions. |
-| **First-person boat controls** | Steers from the left hand and uses right-hand throttle detents with haptic feedback. |
-| **Input bridge** | Connects SteamVR controller actions to the game while preserving native third-person boat input. |
+- **Unreal content pak** cooked from `unreal/Dreadmoor` with UE 5.6
+- **UEVR Lua bridge** in `src/scripts` for pose tracking, gestures, and game integration
+- **Native C++ / OpenVR plugin** in `plugin` for Steam Frame input support
 
-## Engineering behind it
+The repository also includes local Python tools for inspecting Unreal IoStore containers, Blueprint bytecode, and input mappings. See [`tools/re`](tools/re) and the [research notes](docs/research).
 
-This project is a practical systems integration across several layers:
+## Build and install
 
-- **UEVR Lua bridge** — pose-driven gestures, runtime checks, and safe recovery when tracking drops.
-- **Native C++ / OpenVR plugin** — controller input support and action bindings for Steam Frame.
-- **Unreal Engine 5.6** — custom VR arm assets, cooked into a small allowlisted pak.
-- **Local reverse-engineering toolkit** — Python parsers for Unreal IoStore containers, Blueprint bytecode, and input mappings; evidence is recorded in [`docs/research`](docs/research).
-- **Regression harnesses** — Lua and native tests cover gesture logic, input ownership, and failure recovery.
-
-### A security-minded reverse-engineering workflow
-
-I use reverse engineering as a scoped engineering practice: establish authorization and scope, inspect local game assets and runtime behavior, validate hypotheses against the actual project, then document what is known and what still needs a headset check. The parsers and notes turn opaque game behavior into reviewable evidence instead of relying on guesses. This work focuses on VR mod compatibility and game interaction, with clear separation between verified behavior and open questions.
-
-**Toolchain:** C++ · Lua · Python · Unreal Engine 5.6 · UEVR · OpenVR · SteamVR · EngineWire Unreal MCP · Git
-
-## Build and release discipline
-
-The mod has a repeatable cook/deploy path, a packaged beta workflow, rollback instructions, and an asset allowlist. The project keeps implementation status separate from headset acceptance so a green desktop harness is never presented as proof of an in-headset result.
-
-- [v1 readiness and remaining validation](docs/testing/v1-readiness.md)
-- [Gesture smoke-test checklist](docs/testing/m3-gesture-checklist.md)
 - [Install, update, and rollback](docs/release/INSTALL.md)
-- [User-visible changes](CHANGELOG.md)
+- Cook and deploy scripts: [`tools/cook.ps1`](tools/cook.ps1), [`tools/deploy.ps1`](tools/deploy.ps1)
+- [Gesture smoke-test checklist](docs/testing/m3-gesture-checklist.md)
+- [v1 readiness and remaining headset checks](docs/testing/v1-readiness.md)
+- [Changelog](CHANGELOG.md)
+
+## About the reverse engineering
+
+This is authorized game-mod work. I built the local parsers and used them to trace shipped Blueprint and input behavior, then checked the findings against the Unreal project and runtime. The notes distinguish verified behavior from hypotheses and headset-only checks. The workflow and toolchain are documented in [`docs/research`](docs/research) and the [Unreal MCP setup notes](docs/setup/unreal-editor-mcp.md).
+
+**Toolchain:** C++, Lua, Python, Unreal Engine 5.6, UEVR, OpenVR, SteamVR, EngineWire Unreal MCP.
 
 ## Developer note
 
-I built this with UE 5.6, UEVR’s Lua bridge, a small native OpenVR input plugin, SteamVR action bindings, EngineWire’s Unreal MCP, and local parsers for cooked IoStore containers and Blueprint bytecode. AI helped trace and cross-check shipped-game calls and Unreal APIs; I verified the findings against the project and runtime, then did the headset tuning. I can read C++; I just can’t read a whole game’s worth of Blueprint bytecode by hand before breakfast.
-
-<div align="center">
-
-**DreadmoorVR · built by [@f4mrfaux](https://github.com/f4mrfaux)**
-
-</div>
+AI helped trace and cross-check game calls and Unreal APIs; I verified the findings and did the runtime tuning. I can read C++; I just can't read a whole game's worth of Blueprint bytecode by hand before breakfast.
