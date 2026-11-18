@@ -5,6 +5,16 @@ Run this after injecting the current DreadmoorVR profile. Gesture thresholds liv
 Gesture smoke checks passed in the local fake UEVR/game harness, but physical tracking,
 Steam Frame input, and game feel still require a headset run.
 
+## 2026-11-18 candidate deployment
+
+The UE 5.6 cook completed after the editor MCP reported `/Temp/Untitled_1`, no open asset editors,
+no selected actors or warnings, and `save_all` reported zero dirty packages. The editor was then
+closed cleanly with no packages discarded. The pak audit found 3 entries, all under
+`Dreadmoor/Content/DreadmoorVR/`; the cooked pak and current M3 Lua/tuning files are deployed.
+Commits: `ce53196` (helm anchors, pose checks, placement calibration, and throttle debounce) and
+`a2d1c9c` (steering deadzone, response curve and smoothing; deliberate neutral pass to reverse).
+These latest helm changes have not yet had a headset playtest.
+
 ## Morning run: fishing and helm first
 
 Before the run, record the Dreadmoor build, UEVR version/commit, SteamVR version, Frame firmware,
