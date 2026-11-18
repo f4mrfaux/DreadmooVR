@@ -14,7 +14,8 @@ local function v(x, y, z) return { X = x, Y = y, Z = z } end
 local function fname(s) return { to_string = function() return s end } end
 
 local function world(tool_socket, on_body)
-    local W = { logs = {}, callbacks = {}, hook_visible = true, t = 0, mods = { VR_AimMethod = "2" } }
+    local W = { logs = {}, callbacks = {}, hook_visible = true, t = 0, controllers_active = true,
+        mods = { VR_AimMethod = "2" } }
     os.execute('mkdir "build\\smoke3\\scripts\\lib" 2>nul')
     copy("src/scripts/m3_gestures.lua", STAGE .. "scripts/m3_gestures.lua")
     for _, m in ipairs(LIBS) do copy("src/scripts/lib/" .. m .. ".lua", STAGE .. "scripts/lib/" .. m .. ".lua") end
@@ -116,6 +117,7 @@ local function world(tool_socket, on_body)
         params = {
             functions = { log_info = function(s) W.logs[#W.logs + 1] = s end },
             vr = {
+                is_using_controllers = function() return W.controllers_active end,
                 set_mod_value = function(key, value) W.mods[key] = value end,
                 get_left_controller_index = function() return 1 end, get_right_controller_index = function() return 2 end,
                 get_hmd_index = function() return 0 end,
@@ -166,6 +168,30 @@ local function run(W, seconds)
     return presses
 end
 
+local function move_left_x(W, target, speed)
+    speed = speed or 1.0
+    local start = W.left(W.t).X
+    local start_time = W.t
+    local duration = math.abs(target - start) / speed
+    W.left = function(t)
+        local a = duration > 0 and math.min(1, math.max(0, (t - start_time) / duration)) or 1
+        return v(start + (target - start) * a, 1.2, -0.3)
+    end
+    run(W, duration + 0.25)
+end
+
+local function move_right_y(W, target, speed)
+    speed = speed or 1.0
+    local start = W.right(W.t).Y
+    local start_time = W.t
+    local duration = math.abs(target - start) / speed
+    W.right = function(t)
+        local a = duration > 0 and math.min(1, math.max(0, (t - start_time) / duration)) or 1
+        return v(0.2, start + (target - start) * a, -0.3)
+    end
+    run(W, duration + 0.25)
+end
+
 -- Left hand circling the crank point: right hand at the origin facing -Z, crank axis = X,
 -- crank point offset (-0.06, 0, 0.04); circle of 10 cm in the Y/Z plane at 360 deg/s.
 local function cranking(W)
@@ -200,31 +226,31 @@ return {
     test_boat_hands_drive_existing_axes_and_throttle_detents_haptically = function()
         local W = world("None", false)
         W.set_mode("boat")
-        run(W, 0.1) -- captures neutral hand positions on entering helm
-        W.left = function() return v(0.11, 1.2, -0.3) end
-        W.right = function() return v(0.2, 1.38, -0.3) end
-        run(W, 0.1)
-        local state = { Gamepad = { sThumbLX = 0, sThumbLY = 0 } }
+        run(W, 1.5) -- wait for the initial stable-hand calibration
+        local state = { Gamepad = { sThumbLX = 1234, sThumbLY = -2345 } }
         W.callbacks.xinput(nil, 0, state)
-        assert(state.Gamepad.sThumbLX > 15000 and state.Gamepad.sThumbLX < 18000,
-            "left-hand travel steers through IA_BoatMove X")
+        assert(state.Gamepad.sThumbLX == 0 and state.Gamepad.sThumbLY == 0,
+            "first-person calibration holds both axes neutral instead of leaking physical sticks")
+        move_left_x(W, 0.11)
+        move_right_y(W, 1.38)
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLX > 7500 and state.Gamepad.sThumbLX < 14000,
+            "curved, smoothed left-hand travel steers through IA_BoatMove X (got " .. tostring(state.Gamepad.sThumbLX) .. ")")
         assert(state.Gamepad.sThumbLY == 32767, "right-hand lift selects forward detent")
         assert(W.haptic and W.haptic[2] == 0.025 and W.haptic[3] == 150 and W.haptic[4] == 0.45,
             "right controller gets a short haptic click on throttle transition")
         assert(has(W, "boat throttle detent: forward"))
-        W.right = function() return v(0.2, 1.2, -0.3) end
-        run(W, 0.1)
+        move_right_y(W, 1.2)
         W.callbacks.xinput(nil, 0, state)
         assert(state.Gamepad.sThumbLY == 0, "returning the hand to its calibrated height selects neutral")
-        W.right = function() return v(0.2, 1.0, -0.3) end
-        run(W, 0.1)
+        move_right_y(W, 1.0)
         W.callbacks.xinput(nil, 0, state)
         assert(state.Gamepad.sThumbLY == -32767, "lowering the right hand selects full reverse")
         assert(W.haptics == 3, "forward, neutral, and reverse each give one click")
         config("return { gestures = { enabled = true, boat_steer_range_m = 0.11 } }")
         run(W, 1.2)
         W.callbacks.xinput(nil, 0, state)
-        assert(state.Gamepad.sThumbLX == 32767, "boat steering range reloads live")
+        assert(state.Gamepad.sThumbLX > 32000, "boat steering range reloads live")
         no_failures(W)
     end,
 
@@ -239,11 +265,10 @@ return {
         assert(has(W, "boat third"), table.concat(W.logs, " | "))
 
         W.pawn.bFirstPersonCameraEnabled = true
-        run(W, 0.1) -- entering first-person captures a fresh hand neutral pose
-        W.left = function() return v(0.11, 1.2, -0.3) end
-        run(W, 0.1)
+        run(W, 1.5) -- stable placement poll before first-person control
+        move_left_x(W, 0.11)
         W.callbacks.xinput(nil, 0, state)
-        assert(state.Gamepad.sThumbLX > 15000 and state.Gamepad.sThumbLX < 18000,
+        assert(state.Gamepad.sThumbLX > 7500 and state.Gamepad.sThumbLX < 14000,
             "first-person left-hand steering takes over the existing X axis")
 
         W.pawn.bFirstPersonCameraEnabled = false
@@ -256,19 +281,35 @@ return {
         no_failures(W)
     end,
 
+    test_boat_tracking_loss_holds_first_person_axes_at_neutral = function()
+        local W = world("None", false)
+        W.set_mode("boat")
+        run(W, 0.1) -- calibration is active, but must not pass physical sticks through
+        W.controllers_active = false
+        run(W, 0.1)
+        local state = { Gamepad = { sThumbLX = 12345, sThumbLY = -23456 } }
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLX == 0 and state.Gamepad.sThumbLY == 0,
+            "tracking loss holds first-person boat axes at neutral")
+        assert(has(W, "boat controls fail%-safe"), "tracking loss is logged: " .. table.concat(W.logs, " | "))
+        W.controllers_active = true
+        run(W, 1.5)
+        move_left_x(W, 0.11)
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLX > 7500, "tracking recovery recalibrates and restores left-hand steering")
+        no_failures(W)
+    end,
+
     test_boat_harness_checks_both_rudder_directions_and_center_deadzone = function()
         local W = world("None", false)
         W.set_mode("boat")
-        run(W, 0.1) -- calibrate the neutral hand positions
+        run(W, 1.5) -- calibrate the neutral hand positions
         local state = { Gamepad = { sThumbLX = 0, sThumbLY = 0 } }
-        W.left = function() return v(0.22, 1.2, -0.3) end
-        run(W, 0.1); W.callbacks.xinput(nil, 0, state)
-        assert(state.Gamepad.sThumbLX == 32767, "22 cm right hand travel reaches full right rudder")
-        W.left = function() return v(-0.22, 1.2, -0.3) end
-        run(W, 0.1); W.callbacks.xinput(nil, 0, state)
-        assert(state.Gamepad.sThumbLX == -32767, "22 cm left hand travel reaches full left rudder")
-        W.left = function() return v(0.01, 1.2, -0.3) end
-        run(W, 0.1); W.callbacks.xinput(nil, 0, state)
+        move_left_x(W, 0.22, 1.2); W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLX > 32000, "22 cm right hand travel reaches near-full right rudder")
+        move_left_x(W, -0.22, 1.2); W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLX < -32000, "22 cm left hand travel reaches near-full left rudder")
+        move_left_x(W, 0.01, 1.2); W.callbacks.xinput(nil, 0, state)
         assert(state.Gamepad.sThumbLX == 0, "small hand drift stays in the steering center deadzone")
         no_failures(W)
     end,
@@ -276,7 +317,7 @@ return {
     test_boat_harness_copies_cosmetic_wheel_after_game_tick = function()
         local W = world("None", false)
         W.set_mode("boat")
-        run(W, 0.1)
+        run(W, 1.5)
         assert(has(W, "boat mesh anchors: wheel="), "fixture exposes the same wheel and throttle anchors as the game")
         W.cosmetic_rotation, W.cosmetic_updates = nil, 0
         -- The mesh has a local offset; game Blueprint copies its parent actor rotation.
@@ -394,12 +435,12 @@ return {
         local W = world("None", false)
         W.set_mode("fishing")
         run(W, 0.6) -- calibrate neutral
-        local x = 0.2
-        W.right = function() return v(x, 1.2, -0.3) end
-        run(W, DT)
-        x = x + 0.2
-        W.t = W.t + DT
-        W.callbacks.tick(nil, DT)
+        local start_time = W.t
+        W.right = function(t)
+            local a = math.min(1, math.max(0, (t - start_time) / 0.4))
+            return v(0.2 + 0.2 * a, 1.2, -0.3)
+        end
+        run(W, 0.5)
         local state = { Gamepad = { bRightTrigger = 0, sThumbLX = 0, sThumbLY = 0 } }
         W.callbacks.xinput(nil, 0, state)
         assert(state.Gamepad.sThumbLX > 15000, "rod lean should write signed fishing fight X")
@@ -414,15 +455,56 @@ return {
         W.pawn.CurrentQTE = "QTE.Type.DirectionalDrag"
         W.t = W.t + DT
         W.callbacks.tick(nil, DT) -- calibrate QTE neutral
-        local x, y = 0.4, 1.4
-        W.right = function() return v(x, y, -0.3) end
-        W.t = W.t + DT
-        W.callbacks.tick(nil, DT)
+        local start_time = W.t
+        W.right = function(t)
+            local a = math.min(1, math.max(0, (t - start_time) / 0.4))
+            return v(0.2 + 0.2 * a, 1.2 + 0.2 * a, -0.3)
+        end
+        run(W, 0.5)
         local state = { Gamepad = { bRightTrigger = 0, sThumbLX = 0, sThumbLY = 0 } }
         W.callbacks.xinput(nil, 0, state)
         assert(state.Gamepad.sThumbLX > 15000 and state.Gamepad.sThumbLY > 15000,
             "directional drag should write right-hand X/Y movement to left stick")
         assert(state.Gamepad.bRightTrigger == 0, "fishing crank is suppressed during QTE")
+        no_failures(W)
+    end,
+
+    test_fishing_tracking_loss_releases_gestures_and_recalibrates = function()
+        local W = world("None", false)
+        W.set_mode("fishing")
+        run(W, 0.3)
+        W.controllers_active = false
+        W.t = W.t + DT
+        W.callbacks.tick(nil, DT)
+        local state = { Gamepad = { bRightTrigger = 73, sThumbLX = 1234, sThumbLY = -2345 } }
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.bRightTrigger == 73, "tracking loss releases synthetic reel and preserves physical trigger")
+        assert(state.Gamepad.sThumbLX == 1234 and state.Gamepad.sThumbLY == -2345,
+            "tracking loss clears gesture axes and leaves physical stick input alone")
+        assert(has(W, "fishing controls fail%-safe"), "tracking loss is reported: " .. table.concat(W.logs, " | "))
+
+        W.controllers_active = true
+        run(W, 0.1)
+        assert(has(W, "fishing fight gesture: calibrated"), "valid tracking reacquires a fresh fish neutral pose")
+        no_failures(W)
+    end,
+
+    test_fishing_pose_spike_is_rejected_before_axis_write = function()
+        local W = world("None", false)
+        W.set_mode("fishing")
+        run(W, 0.3)
+        W.right = function() return v(0.5, 1.2, -0.3) end -- plausible coordinates, implausible one-frame speed
+        W.t = W.t + DT
+        W.callbacks.tick(nil, DT)
+        local state = { Gamepad = { bRightTrigger = 41, sThumbLX = 1234, sThumbLY = 5678 } }
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.bRightTrigger == 41, "bad pose does not synthesize reel input")
+        assert(state.Gamepad.sThumbLX == 1234 and state.Gamepad.sThumbLY == 5678,
+            "bad pose does not overwrite physical axes")
+        assert(has(W, "implausible pose jump"), "pose discontinuity is logged")
+        W.right = function() return v(0.2, 1.2, -0.3) end
+        run(W, 0.1)
+        assert(has(W, "fishing fight gesture: calibrated"), "pose recovery captures a new neutral reference")
         no_failures(W)
     end,
 

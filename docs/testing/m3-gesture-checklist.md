@@ -47,7 +47,8 @@ be limited to a combination that passes this checklist.
    about 14 cm for forward, return through neutral, then lower it about 14 cm for reverse. Each
    detent must remain requested for 120 ms before it is accepted and produces one right-controller
    haptic click. Invalid/out-of-range poses must zero the axes and restart calibration. Other boat
-   types intentionally retain their native stick.
+   types intentionally retain their native stick. First-person mode must keep gamepad LX/LY at
+   neutral during initial calibration and tracking loss, so a physical stick cannot leak through.
 
 After the run, send the visible behavior plus log lines containing `fishing`, `boat mesh anchors`,
 `boat throttle detent`, `boat arms visibility`, or `FAILED`. The boat anchor log gives the live
@@ -109,6 +110,16 @@ check passes.
 - [ ] Reach FishLand and record the prompt shown, the button pressed, whether the QTE reports
   success, and whether the game enters the landing animation. That reported base-game issue is
   separate from the mod gestures; do not infer its cause from gesture behavior alone.
+- [ ] If controller tracking briefly drops during a fish fight, confirm the crank releases and
+  gesture axes stop. When tracking returns, confirm the right-hand lean recalibrates for that fish
+  and the next DirectionalDrag QTE captures a fresh neutral pose.
+
+Fishing uses the helm's shared pose validator: controller tracking must be active, all three poses
+must have finite positions inside plausible SteamVR bounds, and each quaternion must be near unit
+length before lean, QTE or crank gestures run. A bad pose clears the fish/QTE reference, resets the
+crank detector, zeros gesture axes, releases synthetic reel input, and logs a rate-limited
+`fishing controls fail-safe` line. Physical inputs continue to pass through while gesture state is
+cleared.
 
 ## What to send back
 

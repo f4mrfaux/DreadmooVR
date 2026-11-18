@@ -126,7 +126,7 @@ end
 local function finite_number(v)
     return type(v) == "number" and v == v and v > -math.huge and v < math.huge
 end
-local function boat_pose(index_getter)
+local function validated_pose(index_getter)
     local ok, p, q = pcall(function()
         local index = index_getter()
         local pos, rot = UEVR_Vector3f.new(), UEVR_Quaternionf.new()
@@ -192,6 +192,7 @@ local fishing_reeling = false
 local fishing_fish_id, fishing_neutral_x, fishing_neutral_y = nil, nil, nil
 local fishing_qte_tag, fishing_qte_neutral_x, fishing_qte_neutral_y = nil, nil, nil
 local fishing_axis_x, fishing_axis_y = 0, 0
+local fishing_last_pose_sample
 -- Boat controls are driven by hand travel from a neutral pose captured on entering the boat.
 -- IA_BoatMove consumes X for wheel steering and Y as three throttle detents (reverse/neutral/fwd).
 local boat_axis_x, boat_axis_y = 0, 0
@@ -203,7 +204,12 @@ local boat_calibration_started, boat_stable_since, boat_calibration_sample
 local boat_throttle_candidate, boat_throttle_candidate_since
 local boat_last_motion_sample
 local boat_steer_filtered, boat_steer_last_update = 0, nil
+local boat_controls_active = false
 local boat_pose_error_last_log = -math.huge
+local boat_gesture_error_last_log = -math.huge
+local boat_calibration_log_last = -math.huge
+local fishing_pose_error_last_log = -math.huge
+local fishing_gesture_error_last_log = -math.huge
 local boat_anchor_retry_ticks, boat_anchor_attempt = 0, 0
 local boat_anchors_logged = false
 local boat_pose_sample_ticks = 0
@@ -344,7 +350,9 @@ local function deactivate()
     fishing_fish_id, fishing_neutral_x, fishing_neutral_y = nil, nil, nil
     fishing_qte_tag, fishing_qte_neutral_x, fishing_qte_neutral_y = nil, nil, nil
     fishing_axis_x, fishing_axis_y = 0, 0
+    fishing_last_pose_sample = nil
     boat_axis_x, boat_axis_y = 0, 0
+    boat_controls_active = false
     boat_neutral_lx, boat_neutral_ry, boat_throttle = nil, nil, nil
     boat_throttle_last_direction = 0
     boat_reference_inv, boat_camera_state = nil, nil
@@ -450,7 +458,8 @@ local function step_boat(pawn)
     -- BP_SmallBoat_V2 sets this flag when it switches to its helm camera. Preserve the game's
     -- physical/gamepad steering in third-person; only claim IA_BoatMove axes in first-person.
     local ok_camera, first_person = pcall(function() return pawn.bFirstPersonCameraEnabled end)
-    local camera_state = not ok_camera and "unknown" or (first_person == true and "first_person" or "third_person")
+    local camera_state = ok_camera and (first_person == true and "first_person" or "third_person")
+        or (boat_camera_state == "first_person" and "first_person" or "unknown")
     if camera_state ~= boat_camera_state then
         boat_camera_state = camera_state
         log(camera_state == "first_person" and "boat first-person gesture steering active"
@@ -458,6 +467,7 @@ local function step_boat(pawn)
             or "boat camera flag unavailable; native axes active")
     end
     if camera_state ~= "first_person" then
+        boat_controls_active = false
         boat_camera_look_suppressed = false
         if boat_neutral_lx ~= nil then log("boat gestures paused; native axes restored") end
         boat_axis_x, boat_axis_y = 0, 0
@@ -473,11 +483,14 @@ local function step_boat(pawn)
         return
     end
 
+    -- Claim the axes for the whole first-person helm session, including calibration and
+    -- tracking-error frames. Those paths must hold neutral, not leak physical stick input through.
+    boat_controls_active = true
     local vr = uevr.params.vr
     local ok_tracking, tracking = pcall(vr.is_using_controllers)
-    local l, _, left_error = boat_pose(vr.get_left_controller_index)
-    local r, _, right_error = boat_pose(vr.get_right_controller_index)
-    local h, hq, head_error = boat_pose(vr.get_hmd_index)
+    local l, _, left_error = validated_pose(vr.get_left_controller_index)
+    local r, _, right_error = validated_pose(vr.get_right_controller_index)
+    local h, hq, head_error = validated_pose(vr.get_hmd_index)
     if not ok_tracking or tracking ~= true or l == nil or r == nil or h == nil then
         boat_axis_x, boat_axis_y, boat_throttle = 0, 0, 0
         boat_neutral_lx, boat_neutral_ry = nil, nil
@@ -516,7 +529,7 @@ local function step_boat(pawn)
                 boat_calibration_started, boat_stable_since, boat_calibration_sample = nil, nil, nil
                 boat_throttle_candidate, boat_throttle_candidate_since = nil, nil
                 boat_last_motion_sample = nil
-            boat_steer_filtered, boat_steer_last_update = 0, nil
+                boat_steer_filtered, boat_steer_last_update = 0, nil
                 if clock - boat_pose_error_last_log >= 1 then
                     boat_pose_error_last_log = clock
                     log(string.format("boat controls fail-safe: implausible pose jump (left %.1f m/s, right %.1f m/s)", dl, dr))
@@ -542,8 +555,8 @@ local function step_boat(pawn)
             boat_throttle_candidate, boat_throttle_candidate_since = 0, clock
             log("boat gestures calibrated after stable hand placement; left=steering right=throttle")
             log_boat_anchors(pawn)
-        elseif clock - boat_pose_error_last_log >= 1 then
-            boat_pose_error_last_log = clock
+        elseif clock - boat_calibration_log_last >= 1 then
+            boat_calibration_log_last = clock
             log("boat hand calibration polling: keep both hands still on controls")
         end
         return
@@ -559,7 +572,9 @@ local function step_boat(pawn)
     local steer_target = (steer < 0 and -1 or 1) * (steer_amount ^ cfg.boat_steer_curve)
     local dt = boat_steer_last_update and math.max(0, clock - boat_steer_last_update) or 0
     boat_steer_last_update = clock
-    if cfg.boat_steer_smoothing_s > 0 and dt > 0 then
+    if steer_amount == 0 then
+        boat_steer_filtered = 0
+    elseif cfg.boat_steer_smoothing_s > 0 and dt > 0 then
         local alpha = 1 - math.exp(-dt / cfg.boat_steer_smoothing_s)
         boat_steer_filtered = boat_steer_filtered + (steer_target - boat_steer_filtered) * alpha
     else
@@ -640,6 +655,17 @@ local function lean_axis(delta)
     return delta < 0 and -value or value
 end
 
+local function clear_fishing_gestures(reason)
+    if fishing_reeling then log("fishing crank: released (" .. reason .. ")") end
+    fishing_reeling = false
+    input_active = false
+    fishing_fish_id, fishing_neutral_x, fishing_neutral_y = nil, nil, nil
+    fishing_qte_tag, fishing_qte_neutral_x, fishing_qte_neutral_y = nil, nil, nil
+    fishing_axis_x, fishing_axis_y = 0, 0
+    fishing_last_pose_sample = nil
+    crank:reset()
+end
+
 local function step_fishing(pawn)
     if clock - last_cfg >= 1.0 then
         last_cfg = clock
@@ -658,6 +684,7 @@ local function step_fishing(pawn)
         fishing_fish_id, fishing_neutral_x, fishing_neutral_y = nil, nil, nil
         fishing_qte_tag, fishing_qte_neutral_x, fishing_qte_neutral_y = nil, nil, nil
         fishing_axis_x, fishing_axis_y = 0, 0
+        fishing_last_pose_sample = nil
         crank:reset()
         return
     end
@@ -670,14 +697,53 @@ local function step_fishing(pawn)
         fishing_fish_id, fishing_neutral_x, fishing_neutral_y = nil, nil, nil
         fishing_qte_tag, fishing_qte_neutral_x, fishing_qte_neutral_y = nil, nil, nil
         fishing_axis_x, fishing_axis_y = 0, 0
+        fishing_last_pose_sample = nil
         crank:reset()
         return
     end
 
     local vr = uevr.params.vr
-    local lpos = raw_pose(vr.get_left_controller_index())
-    local rpos, rq = raw_pose(vr.get_right_controller_index())
-    local hmd, hmd_q = raw_pose(vr.get_hmd_index())
+    local ok_tracking, tracking = pcall(vr.is_using_controllers)
+    local lpos, _, left_error = validated_pose(vr.get_left_controller_index)
+    local rpos, rq, right_error = validated_pose(vr.get_right_controller_index)
+    local hmd, hmd_q, head_error = validated_pose(vr.get_hmd_index)
+    if not ok_tracking or tracking ~= true or lpos == nil or rpos == nil or hmd == nil then
+        local errors = "controller tracking=" .. tostring(ok_tracking and tracking)
+            .. " L=" .. tostring(left_error) .. " R=" .. tostring(right_error) .. " HMD=" .. tostring(head_error)
+        clear_fishing_gestures("pose unavailable")
+        if clock - fishing_pose_error_last_log >= 1 then
+            fishing_pose_error_last_log = clock
+            log("fishing controls fail-safe: " .. errors .. "; gesture input released and neutral reference cleared")
+        end
+        return
+    end
+    local prior_pose = fishing_last_pose_sample
+    if prior_pose ~= nil then
+        local dt = clock - prior_pose.time
+        if dt > 0 then
+            local function speed(pos, x, y, z)
+                return math.sqrt((pos.X - x) ^ 2 + (pos.Y - y) ^ 2 + (pos.Z - z) ^ 2) / dt
+            end
+            local left_speed = speed(lpos, prior_pose.lx, prior_pose.ly, prior_pose.lz)
+            local right_speed = speed(rpos, prior_pose.rx, prior_pose.ry, prior_pose.rz)
+            local head_speed = speed(hmd, prior_pose.hx, prior_pose.hy, prior_pose.hz)
+            if left_speed > 8 or right_speed > 8 or head_speed > 8 then
+                clear_fishing_gestures("tracking discontinuity")
+                if clock - fishing_pose_error_last_log >= 1 then
+                    fishing_pose_error_last_log = clock
+                    log(string.format("fishing controls fail-safe: implausible pose jump (L %.1f, R %.1f, HMD %.1f m/s); recalibrating",
+                        left_speed, right_speed, head_speed))
+                end
+                return
+            end
+        end
+    end
+    fishing_last_pose_sample = {
+        time = clock,
+        lx = lpos.X, ly = lpos.Y, lz = lpos.Z,
+        rx = rpos.X, ry = rpos.Y, rz = rpos.Z,
+        hx = hmd.X, hy = hmd.Y, hz = hmd.Z,
+    }
     local hand_from_head = { X = rpos.X - hmd.X, Y = rpos.Y - hmd.Y, Z = rpos.Z - hmd.Z }
     local head_right = rotate(hmd_q, { X = 1, Y = 0, Z = 0 })
     local head_up = rotate(hmd_q, { X = 0, Y = 1, Z = 0 })
@@ -686,6 +752,12 @@ local function step_fishing(pawn)
     local id = identity(fish)
     if id ~= fishing_fish_id then
         fishing_fish_id = id
+        fishing_last_pose_sample = {
+            time = clock,
+            lx = lpos.X, ly = lpos.Y, lz = lpos.Z,
+            rx = rpos.X, ry = rpos.Y, rz = rpos.Z,
+            hx = hmd.X, hy = hmd.Y, hz = hmd.Z,
+        }
         fishing_neutral_x, fishing_neutral_y = relative_x, relative_y
         fishing_qte_tag, fishing_qte_neutral_x, fishing_qte_neutral_y = nil, nil, nil
         log("fishing fight gesture: calibrated")
@@ -889,16 +961,32 @@ uevr.sdk.callbacks.on_pre_engine_tick(function(_, delta)
     if not cfg.enabled then deactivate(); return end
     if mode == "fishing" then
         local ok, err = pcall(step_fishing, pawn)
-        if not ok then deactivate(); log("fishing gesture FAILED: " .. tostring(err)) end
+        if not ok then
+            deactivate()
+            if clock - fishing_gesture_error_last_log >= 1 then
+                fishing_gesture_error_last_log = clock
+                log("fishing gesture FAILED: " .. tostring(err) .. "; gesture input released")
+            end
+        end
         return
     end
     if mode == "boat" then
         if not supports_wheel_boat(pawn) then
-            if boat_neutral_lx ~= nil then deactivate() end
+            boat_controls_active = false
+            if boat_neutral_lx ~= nil or boat_camera_state ~= nil then deactivate() end
             return
         end
         local ok, err = pcall(step_boat, pawn)
-        if not ok then deactivate(); log("boat gesture FAILED: " .. tostring(err)) end
+        if not ok then
+            boat_axis_x, boat_axis_y, boat_throttle = 0, 0, 0
+            boat_neutral_lx, boat_neutral_ry = nil, nil
+            boat_steer_filtered, boat_steer_last_update = 0, nil
+            boat_controls_active = boat_camera_state == "first_person"
+            if clock - boat_gesture_error_last_log >= 1 then
+                boat_gesture_error_last_log = clock
+                log("boat gesture FAILED: " .. tostring(err) .. "; first-person axes held neutral")
+            end
+        end
         return
     end
     if mode == "crafting" then
@@ -971,7 +1059,7 @@ uevr.sdk.callbacks.on_xinput_get_state(function(retval, user_index, state)
             gamepad.sThumbLY = math.floor(fishing_axis_y * 32767)
         end
     end
-    if boat_neutral_lx ~= nil then
+    if boat_controls_active then
         state.Gamepad.sThumbLX = math.floor(boat_axis_x * 32767)
         state.Gamepad.sThumbLY = math.floor(boat_axis_y * 32767)
         return

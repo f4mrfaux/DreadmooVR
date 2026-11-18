@@ -21,6 +21,14 @@ __pycache__/
 # Session scratch
 .remember/
 .superpowers/
+
+# Local credentials and Claude Code machine-specific state
+.env
+.env.*
+!.env.example
+.claude/
+CLAUDE.local.md
+.mcp.local.json
 # Stand-ins copied from UE 5.6 templates / renamed to game paths (never cooked, reproducible)
 unreal/Dreadmoor/Content/Characters/
 unreal/Dreadmoor/Content/3rdParty/

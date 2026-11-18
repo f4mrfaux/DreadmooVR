@@ -47,6 +47,12 @@ Blueprint dumps under `docs/research/bp-dumps/`; live headset behavior still nee
 - Fishing lean thresholds and melee guard posture bounds are exposed in the live
   `gestures` table of `src/data/dreadmoorvr_arms_tuning.lua`; changes are re-read once per second.
   Guard uses a 100 ms pose dwell and separate enter/exit angles to prevent flicker.
+- The 2026-11-18 reliability pass shares the boat's pose validator: active controller tracking,
+  finite and bounded SteamVR positions, and a normalized near-unit quaternion are required for
+  left/right/HMD poses. A tracking or pose failure clears the fish and QTE neutral references,
+  resets crank accumulation, zeros gesture axes, and releases synthetic reel input. The next valid
+  frame recalibrates against the current fish/QTE. This is code-reviewed but still needs a headset
+  check because fishing has not yet had a complete playtest.
 
 ## Source map (avoid re-dumping)
 
