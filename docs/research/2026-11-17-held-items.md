@@ -89,7 +89,19 @@ calls run the script directly and skip the function pointer UEVR hooks. (Hooks o
 engine calls through ProcessEvent, like `BlueprintUpdateAnimation`, do fire.)
 
 **Now:** tools stay attached to `CharacterMesh0` where the game put them. Each frame, in the
-stereo view callback (after the game tick, before rendering), each is placed with
-`K2_SetWorldTransform(ComposeTransforms(gripOffset, Body.GetSocketTransform(socket)))`, where
-`gripOffset` is the tool's own relative transform when it was first seen. The game's equip and
-unequip run untouched.
+stereo view callback (after the game tick, before rendering), each is placed with the captured grip
+transform composed with the VR arms' socket transform. `item_rot` is applied as a local-space delta
+to that complete grip-to-world transform:
+`K2_SetWorldTransform(ComposeTransforms(item_rot, ComposeTransforms(gripOffset, Body.GetSocketTransform(socket))))`.
+The game's equip and unequip run untouched.
+
+## Local-space rotation correction (2026-11-18)
+
+The first `item_rot` implementation composed its delta between `gripOffset` and the socket transform.
+That applies the rotation in socket space; the yaw-90 tuning from `fbf728c` therefore did not turn
+the tool about its grip as intended. UE 5.6's `KismetMathLibrary.h` (3955–3956) explicitly defines
+`ComposeTransforms(DeltaRotation, LocalToWorld)` as a local-space rotation. The bridge now composes
+the grip-to-world transform first, then applies `item_rot` as that local delta. A live 0/90/180/270
+yaw sweep showed yaw 0 pointing forward, yaw 90 to the right, and yaw 180 toward the player. The
+profile and source tuning are now yaw 0; Bob confirmed the forward orientation in-game. Confirmation
+capture: `build/snaps/orientation-confirmation/095116_1.jpg`.

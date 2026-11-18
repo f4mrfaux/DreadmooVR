@@ -44,6 +44,9 @@ Blueprint dumps under `docs/research/bp-dumps/`; live headset behavior still nee
   `IA_QTE_LMB` input; its exact gamepad mapping remains a headset check.
 - All other QTEs and non-fishing phases keep their physical inputs. In particular, no inferred
   cast, bite, land, or timed-reel gesture is synthesized.
+- Fishing lean thresholds and melee guard posture bounds are exposed in the live
+  `gestures` table of `src/data/dreadmoorvr_arms_tuning.lua`; changes are re-read once per second.
+  Guard uses a 100 ms pose dwell and separate enter/exit angles to prevent flicker.
 
 ## Source map (avoid re-dumping)
 
@@ -66,6 +69,11 @@ releases it when rotation stops, right-hand lean writes fishing fight X, and
 `QTE.Type.DirectionalDrag` writes X/Y while suppressing the crank. These checks validate Lua
 wiring and values; they do not confirm the Frame controller, Enhanced Input, or headset feel.
 
+The M3 integration smoke fixture also tests the right-hand thumb-down guard: it must claim the
+left trigger (Secondary Use) after the pose dwell without touching the right-trigger attack,
+release after the hand leaves the front guard zone, and leave physical triggers alone when
+`guard_enabled = false`.
+
 The M3 smoke fixture must provide UEVR's `get_hmd_index()` because both the guard and fishing
 lean reference the HMD pose. This API exists in the vendored UEVR interface (`plugin/third_party/uevr/API.h`);
 the earlier fixture omitted it, causing the guard smoke check to fail without indicating a game
@@ -73,6 +81,14 @@ runtime defect.
 
 ## Open validation
 
+- **Base-game fish landing issue reported 2026-11-17:** landing animation does not
+  play and the fight restarts. The bridge does not synthesize FishLand input or
+  handle that game's completion transition. Static review found a plausible
+  timeout path in the base game: FishLand returns failure if its timer fills,
+  and `BP_FishingController.QTEFinished` restores stamina on generic QTE failure.
+  Confirm `IA_QTE_Interact` delivery and the successful FishLand StateTree
+  transition with a runtime trace. See
+  `logs/fish-landing-restarts-fight-2026-11-17.log` for evidence and checks.
 - Confirm the right-hand lean neutral offset and sign feel natural while seated/standing.
 - Confirm the directional-drag QTE accepts hand X/Y movement in game.
 - In the headset, hold Frame A during DirectionalDrag and FishClicker QTEs; determine whether

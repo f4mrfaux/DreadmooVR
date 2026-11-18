@@ -13,6 +13,8 @@ unreal/Dreadmoor/Plugins/EngineWire/
 # Local tools and build products
 tools/bin/
 build/
+dist/
+logs/
 __pycache__/
 *.pyc
 

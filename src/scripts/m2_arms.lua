@@ -47,6 +47,7 @@ local stats = armstats.new()
 log("loaded")
 
 local actor = nil
+local arms_body_visible_mode = nil
 local sample_err_logged = false
 local solve_err_logged = false
 local items_err_logged = false
@@ -57,7 +58,7 @@ local torso_err_logged = false
 local TUNING_FILE = (lib_dir():gsub("scripts[/\\]lib[/\\]$", "")) .. "dreadmoorvr_arms_tuning.lua"
 local last_tuning_check, applied = -1, {}
 local fit = { shoulder_widen = 0, shoulder_follow = 0.5, shoulder_follow_max = 12, grip_back = 0,
-    items_follow_hands = false, level_torso = false, shoulder_swing = 1 }   -- live body-fit values (tuning.merge)
+    items_follow_hands = false, level_torso = false, shoulder_swing = 1 }
 local hand_states = {}                               -- UEVR MotionControllerStates, set at spawn
 local function apply_tuning(now, mode)
     if now - last_tuning_check < 1.0 then return end
@@ -335,12 +336,17 @@ function place_items()
     if key ~= item_off_key then
         item_off = kml:MakeTransform({ X = 0, Y = 0, Z = 0 }, { Pitch = r.p, Yaw = r.y, Roll = r.r }, { X = 1, Y = 1, Z = 1 })
         item_off_key = key
+        log(string.format("held item local rotation offset p=%s y=%s r=%s", r.p, r.y, r.r))
     end
     local body = actor.Body
     for a, m in pairs(moved) do
         local ok, err = pcall(function()
             local sock = body:GetSocketTransform(m.socket, RTS_WORLD)
-            m.comp:K2_SetWorldTransform(kml:ComposeTransforms(m.rel, kml:ComposeTransforms(item_off, sock)), false, {}, true)
+            -- ComposeTransforms(delta, local_to_world) applies the delta in local space (UE 5.6
+            -- KismetMathLibrary.h:3955-3956). Put item_rot before the captured grip-to-world
+            -- transform so it turns the tool around its own grip, not around the hand socket.
+            local grip_to_world = kml:ComposeTransforms(m.rel, sock)
+            m.comp:K2_SetWorldTransform(kml:ComposeTransforms(item_off, grip_to_world), false, {}, true)
         end)
         if not ok then
             moved[a] = nil
@@ -405,6 +411,16 @@ local function attach_and_hide(pawn)
     -- (camera_forward pulls the eyes back into the head). Hiding a bone hides its children.
     actor.Body:HideBoneByName("neck_01", PBO_NONE)
     hidden_on = pawn.Mesh
+end
+
+local function show_arms_at_boat(pawn)
+    if not arms_ready() then return end
+    -- Keep Body attached to the diver's skeletal mesh: ABP_VRArms uses
+    -- FAnimNode_CopyPoseFromMesh.bUseAttachedParent. The game hides the diver actor for first
+    -- person helm view, so explicitly clear the inherited hidden-in-game state on our mesh.
+    actor.Body:SetHiddenInGame(false, true)
+    actor:SetActorHiddenInGame(false)
+    log("VR arms body visible at helm; pose source remains the diver mesh")
 end
 
 local function spawn(pawn)
@@ -481,6 +497,13 @@ uevr.sdk.callbacks.on_pre_engine_tick(function(_, delta)
             flow:lost()
         end
     end
+    if actor ~= nil and mode == "boat" and arms_body_visible_mode ~= "boat" then
+        local okb, errb = pcall(show_arms_at_boat, pawn)
+        if not okb then log("boat arms visibility FAILED: " .. tostring(errb))
+        else arms_body_visible_mode = "boat" end
+    elseif mode == "walking" then
+        arms_body_visible_mode = "walking"
+    end
     if flow.status == "active" and actor ~= nil then
         local okt, errt = pcall(apply_tuning, clock, mode)
         if mode == "walking" and fit.level_torso and not torso_hooked and pawn ~= nil then
@@ -489,13 +512,20 @@ uevr.sdk.callbacks.on_pre_engine_tick(function(_, delta)
         end
         if not okt and not sample_err_logged then sample_err_logged = true; log("tuning FAILED: " .. tostring(errt)) end
     end
-    if flow.status == "active" and actor ~= nil and mode == "walking" then
+    local boat_arm_solver_available = mode == "boat" and pawn ~= nil
+        and type(pawn.K2_GetActorRotation) == "function"
+    if flow.status == "active" and actor ~= nil and (mode == "walking" or boat_arm_solver_available) then
         local oks, errs = pcall(solve_arms, pawn)
         if not oks and not solve_err_logged then solve_err_logged = true; log("solver FAILED: " .. tostring(errs)) end
-        local oki, erri = pcall(follow_items, pawn, clock)
-        if not oki and not items_err_logged then items_err_logged = true; log("items FAILED: " .. tostring(erri)) end
-        local ok, err = pcall(sample_arms, pawn, clock)
-        if not ok and not sample_err_logged then sample_err_logged = true; log("harness FAILED: " .. tostring(err)) end
+        -- The game's first-person helm hides the character mesh. The VR arms remain attached to
+        -- that character (which is attached to the boat) and solve against the boat's yaw.
+        -- Item following and the harness still run on foot only.
+        if mode == "walking" then
+            local oki, erri = pcall(follow_items, pawn, clock)
+            if not oki and not items_err_logged then items_err_logged = true; log("items FAILED: " .. tostring(erri)) end
+            local ok, err = pcall(sample_arms, pawn, clock)
+            if not ok and not sample_err_logged then sample_err_logged = true; log("harness FAILED: " .. tostring(err)) end
+        end
     end
     placing = flow.status == "active" and actor ~= nil and mode == "walking"
     if mode ~= "walking" and next(moved) then restore_items() end   -- fishing, steering: game owns the hands

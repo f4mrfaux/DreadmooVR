@@ -25,6 +25,15 @@ return {
         assert(f:step(4.1, "walking", "pawnA") == nil)
     end,
 
+    test_arms_stay_visible_at_first_person_helm = function()
+        local f = armsflow.new()
+        walk_until_request(f)
+        f:on_reply("ok|x"); f:step(2.1, "walking", "pawnA"); f:spawned(true)
+        assert(f:step(3.0, "boat", "pawnA") == nil, "helm mode keeps visible arms")
+        assert(f:step(3.1, "fishing", "rig") == "hide")
+        assert(f:step(3.2, "boat", "pawnA") == "show", "entering helm shows arms")
+    end,
+
     test_new_walking_pawn_reattaches = function()
         local f = armsflow.new()
         walk_until_request(f)

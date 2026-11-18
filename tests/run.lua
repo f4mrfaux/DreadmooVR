@@ -1,5 +1,5 @@
 -- Desk test runner for the bridge's pure units.
--- Usage (from the repo root): lua tests/run.lua [pattern]
+-- Usage (from the repo root): lua tests/run.lua [module-or-test-name-pattern]
 -- Each tests/test_*.lua returns { name = function() ... end }. Plain asserts.
 
 package.path = "src/scripts/lib/?.lua;src/scripts/?.lua;tests/?.lua;" .. package.path
@@ -19,7 +19,7 @@ local filter = arg[1]
 local passed, failed = 0, 0
 for _, file in ipairs(list_tests()) do
     local mod = file:gsub("%.lua$", "")
-    if not filter or mod:find(filter, 1, true) then
+    do -- Load all suites so a pattern may target a test name, not only a file.
         package.loaded[mod] = nil
         local ok, suite = pcall(require, mod)
         if not ok then
@@ -30,12 +30,15 @@ for _, file in ipairs(list_tests()) do
             for name in pairs(suite) do names[#names + 1] = name end
             table.sort(names)
             for _, name in ipairs(names) do
-                local okt, err = pcall(suite[name])
-                if okt then
-                    passed = passed + 1
-                else
-                    failed = failed + 1
-                    print("FAIL " .. file .. "::" .. name .. ": " .. tostring(err))
+                if not filter or mod:find(filter, 1, true) or file:find(filter, 1, true)
+                    or name:find(filter, 1, true) then
+                    local okt, err = pcall(suite[name])
+                    if okt then
+                        passed = passed + 1
+                    else
+                        failed = failed + 1
+                        print("FAIL " .. file .. "::" .. name .. ": " .. tostring(err))
+                    end
                 end
             end
         end

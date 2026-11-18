@@ -52,8 +52,12 @@ local DEFAULTS = {
     guard_enabled = true, guard_enter_z = -0.65, guard_exit_z = -0.50,
     guard_front_z = -0.05, guard_min_y = -0.65, guard_max_y = 0.10, guard_max_x = 0.45,
     fishing_fight_deadzone_m = 0.08, fishing_fight_range_m = 0.28,
+    craft_cursor_span_m = 0.40, boat_steer_range_m = 0.22,
+    boat_throttle_enter_m = 0.14, boat_throttle_release_m = 0.055, boat_throttle_turnaround_m = 0.08,
+    aim_method = 2,
 }
 local cfg = DEFAULTS
+local clock, last_cfg = 0, -1
 local function num(v, lo, hi, d) return (type(v) == "number" and v == v and v >= lo and v <= hi) and v or d end
 local function read_cfg()
     local chunk = loadfile(TUNING_FILE, "t", {})
@@ -81,6 +85,12 @@ local function read_cfg()
         guard_max_x = num(g.guard_max_x, 0.1, 1.5, d.guard_max_x),
         fishing_fight_deadzone_m = num(g.fishing_fight_deadzone_m, 0.02, 0.3, d.fishing_fight_deadzone_m),
         fishing_fight_range_m = num(g.fishing_fight_range_m, 0.08, 0.8, d.fishing_fight_range_m),
+        craft_cursor_span_m = num(g.craft_cursor_span_m, 0.1, 1.5, d.craft_cursor_span_m),
+        boat_steer_range_m = num(g.boat_steer_range_m, 0.05, 0.8, d.boat_steer_range_m),
+        boat_throttle_enter_m = num(g.boat_throttle_enter_m, 0.06, 0.4, d.boat_throttle_enter_m),
+        boat_throttle_release_m = num(g.boat_throttle_release_m, 0.01, 0.15, d.boat_throttle_release_m),
+        boat_throttle_turnaround_m = num(g.boat_throttle_turnaround_m, 0.02, 0.2, d.boat_throttle_turnaround_m),
+        aim_method = num(u.aim_method, 0, 5, d.aim_method),
     }
 end
 
@@ -91,6 +101,17 @@ local function rebuild()
     tapper = gestures.tapper({ hold = cfg.tap_hold, gap = cfg.tap_gap })
 end
 rebuild()
+
+local function refresh_cfg()
+    if clock - last_cfg < 1.0 then return end
+    last_cfg = clock
+    local ok, c = pcall(read_cfg)
+    if not ok then return end
+    local changed = false
+    for k, v in pairs(c) do if type(v) ~= "table" and cfg[k] ~= v then changed = true end end
+    cfg = c
+    if changed then rebuild() end
+end
 
 -- Raw SteamVR pose (metres, quaternion). Rotate a local vector by the pose's rotation.
 local function raw_pose(index)
@@ -106,6 +127,8 @@ end
 
 -- Which tool is in hand: the game attaches it to CharacterMesh0 at HookSimple / KnifeSocket; with
 -- items_follow_hands it sits one level down, on the VR arms' Body (itself a child of the mesh).
+-- Knife and sickle share KnifeSocket; the runtime component class distinguishes them so the
+-- block gesture only runs with the sickle, which is the only one with GA_Sickle_Block.
 local TOOL_BY_SOCKET = { HookSimple = "hookgun", KnifeSocket = "melee" }
 local function name_str(n)
     if type(n) == "string" then return n end
@@ -117,7 +140,15 @@ local function find_tool(mesh)
         for _, c in ipairs(comp.AttachChildren or {}) do
             local ok, socket = pcall(function() return name_str(c:GetAttachSocketName()) end)
             local kind = ok and TOOL_BY_SOCKET[socket]
-            if kind then return kind, c end
+            if kind then
+                if kind == "melee" then
+                    local ok_full, full = pcall(function() return c:get_full_name() end)
+                    if ok_full and type(full) == "string" and full:find("BP_Sickle_Equipment_C", 1, true) then
+                        kind = "sickle"
+                    end
+                end
+                return kind, c
+            end
             if depth < 2 then
                 local k2, c2 = scan(c, depth + 1)
                 if k2 then return k2, c2 end
@@ -128,14 +159,19 @@ local function find_tool(mesh)
     return scan(mesh, 1)
 end
 
-local clock, last_cfg = 0, -1
 local tool, tool_comp, hook_out = nil, nil, false
-local pawn_id, tool_id, input_active, trigger_owned = nil, nil, false, false
+local pawn_id, tool_id, input_active, active_mode = nil, nil, false, nil
 local guarding, guard_since, guard_release_until = false, nil, -math.huge
 local fishing_reeling = false
 local fishing_fish_id, fishing_neutral_x, fishing_neutral_y = nil, nil, nil
 local fishing_qte_tag, fishing_qte_neutral_x, fishing_qte_neutral_y = nil, nil, nil
 local fishing_axis_x, fishing_axis_y = 0, 0
+-- Boat controls are driven by hand travel from a neutral pose captured on entering the boat.
+-- IA_BoatMove consumes X for wheel steering and Y as three throttle detents (reverse/neutral/fwd).
+local boat_axis_x, boat_axis_y = 0, 0
+local boat_neutral_lx, boat_neutral_ry
+local boat_reference_inv, boat_camera_state
+local boat_throttle = nil
 local last_log = 0
 local function identity(obj)
     if obj == nil then return nil end
@@ -143,11 +179,51 @@ local function identity(obj)
     return ok and a or tostring(obj)
 end
 
+-- BP_HookGunEquipment's dump names the static mesh component Hook_GEN_VARIABLE, but neither its
+-- short name nor generated property is reflected on the live actor. Find the named component under
+-- the actor root instead of depending on a Blueprint field alias.
+local function hook_mesh(gun)
+    if gun == nil then return nil end
+    -- Some actor instances do expose the generated property; keep it as the cheapest path.
+    local direct = gun.Hook
+    if direct ~= nil then return direct end
+    local root = gun.RootComponent
+    local function scan(parent, depth)
+        if parent == nil then return nil end
+        if depth > 4 then return nil end
+        for _, child in ipairs(parent.AttachChildren or {}) do
+            local ok, full = pcall(function() return child:get_full_name() end)
+            if ok and type(full) == "string" and full:match("%.Hook_GEN_VARIABLE$") then return child end
+            local found = scan(child, depth + 1)
+            if found ~= nil then return found end
+        end
+        return nil
+    end
+    local found = scan(root, 1)
+    if found ~= nil then return found end
+
+    -- The Blueprint SCS component can be present on the actor without appearing under the
+    -- reflected RootComponent.AttachChildren tree. Actor.h exposes K2_GetComponentsByClass.
+    local ok, components = pcall(function()
+        local cls = uevr.api:find_uobject("Class /Script/Engine.StaticMeshComponent")
+        if cls == nil then return nil end
+        return gun:K2_GetComponentsByClass(cls)
+    end)
+    if ok and type(components) == "table" then
+        for _, child in ipairs(components) do
+            local full_ok, full = pcall(function() return child:get_full_name() end)
+            if full_ok and type(full) == "string" and full:match("%.Hook_GEN_VARIABLE$") then return child end
+        end
+    end
+    return nil
+end
+
 local function hook_is_out()
     if tool ~= "hookgun" or tool_comp == nil then return false end
     local ok, out = pcall(function()
         local gun = tool_comp:GetOwner()
-        return gun ~= nil and gun.Hook ~= nil and not gun.Hook:IsVisible()
+        local hook = hook_mesh(gun)
+        return hook ~= nil and not hook:IsVisible()
     end)
     return ok and out or false
 end
@@ -228,15 +304,143 @@ end
 
 local function deactivate()
     input_active = false
-    trigger_owned, fishing_reeling = false, false
+    fishing_reeling = false
     fishing_fish_id, fishing_neutral_x, fishing_neutral_y = nil, nil, nil
     fishing_qte_tag, fishing_qte_neutral_x, fishing_qte_neutral_y = nil, nil, nil
     fishing_axis_x, fishing_axis_y = 0, 0
-    if guarding then guard_release_until = clock + 0.1 end
+    boat_axis_x, boat_axis_y = 0, 0
+    boat_neutral_lx, boat_neutral_ry, boat_throttle = nil, nil, nil
+    boat_reference_inv, boat_camera_state = nil, nil
+    if guarding then
+        guard_release_until = clock + 0.1
+        pcall(function() uevr.params.vr.set_mod_value("VR_AimMethod", string.format("%d", math.floor(cfg.aim_method))) end)
+    end
     guarding, guard_since = false, nil
     rebuild()
     tool, tool_comp, tool_id, hook_out = nil, nil, nil, false
     dot_show(false)
+end
+
+-- BP_CraftController traces from DeprojectMousePositionToWorld and already maps face buttons
+-- to IA_Crafting_Click. Move only the cursor so its native hover/click path stays authoritative.
+local function step_crafting()
+    local pc = uevr.api:get_player_controller(0)
+    local wbl = uevr.api:find_uobject("Class /Script/UMG.WidgetLayoutLibrary")
+    if pc == nil or wbl == nil then return end
+    local size = wbl:get_class_default_object():GetViewportSize(pc)
+    if size == nil then return end
+    local width, height = size.X or size.x, size.Y or size.y
+    if not width or not height or width < 1 or height < 1 then return end
+    local vr = uevr.params.vr
+    local l = raw_pose(vr.get_left_controller_index())
+    local h, hq = raw_pose(vr.get_hmd_index())
+    local rel = rotate({ x = -hq.x, y = -hq.y, z = -hq.z, w = hq.w },
+        { X = l.X - h.X, Y = l.Y - h.Y, Z = l.Z - h.Z })
+    -- A 40 cm hand workspace spans the viewport. Keeping this absolute to the head makes the
+    -- cursor predictable when entering a bench; stock game input still performs hover and click.
+    local x = math.floor(width * 0.5 + rel.X / cfg.craft_cursor_span_m * width)
+    local y = math.floor(height * 0.5 - rel.Y / cfg.craft_cursor_span_m * height)
+    x, y = math.max(0, math.min(width - 1, x)), math.max(0, math.min(height - 1, y))
+    pc:SetMouseLocation(x, y)
+end
+
+local function log_boat_anchors(pawn)
+    local ok, wheel, lever = pcall(function()
+        local child = pawn.BP_ShipSteeringWheel:GetChildActor()
+        return child.Small_Boat_Steerwheel:K2_GetComponentLocation(), pawn.Throttle_lever:K2_GetComponentLocation()
+    end)
+    if ok and wheel and lever then
+        log(string.format("boat mesh anchors: wheel=(%.1f,%.1f,%.1f) throttle=(%.1f,%.1f,%.1f)",
+            wheel.x, wheel.y, wheel.z, lever.x, lever.y, lever.z))
+    else
+        log("boat mesh anchors unavailable; using tracked hand poses")
+    end
+end
+
+local function sync_cosmetic_wheel(pawn)
+    pcall(function()
+        local child = pawn.BP_ShipSteeringWheel:GetChildActor()
+        local cosmetic = child.CurrentActiveWheelCosmetic
+        if cosmetic == nil then return end
+        -- Match BP_ShipSteeringWheel.ReceiveTick: it copies the steering-wheel ACTOR's
+        -- world rotation to the cosmetic module. The mesh component may have its own
+        -- relative rotation, so using its world rotation adds that offset a second time.
+        local wheel_rotation = child:K2_GetActorRotation()
+        cosmetic:K2_SetActorRotation(wheel_rotation, false)
+    end)
+end
+
+local function supports_wheel_boat(pawn)
+    for _, class_name in ipairs(gameapi.class_chain(pawn)) do
+        if class_name == "BP_SmallBoat_V2_C" then return true end
+    end
+    return false
+end
+
+local function step_boat(pawn)
+    -- BP_SmallBoat_V2 sets this flag when it switches to its helm camera. Preserve the game's
+    -- physical/gamepad steering in third-person; only claim IA_BoatMove axes in first-person.
+    local ok_camera, first_person = pcall(function() return pawn.bFirstPersonCameraEnabled end)
+    local camera_state = not ok_camera and "unknown" or (first_person == true and "first_person" or "third_person")
+    if camera_state ~= boat_camera_state then
+        boat_camera_state = camera_state
+        log(camera_state == "first_person" and "boat first-person gesture steering active"
+            or camera_state == "third_person" and "boat third-person native axes active"
+            or "boat camera flag unavailable; native axes active")
+    end
+    if camera_state ~= "first_person" then
+        if boat_neutral_lx ~= nil then log("boat gestures paused; native axes restored") end
+        boat_axis_x, boat_axis_y = 0, 0
+        boat_neutral_lx, boat_neutral_ry, boat_throttle = nil, nil, nil
+        boat_reference_inv = nil
+        return
+    end
+
+    local vr = uevr.params.vr
+    local l = raw_pose(vr.get_left_controller_index())
+    local r = raw_pose(vr.get_right_controller_index())
+    local h, hq = raw_pose(vr.get_hmd_index())
+    -- Freeze the boat's horizontal frame when taking the helm. Recomputing this from the live
+    -- HMD quaternion makes a head turn look like wheel input. Keep world-up for throttle.
+    if boat_reference_inv == nil then
+        local yaw = math.atan(2 * (hq.w * hq.y + hq.x * hq.z), 1 - 2 * (hq.y * hq.y + hq.z * hq.z))
+        boat_reference_inv = { x = 0, y = -math.sin(yaw * 0.5), z = 0, w = math.cos(yaw * 0.5) }
+    end
+    local offset_l = { X = l.X - h.X, Y = l.Y - h.Y, Z = l.Z - h.Z }
+    local offset_r = { X = r.X - h.X, Y = r.Y - h.Y, Z = r.Z - h.Z }
+    local lp = rotate(boat_reference_inv, offset_l)
+    local rp = rotate(boat_reference_inv, offset_r)
+    local lx, ry = lp.X, rp.Y
+    if boat_neutral_lx == nil then
+        boat_neutral_lx, boat_neutral_ry = lx, ry
+        boat_throttle = 0
+        log("boat gestures calibrated; left hand steers, right hand sets throttle")
+        log_boat_anchors(pawn)
+    end
+    sync_cosmetic_wheel(pawn)
+    -- Horizontal left-hand travel maps to the boat's full steering input.
+    local steer = lx - boat_neutral_lx
+    boat_axis_x = math.max(-1, math.min(1, steer / cfg.boat_steer_range_m))
+    if math.abs(boat_axis_x) < 0.10 then boat_axis_x = 0 end
+    -- Three physical detents. Hysteresis prevents chatter around neutral/full travel.
+    local lift = ry - boat_neutral_ry
+    local previous = boat_throttle or 0
+    local next_level = previous
+    if lift > (previous == 1 and cfg.boat_throttle_turnaround_m or cfg.boat_throttle_enter_m) then next_level = 1
+    elseif lift < -(previous == -1 and cfg.boat_throttle_turnaround_m or cfg.boat_throttle_enter_m) then next_level = -1
+    elseif math.abs(lift) < cfg.boat_throttle_release_m then next_level = 0 end
+    if next_level ~= previous then
+        boat_throttle = next_level
+        boat_axis_y = next_level
+        log("boat throttle detent: " .. (next_level == 1 and "forward" or next_level == -1 and "reverse" or "neutral"))
+        -- UEVR 2.39 exposes this wrapper; guard it for runtimes that omit haptics.
+        pcall(function()
+            local source = vr.get_right_joystick_source()
+            vr.trigger_haptic_vibration(0, 0.025, 150, 0.45, source)
+        end)
+    else
+        boat_axis_y = boat_throttle or 0
+    end
 end
 
 local function value_name(v)
@@ -281,7 +485,7 @@ local function step_fishing(pawn)
     if not cfg.enabled then
         if fishing_reeling then log("fishing crank: released (no fish or QTE active)") end
         fishing_reeling = false
-        input_active, trigger_owned = false, false
+        input_active = false
         fishing_fish_id, fishing_neutral_x, fishing_neutral_y = nil, nil, nil
         fishing_qte_tag, fishing_qte_neutral_x, fishing_qte_neutral_y = nil, nil, nil
         fishing_axis_x, fishing_axis_y = 0, 0
@@ -293,7 +497,7 @@ local function step_fishing(pawn)
     if fish == nil then
         if fishing_reeling then log("fishing crank: released (no fish)") end
         fishing_reeling = false
-        input_active, trigger_owned = false, false
+        input_active = false
         fishing_fish_id, fishing_neutral_x, fishing_neutral_y = nil, nil, nil
         fishing_qte_tag, fishing_qte_neutral_x, fishing_qte_neutral_y = nil, nil, nil
         fishing_axis_x, fishing_axis_y = 0, 0
@@ -342,7 +546,7 @@ local function step_fishing(pawn)
         if fishing_reeling then log("fishing crank: released (QTE active)") end
         fishing_reeling = false
         crank:reset()
-        input_active, trigger_owned = false, false
+        input_active = false
         return
     end
 
@@ -355,13 +559,13 @@ local function step_fishing(pawn)
         fishing_reeling = active
         log(active and "fishing crank: reel held" or "fishing crank: reel released")
     end
-    input_active, trigger_owned = active, active
+    input_active = active
 end
 
 -- Thumb-down proxy: controller forward points toward the floor while the hand is low and
 -- in front of the torso. UEVR exposes controller orientation, not individual finger curls.
 local function step_guard(pawn)
-    if not cfg.guard_enabled or tool ~= "melee" then
+    if not cfg.guard_enabled or tool ~= "sickle" then
         guard_since = nil
         return false
     end
@@ -390,6 +594,11 @@ local function dot_update(pawn)
     local finish = reticle.trace_end(start, rot.x, rot.y, dot.trace_length)
     local clear = { R = 0, G = 0, B = 0, A = 0 }
     local blocked = dot.ksl:LineTraceSingle(pawn, start, finish, 0, false, { pawn }, 0, dot.hit, true, clear, clear, 0)
+    dot.last_launch_target = finish
+    if blocked then
+        local impact = dot.hit.ImpactPoint
+        dot.last_launch_target = { X = impact.X or impact.x, Y = impact.Y or impact.y, Z = impact.Z or impact.z }
+    end
     if not blocked then dot_show(false); return end   -- nothing to hook onto
     -- ImpactPoint is FVector_NetQuantize: UEVR returns it as a struct with X/Y/Z, not the
     -- x/y/z of a plain FVector (in game 17:51 this crashed the reticle). Accept either.
@@ -402,23 +611,44 @@ local function dot_update(pawn)
     dot_show(true)
 end
 
--- Gun alignment check: the barrel runs from the gun's grip (its attached root) to its Hook mesh
--- at the tip (BP_HookGunEquipment.Hook). Compared once a second with the aim the shots follow
--- (control rotation), as degrees: dyaw > 0 = barrel right of the aim, dpitch > 0 = barrel above.
--- K2_GetComponentLocation SceneComponent.h, GetControlRotation Controller.h:159.
+-- Hook shots trace from PlayerController.GetPlayerViewPoint but launch at BP_HookGunEquipment's
+-- Hook component. Compare the camera ray with the expected muzzle-to-trace-point launch vector.
+-- GetControlRotation Controller.h:159; GetCameraRotation PlayerCameraManager.h:702;
+-- K2_GetComponentLocation/Rotation SceneComponent.h:644/648; K2_GetComponentsByClass Actor.h:3762.
 local last_aim_log = -1
+local aim_err_logged = false
 local function log_gun_aim(pawn)
     if clock - last_aim_log < 1.0 or tool_comp == nil then return end
     last_aim_log = clock
-    local gun = tool_comp:GetOwner()
-    local tip, grip = gun.Hook:K2_GetComponentLocation(), tool_comp:K2_GetComponentLocation()
-    local bx, by, bz = tip.x - grip.x, tip.y - grip.y, tip.z - grip.z
-    local cr = pawn.Controller:GetControlRotation()
+    local ok_rot, cr, vr = pcall(function()
+        return pawn.Controller:GetControlRotation(), pawn.Controller.PlayerCameraManager:GetCameraRotation()
+    end)
+    if not ok_rot or cr == nil or vr == nil then return end -- mocks/actors without the player view
+    local hook = hook_mesh(tool_comp:GetOwner())
+    local ok_muzzle, muzzle = pcall(function() return hook and hook:K2_GetComponentLocation() end)
+    if not ok_muzzle then muzzle = nil end
+    local ctrl_yaw, ctrl_pitch = cr.Yaw or cr.y, cr.Pitch or cr.x
+    local view_yaw, view_pitch = vr.Yaw or vr.y, vr.Pitch or vr.x
+    if ctrl_yaw == nil or ctrl_pitch == nil or view_yaw == nil or view_pitch == nil then
+        error("control or view rotation has no yaw/pitch fields")
+    end
     local function wrap(a) a = (a + 180) % 360; return a - 180 end
-    local byaw = math.deg(math.atan(by, bx))
-    local bpitch = math.deg(math.atan(bz, math.sqrt(bx * bx + by * by)))
-    log(string.format("gun aim: dyaw=%.0f dpitch=%.0f (barrel %.0f/%.0f, aim %.0f/%.0f)",
-        wrap(byaw - cr.y), wrap(bpitch - cr.x), byaw, bpitch, wrap(cr.y), wrap(cr.x)))
+    if muzzle ~= nil and dot.last_launch_target ~= nil then
+        local mx, my, mz = muzzle.X or muzzle.x, muzzle.Y or muzzle.y, muzzle.Z or muzzle.z
+        local target = dot.last_launch_target
+        local dx, dy, dz = target.X - mx, target.Y - my, target.Z - mz
+        local launch_yaw = math.deg(math.atan(dy, dx))
+        local launch_pitch = math.deg(math.atan(dz, math.sqrt(dx * dx + dy * dy)))
+        log(string.format("hook aim: ctrl=%.0f/%.0f view=%.0f/%.0f view_minus_ctrl=%.0f/%.0f launch_minus_view=%.0f/%.0f",
+            wrap(ctrl_yaw), wrap(ctrl_pitch), wrap(view_yaw), wrap(view_pitch),
+            wrap(view_yaw - ctrl_yaw), wrap(view_pitch - ctrl_pitch),
+            wrap(launch_yaw - view_yaw), wrap(launch_pitch - view_pitch)))
+    else
+        log(string.format("hook aim: ctrl=%.0f/%.0f view=%.0f/%.0f view_minus_ctrl=%.0f/%.0f muzzle=%s target=%s",
+            wrap(ctrl_yaw), wrap(ctrl_pitch), wrap(view_yaw), wrap(view_pitch),
+            wrap(view_yaw - ctrl_yaw), wrap(view_pitch - ctrl_pitch), tostring(muzzle ~= nil),
+            tostring(dot.last_launch_target ~= nil)))
+    end
 end
 
 local function step(pawn)
@@ -443,9 +673,15 @@ local function step(pawn)
     tool, tool_comp, tool_id = kind, comp, id
     local out = hook_is_out()
     if out ~= hook_out then hook_out = out; log(out and "hook out: crank live" or "hook home: crank off"); rebuild() end
-    input_active = tool == "melee" or (tool == "hookgun" and hook_out)
+    input_active = tool == "melee" or tool == "sickle" or (tool == "hookgun" and hook_out)
 
-    if tool == "hookgun" then pcall(log_gun_aim, pawn) end
+    if tool == "hookgun" then
+        local oka, erra = pcall(log_gun_aim, pawn)
+        if not oka and not aim_err_logged then
+            aim_err_logged = true
+            log("gun aim diagnostic FAILED: " .. tostring(erra))
+        end
+    end
     if tool == "hookgun" and not hook_out and cfg.reticle then
         local okd, errd = pcall(dot_update, pawn)
         if not okd then dot_show(false); if not dot.err_logged then dot.err_logged = true; log("reticle FAILED: " .. tostring(errd)) end end
@@ -467,7 +703,7 @@ local function step(pawn)
             local d = { X = lpos.X - pivot.X, Y = lpos.Y - pivot.Y, Z = lpos.Z - pivot.Z }
             log(string.format("crank hand_from_point=%.3fm", math.sqrt(d.X * d.X + d.Y * d.Y + d.Z * d.Z)))
         end
-    elseif tool == "melee" then
+    elseif tool == "melee" or tool == "sickle" then
         local rpos = raw_pose(vr.get_right_controller_index())
         if swing:update(clock, rpos) then tapper:add(1); log("swing -> attack") end
     end
@@ -479,9 +715,26 @@ uevr.sdk.callbacks.on_pre_engine_tick(function(_, delta)
     local mode = pawn and modes.classify(gameapi.class_chain(pawn)) or nil
     local id = identity(pawn)
     if id ~= pawn_id then deactivate(); pawn_id = id end
+    if mode ~= active_mode then deactivate(); active_mode = mode end
+    refresh_cfg()
+    if not cfg.enabled then deactivate(); return end
     if mode == "fishing" then
         local ok, err = pcall(step_fishing, pawn)
         if not ok then deactivate(); log("fishing gesture FAILED: " .. tostring(err)) end
+        return
+    end
+    if mode == "boat" then
+        if not supports_wheel_boat(pawn) then
+            if boat_neutral_lx ~= nil then deactivate() end
+            return
+        end
+        local ok, err = pcall(step_boat, pawn)
+        if not ok then deactivate(); log("boat gesture FAILED: " .. tostring(err)) end
+        return
+    end
+    if mode == "crafting" then
+        local ok, err = pcall(step_crafting)
+        if not ok then log("craft cursor FAILED: " .. tostring(err)) end
         return
     end
     if mode ~= "walking" then
@@ -497,17 +750,30 @@ uevr.sdk.callbacks.on_pre_engine_tick(function(_, delta)
             local was_guarding = guarding
             if blocked ~= was_guarding then
                 log(blocked and "guard held" or "guard released")
+                pcall(function()
+                    local aim = blocked and 1 or math.floor(cfg.aim_method)
+                    uevr.params.vr.set_mod_value("VR_AimMethod", string.format("%d", aim))
+                    log("guard aim method: " .. (blocked and "head" or tostring(aim)))
+                end)
                 rebuild()
                 if was_guarding then guard_release_until = clock + 0.1 end
             end
             guarding = blocked
-            trigger_owned = blocked
             input_active = input_active or blocked
         else
-            guarding, trigger_owned = false, false
+            guarding = false
             log("guard gesture FAILED: " .. tostring(blocked))
         end
     end
+end)
+
+-- Copy the steering-wheel actor's post-game rotation to its separately spawned cosmetic,
+-- matching BP_ShipSteeringWheel.ReceiveTick.
+-- Run after the boat Blueprint tick so its cosmetic tick cannot leave the overlay behind.
+uevr.sdk.callbacks.on_post_calculate_stereo_view_offset(function(_, view_index)
+    if view_index ~= 0 or active_mode ~= "boat" then return end
+    local pawn = gameapi.local_pawn()
+    if pawn ~= nil and supports_wheel_boat(pawn) then sync_cosmetic_wheel(pawn) end
 end)
 
 -- The virtual press: while a tap is down the right trigger reads fully pressed; during the gap
@@ -523,11 +789,22 @@ uevr.sdk.callbacks.on_xinput_get_state(function(retval, user_index, state)
             gamepad.sThumbLY = math.floor(fishing_axis_y * 32767)
         end
     end
-    if trigger_owned then
-        state.Gamepad.bRightTrigger = (guarding or fishing_reeling) and 255 or 0
+    if boat_neutral_lx ~= nil then
+        state.Gamepad.sThumbLX = math.floor(boat_axis_x * 32767)
+        state.Gamepad.sThumbLY = math.floor(boat_axis_y * 32767)
         return
     end
-    if clock < guard_release_until then state.Gamepad.bRightTrigger = 0; return end
+    if guarding then
+        -- IMC_CharacterMapping: SecondaryUse is the left trigger. The sickle block ability
+        -- waits for input release; do not send PrimaryUse here or this gesture attacks instead.
+        state.Gamepad.bLeftTrigger = 255
+        return
+    end
+    if fishing_reeling then
+        state.Gamepad.bRightTrigger = 255
+        return
+    end
+    if clock < guard_release_until then state.Gamepad.bLeftTrigger = 0; return end
     if not input_active then return end
     local down = tapper:pressed(clock)
     if down then state.Gamepad.bRightTrigger = 255

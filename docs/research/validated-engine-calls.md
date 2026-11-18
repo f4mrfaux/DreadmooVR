@@ -18,6 +18,7 @@ Add a row here before using a new call.
 | `AActor::GetTransform` | GameFramework/Actor.h:1545 | BlueprintCallable (display "Get Actor Transform") | `const FTransform& GetTransform() const`. **Not** `K2_GetActorTransform`, which doesn't exist; that bug was found in game on 2026-11-16 |
 | `AActor::K2_GetActorLocation` | Actor.h:1558 | BlueprintCallable | `FVector K2_GetActorLocation() const` |
 | `AActor::K2_GetActorRotation` | Actor.h:1579 | BlueprintCallable | `FRotator K2_GetActorRotation() const` |
+| `AActor::K2_GetComponentsByClass` | Actor.h:3762 | BlueprintCallable (`ScriptName=GetComponentsByClass`) | `TArray<UActorComponent*> K2_GetComponentsByClass(TSubclassOf<UActorComponent>) const`; used as a fallback to find the hook gun's generated `Hook` mesh component |
 | `AActor::K2_TeleportTo` | Actor.h:3327 | BlueprintCallable | `bool K2_TeleportTo(FVector DestLocation, FRotator DestRotation)` |
 | `AController::GetControlRotation` | GameFramework/Controller.h:159 | BlueprintCallable | `virtual FRotator GetControlRotation() const` |
 | `UGameplayStatics::BeginDeferredActorSpawnFromClass` | Kismet/GameplayStatics.h:67 | BlueprintCallable, BlueprintInternalUseOnly | `(WorldContextObject, ActorClass, const FTransform& SpawnTransform, ESpawnActorCollisionHandlingMethod CollisionHandlingOverride, AActor* Owner = nullptr, ESpawnActorScaleMethod TransformScaleMethod = MultiplyWithRoot)` |
@@ -26,6 +27,7 @@ Add a row here before using a new call.
 | `UKismetSystemLibrary::Conv_SoftObjPathToSoftObjRef` | KismetSystemLibrary.h:344 | yes | `TSoftObjectPtr<UObject> Conv_SoftObjPathToSoftObjRef(const FSoftObjectPath&)` |
 | `UKismetSystemLibrary::LoadAsset_Blocking` | KismetSystemLibrary.h:395 | yes | `UObject* LoadAsset_Blocking(TSoftObjectPtr<UObject> Asset)` |
 | `USceneComponent::K2_AttachToComponent` | Components/SceneComponent.h:747 | BlueprintCallable | `(Parent, FName SocketName, EAttachmentRule Location, Rotation, Scale, bool bWeldSimulatedBodies)`; `EAttachmentRule` KeepRelative=0, KeepWorld=1, **SnapToTarget=2** |
+| `USceneComponent::SetHiddenInGame` | Components/SceneComponent.h:915 | BlueprintCallable | `(bool NewHidden, bool bPropagateToChildren=false)`; clear hidden state on the VR arms body after the game hides the diver at the first-person helm |
 | `USceneComponent::K2_GetComponentLocation` / `K2_GetComponentRotation` | SceneComponent.h:644 / 648 | BlueprintCallable | used in `ABP_VRArms` |
 | `USkinnedMeshComponent::HideBoneByName` | Components/SkinnedMeshComponent.h:2034 | BlueprintCallable | `(FName BoneName, EPhysBodyOp)`; **PBO_None=0** (:85) |
 | `USkinnedMeshComponent::UnHideBoneByName` | SkinnedMeshComponent.h:2043 | BlueprintCallable | `(FName BoneName)` |

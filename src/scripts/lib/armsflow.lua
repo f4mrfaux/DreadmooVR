@@ -23,7 +23,7 @@ function armsflow.new(deps)
         visible = true, pawn = nil, reason = nil }, armsflow)
 end
 
--- now: seconds; mode: "walking" or another mode name or nil; pawn: an identity for the pawn.
+-- now: seconds; mode: "walking", "boat", or another mode name or nil; pawn: identity.
 function armsflow:step(now, mode, pawn)
     if self.status == "loading" then
         local action = self.load:step(now, mode == "walking")
@@ -35,14 +35,14 @@ function armsflow:step(now, mode, pawn)
     end
     if self.status ~= "active" then return nil end
 
-    local walking = mode == "walking"
-    if walking and pawn ~= self.pawn then
+    local visible_mode = mode == "walking" or mode == "boat"
+    if mode == "walking" and pawn ~= self.pawn then
         self.pawn = pawn
         self.visible = true
         return "reattach"
     end
-    if walking and not self.visible then self.visible = true; return "show" end
-    if not walking and self.visible then self.visible = false; return "hide" end
+    if visible_mode and not self.visible then self.visible = true; return "show" end
+    if not visible_mode and self.visible then self.visible = false; return "hide" end
     return nil
 end
 

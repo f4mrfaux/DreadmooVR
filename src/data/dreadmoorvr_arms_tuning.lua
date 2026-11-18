@@ -26,5 +26,16 @@ return {
         crank_r_min = 0.04, crank_r_max = 0.25,           -- left hand distance from the crank axis
         crank_min_deg_s = 180, crank_step_deg = 90,       -- one reel press per 90 degrees turned
         swing_min_m_s = 2.0, swing_frames = 3, swing_cooldown_s = 0.4,
+        guard_enabled = true,
+        guard_enter_z = -0.65, guard_exit_z = -0.50,      -- thumb-down hysteresis; lower = more vertical
+        guard_front_z = -0.05,                            -- hand must be in front of HMD/body plane
+        guard_min_y = -0.65, guard_max_y = 0.10,          -- low, in front of the chest
+        guard_max_x = 0.45,                                -- stay near body center
+        fishing_fight_deadzone_m = 0.08, fishing_fight_range_m = 0.28,
+        craft_cursor_span_m = 0.40,                        -- hand travel across full screen
+        boat_steer_range_m = 0.22,                         -- left hand travel to full rudder
+        boat_throttle_enter_m = 0.14,                       -- right hand travel to a throttle detent
+        boat_throttle_release_m = 0.055,                    -- return to neutral inside this range
+        boat_throttle_turnaround_m = 0.08,                  -- cross through neutral to change direction
     },
 }

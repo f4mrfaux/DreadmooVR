@@ -99,7 +99,13 @@ local function make_world()
         return { get_fname = function() return fname(chain[i]) end, get_super_struct = function() return class_at(i + 1) end }
     end
     W.pawn = obj({ name = "Pawn", Mesh = pawn_mesh, get_class = function() return class_at(1) end,
+        RootComponent = obj({ name = "BoatRoot", AttachChildren = {} }),
         GetTransform = function() return {} end, K2_GetActorRotation = function() return { Pitch = 0, Yaw = 0, Roll = 0 } end })
+    W.set_mode = function(mode)
+        chain = mode == "boat" and { "BP_SmallBoat_V2_C", "DrdShipBase", "Pawn" }
+            or mode == "fishing" and { "BP_FishingController_C", "DrdFishingControllerBase", "Pawn" }
+            or { "BP_PlayerCharacter_C", "DrdPlayerCharacter", "Character", "Pawn", "Actor", "Object" }
+    end
     -- A replacement pawn (respawn, level load): a fresh mesh with nothing attached.
     W.new_pawn = function()
         local m = mesh("GameMesh2"); m.AttachChildren = {}
@@ -121,10 +127,13 @@ local function make_world()
             p.AttachChildren = p.AttachChildren or {}; table.insert(p.AttachChildren, self)
             self.parent = p; return true
         end
+        body.GetAttachParent = function(self) return self.parent end
+        body.SetHiddenInGame = function(self, hidden) self.hidden_in_game = hidden end
         W.body = body
         W.arms = obj({ name = "BP_VRArms", Body = body,
             LeftHandTarget = target(v(30, -25, 110)), RightHandTarget = target(v(30, 25, 110)),
-            SetActorHiddenInGame = function() end, K2_DestroyActor = function(self) self.destroyed = true end })
+            SetActorHiddenInGame = function(_, hidden) W.hidden = hidden end,
+            K2_DestroyActor = function(self) self.destroyed = true end })
         return W.arms
     end
 
@@ -231,7 +240,7 @@ end
 local TUNING_ON = [[
 return { grip_back = 8, shoulder_widen = 5, camera_forward = -30, camera_up = 0,
          aim_method = 2, movement_orientation = 1, items_follow_hands = true, level_torso = true,
-         item_rot = { y = 180 } }
+         item_rot = { y = 15 } }
 ]]
 
 -- Loads the given scripts the way UEVR does: no working require.
@@ -279,9 +288,9 @@ return {
         -- The tool stays where the game put it, so the game's own unequip can find it.
         assert(W.gun.parent == W.pawn_mesh and W.gun.socket == "HookSimple", "stays attached to the game mesh")
         local w = W.gun.world
-        assert(w and w.a == W.gun.rel and w.b.b.socket == "HookSimple" and w.b.b.on == W.body.name,
+        assert(w and w.a.rot.Yaw == 15 and w.b.a == W.gun.rel and
+            w.b.b.socket == "HookSimple" and w.b.b.on == W.body.name,
             "placed every frame at the VR hand's HookSimple with the game's grip offset")
-        assert(w.b.a.rot.Yaw == 180, "turned by item_rot in the hand's frame (gun was 180 off, 18:20)")
         assert(W.camera.world == nil, "camera untouched")
         assert(has(W.logs, "held item %-> VR hand R"), "logged")
     end,
@@ -426,6 +435,19 @@ return {
         assert(W.mods.VR_RoomscaleMovement == "true")
         run(W, 2)
         assert(W.mods.VR_AimMethod == "3", "walking picks up tuning edited at helm")
+        assert(failures(W.logs) == "", failures(W.logs))
+    end,
+
+    test_first_person_boat_shows_vr_arms_and_runs_solver = function()
+        local W = boot()
+        W.set_mode("fishing"); run(W, 0.1)
+        assert(W.hidden == true, "fixture hides arms outside walking mode")
+        W.set_mode("boat"); run(W, 0.2)
+        assert(W.hidden == false, "VR arms are shown at the first-person helm")
+        assert(W.body.parent == W.pawn.Mesh and W.body.hidden_in_game == false,
+            "arms mesh stays on the diver pose source but clears hidden state at the helm")
+        W.set_mode("walking"); run(W, 0.1)
+        assert(W.body.parent == W.pawn.Mesh, "arms retain the character pose source when leaving the helm")
         assert(failures(W.logs) == "", failures(W.logs))
     end,
 

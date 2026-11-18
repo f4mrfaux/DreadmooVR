@@ -37,6 +37,18 @@ The server exposes one tool, `unreal`, with four operations: search, describe, e
 
 ## Status
 
-- Verified: the build succeeds, the editor loads the plugin, and a hand-sent `initialize` request returns HTTP 200 with the expected server info.
-- Not yet verified: tool calls from Claude Code, and whether Blueprint node creation and wiring work in 5.6.
-- Not yet set up: cooking and pak packaging for the game.
+- Verified: the UE 5.6 editor loads EngineWire; hand-sent MCP `initialize`, `search`, `describe`, and read-only `execute` calls work over HTTP.
+- Not yet verified: Claude Code's stdio proxy attachment and EngineWire Blueprint graph writes in UE 5.6.
+- The mod's cooking and pak packaging workflow is in `tools/cook.ps1`; this MCP setup note does not validate a fresh cook.
+
+### Game Blueprints versus mod assets
+
+EngineWire reads editor assets registered in the `unreal/Dreadmoor` project. It does not mount
+the installed game's cooked IoStore containers as editable Blueprint assets. The game Blueprints
+are cooked; the editor graph source is not present in those packages, so copying the cooked files
+into this project's `Content` folder will not make their graphs inspectable through MCP. In this
+session the editor was correctly running this project, but its world was `/Temp/Untitled_1` and
+the asset registry confirmed that the two boat Blueprint paths were absent. Use the read-only
+`tools/re` IoStore/Kismet pipeline for shipped game Blueprint bytecode; use EngineWire for the
+mod project's editable assets. Record which source was used in research notes so cooked-code
+findings are not described as live editor-graph reads.

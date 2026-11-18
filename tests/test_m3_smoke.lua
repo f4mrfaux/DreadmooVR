@@ -14,7 +14,7 @@ local function v(x, y, z) return { X = x, Y = y, Z = z } end
 local function fname(s) return { to_string = function() return s end } end
 
 local function world(tool_socket, on_body)
-    local W = { logs = {}, callbacks = {}, hook_visible = true, t = 0 }
+    local W = { logs = {}, callbacks = {}, hook_visible = true, t = 0, mods = { VR_AimMethod = "2" } }
     os.execute('mkdir "build\\smoke3\\scripts\\lib" 2>nul')
     copy("src/scripts/m3_gestures.lua", STAGE .. "scripts/m3_gestures.lua")
     for _, m in ipairs(LIBS) do copy("src/scripts/lib/" .. m .. ".lua", STAGE .. "scripts/lib/" .. m .. ".lua") end
@@ -22,7 +22,8 @@ local function world(tool_socket, on_body)
 
     local hook = { IsVisible = function() return W.hook_visible end }
     local gun = { Hook = hook }
-    local tool = { GetAttachSocketName = function() return fname(tool_socket) end, GetOwner = function() return gun end }
+    local tool = { GetAttachSocketName = function() return fname(tool_socket) end, GetOwner = function() return gun end,
+        get_full_name = function() return W.tool_full_name or "StaticMeshComponent /Test/Knife" end }
     local body = { GetAttachSocketName = function() return fname("None") end, AttachChildren = on_body and { tool } or nil }
     local mesh = { AttachChildren = on_body and { body } or { tool } }
     W.mesh, W.tool = mesh, tool
@@ -35,14 +36,35 @@ local function world(tool_socket, on_body)
     W.trace_calls = {}
     local pcm = { GetCameraLocation = function() return { x = 0, y = 0, z = 170 } end,
                   GetCameraRotation = function() return { x = 0, y = 0, z = 0 } end }
+    local wheel = { rotation = { Pitch = 0, Yaw = 0, Roll = 0 },
+        K2_GetComponentLocation = function() return { x = 100, y = 20, z = 30 } end,
+        K2_GetComponentRotation = function(self) return self.rotation end }
+    local cosmetic = { K2_SetActorRotation = function(_, rotation)
+        W.cosmetic_rotation = { Pitch = rotation.Pitch, Yaw = rotation.Yaw, Roll = rotation.Roll }
+        W.cosmetic_updates = (W.cosmetic_updates or 0) + 1
+    end }
+    local wheel_child = { Small_Boat_Steerwheel = wheel, CurrentActiveWheelCosmetic = cosmetic,
+        actor_rotation = { Pitch = 0, Yaw = 0, Roll = 0 },
+        K2_GetActorRotation = function(self) return self.actor_rotation end }
     W.pawn = { Mesh = mesh, get_class = function() return class_at(1) end,
-        Controller = { PlayerCameraManager = pcm }, GetTransform = function() return {} end }
-    W.set_mode = function(mode)
+        Controller = { PlayerCameraManager = pcm }, GetTransform = function() return {} end,
+        BP_ShipSteeringWheel = { GetChildActor = function() return wheel_child end },
+        Throttle_lever = { K2_GetComponentLocation = function() return { x = 90, y = 10, z = 20 } end } }
+    W.wheel, W.wheel_cosmetic, W.wheel_child = wheel, cosmetic, wheel_child
+    W.mouse = nil
+    W.set_mode = function(mode, first_person)
         if mode == "fishing" then
             chain = { "BP_FishingController_C", "DrdFishingControllerBase", "Pawn" }
             W.pawn.StrugglingFish = { get_full_name = function() return "DrdStrugglingFish /Test/Fish" end,
                 get_address = function() return 123 end }
             W.pawn.CurrentQTE = "None"
+        elseif mode == "boat" then
+            chain = { "BP_SmallBoat_V2_C", "DrdShipBase", "Pawn" }
+            W.pawn.bFirstPersonCameraEnabled = first_person ~= false
+        elseif mode == "paddle" then
+            chain = { "BP_PaddleBoat_C", "DrdShipBase", "Pawn" }
+        elseif mode == "crafting" then
+            chain = { "BP_CraftController_C", "PlayerController", "Pawn" }
         else
             chain = { "BP_PlayerCharacter_C", "DrdPlayerCharacter", "Character", "Pawn" }
             W.pawn.StrugglingFish, W.pawn.CurrentQTE = nil, nil
@@ -78,11 +100,15 @@ local function world(tool_socket, on_body)
     W.cross = { opacity = 1, SetRenderOpacity = function(self, o) self.opacity = o end }
     objs["WidgetBlueprintGeneratedClass /Game/Dreadmoor/UI/HUD/WBP_Cross.WBP_Cross_C"] = {}
     objs["Class /Script/UMG.WidgetBlueprintLibrary"] = { get_class_default_object = function() return {
-        GetAllWidgetsOfClass = function(_, ctx, out, cls, top) out[1] = W.cross end } end }
+        GetAllWidgetsOfClass = function(_, ctx, out, cls, top) out[1] = W.cross end,
+        GetViewportSize = function() return { X = 1000, Y = 800 } end } end }
+    objs["Class /Script/UMG.WidgetLayoutLibrary"] = { get_class_default_object = function() return {
+        GetViewportSize = function() return { X = 1000, Y = 800 } end } end }
     _G.StructObject = { new = function() return {} end }
     -- Poses: W.left / W.right are functions of time returning a position (m); right faces -Z.
     W.left = function() return v(0, 1.2, -0.3) end
     W.right = function() return v(0.2, 1.2, -0.3) end
+    W.right_q = { x = 0, y = 0, z = 0, w = 1 }
     _G.UEVR_Vector3f = { new = function() return { x = 0, y = 0, z = 0 } end }
     _G.UEVR_Quaternionf = { new = function() return { x = 0, y = 0, z = 0, w = 1 } end }
     local function reg(n) return function(fn) W.callbacks[n] = fn end end
@@ -90,17 +116,29 @@ local function world(tool_socket, on_body)
         params = {
             functions = { log_info = function(s) W.logs[#W.logs + 1] = s end },
             vr = {
+                set_mod_value = function(key, value) W.mods[key] = value end,
                 get_left_controller_index = function() return 1 end, get_right_controller_index = function() return 2 end,
                 get_hmd_index = function() return 0 end,
+                get_right_joystick_source = function() return 2 end,
+                trigger_haptic_vibration = function(delay, duration, frequency, amplitude, source)
+                    W.haptic = { delay, duration, frequency, amplitude, source }
+                    W.haptics = (W.haptics or 0) + 1
+                end,
                 get_pose = function(i, p, q)
                     local pos = i == 0 and v(0, 1.65, 0) or ((i == 1) and W.left(W.t) or W.right(W.t))
                     p.x, p.y, p.z = pos.X, pos.Y, pos.Z
-                    q.x, q.y, q.z, q.w = 0, 0, 0, 1
+                    if i == 2 then
+                        q.x, q.y, q.z, q.w = W.right_q.x, W.right_q.y, W.right_q.z, W.right_q.w
+                    else
+                        q.x, q.y, q.z, q.w = 0, 0, 0, 1
+                    end
                 end,
             },
         },
-        sdk = { callbacks = { on_pre_engine_tick = reg("tick"), on_xinput_get_state = reg("xinput"), on_script_reset = reg("reset") } },
+        sdk = { callbacks = { on_pre_engine_tick = reg("tick"), on_xinput_get_state = reg("xinput"),
+            on_script_reset = reg("reset"), on_post_calculate_stereo_view_offset = reg("post_view") } },
         api = { get_local_pawn = function() return W.pawn end,
+                get_player_controller = function() return { SetMouseLocation = function(_, x, y) W.mouse = { x = x, y = y } end } end,
                 find_uobject = function(_, n) return objs[n] end,
                 get_engine = function() return { GameViewport = { World = {} } } end },
     }
@@ -159,6 +197,134 @@ local function queued_crank()
 end
 
 return {
+    test_boat_hands_drive_existing_axes_and_throttle_detents_haptically = function()
+        local W = world("None", false)
+        W.set_mode("boat")
+        run(W, 0.1) -- captures neutral hand positions on entering helm
+        W.left = function() return v(0.11, 1.2, -0.3) end
+        W.right = function() return v(0.2, 1.38, -0.3) end
+        run(W, 0.1)
+        local state = { Gamepad = { sThumbLX = 0, sThumbLY = 0 } }
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLX > 15000 and state.Gamepad.sThumbLX < 18000,
+            "left-hand travel steers through IA_BoatMove X")
+        assert(state.Gamepad.sThumbLY == 32767, "right-hand lift selects forward detent")
+        assert(W.haptic and W.haptic[2] == 0.025 and W.haptic[3] == 150 and W.haptic[4] == 0.45,
+            "right controller gets a short haptic click on throttle transition")
+        assert(has(W, "boat throttle detent: forward"))
+        W.right = function() return v(0.2, 1.2, -0.3) end
+        run(W, 0.1)
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLY == 0, "returning the hand to its calibrated height selects neutral")
+        W.right = function() return v(0.2, 1.0, -0.3) end
+        run(W, 0.1)
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLY == -32767, "lowering the right hand selects full reverse")
+        assert(W.haptics == 3, "forward, neutral, and reverse each give one click")
+        config("return { gestures = { enabled = true, boat_steer_range_m = 0.11 } }")
+        run(W, 1.2)
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLX == 32767, "boat steering range reloads live")
+        no_failures(W)
+    end,
+
+    test_boat_gestures_only_override_axes_in_first_person = function()
+        local W = world("None", false)
+        W.set_mode("boat", false)
+        run(W, 0.1)
+        local state = { Gamepad = { sThumbLX = 12345, sThumbLY = -23456 } }
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLX == 12345 and state.Gamepad.sThumbLY == -23456,
+            "third-person native steering and throttle pass through unchanged")
+        assert(has(W, "boat third"), table.concat(W.logs, " | "))
+
+        W.pawn.bFirstPersonCameraEnabled = true
+        run(W, 0.1) -- entering first-person captures a fresh hand neutral pose
+        W.left = function() return v(0.11, 1.2, -0.3) end
+        run(W, 0.1)
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLX > 15000 and state.Gamepad.sThumbLX < 18000,
+            "first-person left-hand steering takes over the existing X axis")
+
+        W.pawn.bFirstPersonCameraEnabled = false
+        run(W, 0.1)
+        state.Gamepad.sThumbLX, state.Gamepad.sThumbLY = 12345, -23456
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLX == 12345 and state.Gamepad.sThumbLY == -23456,
+            "returning to third-person immediately restores native stick input")
+        assert(has(W, "boat gestures paused; native axes restored"))
+        no_failures(W)
+    end,
+
+    test_boat_harness_checks_both_rudder_directions_and_center_deadzone = function()
+        local W = world("None", false)
+        W.set_mode("boat")
+        run(W, 0.1) -- calibrate the neutral hand positions
+        local state = { Gamepad = { sThumbLX = 0, sThumbLY = 0 } }
+        W.left = function() return v(0.22, 1.2, -0.3) end
+        run(W, 0.1); W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLX == 32767, "22 cm right hand travel reaches full right rudder")
+        W.left = function() return v(-0.22, 1.2, -0.3) end
+        run(W, 0.1); W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLX == -32767, "22 cm left hand travel reaches full left rudder")
+        W.left = function() return v(0.01, 1.2, -0.3) end
+        run(W, 0.1); W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLX == 0, "small hand drift stays in the steering center deadzone")
+        no_failures(W)
+    end,
+
+    test_boat_harness_copies_cosmetic_wheel_after_game_tick = function()
+        local W = world("None", false)
+        W.set_mode("boat")
+        run(W, 0.1)
+        assert(has(W, "boat mesh anchors: wheel="), "fixture exposes the same wheel and throttle anchors as the game")
+        W.cosmetic_rotation, W.cosmetic_updates = nil, 0
+        -- The mesh has a local offset; game Blueprint copies its parent actor rotation.
+        W.wheel.rotation = { Pitch = 12, Yaw = 65, Roll = -11 }
+        W.wheel_child.actor_rotation = { Pitch = 2, Yaw = 65, Roll = -1 }
+        W.callbacks.post_view(nil, 1)
+        assert(W.cosmetic_rotation == nil, "skip the second eye callback")
+        W.callbacks.post_view(nil, 0)
+        assert(W.cosmetic_rotation and W.cosmetic_rotation.Yaw == 65
+            and W.cosmetic_rotation.Pitch == 2 and W.cosmetic_rotation.Roll == -1,
+            "cosmetic overlay copies the steering-wheel actor rotation, excluding mesh offset")
+        W.wheel.rotation = { Pitch = 7, Yaw = -65, Roll = 14 }
+        W.wheel_child.actor_rotation = { Pitch = -3, Yaw = -65, Roll = 4 }
+        W.callbacks.post_view(nil, 0)
+        assert(W.cosmetic_rotation.Yaw == -65 and W.cosmetic_rotation.Pitch == -3
+            and W.cosmetic_rotation.Roll == 4, "cosmetic follows the base wheel in the opposite direction too")
+        local updates = W.cosmetic_updates
+        W.set_mode("walking"); run(W, 0.1)
+        W.wheel.rotation = { Pitch = 0, Yaw = 0, Roll = 0 }
+        W.callbacks.post_view(nil, 0)
+        assert(W.cosmetic_updates == updates, "boat-only cosmetic sync stops after leaving the helm")
+        no_failures(W)
+    end,
+
+    test_other_boat_types_keep_their_native_axes = function()
+        local W = world("None", false)
+        W.set_mode("paddle")
+        run(W, 0.1)
+        local state = { Gamepad = { sThumbLX = 2345, sThumbLY = -6789 } }
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLX == 2345 and state.Gamepad.sThumbLY == -6789,
+            "wheel/throttle bridge is scoped to BP_SmallBoat_V2")
+        no_failures(W)
+    end,
+
+    test_crafting_hand_moves_cursor_through_native_hover_and_click_path = function()
+        local W = world("None", false)
+        W.set_mode("crafting")
+        W.left = function() return v(0.1, 1.65, 0) end
+        run(W, 0.1)
+        assert(W.mouse and W.mouse.x == 750 and W.mouse.y == 400,
+            "left-hand position moves the screen cursor; CraftController retains hover/click: " .. table.concat(W.logs, " | "))
+        config("return { gestures = { enabled = true, craft_cursor_span_m = 0.2 } }")
+        run(W, 1.2)
+        assert(W.mouse.x == 999, "craft cursor span reloads live and clamps at the viewport edge")
+        no_failures(W)
+    end,
+
     test_loads_without_require = function()
         local W = world("HookSimple", false)
         run(W, 1)
@@ -189,6 +355,7 @@ return {
 
     test_sickle_swing_attacks_once = function()
         local W = world("KnifeSocket", false)
+        W.tool_full_name = "StaticMeshComponent /Test/BP_Sickle_Equipment_C_1.StaticMesh"
         run(W, 0.6)
         local x = 0
         W.right = function() x = x + 3.0 * DT; return v(x, 1.2, -0.3) end
@@ -290,6 +457,67 @@ return {
         local state = { Gamepad = { bRightTrigger = 200 } }
         W.callbacks.xinput(nil, 0, state)
         assert(state.Gamepad.bRightTrigger == 200, "player's own trigger untouched")
+    end,
+
+    test_thumb_down_in_front_holds_melee_guard = function()
+        local W = world("KnifeSocket", false)
+        W.tool_full_name = "StaticMeshComponent /Test/BP_Sickle_Equipment_C_1.StaticMesh"
+        run(W, 0.6)
+        -- Rotate controller forward (-Z) down toward world -Y; keep the hand low and in front.
+        W.right_q = { x = -math.sqrt(0.5), y = 0, z = 0, w = math.sqrt(0.5) }
+        local held = 0
+        for _ = 1, 24 do
+            W.t = W.t + DT
+            W.callbacks.tick(nil, DT)
+            local state = { Gamepad = { bRightTrigger = 41, bLeftTrigger = 0 } }
+            W.callbacks.xinput(nil, 0, state)
+            if state.Gamepad.bLeftTrigger == 255 then held = held + 1 end
+            assert(state.Gamepad.bRightTrigger == 41, "guard must not press PrimaryUse/attack")
+        end
+        assert(held >= 5, "thumb-down guard should hold SecondaryUse after its 100 ms dwell; frames=" .. held)
+        assert(has(W, "guard held"), "guard transition should be logged")
+        assert(W.mods.VR_AimMethod == "1", "guard switches aim away from the right controller to prevent body yaw twisting")
+        no_failures(W)
+    end,
+
+    test_guard_releases_when_hand_leaves_the_front_guard_zone = function()
+        local W = world("KnifeSocket", false)
+        W.tool_full_name = "StaticMeshComponent /Test/BP_Sickle_Equipment_C_1.StaticMesh"
+        run(W, 0.6)
+        W.right_q = { x = -math.sqrt(0.5), y = 0, z = 0, w = math.sqrt(0.5) }
+        run(W, 0.2)
+        assert(has(W, "guard held"), "fixture should enter guard before testing release")
+        W.right = function() return v(0.2, 1.2, 0.2) end -- behind the HMD/body plane
+        run(W, 0.3)
+        assert(has(W, "guard released"), "moving behind the body should release guard")
+        assert(W.mods.VR_AimMethod == "2", "walking right-hand aim is restored after guard release")
+        no_failures(W)
+    end,
+
+    test_guard_can_be_disabled_live = function()
+        local W = world("KnifeSocket", false)
+        W.tool_full_name = "StaticMeshComponent /Test/BP_Sickle_Equipment_C_1.StaticMesh"
+        W.right_q = { x = -math.sqrt(0.5), y = 0, z = 0, w = math.sqrt(0.5) }
+        config("return { gestures = { enabled = true, guard_enabled = false } }")
+        run(W, 0.5)
+        assert(not has(W, "guard held"), "disabled guard must not claim the trigger")
+        local state = { Gamepad = { bRightTrigger = 173, bLeftTrigger = 91 } }
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.bRightTrigger == 173, "disabled guard leaves the physical trigger untouched")
+        assert(state.Gamepad.bLeftTrigger == 91, "disabled guard leaves SecondaryUse untouched")
+        no_failures(W)
+    end,
+
+    test_thumb_down_does_not_guard_with_knife = function()
+        local W = world("KnifeSocket", false)
+        run(W, 0.6) -- default fake full name is a knife, not BP_Sickle_Equipment
+        W.right_q = { x = -math.sqrt(0.5), y = 0, z = 0, w = math.sqrt(0.5) }
+        run(W, 0.3)
+        assert(not has(W, "guard held"), "block ability is only present on the sickle")
+        local state = { Gamepad = { bRightTrigger = 0, bLeftTrigger = 77 } }
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.bLeftTrigger == 77, "knife does not claim SecondaryUse as block")
+        no_failures(W)
     end,
 
     test_hook_return_cancels_all_queued_presses = function()

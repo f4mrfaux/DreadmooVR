@@ -43,6 +43,12 @@ Held tools are in [2026-11-17-held-items.md](2026-11-17-held-items.md). Earlier 
   - Damage goes through `BPFL_GasFunctions.DrdApplyDamage(... GE_HarpoonDamage ...)`.
 - **`GA_Knife`:** the same pattern. A radius-75 sphere along control rotation, damage 10,
   montages `dm_demo_protagonist_Axe_SwingLeft_Montage` / `_SwingRight_Montage`.
+- **`GA_Sickle_Block`:** waits for the ability input to be released, then clears
+  `Anim.State.Block` on the linked upper-body weapon animation graph. This is a held action,
+  unlike the one-shot primary-use attack. The character mapping sends `IA_SecondaryUse` on the
+  left trigger; associating that input with this ability is strongly suggested by its hold/release
+  behavior, but should be confirmed in game. The thumb-down guard now holds the left trigger and
+  preserves the right-trigger attack input.
 - **What follows:** hits come from the body and control rotation, not from the blade. A VR
   swing gesture only needs to press primary use at the swing; with aim on the right hand it hits
   where the hand points. The blade's real path does not matter to the game.
@@ -70,3 +76,26 @@ Held tools are in [2026-11-17-held-items.md](2026-11-17-held-items.md). Earlier 
 
 `GA_GrapplingHookGun` and `GA_GrapplingHookGunDrag` are in `Deprecated` and unused. There is no
 axe item: the "axe" montages belong to the knife.
+
+## 5. Craft bench and small-boat inputs
+
+- `BP_CraftController.TraceForPile` deprojects the current mouse position, traces forward 200 cm
+  with a sphere radius of 1, and updates `HoveredPile`, hover state, and HUD hints. Its
+  `IA_Crafting_Click` handler calls `HoveredPile.ClickPile()`, which runs `TryMoveItem` after
+  readiness and selection-limit checks. The bridge moves the cursor from the left controller and
+  leaves the game's targeting and click path intact.
+- The `IMC_CharacterCrafting` dump pairs `IA_Crafting_Click` with left mouse, face top, and face
+  bottom; `IA_Crafting_Recipes` with face top; and `IA_Crafting_Start` with face top and face left.
+  Prefer face bottom to select a pile, face left to start/cancel, and face top to open recipes.
+  The source mapping overlaps top across actions, so keep that in mind when diagnosing a bench
+  input conflict.
+- Small-boat meshes are `Small_Boat_Steerwheel` and `Throttle_lever` in
+  `Dreadmoor/Content/Dreadmoor/Art/StaticMesh/Characters/Small_Boat/`. In `BP_SmallBoat_V2`,
+  `IA_BoatMove.X` chooses the wheel's ±65 degree target by sign; `IA_BoatMove.Y` selects the
+  throttle's +25, 0, or -22 degree target. The bridge translates hand travel into these existing
+  axes and haptics the right controller when the discrete throttle state changes. It only claims
+  input for `BP_SmallBoat_V2_C`; other boats retain their native axes.
+- Live tuning keys are in `dreadmoorvr_arms_tuning.lua` under `gestures`: `craft_cursor_span_m`,
+  `boat_steer_range_m`, `boat_throttle_enter_m`, `boat_throttle_release_m`, and
+  `boat_throttle_turnaround_m`. The bridge refreshes these in crafting and boat modes as well as on
+  foot and while fishing.
