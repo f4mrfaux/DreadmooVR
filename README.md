@@ -1,30 +1,62 @@
-# Dreadmoor VR
+<div align="center">
 
-A VR mod for Dreadmoor (Unreal Engine 5.6.1) on the Steam Frame. Real arms and hands, and
-gesture fishing, crafting, hook gun, melee guard, and small-boat controls. It has two halves: a content pak cooked from
-`unreal/Dreadmoor` with UE 5.6, and a UEVR Lua bridge in `src/scripts`. Made with the
-developer's blessing, not for sale.
+<img src="docs/assets/dreadmoovr-kraken-storm.png" alt="DreadmoorVR — a fishing boat in a kraken storm" width="100%">
 
-## Where things are deployed
+# DreadmoorVR
 
-`tools/deploy.ps1` writes only to these two places. Delete both to remove the mod completely.
+### A deep-sea survival game, rebuilt for room-scale VR.
 
-- Pak: `D:\SteamLibrary\steamapps\common\DREADMOOR\Dreadmoor\Content\Paks\~mods\DreadmoorVR_P.*`
-- UEVR profile: `%APPDATA%\UnrealVRMod\Dreadmoor-Win64-Shipping\`
+**Developer & ethical hacker · VR systems · Authorized reverse engineering · Input engineering**
 
-## Release status
+[Project status](docs/testing/v1-readiness.md) · [Install notes](docs/release/INSTALL.md) · [Changelog](CHANGELOG.md) · [Research notebook](docs/research)
 
-This repository is still a pre-release candidate. See [v1 readiness](docs/testing/v1-readiness.md)
-for headset gates and supported-version status. Release and rollback instructions are in
-[docs/release/INSTALL.md](docs/release/INSTALL.md); user-visible changes are tracked in
-[CHANGELOG.md](CHANGELOG.md). After committing a validated tree, create the beta archive with
-`tools/package-release.ps1 -Version 1.0.0-beta.1`. `-AllowDirtyCandidate` is for local, clearly
-marked builds only. Do not label an archive `1.0.0` until the headset gates pass.
+</div>
 
-## Documents
+I’m building a full-body VR mod for **Dreadmoor** on **UE 5.6** and **Steam Frame**. It connects tracked hands and headset motion to the game’s existing systems: grappling, melee guard, fishing, crafting, and boat controls. The work spans native input, Lua runtime hooks, Unreal assets, and reverse engineering the shipped game code.
 
-- Design: [docs/superpowers/specs/2026-11-15-dreadmoor-vr-gestures-design.md](docs/superpowers/specs/2026-11-15-dreadmoor-vr-gestures-design.md)
-- Plan 1: [docs/superpowers/plans/2026-11-15-dreadmoor-vr-foundations.md](docs/superpowers/plans/2026-11-15-dreadmoor-vr-foundations.md)
-- Research: [docs/research](docs/research), RE scripts: [tools/re](tools/re)
-- Editor MCP setup: [docs/setup/unreal-editor-mcp.md](docs/setup/unreal-editor-mcp.md)
-- Headset checks: [M3 gestures](docs/testing/m3-gesture-checklist.md), [v1 readiness](docs/testing/v1-readiness.md)
+> **Current state:** private beta candidate. Local smoke checks are in place; fishing, boat handling, and the target Steam Frame setup still need final headset acceptance. See [v1 readiness](docs/testing/v1-readiness.md) for evidence and open gates.
+
+## What’s in the build
+
+| VR feature | What it does |
+|---|---|
+| **Tracked arms and held tools** | Fits the in-game arms to tracked poses and aligns held equipment to the hand. |
+| **Gesture combat** | Adds a physical melee guard and hand-directed grappling interactions. |
+| **Fishing and crafting** | Maps tracked-hand motion to fish-fight, reel, QTE, and crafting cursor actions. |
+| **First-person boat controls** | Steers from the left hand and uses right-hand throttle detents with haptic feedback. |
+| **Input bridge** | Connects SteamVR controller actions to the game while preserving native third-person boat input. |
+
+## Engineering behind it
+
+This project is a practical systems integration across several layers:
+
+- **UEVR Lua bridge** — pose-driven gestures, runtime checks, and safe recovery when tracking drops.
+- **Native C++ / OpenVR plugin** — controller input support and action bindings for Steam Frame.
+- **Unreal Engine 5.6** — custom VR arm assets, cooked into a small allowlisted pak.
+- **Local reverse-engineering toolkit** — Python parsers for Unreal IoStore containers, Blueprint bytecode, and input mappings; evidence is recorded in [`docs/research`](docs/research).
+- **Regression harnesses** — Lua and native tests cover gesture logic, input ownership, and failure recovery.
+
+### A security-minded reverse-engineering workflow
+
+I use reverse engineering as a scoped engineering practice: establish authorization and scope, inspect local game assets and runtime behavior, validate hypotheses against the actual project, then document what is known and what still needs a headset check. The parsers and notes turn opaque game behavior into reviewable evidence instead of relying on guesses. This work focuses on VR mod compatibility and game interaction, with clear separation between verified behavior and open questions.
+
+**Toolchain:** C++ · Lua · Python · Unreal Engine 5.6 · UEVR · OpenVR · SteamVR · EngineWire Unreal MCP · Git
+
+## Build and release discipline
+
+The mod has a repeatable cook/deploy path, a packaged beta workflow, rollback instructions, and an asset allowlist. The project keeps implementation status separate from headset acceptance so a green desktop harness is never presented as proof of an in-headset result.
+
+- [v1 readiness and remaining validation](docs/testing/v1-readiness.md)
+- [Gesture smoke-test checklist](docs/testing/m3-gesture-checklist.md)
+- [Install, update, and rollback](docs/release/INSTALL.md)
+- [User-visible changes](CHANGELOG.md)
+
+## Developer note
+
+I built this with UE 5.6, UEVR’s Lua bridge, a small native OpenVR input plugin, SteamVR action bindings, EngineWire’s Unreal MCP, and local parsers for cooked IoStore containers and Blueprint bytecode. AI helped trace and cross-check shipped-game calls and Unreal APIs; I verified the findings against the project and runtime, then did the headset tuning. I can read C++; I just can’t read a whole game’s worth of Blueprint bytecode by hand before breakfast.
+
+<div align="center">
+
+**DreadmoorVR · built by [@f4mrfaux](https://github.com/f4mrfaux)**
+
+</div>
