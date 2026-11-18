@@ -19,3 +19,13 @@ pending has not passed headset acceptance.
 - Local Lua and native test suites pass. Headset acceptance for fishing, boat steering/throttle,
   arms/shoulders, crafting, and the target Steam Frame input setup is still pending. The reported
   fish landing animation restart is tracked as a base-game issue; this mod does not claim to fix it.
+
+### Developer's note
+
+I built this with UE 5.6, UEVR's Lua bridge and a small native OpenVR input plugin, SteamVR action
+bindings, EngineWire's Unreal MCP for our mod assets, and the local `tools/re` parsers for the
+game's cooked IoStore containers and Blueprint bytecode. AI assisted with tracing and cross-checking
+the game's calls, input paths, and Unreal APIs; I verified the findings against the project and
+runtime and did the headset tuning. Honestly, I couldn't have traced this many shipped-game calls
+by hand in 72 hours. I can read C++; I just can't read a whole game's worth of Blueprint bytecode
+before breakfast.
