@@ -654,7 +654,13 @@ end
 local function fishing_qte(pawn)
     local ok, qte = pcall(function() return pawn.CurrentQTE end)
     if not ok or qte == nil then return "Unknown" end
-    return value_name(qte)
+    -- UEVR exposes FGameplayTag as a temporary StructObject. tostring() on that wrapper gives
+    -- its allocation address, which changes each frame and makes every QTE look active forever.
+    -- FGameplayTag.TagName is a reflected FName (GameplayTagContainer.h); stringify that value.
+    if type(qte) == "string" then return qte end -- supports test/fallback sources
+    local ok_name, name = pcall(function() return qte.TagName:to_string() end)
+    if ok_name and type(name) == "string" and name ~= "" then return name end
+    return "Unknown" -- fail closed: never reel while the tag cannot be read
 end
 
 local function lean_axis(delta)

@@ -99,6 +99,13 @@ check passes.
 
 ## Fishing
 
+**Capture follow-up (2026-11-18):** the UEVR log from the latest OBS run rendered `CurrentQTE` as a
+temporary `FGameplayTag` wrapper address, rather than its tag name. The bridge now reads the
+reflected `TagName` FName, so `None` no longer looks like a continuously changing QTE and blocks
+the reel path. The Lua smoke fixture now supplies the same struct shape. Restart/reload the Lua
+bridge before validating; check that `fishing crank: reel held` appears only while cranking and
+that normal fishing resumes after a QTE.
+
 - [ ] During the fish fight, lean the right hand left/right from a neutral position; confirm the
   fight indicator reacts in the direction expected by the game's UI. Adjust
   `fishing_fight_deadzone_m` if neutral tracking noise moves it; `fishing_fight_range_m` controls
@@ -126,6 +133,17 @@ cleared.
 Note the title of the check, whether it worked, and any UEVR log lines containing `guard`,
 `fishing`, `crank`, or `swing`. For FishLand, include the visible prompt/button and whether it
 timed out or accepted input.
+
+## Finger tracking and first-person helm view
+
+- **Finger tracking:** move each Steam Frame controller finger independently. Confirm the matching
+  avatar digit bends, then opens when released. The Lua bridge logs the actual arm AnimInstance
+  class and whether `FingerCurlLThumb` can be written and read back. A `property probe FAILED` line
+  means the Unreal AnimBP property path/name is the remaining blocker; include that line and the
+  next `finger animation update FAILED` line if present.
+- **First-person boat camera:** the helm now uses a separate `boat_camera_forward` offset of -30 cm;
+  walking retains -12 cm. Check that the torso no longer fills the helm view and that walking view
+  returns after leaving the boat. This offset is an initial headset trial, not an asserted final fit.
 # Crafting and boat interactions
 
 - **Craft bench cursor:** in BP_CraftController_C, move the left controller around a 40 cm

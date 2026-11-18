@@ -20,6 +20,10 @@ pending has not passed headset acceptance.
 - Added SteamVR five-finger curl driven articulation for both hands, with smoothing and three
   additive bone joints per digit. Tracking loss and stale samples ease back to an open hand.
   Finger direction and fit still need headset validation.
+- Fixed fishing QTE detection to read the reflected FGameplayTag name instead of the wrapper
+  address; the address had made a non-QTE state appear continuously active and suppressed reeling.
+- Added a separate first-person helm camera offset and runtime finger AnimBP property readback
+  diagnostics to guide the next headset check.
 - Removed the automatic M1 debug-cube spawn from the production bridge.
 - Local Lua and native test suites pass. Headset acceptance for fishing, boat steering/throttle,
   arms/shoulders, crafting, and the target Steam Frame input setup is still pending. The reported

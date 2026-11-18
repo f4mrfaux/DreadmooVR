@@ -45,6 +45,7 @@ function tuning.merge(u)
         shoulder_widen = num(u.shoulder_widen, -10, 30, d.shoulder_widen),
         grip_back = num(u.grip_back, -20, 20, d.grip_back),
         camera_forward = num(u.camera_forward, -100, 100, nil),   -- UEVR VR_CameraForwardOffset (cm)
+        boat_camera_forward = num(u.boat_camera_forward, -100, 100, nil), -- helm view offset (cm)
         camera_up = num(u.camera_up, -100, 100, nil),             -- UEVR VR_CameraUpOffset (cm)
         aim_method = int(u.aim_method, 0, 5),                     -- UEVR VR_AimMethod (VR.hpp:45)
         movement_orientation = int(u.movement_orientation, 0, 5), -- UEVR VR_MovementOrientation

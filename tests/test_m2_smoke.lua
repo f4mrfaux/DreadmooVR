@@ -119,7 +119,7 @@ local function make_world()
     W.spawns = 0
     local function new_arms()
         W.spawns = W.spawns + 1
-        W.finger_anim = {}
+        W.finger_anim = { get_class = function() return { get_fname = function() return fname("ABP_VRArms_C") end } end }
         local body = mesh("Body" .. W.spawns)
         body.GetAnimInstance = function() return W.finger_anim end
         body.K2_AttachToComponent = function(self, p)
@@ -240,7 +240,7 @@ local function failures(logs)
 end
 
 local TUNING_ON = [[
-return { grip_back = 8, shoulder_widen = 5, camera_forward = -30, camera_up = 0,
+return { grip_back = 8, shoulder_widen = 5, camera_forward = -12, boat_camera_forward = -30, camera_up = 0,
          aim_method = 2, movement_orientation = 1, items_follow_hands = true, level_torso = true,
          item_rot = { y = 15 } }
 ]]
@@ -281,7 +281,7 @@ return {
         local W = boot()
         assert(W.mods.VR_AimMethod == "2", "aim " .. tostring(W.mods.VR_AimMethod))
         assert(W.mods.VR_MovementOrientation == "1", "movement " .. tostring(W.mods.VR_MovementOrientation))
-        assert(tonumber(W.mods.VR_CameraForwardOffset) == -30 and tonumber(W.mods.VR_CameraUpOffset) == 0)
+        assert(tonumber(W.mods.VR_CameraForwardOffset) == -12 and tonumber(W.mods.VR_CameraUpOffset) == 0)
         assert(#W.offsets == 2 and W.offsets[1].z == 8, "grip_back on both controllers")
     end,
 
@@ -319,7 +319,16 @@ return {
         assert(W.finger_anim.FingerCurlRIndex > 0.5, "right hand maps independently")
         run(W, 0.8) -- No further sensor events: stale curls must fail open if the plugin disappears.
         assert(W.finger_anim.FingerCurlRIndex < 0.01, "stale tracking sample returns the hand to open")
+        assert(has(W.logs, "finger AnimInstance=ABP_VRArms_C property probe PASS"), "AnimBP finger property is writable and readable")
         assert(failures(W.logs) == "", failures(W.logs))
+    end,
+
+    test_boat_camera_moves_forward_and_restores_walking_view = function()
+        local W = boot()
+        W.set_mode("boat"); run(W, 1.2)
+        assert(tonumber(W.mods.VR_CameraForwardOffset) == -30, "boat view advances past the torso")
+        W.set_mode("walking"); run(W, 1.2)
+        assert(tonumber(W.mods.VR_CameraForwardOffset) == -12, "walking camera offset is restored")
     end,
 
     test_turning_items_off_live_returns_them = function()

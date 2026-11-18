@@ -73,7 +73,7 @@ local finger_smoothed = {
     L = { thumb = 0, index = 0, middle = 0, ring = 0, pinky = 0 },
     R = { thumb = 0, index = 0, middle = 0, ring = 0, pinky = 0 },
 }
-local finger_anim_error_logged = false
+local finger_anim_error_logged, finger_anim_probe_logged = false, false
 local boat_hand_anchor_active, boat_hand_anchor_last_log = false, -math.huge
 local boat_hand_anchor_offsets = {}
 local function apply_tuning(now, mode)
@@ -109,8 +109,9 @@ local function apply_tuning(now, mode)
     -- through the plugin API's set_mod_value (uevr/API.h; Lua binding ScriptContext.cpp:481).
     for key, mod in pairs({ camera_forward = "VR_CameraForwardOffset", camera_up = "VR_CameraUpOffset",
                              aim_method = "VR_AimMethod", movement_orientation = "VR_MovementOrientation" }) do
-        local v = merged[key]
-        if mode ~= "boat" and next(boatcontrols.saved) == nil and v ~= nil and v ~= fit[key] then
+        local v = key == "camera_forward" and mode == "boat" and merged.boat_camera_forward or merged[key]
+        local allowed = key == "camera_forward" or (mode ~= "boat" and next(boatcontrols.saved) == nil)
+        if allowed and v ~= nil and v ~= fit[key] then
             local ok3, err = pcall(function() uevr.params.vr.set_mod_value(mod, key:find("^camera_") and string.format("%.6f", v) or string.format("%d", v)) end)
             if ok3 then fit[key] = v; log(mod .. "=" .. v) else log(mod .. " FAILED: " .. tostring(err)) end
         end
@@ -602,6 +603,25 @@ local function update_finger_animation(delta)
         if type(body.GetAnimInstance) ~= "function" then return end
         local anim = body:GetAnimInstance()
         if anim == nil then return end
+        if not finger_anim_probe_logged then
+            finger_anim_probe_logged = true
+            local cls_name_ok, cls_name = pcall(function()
+                local cls = anim:get_class()
+                return cls and name_str(cls:get_fname()) or "unknown"
+            end)
+            if not cls_name_ok then cls_name = "unavailable: " .. tostring(cls_name) end
+            local probe_ok, probe_err = pcall(function()
+                local key = "FingerCurlLThumb"
+                local before = anim[key]
+                anim[key] = 0.37
+                local after = anim[key]
+                if type(after) ~= "number" or math.abs(after - 0.37) > 0.001 then
+                    error(key .. " readback=" .. tostring(after) .. " (before=" .. tostring(before) .. ")")
+                end
+            end)
+            log("finger AnimInstance=" .. tostring(cls_name) .. " property probe "
+                .. (probe_ok and "PASS" or "FAILED: " .. tostring(probe_err)))
+        end
         local blend = 1.0 - math.exp(-math.max(0, delta or 0) / 0.045)
         for _, side in ipairs({ "L", "R" }) do
             local sample = finger_curls[side]

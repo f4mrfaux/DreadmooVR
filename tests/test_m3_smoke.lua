@@ -12,6 +12,7 @@ end
 
 local function v(x, y, z) return { X = x, Y = y, Z = z } end
 local function fname(s) return { to_string = function() return s end } end
+local function gameplay_tag(s) return { TagName = fname(s) } end
 
 local function world(tool_socket, on_body)
     local W = { logs = {}, callbacks = {}, hook_visible = true, t = 0, controllers_active = true,
@@ -59,7 +60,7 @@ local function world(tool_socket, on_body)
             chain = { "BP_FishingController_C", "DrdFishingControllerBase", "Pawn" }
             W.pawn.StrugglingFish = { get_full_name = function() return "DrdStrugglingFish /Test/Fish" end,
                 get_address = function() return 123 end }
-            W.pawn.CurrentQTE = "None"
+            W.pawn.CurrentQTE = gameplay_tag("None")
         elseif mode == "boat" then
             chain = { "BP_SmallBoat_V2_C", "DrdShipBase", "Pawn" }
             W.pawn.bFirstPersonCameraEnabled = first_person ~= false
@@ -453,7 +454,7 @@ return {
         local W = world("None", false)
         W.set_mode("fishing")
         run(W, 0.6)
-        W.pawn.CurrentQTE = "QTE.Type.DirectionalDrag"
+        W.pawn.CurrentQTE = gameplay_tag("QTE.Type.DirectionalDrag")
         W.t = W.t + DT
         W.callbacks.tick(nil, DT) -- calibrate QTE neutral
         local start_time = W.t
