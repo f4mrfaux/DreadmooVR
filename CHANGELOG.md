@@ -27,6 +27,9 @@ pending has not passed headset acceptance.
 - Reworked first-person throttle around the intended hand poses: hip-fire neutral, hand low at
   the hip for reverse, and a straight-elbow diagonal reach for forward. Added projected-travel
   telemetry and a pose-sequence smoke test.
+- Added a fishing cast gesture: hold the right hand at the ear to charge `IA_Fishing_Cast`, then
+  extend forward to release it; the gesture does not write camera-look axes.
+- Added a bite-QTE-only upward twitch that sends one short `IA_Fishing_Cast` press to set the hook.
 - Removed the automatic M1 debug-cube spawn from the production bridge.
 - Local Lua and native test suites pass. Headset acceptance for fishing, boat steering/throttle,
   arms/shoulders, crafting, and the target Steam Frame input setup is still pending. The reported

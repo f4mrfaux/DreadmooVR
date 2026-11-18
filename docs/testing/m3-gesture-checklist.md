@@ -108,6 +108,15 @@ the reel path. The Lua smoke fixture now supplies the same struct shape. Restart
 bridge before validating; check that `fishing crank: reel held` appears only while cranking and
 that normal fishing resumes after a QTE.
 
+- **Cast:** before a fish is hooked, hold the right hand beside the right ear briefly to charge,
+  then extend the arm forward to release `IA_Fishing_Cast`. The gesture only overrides the cast
+  trigger; it leaves both camera-look axes untouched. Check that the landing power widget charges,
+  the float launches on extension, and the view does not flip. The left-hand crank remains the
+  separate reel gesture during a fish fight.
+- **Hook set:** when `QTE.Type.FishingBite` appears, give the right hand one quick upward twitch.
+  The gesture sends a single short `IA_Fishing_Cast` press for that bite QTE; ordinary upward
+  movement outside the bite window does nothing.
+
 - [ ] During the fish fight, lean the right hand left/right from a neutral position; confirm the
   fight indicator reacts in the direction expected by the game's UI. Adjust
   `fishing_fight_deadzone_m` if neutral tracking noise moves it; `fishing_fight_range_m` controls

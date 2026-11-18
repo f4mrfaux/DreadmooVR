@@ -226,6 +226,62 @@ local function queued_crank()
 end
 
 return {
+    test_fishing_bite_qte_sets_hook_on_quick_upward_twitch = function()
+        local W = world("None", false)
+        W.set_mode("fishing")
+        W.pawn.CurrentQTE = gameplay_tag("QTE.Type.FishingBite")
+        run(W, 0.08) -- capture the hand's bite-QTE baseline
+        local start_time = W.t
+        W.right = function(t)
+            local a = math.min(1, math.max(0, (t - start_time) / 0.16))
+            return v(0.2, 1.2 + 0.20 * a, -0.3)
+        end
+        local saw_press = false
+        for _ = 1, 10 do
+            W.t = W.t + DT
+            W.callbacks.tick(nil, DT)
+            local state = { Gamepad = { bRightTrigger = 0, sThumbRX = 1234, sThumbRY = -2345 } }
+            W.callbacks.xinput(nil, 0, state)
+            if state.Gamepad.bRightTrigger == 255 then saw_press = true end
+            assert(state.Gamepad.sThumbRX == 1234 and state.Gamepad.sThumbRY == -2345,
+                "hook-set gesture does not alter camera-look axes")
+        end
+        assert(saw_press, "upward twitch sends a short hook-set press")
+        run(W, 0.1)
+        local released = { Gamepad = { bRightTrigger = 0, sThumbRX = 1234, sThumbRY = -2345 } }
+        W.callbacks.xinput(nil, 0, released)
+        assert(released.Gamepad.bRightTrigger == 0, "hook-set press is released after its short pulse")
+        assert(has(W, "fishing hook%-set gesture: upward twitch"), table.concat(W.logs, " | "))
+        local hits = 0
+        for _, line in ipairs(W.logs) do if line:find("fishing hook%-set gesture: upward twitch") then hits = hits + 1 end end
+        assert(hits == 1, "one hook set per bite QTE")
+        no_failures(W)
+    end,
+
+    test_fishing_cast_right_ear_load_then_forward_extension_presses_and_releases_cast = function()
+        local W = world("None", false)
+        W.set_mode("fishing")
+        W.pawn.StrugglingFish = nil
+        W.right = function() return v(0.2, 1.65, 0.10) end -- right ear, slightly behind head
+        run(W, 0.2)
+        local loaded = { Gamepad = { bRightTrigger = 0, sThumbRX = 1234, sThumbRY = -2345 } }
+        W.callbacks.xinput(nil, 0, loaded)
+        assert(loaded.Gamepad.bRightTrigger == 255, "ear load holds IA_Fishing_Cast to charge power; got " .. tostring(loaded.Gamepad.bRightTrigger) .. "; logs=" .. table.concat(W.logs, " | "))
+        assert(loaded.Gamepad.sThumbRX == 1234 and loaded.Gamepad.sThumbRY == -2345,
+            "cast gesture does not write camera look axes")
+
+        W.right = function() return v(0.2, 1.65, -0.32) end -- extend forward to throw
+        run(W, 0.1)
+        local released = { Gamepad = { bRightTrigger = 0, sThumbRX = 1234, sThumbRY = -2345 } }
+        W.callbacks.xinput(nil, 0, released)
+        assert(released.Gamepad.bRightTrigger == 0, "forward extension releases IA_Fishing_Cast")
+        assert(released.Gamepad.sThumbRX == 1234 and released.Gamepad.sThumbRY == -2345,
+            "cast release still leaves camera axes untouched")
+        assert(has(W, "fishing cast gesture: charging from right%-ear load"), table.concat(W.logs, " | "))
+        assert(has(W, "fishing cast gesture: released at forward reach"), table.concat(W.logs, " | "))
+        no_failures(W)
+    end,
+
     test_boat_hands_drive_existing_axes_and_throttle_detents_haptically = function()
         local W = world("None", false)
         W.set_mode("boat")

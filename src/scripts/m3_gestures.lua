@@ -52,6 +52,9 @@ local DEFAULTS = {
     guard_enabled = true, guard_enter_z = -0.65, guard_exit_z = -0.50,
     guard_front_z = -0.05, guard_min_y = -0.65, guard_max_y = 0.10, guard_max_x = 0.45,
     fishing_fight_deadzone_m = 0.08, fishing_fight_range_m = 0.28,
+    fishing_cast_ear_side_m = 0.12, fishing_cast_release_forward_m = 0.22,
+    fishing_cast_load_confirm_s = 0.12,
+    fishing_hook_set_rise_m = 0.07,
     craft_cursor_span_m = 0.40, boat_steer_range_m = 0.22, boat_steer_deadzone_m = 0.02,
     boat_steer_curve = 1.25, boat_steer_smoothing_s = 0.08,
     boat_throttle_enter_m = 0.10, boat_throttle_release_m = 0.04, boat_throttle_turnaround_m = 0.06,
@@ -86,6 +89,10 @@ local function read_cfg()
         guard_max_x = num(g.guard_max_x, 0.1, 1.5, d.guard_max_x),
         fishing_fight_deadzone_m = num(g.fishing_fight_deadzone_m, 0.02, 0.3, d.fishing_fight_deadzone_m),
         fishing_fight_range_m = num(g.fishing_fight_range_m, 0.08, 0.8, d.fishing_fight_range_m),
+        fishing_cast_ear_side_m = num(g.fishing_cast_ear_side_m, 0.05, 0.5, d.fishing_cast_ear_side_m),
+        fishing_cast_release_forward_m = num(g.fishing_cast_release_forward_m, 0.08, 0.7, d.fishing_cast_release_forward_m),
+        fishing_cast_load_confirm_s = num(g.fishing_cast_load_confirm_s, 0.05, 0.5, d.fishing_cast_load_confirm_s),
+        fishing_hook_set_rise_m = num(g.fishing_hook_set_rise_m, 0.03, 0.25, d.fishing_hook_set_rise_m),
         craft_cursor_span_m = num(g.craft_cursor_span_m, 0.1, 1.5, d.craft_cursor_span_m),
         boat_steer_range_m = num(g.boat_steer_range_m, 0.05, 0.8, d.boat_steer_range_m),
         boat_steer_deadzone_m = num(g.boat_steer_deadzone_m, 0, 0.1, d.boat_steer_deadzone_m),
@@ -189,6 +196,10 @@ local tool, tool_comp, hook_out = nil, nil, false
 local pawn_id, tool_id, input_active, active_mode = nil, nil, false, nil
 local guarding, guard_since, guard_release_until = false, nil, -math.huge
 local fishing_reeling = false
+local fishing_cast_held, fishing_cast_armed, fishing_cast_load_since = false, true, nil
+local fishing_bite_qte_active, fishing_bite_start_y, fishing_bite_start_time = false, nil, nil
+local fishing_bite_fired = false
+local fishing_hook_set_until = 0
 local fishing_fish_id, fishing_neutral_x, fishing_neutral_y = nil, nil, nil
 local fishing_qte_tag, fishing_qte_neutral_x, fishing_qte_neutral_y = nil, nil, nil
 local fishing_axis_x, fishing_axis_y = 0, 0
@@ -348,6 +359,10 @@ end
 local function deactivate()
     input_active = false
     fishing_reeling = false
+    fishing_cast_held, fishing_cast_armed, fishing_cast_load_since = false, true, nil
+    fishing_bite_qte_active, fishing_bite_start_y, fishing_bite_start_time = false, nil, nil
+    fishing_bite_fired = false
+    fishing_hook_set_until = 0
     fishing_fish_id, fishing_neutral_x, fishing_neutral_y = nil, nil, nil
     fishing_qte_tag, fishing_qte_neutral_x, fishing_qte_neutral_y = nil, nil, nil
     fishing_axis_x, fishing_axis_y = 0, 0
@@ -677,12 +692,109 @@ end
 local function clear_fishing_gestures(reason)
     if fishing_reeling then log("fishing crank: released (" .. reason .. ")") end
     fishing_reeling = false
+    fishing_cast_held, fishing_cast_armed, fishing_cast_load_since = false, false, nil
     input_active = false
     fishing_fish_id, fishing_neutral_x, fishing_neutral_y = nil, nil, nil
     fishing_qte_tag, fishing_qte_neutral_x, fishing_qte_neutral_y = nil, nil, nil
     fishing_axis_x, fishing_axis_y = 0, 0
     fishing_last_pose_sample = nil
     crank:reset()
+end
+
+-- Cast is the game's charge/release action: load the right hand by the ear, hold IA_Fishing_Cast,
+-- then release it on a forward extension. The gesture intentionally never writes look axes.
+local function step_fishing_cast(pawn)
+    if fishing_qte(pawn) ~= "None" then
+        fishing_cast_held, fishing_cast_armed, fishing_cast_load_since = false, false, nil
+        return
+    end
+    local vr = uevr.params.vr
+    local ok_tracking, tracking = pcall(vr.is_using_controllers)
+    local hand, _, hand_error = validated_pose(vr.get_right_controller_index)
+    local head, head_q, head_error = validated_pose(vr.get_hmd_index)
+    if not ok_tracking or tracking ~= true or hand == nil or head == nil then
+        if fishing_cast_held then log("fishing cast gesture: released (tracking unavailable)") end
+        fishing_cast_held, fishing_cast_armed, fishing_cast_load_since = false, false, nil
+        if clock - fishing_pose_error_last_log >= 1 then
+            fishing_pose_error_last_log = clock
+            log("fishing cast fail-safe: tracking=" .. tostring(ok_tracking and tracking)
+                .. " R=" .. tostring(hand_error) .. " HMD=" .. tostring(head_error))
+        end
+        return
+    end
+    local d = { X = hand.X - head.X, Y = hand.Y - head.Y, Z = hand.Z - head.Z }
+    local right, up, forward_axis = rotate(head_q, { X = 1, Y = 0, Z = 0 }),
+        rotate(head_q, { X = 0, Y = 1, Z = 0 }), rotate(head_q, { X = 0, Y = 0, Z = -1 })
+    local function dot(a, b) return a.X * b.X + a.Y * b.Y + a.Z * b.Z end
+    local side = dot(d, right)
+    local height = dot(d, up)
+    local forward = dot(d, forward_axis)
+    local at_ear = side >= cfg.fishing_cast_ear_side_m and height >= -0.30 and height <= 0.25 and forward <= 0.08
+    local extended = side >= cfg.fishing_cast_ear_side_m * 0.5 and forward >= cfg.fishing_cast_release_forward_m
+    if fishing_cast_held then
+        if extended then
+            fishing_cast_held, fishing_cast_armed, fishing_cast_load_since = false, false, nil
+            log(string.format("fishing cast gesture: released at forward reach %.2fm", forward))
+        end
+    elseif not fishing_cast_armed then
+        if not at_ear then fishing_cast_armed = true end
+    elseif at_ear then
+        fishing_cast_load_since = fishing_cast_load_since or clock
+        if clock - fishing_cast_load_since >= cfg.fishing_cast_load_confirm_s then
+            fishing_cast_held, fishing_cast_armed = true, false
+            log("fishing cast gesture: charging from right-ear load")
+        end
+    else
+        fishing_cast_load_since = nil
+    end
+end
+
+-- The FishingBite widget listens to IA_Fishing_Cast and succeeds on a press. Detect a quick
+-- upward right-hand twitch during that QTE and send one short trigger pulse to set the hook.
+local function step_fishing_hook_set(pawn, qte)
+    if qte ~= "QTE.Type.FishingBite" then
+        fishing_bite_qte_active, fishing_bite_start_y, fishing_bite_start_time = false, nil, nil
+        fishing_bite_fired = false
+        return
+    end
+    local vr = uevr.params.vr
+    local ok_tracking, tracking = pcall(vr.is_using_controllers)
+    local hand, _, hand_error = validated_pose(vr.get_right_controller_index)
+    local head, head_q, head_error = validated_pose(vr.get_hmd_index)
+    if not ok_tracking or tracking ~= true or hand == nil or head == nil then
+        fishing_bite_qte_active, fishing_bite_start_y, fishing_bite_start_time = true, nil, nil
+        if clock - fishing_pose_error_last_log >= 1 then
+            fishing_pose_error_last_log = clock
+            log("fishing hook-set fail-safe: tracking=" .. tostring(ok_tracking and tracking)
+                .. " R=" .. tostring(hand_error) .. " HMD=" .. tostring(head_error))
+        end
+        return
+    end
+    local d = { X = hand.X - head.X, Y = hand.Y - head.Y, Z = hand.Z - head.Z }
+    local up = rotate(head_q, { X = 0, Y = 1, Z = 0 })
+    local height = d.X * up.X + d.Y * up.Y + d.Z * up.Z
+    if not fishing_bite_qte_active then
+        fishing_bite_qte_active, fishing_bite_start_y, fishing_bite_start_time = true, height, clock
+        fishing_bite_fired = false
+        log("fishing hook-set gesture: ready; quick right-hand twitch up")
+        return
+    end
+    if fishing_bite_fired then return end
+    if fishing_bite_start_y == nil then
+        fishing_bite_start_y, fishing_bite_start_time = height, clock
+        return
+    end
+    local elapsed = clock - fishing_bite_start_time
+    local rise = height - fishing_bite_start_y
+    if elapsed > 0 and elapsed <= 0.24 and rise >= cfg.fishing_hook_set_rise_m and rise / elapsed >= 0.45 then
+        fishing_bite_fired, fishing_bite_start_y, fishing_bite_start_time = true, nil, nil
+        fishing_hook_set_until = clock + 0.08
+        log(string.format("fishing hook-set gesture: upward twitch %.2fm in %.2fs", rise, elapsed))
+        return
+    end
+    if elapsed > 0.24 or rise < -0.04 then
+        fishing_bite_start_y, fishing_bite_start_time = height, clock
+    end
 end
 
 local function step_fishing(pawn)
@@ -699,6 +811,7 @@ local function step_fishing(pawn)
     if not cfg.enabled then
         if fishing_reeling then log("fishing crank: released (no fish or QTE active)") end
         fishing_reeling = false
+        fishing_cast_held, fishing_cast_armed, fishing_cast_load_since = false, true, nil
         input_active = false
         fishing_fish_id, fishing_neutral_x, fishing_neutral_y = nil, nil, nil
         fishing_qte_tag, fishing_qte_neutral_x, fishing_qte_neutral_y = nil, nil, nil
@@ -708,8 +821,17 @@ local function step_fishing(pawn)
         return
     end
 
+    local qte = fishing_qte(pawn)
+    step_fishing_hook_set(pawn, qte)
+    if qte == "QTE.Type.FishingBite" then
+        fishing_cast_held, fishing_cast_armed, fishing_cast_load_since = false, false, nil
+        fishing_reeling, input_active = false, false
+        fishing_axis_x, fishing_axis_y = 0, 0
+        return
+    end
     local fish = fishing_fish(pawn)
     if fish == nil then
+        step_fishing_cast(pawn)
         if fishing_reeling then log("fishing crank: released (no fish)") end
         fishing_reeling = false
         input_active = false
@@ -719,6 +841,11 @@ local function step_fishing(pawn)
         fishing_last_pose_sample = nil
         crank:reset()
         return
+    end
+
+    if fishing_cast_held then
+        fishing_cast_held, fishing_cast_armed, fishing_cast_load_since = false, false, nil
+        log("fishing cast gesture: released (fish fight started)")
     end
 
     local vr = uevr.params.vr
@@ -1090,6 +1217,14 @@ uevr.sdk.callbacks.on_xinput_get_state(function(retval, user_index, state)
         return
     end
     if fishing_reeling then
+        state.Gamepad.bRightTrigger = 255
+        return
+    end
+    if fishing_cast_held then
+        state.Gamepad.bRightTrigger = 255
+        return
+    end
+    if clock < fishing_hook_set_until then
         state.Gamepad.bRightTrigger = 255
         return
     end

@@ -33,6 +33,10 @@ return {
         guard_min_y = -0.65, guard_max_y = 0.10,          -- low, in front of the chest
         guard_max_x = 0.45,                                -- stay near body center
         fishing_fight_deadzone_m = 0.08, fishing_fight_range_m = 0.28,
+        fishing_cast_ear_side_m = 0.12,               -- hand must be to the right of the HMD to load a cast
+        fishing_cast_release_forward_m = 0.22,         -- forward reach that releases the charged cast
+        fishing_cast_load_confirm_s = 0.12,            -- avoid triggering when the hand passes the ear
+        fishing_hook_set_rise_m = 0.07,                 -- quick upward travel during QTE.Type.FishingBite
         craft_cursor_span_m = 0.40,                        -- hand travel across full screen
         boat_steer_range_m = 0.22,                         -- left hand travel to full rudder
         boat_steer_deadzone_m = 0.02,                      -- ignore small center noise (2 cm)
