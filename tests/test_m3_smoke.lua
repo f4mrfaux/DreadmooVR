@@ -37,6 +37,17 @@ local function world(tool_socket, on_body)
                   GetCameraRotation = function() return { x = 0, y = 0, z = 0 } end }
     W.pawn = { Mesh = mesh, get_class = function() return class_at(1) end,
         Controller = { PlayerCameraManager = pcm }, GetTransform = function() return {} end }
+    W.set_mode = function(mode)
+        if mode == "fishing" then
+            chain = { "BP_FishingController_C", "DrdFishingControllerBase", "Pawn" }
+            W.pawn.StrugglingFish = { get_full_name = function() return "DrdStrugglingFish /Test/Fish" end,
+                get_address = function() return 123 end }
+            W.pawn.CurrentQTE = "None"
+        else
+            chain = { "BP_PlayerCharacter_C", "DrdPlayerCharacter", "Character", "Pawn" }
+            W.pawn.StrugglingFish, W.pawn.CurrentQTE = nil, nil
+        end
+    end
     W.dot = { hidden = true, StaticMeshComponent = { SetStaticMesh = function() end, SetMaterial = function() end,
         SetCollisionEnabled = function() end, SetCastShadow = function() end,
         SetWorldScale3D = function(self, sc) W.dot_scale = sc.X end } }
@@ -80,8 +91,9 @@ local function world(tool_socket, on_body)
             functions = { log_info = function(s) W.logs[#W.logs + 1] = s end },
             vr = {
                 get_left_controller_index = function() return 1 end, get_right_controller_index = function() return 2 end,
+                get_hmd_index = function() return 0 end,
                 get_pose = function(i, p, q)
-                    local pos = (i == 1) and W.left(W.t) or W.right(W.t)
+                    local pos = i == 0 and v(0, 1.65, 0) or ((i == 1) and W.left(W.t) or W.right(W.t))
                     p.x, p.y, p.z = pos.X, pos.Y, pos.Z
                     q.x, q.y, q.z, q.w = 0, 0, 0, 1
                 end,
@@ -185,6 +197,65 @@ return {
         presses = presses + run(W, 0.5)
         assert(presses == 1, "one swing, one attack; got " .. presses)
         assert(has(W, "swing %-> attack"))
+        no_failures(W)
+    end,
+
+    test_fishing_crank_holds_reel_only_while_turning = function()
+        local W = world("None", false)
+        W.set_mode("fishing")
+        run(W, 0.6) -- establish the idle fish phase before beginning the crank
+        cranking(W)
+        local held = 0
+        for _ = 1, 90 do
+            W.t = W.t + DT
+            W.callbacks.tick(nil, DT)
+            local state = { Gamepad = { bRightTrigger = 0 } }
+            W.callbacks.xinput(nil, 0, state)
+            if state.Gamepad.bRightTrigger == 255 then held = held + 1 end
+        end
+        assert(held > 50, "crank should hold the game's fishing reel action")
+        W.left = function() return v(0, 0, 0) end
+        W.t = W.t + DT
+        W.callbacks.tick(nil, DT)
+        local state = { Gamepad = { bRightTrigger = 0 } }
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.bRightTrigger == 0, "reel trigger releases after crank stops")
+        no_failures(W)
+    end,
+
+    test_fishing_rod_lean_writes_fight_axis = function()
+        local W = world("None", false)
+        W.set_mode("fishing")
+        run(W, 0.6) -- calibrate neutral
+        local x = 0.2
+        W.right = function() return v(x, 1.2, -0.3) end
+        run(W, DT)
+        x = x + 0.2
+        W.t = W.t + DT
+        W.callbacks.tick(nil, DT)
+        local state = { Gamepad = { bRightTrigger = 0, sThumbLX = 0, sThumbLY = 0 } }
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLX > 15000, "rod lean should write signed fishing fight X")
+        assert(state.Gamepad.sThumbLY == 0, "normal fight leaves physical Y untouched")
+        no_failures(W)
+    end,
+
+    test_directional_drag_writes_two_stick_axes = function()
+        local W = world("None", false)
+        W.set_mode("fishing")
+        run(W, 0.6)
+        W.pawn.CurrentQTE = "QTE.Type.DirectionalDrag"
+        W.t = W.t + DT
+        W.callbacks.tick(nil, DT) -- calibrate QTE neutral
+        local x, y = 0.4, 1.4
+        W.right = function() return v(x, y, -0.3) end
+        W.t = W.t + DT
+        W.callbacks.tick(nil, DT)
+        local state = { Gamepad = { bRightTrigger = 0, sThumbLX = 0, sThumbLY = 0 } }
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLX > 15000 and state.Gamepad.sThumbLY > 15000,
+            "directional drag should write right-hand X/Y movement to left stick")
+        assert(state.Gamepad.bRightTrigger == 0, "fishing crank is suppressed during QTE")
         no_failures(W)
     end,
 

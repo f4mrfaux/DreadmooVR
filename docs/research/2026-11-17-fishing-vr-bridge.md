@@ -58,6 +58,19 @@ Blueprint dumps under `docs/research/bp-dumps/`; live headset behavior still nee
 - Implementation: `src/scripts/m3_gestures.lua`; common crank detector:
   `src/scripts/lib/gestures.lua`.
 
+## Smoke coverage
+
+`lua tests/run.lua` exercises the live `m3_gestures.lua` against a fake UEVR/game boundary. The
+fishing cases verify that the left-hand crank holds the game's right-trigger reel action and
+releases it when rotation stops, right-hand lean writes fishing fight X, and
+`QTE.Type.DirectionalDrag` writes X/Y while suppressing the crank. These checks validate Lua
+wiring and values; they do not confirm the Frame controller, Enhanced Input, or headset feel.
+
+The M3 smoke fixture must provide UEVR's `get_hmd_index()` because both the guard and fishing
+lean reference the HMD pose. This API exists in the vendored UEVR interface (`plugin/third_party/uevr/API.h`);
+the earlier fixture omitted it, causing the guard smoke check to fail without indicating a game
+runtime defect.
+
 ## Open validation
 
 - Confirm the right-hand lean neutral offset and sign feel natural while seated/standing.
