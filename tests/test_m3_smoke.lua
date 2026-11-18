@@ -25,6 +25,7 @@ local function world(tool_socket, on_body)
     local tool = { GetAttachSocketName = function() return fname(tool_socket) end, GetOwner = function() return gun end }
     local body = { GetAttachSocketName = function() return fname("None") end, AttachChildren = on_body and { tool } or nil }
     local mesh = { AttachChildren = on_body and { body } or { tool } }
+    W.mesh, W.tool = mesh, tool
     local chain = { "BP_PlayerCharacter_C", "DrdPlayerCharacter", "Character", "Pawn" }
     local function class_at(i)
         if i > #chain then return nil end
@@ -130,6 +131,21 @@ local function no_failures(W)
     for _, l in ipairs(W.logs) do assert(not l:find("FAILED"), l) end
 end
 
+local function config(text)
+    local f = assert(io.open(STAGE .. "dreadmoorvr_arms_tuning.lua", "wb"))
+    f:write(text); f:close()
+end
+
+-- Queue real crank events without polling XInput, so the transition has work to cancel.
+local function queued_crank()
+    local W = world("HookSimple", false)
+    W.hook_visible = false
+    cranking(W)
+    for _ = 1, 45 do W.t = W.t + DT; W.callbacks.tick(nil, DT) end
+    assert(has(W, "crank click"), "fixture must actually queue input")
+    return W
+end
+
 return {
     test_loads_without_require = function()
         local W = world("HookSimple", false)
@@ -155,7 +171,7 @@ return {
         assert(has(W, "hook out: crank live"))
         W.hook_visible = true
         local after = run(W, 1)
-        assert(after <= 1, "stops when the hook is home (one queued tap may finish), got " .. after)
+        assert(after == 0, "no reel tap may fire the gun after the hook returns, got " .. after)
         no_failures(W)
     end,
 
@@ -203,5 +219,73 @@ return {
         local state = { Gamepad = { bRightTrigger = 200 } }
         W.callbacks.xinput(nil, 0, state)
         assert(state.Gamepad.bRightTrigger == 200, "player's own trigger untouched")
+    end,
+
+    test_hook_return_cancels_all_queued_presses = function()
+        local W = queued_crank()
+        W.hook_visible = true
+        assert(run(W, 1) == 0, "queued reel must not FIRE the gun")
+        no_failures(W)
+    end,
+
+    test_leaving_walking_cancels_queued_and_active_presses = function()
+        local W = queued_crank()
+        local state = { Gamepad = { bRightTrigger = 0 } }
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.bRightTrigger == 255, "a pulse was active")
+        local walking = W.pawn
+        W.pawn = nil
+        assert(run(W, 1) == 0, "no pulses after leaving walking")
+        state.Gamepad.bRightTrigger = 200
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.bRightTrigger == 200, "physical trigger passes through")
+        W.pawn = walking
+        W.hook_visible = true
+        assert(run(W, 1) == 0, "no old input on return")
+    end,
+
+    test_tool_replacement_cancels_old_queue_even_for_same_kind = function()
+        local W = queued_crank()
+        W.left = function() return v(0, 0, 0) end
+        W.mesh.AttachChildren = { { GetAttachSocketName = W.tool.GetAttachSocketName, GetOwner = W.tool.GetOwner } }
+        assert(run(W, 0.2) == 0, "old gun's queue cannot transfer to new gun")
+    end,
+
+    test_new_walking_pawn_cancels_old_queue = function()
+        local W = queued_crank()
+        W.left = function() return v(0, 0, 0) end
+        W.pawn = setmetatable({}, { __index = W.pawn })
+        assert(run(W, 0.2) == 0, "new pawn must not inherit taps")
+    end,
+
+    test_disable_restores_crosshair_and_hides_reticle = function()
+        local W = world("HookSimple", false)
+        run(W, 1)
+        assert(not W.dot.hidden and W.cross.opacity == 0)
+        config("return { gestures = { enabled = false } }")
+        run(W, 2)
+        assert(W.dot.hidden and W.cross.opacity == 1, "disable cleans both visuals")
+    end,
+
+    test_hide_game_dot_can_change_while_reticle_stays_visible = function()
+        local W = world("HookSimple", false)
+        run(W, 1)
+        config("return { gestures = { hide_game_dot = false } }")
+        run(W, 2)
+        assert(not W.dot.hidden and W.cross.opacity == 1, "live option restores crosshair")
+        config("return { gestures = { hide_game_dot = true } }")
+        run(W, 2)
+        assert(W.cross.opacity == 0)
+        W.callbacks.reset()
+        assert(W.cross.opacity == 1 and W.dot.destroyed, "reset cleans up")
+    end,
+
+    test_other_xinput_slots_do_not_consume_or_receive_taps = function()
+        local W = queued_crank()
+        local state = { Gamepad = { bRightTrigger = 17 } }
+        W.callbacks.xinput(nil, 1, state)
+        assert(state.Gamepad.bRightTrigger == 17)
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.bRightTrigger == 255)
     end,
 }

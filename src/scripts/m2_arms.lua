@@ -40,6 +40,9 @@ local tuning = load_module("tuning")
 local wristfit = load_module("wristfit")
 local ubik = load_module("ubik")
 local itemfollow = load_module("itemfollow")
+local boatcontrols = load_module("boatcontrols").new(
+    function(key) return uevr.params.vr.get_mod_value(key) end,
+    function(key, value) uevr.params.vr.set_mod_value(key, value); log(key .. "=" .. value .. " (boat transition)") end)
 local stats = armstats.new()
 log("loaded")
 
@@ -55,7 +58,7 @@ local TUNING_FILE = (lib_dir():gsub("scripts[/\\]lib[/\\]$", "")) .. "dreadmoorv
 local last_tuning_check, applied = -1, {}
 local fit = { shoulder_widen = 0, grip_back = 0, items_follow_hands = false, level_torso = false, shoulder_swing = 1 }   -- live body-fit values (tuning.merge)
 local hand_states = {}                               -- UEVR MotionControllerStates, set at spawn
-local function apply_tuning(now)
+local function apply_tuning(now, mode)
     if now - last_tuning_check < 1.0 then return end
     last_tuning_check = now
     local chunk = loadfile(TUNING_FILE, "t", {})
@@ -82,7 +85,7 @@ local function apply_tuning(now)
     for key, mod in pairs({ camera_forward = "VR_CameraForwardOffset", camera_up = "VR_CameraUpOffset",
                              aim_method = "VR_AimMethod", movement_orientation = "VR_MovementOrientation" }) do
         local v = merged[key]
-        if v ~= nil and v ~= fit[key] then
+        if mode ~= "boat" and next(boatcontrols.saved) == nil and v ~= nil and v ~= fit[key] then
             local ok3, err = pcall(function() uevr.params.vr.set_mod_value(mod, key:find("^camera_") and string.format("%.6f", v) or string.format("%d", v)) end)
             if ok3 then fit[key] = v; log(mod .. "=" .. v) else log(mod .. " FAILED: " .. tostring(err)) end
         end
@@ -402,6 +405,10 @@ local function spawn(pawn)
     local ok, err = pcall(function()
         actor = armsloader.spawn(cls, pawn:GetTransform())
         if actor == nil then error("spawn returned nil") end
+        -- These caches belong to the actor, not the Lua session. Reapply even unchanged tuning.
+        applied, last_tuning_check = {}, -math.huge
+        shift = { L = { X = 0, Y = 0, Z = 0 }, R = { X = 0, Y = 0, Z = 0 } }
+        calib, last_calib_logged = ubik.calibration.new(), nil
         attach_and_hide(pawn)
         -- UEVR exposes the hook as the global usertype UEVR_UObjectHook (ScriptContext.cpp:990);
         -- activate() (:991) turns the system on, get_or_add_motion_controller_state (:1028).
@@ -430,10 +437,15 @@ uevr.sdk.callbacks.on_lua_event(function(name, data)
     flow:on_reply(data)
 end)
 
+local controls_err_logged = false
 uevr.sdk.callbacks.on_pre_engine_tick(function(_, delta)
     clock = clock + (delta or 0)
     local pawn = gameapi.local_pawn()
     local mode = pawn and modes.classify(gameapi.class_chain(pawn)) or nil
+    -- Independent of the arms lifecycle: this also runs when loading directly at the helm.
+    local okc, errc = pcall(boatcontrols.update, boatcontrols, mode)
+    if not okc and not controls_err_logged then log("boat controls FAILED: " .. tostring(errc)) end
+    controls_err_logged = not okc
     local before = flow.status
     -- Identity by object address: tostring() names the Lua wrapper, which UEVR can replace for
     -- the same pawn (seen in game as false "new pawn" reattaches).
@@ -462,8 +474,8 @@ uevr.sdk.callbacks.on_pre_engine_tick(function(_, delta)
         end
     end
     if flow.status == "active" and actor ~= nil then
-        local okt, errt = pcall(apply_tuning, clock)
-        if fit.level_torso and not torso_hooked and pawn ~= nil then
+        local okt, errt = pcall(apply_tuning, clock, mode)
+        if mode == "walking" and fit.level_torso and not torso_hooked and pawn ~= nil then
             local okh, errh = pcall(install_torso_hook, pawn, clock)
             if not okh and not torso_err_logged then torso_err_logged = true; log("torso hook FAILED: " .. tostring(errh)) end
         end
@@ -485,6 +497,8 @@ uevr.sdk.callbacks.on_pre_engine_tick(function(_, delta)
 end)
 
 uevr.sdk.callbacks.on_script_reset(function()
+    local ok, err = pcall(boatcontrols.update, boatcontrols, nil)
+    if not ok then log("boat controls restore FAILED: " .. tostring(err)) end
     restore_items()
     restore_game_body()
     if actor ~= nil then pcall(function() actor:K2_DestroyActor() end) end

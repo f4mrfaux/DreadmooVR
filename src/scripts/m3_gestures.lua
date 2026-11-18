@@ -116,9 +116,15 @@ local function find_tool(mesh)
     return scan(mesh, 1)
 end
 
-local clock, last_scan, last_cfg = 0, -1, -1
+local clock, last_cfg = 0, -1
 local tool, tool_comp, hook_out = nil, nil, false
+local pawn_id, tool_id, input_active = nil, nil, false
 local last_log = 0
+local function identity(obj)
+    if obj == nil then return nil end
+    local ok, a = pcall(function() return obj:get_address() end)
+    return ok and a or tostring(obj)
+end
 
 local function hook_is_out()
     if tool ~= "hookgun" or tool_comp == nil then return false end
@@ -190,12 +196,24 @@ local function set_game_dot(opacity)
     end)
 end
 
+local game_dot_hidden = false
 local function dot_show(on)
     if dot.actor ~= nil and on ~= dot.shown then
-        dot.shown = on
         dot.actor:SetActorHiddenInGame(not on)
-        if cfg.hide_game_dot then set_game_dot(on and 0 or 1) end
+        dot.shown = on
     end
+    local hide = on and dot.shown and cfg.hide_game_dot
+    if hide ~= game_dot_hidden then
+        set_game_dot(hide and 0 or 1)
+        game_dot_hidden = hide
+    end
+end
+
+local function deactivate()
+    input_active = false
+    rebuild()
+    tool, tool_comp, tool_id, hook_out = nil, nil, nil, false
+    dot_show(false)
 end
 
 local function dot_update(pawn)
@@ -229,16 +247,20 @@ local function step(pawn)
             if changed then rebuild() end
         end
     end
-    if not cfg.enabled then return end
-    if clock - last_scan >= 0.5 then
-        last_scan = clock
-        local kind, comp = find_tool(pawn.Mesh)
-        if kind ~= tool then log("tool in hand: " .. tostring(kind)); crank:reset() end
-        tool, tool_comp = kind, comp
+    if not cfg.enabled then deactivate(); return end
+    -- Scan each engine tick: a queued press must not transfer to a newly equipped tool.
+    local kind, comp = find_tool(pawn.Mesh)
+    local id = identity(comp)
+    if kind ~= tool or id ~= tool_id then
+        log("tool in hand: " .. tostring(kind))
+        rebuild()
     end
+    tool, tool_comp, tool_id = kind, comp, id
     local out = hook_is_out()
-    if out ~= hook_out then hook_out = out; log(out and "hook out: crank live" or "hook home: crank off"); crank:reset() end
+    if out ~= hook_out then hook_out = out; log(out and "hook out: crank live" or "hook home: crank off"); rebuild() end
+    input_active = tool == "melee" or (tool == "hookgun" and hook_out)
 
+    if tool == "hookgun" then pcall(log_gun_aim, pawn) end
     if tool == "hookgun" and not hook_out and cfg.reticle then
         local okd, errd = pcall(dot_update, pawn)
         if not okd then dot_show(false); if not dot.err_logged then dot.err_logged = true; log("reticle FAILED: " .. tostring(errd)) end end
@@ -270,28 +292,29 @@ uevr.sdk.callbacks.on_pre_engine_tick(function(_, delta)
     clock = clock + (delta or 0)
     local pawn = gameapi.local_pawn()
     local mode = pawn and modes.classify(gameapi.class_chain(pawn)) or nil
+    local id = identity(pawn)
+    if id ~= pawn_id then deactivate(); pawn_id = id end
     if mode ~= "walking" then
-        dot_show(false)
         if tool ~= nil then log("tool in hand: nil (left walking mode)") end
-        tool, tool_comp, hook_out = nil, nil, false
+        deactivate()
         return
     end
     local ok, err = pcall(step, pawn)
-    if not ok then log("FAILED: " .. tostring(err)) end
+    if not ok then deactivate(); log("FAILED: " .. tostring(err)) end
 end)
 
 -- The virtual press: while a tap is down the right trigger reads fully pressed; during the gap
 -- between taps it reads released, so taps stay distinct even over a held trigger. Otherwise the
 -- player's own trigger passes through untouched.
 uevr.sdk.callbacks.on_xinput_get_state(function(retval, user_index, state)
-    if tapper == nil then return end
+    if not input_active or user_index ~= 0 or state == nil then return end
     local down = tapper:pressed(clock)
     if down then state.Gamepad.bRightTrigger = 255
     elseif tapper.phase == "gap" then state.Gamepad.bRightTrigger = 0 end
 end)
 
 uevr.sdk.callbacks.on_script_reset(function()
-    if dot.shown then set_game_dot(1) end
+    deactivate()
     if dot.actor ~= nil then pcall(function() dot.actor:K2_DestroyActor() end) end
     tool, tool_comp, hook_out = nil, nil, false
 end)

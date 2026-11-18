@@ -2,7 +2,7 @@
 -- for ~15 s of frames. Checks the whole bridge wires up without errors, pushes the tuning into
 -- UEVR, moves a hand-held item onto the VR arms and gives it back. Staged under build/smoke.
 local STAGE = "build/smoke/"
-local LIBS = { "gameapi", "modes", "armsloader", "m1flow", "armsflow", "armstats", "tuning", "wristfit", "ubik", "itemfollow", "gestures", "reticle" }
+local LIBS = { "gameapi", "modes", "armsloader", "m1flow", "armsflow", "armstats", "tuning", "wristfit", "ubik", "itemfollow", "gestures", "reticle", "boatcontrols" }
 
 local function copy(src, dst)
     local i = assert(io.open(src, "rb")); local s = i:read("a"); i:close()
@@ -23,7 +23,7 @@ local function fname(s) return { to_string = function() return s end } end
 
 -- Fake world -------------------------------------------------------------------------------
 local function make_world()
-    local W = { logs = {}, mods = {}, offsets = {}, callbacks = {} }
+    local W = { logs = {}, mods = { VR_AimMethod = "1", VR_MovementOrientation = "0", VR_RoomscaleMovement = "true" }, offsets = {}, callbacks = {} }
     local next_addr = 0x1000
     local function obj(t) next_addr = next_addr + 0x10; local a = next_addr; t.get_address = function() return a end
         t.get_full_name = function() return t.name or "obj" end; return t end
@@ -153,6 +153,7 @@ local function make_world()
             functions = { log_info = function(s) W.logs[#W.logs + 1] = s end },
             vr = {
                 set_mod_value = function(k, val) W.mods[k] = val end,
+                get_mod_value = function(k) return W.mods[k] end,
                 get_hmd_index = function() return 0 end,
                 get_left_controller_index = function() return 1 end,
                 get_right_controller_index = function() return 2 end,
@@ -327,6 +328,11 @@ return {
         assert(W.spawns == 2 and W.arms ~= old_arms, "fresh arms spawned, spawns=" .. W.spawns)
         assert(W.body.parent == p2.Mesh, "fresh arms ride the new pawn")
         assert(old_arms.destroyed, "dead arms cleaned up")
+        for _, key in ipairs({ "LeftRotP", "LeftRotY", "LeftRotR", "RightRotP", "RightRotY", "RightRotR",
+                              "ArmLength", "ElbowOut", "ElbowDown", "ShoulderFollow" }) do
+            assert(W.arms[key] == old_arms[key], "respawn reapplies " .. key)
+        end
+        assert(#W.offsets == 4 and W.offsets[3].z == 8 and W.offsets[4].z == 8, "fresh controller offsets")
         assert(has(W.logs, "arms lost with the old pawn"), "logged")
         local later = {}
         for i, l in ipairs(W.logs) do if l:find("FAILED") and i > #W.logs - 50 then later[#later + 1] = l end end
@@ -400,5 +406,41 @@ return {
         assert(W.gun.rel_set == W.gun.rel, "hook gun back at the game's grip on reset")
         assert(next(W.pawn_mesh.hidden) == nil, "game bones unhidden")
         assert(W.arms.destroyed, "arms actor destroyed")
+    end,
+
+    test_boat_controls_survive_tuning_reload_and_restore_on_exit = function()
+        local W = boot()
+        local walking = W.pawn
+        W.pawn = { get_class = function() return {
+            get_fname = function() return fname("DrdShipBase") end,
+            get_super_struct = function() return nil end } end }
+        run(W, 0.05)
+        assert(W.mods.VR_MovementOrientation == "0", "raw throttle/rudder axes immediately on entry")
+        assert(W.mods.VR_AimMethod == "0" and W.mods.VR_RoomscaleMovement == "false", "boat owns movement and aim")
+        write(STAGE .. "dreadmoorvr_arms_tuning.lua", TUNING_ON:gsub("aim_method = 2", "aim_method = 3"))
+        run(W, 2)
+        assert(W.mods.VR_AimMethod == "0" and W.mods.VR_MovementOrientation == "0", "live tuning cannot overwrite boat settings")
+        W.pawn = walking
+        run(W, 0.05)
+        assert(W.mods.VR_AimMethod == "2" and W.mods.VR_MovementOrientation == "1", "restore exact entry settings on exit")
+        assert(W.mods.VR_RoomscaleMovement == "true")
+        run(W, 2)
+        assert(W.mods.VR_AimMethod == "3", "walking picks up tuning edited at helm")
+        assert(failures(W.logs) == "", failures(W.logs))
+    end,
+
+    test_boat_controls_work_before_arms_spawn_and_reset_restores = function()
+        stage(TUNING_ON)
+        local W = make_world()
+        W.pawn = { get_class = function() return {
+            get_fname = function() return fname("DrdShipBase") end,
+            get_super_struct = function() return nil end } end }
+        load_scripts(W, { "m2_arms" })
+        run(W, 2)
+        assert(W.spawns == 0)
+        assert(W.mods.VR_AimMethod == "0" and W.mods.VR_RoomscaleMovement == "false")
+        W.callbacks.reset()
+        assert(W.mods.VR_AimMethod == "1" and W.mods.VR_RoomscaleMovement == "true", "reset restores original values")
+        assert(failures(W.logs) == "", failures(W.logs))
     end,
 }
