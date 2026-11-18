@@ -192,5 +192,6 @@ joints of each digit. In a safe area, move each finger through open/closed posit
 Check the corresponding avatar finger moves smoothly, opens fully, and does not pull neighboring
 digits along. Check thumb opposition and both hands from a relaxed open pose through a fist. The
 initial bend angles are a starting fit; report any finger bending backwards or clipping into the
-palm so we can correct its axis/sign and per-joint angles. The log/report curls remain available
-to distinguish sensor input from mesh articulation.
+palm so we can correct its axis/sign and per-joint angles. If tracking stops, the hand should ease
+open within about 0.5 seconds. The log/report curls remain available to distinguish sensor input
+from mesh articulation.

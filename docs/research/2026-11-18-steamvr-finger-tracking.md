@@ -27,6 +27,11 @@ calibration. UE 5.6 compiled the AnimBlueprint after both graph batches, and gra
 confirmed all 30 targets, curl Alpha links, and pose links. The Frame's live values, rotation axis
 direction, and visual fit still need an in-game finger-by-finger check.
 
+An explicit inactive sample eases that hand back open. Lua also treats a channel with no fresh
+sample for 0.5 seconds as open, covering a plugin shutdown that cannot send an inactive event. The
+M2 smoke harness exercises side/channel mapping, smoothing, inactive recovery, and stale-sample
+recovery.
+
 ## Fallout 4 VR Body / FRIK comparison
 
 The existing body solver in this project is a Lua port of **UBIKSolver**, which calculates arm,

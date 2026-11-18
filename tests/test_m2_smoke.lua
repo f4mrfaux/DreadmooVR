@@ -119,7 +119,9 @@ local function make_world()
     W.spawns = 0
     local function new_arms()
         W.spawns = W.spawns + 1
+        W.finger_anim = {}
         local body = mesh("Body" .. W.spawns)
+        body.GetAnimInstance = function() return W.finger_anim end
         body.K2_AttachToComponent = function(self, p)
             if self.dead then error("arms actor is gone") end
             local old = self.parent and self.parent.AttachChildren
@@ -293,6 +295,31 @@ return {
             "placed every frame at the VR hand's HookSimple with the game's grip offset")
         assert(W.camera.world == nil, "camera untouched")
         assert(has(W.logs, "held item %-> VR hand R"), "logged")
+    end,
+
+    test_finger_curls_drive_independent_anim_channels_and_fail_open = function()
+        local W = boot()
+        W.callbacks.lua_event("dreadmoorvr_finger_curls", "L|1.000,0.000,0.500,0.250,1.000")
+        run(W, 0.05)
+        assert(W.finger_anim.FingerCurlLThumb > 0.5, "left thumb channel receives curl")
+        assert(W.finger_anim.FingerCurlLIndex == 0, "open index remains independent")
+        assert(W.finger_anim.FingerCurlLMiddle > 0.25 and W.finger_anim.FingerCurlLMiddle < 0.5,
+            "middle channel receives its own smoothed value")
+        assert(W.finger_anim.FingerCurlLRing > 0 and W.finger_anim.FingerCurlLPinky > 0.5,
+            "ring and pinky channels map independently")
+        assert(W.finger_anim.FingerCurlRThumb == 0 and W.finger_anim.FingerCurlRIndex == 0,
+            "left hand sample does not affect right hand")
+
+        W.callbacks.lua_event("dreadmoorvr_finger_curls", "L|inactive")
+        run(W, 0.1)
+        assert(W.finger_anim.FingerCurlLThumb < 0.5, "inactive tracking eases fingers open")
+
+        W.callbacks.lua_event("dreadmoorvr_finger_curls", "R|1.000,1.000,1.000,1.000,1.000")
+        run(W, 0.05)
+        assert(W.finger_anim.FingerCurlRIndex > 0.5, "right hand maps independently")
+        run(W, 0.8) -- No further sensor events: stale curls must fail open if the plugin disappears.
+        assert(W.finger_anim.FingerCurlRIndex < 0.01, "stale tracking sample returns the hand to open")
+        assert(failures(W.logs) == "", failures(W.logs))
     end,
 
     test_turning_items_off_live_returns_them = function()

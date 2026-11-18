@@ -18,7 +18,8 @@ pending has not passed headset acceptance.
 - Corrected the cosmetic wheel sync target to the modular cosmetic's nested `Actor`, matching the
   shipped `BP_ShipSteeringWheel` Blueprint. Live headset confirmation is pending.
 - Added SteamVR five-finger curl driven articulation for both hands, with smoothing and three
-  additive bone joints per digit. Finger direction and fit still need headset validation.
+  additive bone joints per digit. Tracking loss and stale samples ease back to an open hand.
+  Finger direction and fit still need headset validation.
 - Removed the automatic M1 debug-cube spawn from the production bridge.
 - Local Lua and native test suites pass. Headset acceptance for fishing, boat steering/throttle,
   arms/shoulders, crafting, and the target Steam Frame input setup is still pending. The reported

@@ -62,6 +62,8 @@ local fit = { shoulder_widen = 0, shoulder_follow = 0.5, shoulder_follow_max = 1
     items_follow_hands = false, level_torso = false, shoulder_swing = 1 }
 local hand_states = {}                               -- UEVR MotionControllerStates, set at spawn
 local finger_curls = { L = nil, R = nil }            -- SteamVR skeleton summary, 0=open, 1=curled
+local finger_curl_received_at = { L = nil, R = nil }
+local FINGER_CURL_STALE_SECONDS = 0.5
 local finger_channel_names = {
     { field = "thumb", name = "Thumb" }, { field = "index", name = "Index" },
     { field = "middle", name = "Middle" }, { field = "ring", name = "Ring" },
@@ -577,12 +579,16 @@ uevr.sdk.callbacks.on_lua_event(function(name, data)
     if name ~= "dreadmoorvr_finger_curls" or type(data) ~= "string" then return end
     local side, values = data:match("^([LR])|(.+)$")
     if side == nil then return end
-    if values == "inactive" then finger_curls[side] = nil; return end
+    if values == "inactive" then
+        finger_curls[side], finger_curl_received_at[side] = nil, nil
+        return
+    end
     local a, b, c, d, e = values:match("^([%d%.%-]+),([%d%.%-]+),([%d%.%-]+),([%d%.%-]+),([%d%.%-]+)$")
     a, b, c, d, e = tonumber(a), tonumber(b), tonumber(c), tonumber(d), tonumber(e)
     if a and b and c and d and e and a >= 0 and a <= 1 and b >= 0 and b <= 1
         and c >= 0 and c <= 1 and d >= 0 and d <= 1 and e >= 0 and e <= 1 then
         finger_curls[side] = { thumb = a, index = b, middle = c, ring = d, pinky = e }
+        finger_curl_received_at[side] = clock
     end
 end)
 
@@ -599,6 +605,8 @@ local function update_finger_animation(delta)
         local blend = 1.0 - math.exp(-math.max(0, delta or 0) / 0.045)
         for _, side in ipairs({ "L", "R" }) do
             local sample = finger_curls[side]
+            local received_at = finger_curl_received_at[side]
+            if received_at == nil or clock - received_at > FINGER_CURL_STALE_SECONDS then sample = nil end
             for _, channel in ipairs(finger_channel_names) do
                 local field = channel.field
                 local current = finger_smoothed[side][field] or 0
