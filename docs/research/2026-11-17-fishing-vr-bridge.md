@@ -28,6 +28,14 @@ Blueprint dumps under `docs/research/bp-dumps/`; live headset behavior still nee
 
 ## Bridge behavior
 
+- Production input path: `m3_gestures.lua` samples poses in `on_pre_engine_tick`, then writes
+  gesture outputs directly to the XInput `state.Gamepad` in its single
+  `on_xinput_get_state` callback. Trigger writes are already used for hook/melee gestures;
+  fishing extends that same callback with `sThumbLX/Y`. Neutral gesture values leave physical
+  Frame input alone. The callback does not synthesize `wButtons`, since UEVR rebuilds those
+  button bits after Lua callbacks.
+- `src/scripts/lib/pad.lua` is a pure merge helper covered by `tests/test_pad.lua`, but no runtime
+  script calls it. Treat it as dormant; it does not describe how live gesture inputs are applied.
 - On a new struggling fish, calibrate the right-hand horizontal offset relative to the HMD.
 - While fighting and outside a QTE, horizontal right-hand lean past a deadzone writes a signed
   left-stick X value. Physical input passes through while the gesture is neutral.
@@ -46,6 +54,7 @@ Blueprint dumps under `docs/research/bp-dumps/`; live headset behavior still nee
 - `docs/research/bp-dumps/WBP_QTE_DirectionalDrag.txt`, `WBP_QTE_Reel.txt`,
   `WBP_QTE_FishLand.txt`, `WBP_QTE_FishingBite.txt` — prompt action bindings.
 - `python -I tools/re/imc.py "IMC_Fishing$"` — cooked input mapping summary.
+- `docs/research/2026-11-16-frame-plugin-phase2.md` — observed Frame A → XInput A (`0x1000`).
 - Implementation: `src/scripts/m3_gestures.lua`; common crank detector:
   `src/scripts/lib/gestures.lua`.
 
