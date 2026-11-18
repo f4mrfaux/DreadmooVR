@@ -42,7 +42,8 @@ local ubik = load_module("ubik")
 local itemfollow = load_module("itemfollow")
 local boatcontrols = load_module("boatcontrols").new(
     function(key) return uevr.params.vr.get_mod_value(key) end,
-    function(key, value) uevr.params.vr.set_mod_value(key, value); log(key .. "=" .. value .. " (boat transition)") end)
+    function(key, value) uevr.params.vr.set_mod_value(key, value); log(key .. "=" .. value .. " (boat transition)") end,
+    function(key, reason) log("boat setting " .. key .. " FAILED: " .. reason) end)
 local stats = armstats.new()
 log("loaded")
 
@@ -60,6 +61,8 @@ local last_tuning_check, applied = -1, {}
 local fit = { shoulder_widen = 0, shoulder_follow = 0.5, shoulder_follow_max = 12, grip_back = 0,
     items_follow_hands = false, level_torso = false, shoulder_swing = 1 }
 local hand_states = {}                               -- UEVR MotionControllerStates, set at spawn
+local boat_hand_anchor_active, boat_hand_anchor_last_log = false, -math.huge
+local boat_hand_anchor_offsets = {}
 local function apply_tuning(now, mode)
     if now - last_tuning_check < 1.0 then return end
     last_tuning_check = now
@@ -77,12 +80,17 @@ local function apply_tuning(now, mode)
     if merged.grip_back ~= fit.grip_back and hand_states.L ~= nil then
         -- MotionControllerState offset is in the controller's OpenVR frame (UObjectHook.cpp:925,
         -- cm); OpenVR grip forward is -Z, so +Z moves the target back toward the wrist.
-        local ok2, err = pcall(function()
-            hand_states.L:set_location_offset(Vector3f.new(0, 0, merged.grip_back))
-            hand_states.R:set_location_offset(Vector3f.new(0, 0, merged.grip_back))
-        end)
-        if ok2 then fit.grip_back = merged.grip_back; log("grip_back=" .. merged.grip_back)
-        else log("grip_back FAILED: " .. tostring(err)) end
+        if boat_hand_anchor_active then
+            fit.grip_back = merged.grip_back
+            log("grip_back=" .. merged.grip_back .. " (restore value; boat hands remain on grip sockets)")
+        else
+            local ok2, err = pcall(function()
+                hand_states.L:set_location_offset(Vector3f.new(0, 0, merged.grip_back))
+                hand_states.R:set_location_offset(Vector3f.new(0, 0, merged.grip_back))
+            end)
+            if ok2 then fit.grip_back = merged.grip_back; log("grip_back=" .. merged.grip_back)
+            else log("grip_back FAILED: " .. tostring(err)) end
+        end
     end
     -- Eye position relative to the character's shoulders: UEVR's own camera offsets, set live
     -- through the plugin API's set_mod_value (uevr/API.h; Lua binding ScriptContext.cpp:481).
@@ -423,6 +431,99 @@ local function show_arms_at_boat(pawn)
     log("VR arms body visible at helm; pose source remains the diver mesh")
 end
 
+-- Use hand sockets authored into the shipped control meshes. Rebase each tracked target so its
+-- rendered hand stays at the wheel/throttle grip while the real controller continues to drive
+-- IA_BoatMove from raw SteamVR pose in M3. The socket transforms themselves rotate with the game
+-- controls, giving visual feedback without feeding the rebased pose back into gesture input.
+local function restore_boat_hand_anchors()
+    if not boat_hand_anchor_active and next(boat_hand_anchor_offsets) == nil then return end
+    for _, side in ipairs({ "L", "R" }) do
+        local state = hand_states[side]
+        if state ~= nil then
+            pcall(function() state:set_location_offset(Vector3f.new(0, 0, fit.grip_back)) end)
+        end
+    end
+    boat_hand_anchor_offsets = {}
+    boat_hand_anchor_active = false
+    log("boat hand grip anchors released")
+end
+
+local function boat_hand_anchor_components(pawn)
+    local wheel_mount = pawn.BP_ShipSteeringWheel
+    if wheel_mount == nil then error("BP_ShipSteeringWheel mount is nil") end
+    local wheel_actor = wheel_mount.ChildActor
+    if wheel_actor == nil then wheel_actor = wheel_mount:GetChildActor() end
+    if wheel_actor == nil then error("steering wheel child actor is not spawned") end
+    local wheel = wheel_actor.Small_Boat_Steerwheel
+    local throttle = pawn.Throttle_lever
+    if wheel == nil then error("steering wheel mesh component is nil") end
+    if throttle == nil then error("Throttle_lever mesh component is nil") end
+    return wheel, throttle
+end
+
+local function anchor_hand_to_socket(side, target, component, socket)
+    local state = hand_states[side]
+    if state == nil then error("motion controller state " .. side .. " is nil") end
+    local anchor = component:GetSocketLocation(socket)
+    local hand = target:K2_GetComponentLocation()
+    local forward, right, up = target:GetForwardVector(), target:GetRightVector(), target:GetUpVector()
+    -- UEVR's controller offset uses OpenVR local X=right, Y=up, Z=back; the UE hand target's
+    -- forward axis is the inverse of OpenVR local Z. Remove last frame's known offset to recover
+    -- the unmodified tracked target before calculating this frame's offset. Without this step,
+    -- reading the already-offset target would alternate the offset between zero and full distance.
+    local previous = boat_hand_anchor_offsets[side] or { x = 0, y = 0, z = fit.grip_back }
+    local applied_world = vadd(vadd(
+        { X = right.X * previous.x, Y = right.Y * previous.x, Z = right.Z * previous.x },
+        { X = up.X * previous.y, Y = up.Y * previous.y, Z = up.Z * previous.y }),
+        { X = -forward.X * previous.z, Y = -forward.Y * previous.z, Z = -forward.Z * previous.z })
+    local raw_hand = vsub(hand, applied_world)
+    local delta = vsub(anchor, raw_hand)
+    local offset = Vector3f.new(vdot(delta, right), vdot(delta, up), -vdot(delta, forward))
+    state:set_location_offset(offset)
+    boat_hand_anchor_offsets[side] = { x = offset.x, y = offset.y, z = offset.z }
+    return offset
+end
+
+local function update_boat_hand_anchors(pawn, now)
+    local ok_camera, first_person = pcall(function() return pawn.bFirstPersonCameraEnabled end)
+    if not ok_camera or first_person ~= true then restore_boat_hand_anchors(); return end
+    if not arms_ready() then return end
+    local ok, wheel, throttle = pcall(boat_hand_anchor_components, pawn)
+    if not ok then
+        restore_boat_hand_anchors()
+        if now - boat_hand_anchor_last_log >= 2 then
+            boat_hand_anchor_last_log = now
+            log("boat hand grip anchor lookup FAILED: " .. tostring(wheel))
+        end
+        return
+    end
+    if not boat_hand_anchor_active then
+        boat_hand_anchor_offsets = {
+            L = { x = 0, y = 0, z = fit.grip_back },
+            R = { x = 0, y = 0, z = fit.grip_back },
+        }
+    end
+    local ok_left, left_offset = pcall(anchor_hand_to_socket, "L", actor.LeftHandTarget, wheel, "LHand_Socket")
+    local ok_right, right_offset = pcall(anchor_hand_to_socket, "R", actor.RightHandTarget, throttle, "RHand")
+    if not ok_left or not ok_right then
+        restore_boat_hand_anchors()
+        if now - boat_hand_anchor_last_log >= 2 then
+            boat_hand_anchor_last_log = now
+            log("boat hand grip socket FAILED: L=" .. tostring(left_offset) .. " R=" .. tostring(right_offset))
+        end
+        return
+    end
+    if not boat_hand_anchor_active then
+        boat_hand_anchor_active = true
+        log("boat hand grip anchors active: left=Small_Boat_Steerwheel.LHand_Socket right=Throttle_lever.RHand")
+    end
+    if now - boat_hand_anchor_last_log >= 1 then
+        boat_hand_anchor_last_log = now
+        log(string.format("boat grip offsets cm: L=(%.1f,%.1f,%.1f) R=(%.1f,%.1f,%.1f)",
+            left_offset.x, left_offset.y, left_offset.z, right_offset.x, right_offset.y, right_offset.z))
+    end
+end
+
 local function spawn(pawn)
     local cls = uevr.api:find_uobject("BlueprintGeneratedClass " .. ARMS)
     if cls == nil then log("spawn FAILED: class not in memory after plugin load"); return false end
@@ -433,6 +534,7 @@ local function spawn(pawn)
         applied, last_tuning_check = {}, -math.huge
         shift = { L = { X = 0, Y = 0, Z = 0 }, R = { X = 0, Y = 0, Z = 0 } }
         calib, last_calib_logged = ubik.calibration.new(), nil
+        boat_hand_anchor_active, boat_hand_anchor_last_log = false, -math.huge
         attach_and_hide(pawn)
         -- UEVR exposes the hook as the global usertype UEVR_UObjectHook (ScriptContext.cpp:990);
         -- activate() (:991) turns the system on, get_or_add_motion_controller_state (:1028).
@@ -512,6 +614,12 @@ uevr.sdk.callbacks.on_pre_engine_tick(function(_, delta)
         end
         if not okt and not sample_err_logged then sample_err_logged = true; log("tuning FAILED: " .. tostring(errt)) end
     end
+    if mode == "boat" and actor ~= nil then
+        local okh, errh = pcall(update_boat_hand_anchors, pawn, clock)
+        if not okh and not sample_err_logged then sample_err_logged = true; log("boat hand grip anchors FAILED: " .. tostring(errh)) end
+    else
+        restore_boat_hand_anchors()
+    end
     local boat_arm_solver_available = mode == "boat" and pawn ~= nil
         and type(pawn.K2_GetActorRotation) == "function"
     if flow.status == "active" and actor ~= nil and (mode == "walking" or boat_arm_solver_available) then
@@ -537,6 +645,7 @@ end)
 uevr.sdk.callbacks.on_script_reset(function()
     local ok, err = pcall(boatcontrols.update, boatcontrols, nil)
     if not ok then log("boat controls restore FAILED: " .. tostring(err)) end
+    restore_boat_hand_anchors()
     restore_items()
     restore_game_body()
     if actor ~= nil then pcall(function() actor:K2_DestroyActor() end) end

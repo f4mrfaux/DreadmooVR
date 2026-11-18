@@ -29,6 +29,7 @@ Add a row here before using a new call.
 | `USceneComponent::K2_AttachToComponent` | Components/SceneComponent.h:747 | BlueprintCallable | `(Parent, FName SocketName, EAttachmentRule Location, Rotation, Scale, bool bWeldSimulatedBodies)`; `EAttachmentRule` KeepRelative=0, KeepWorld=1, **SnapToTarget=2** |
 | `USceneComponent::SetHiddenInGame` | Components/SceneComponent.h:915 | BlueprintCallable | `(bool NewHidden, bool bPropagateToChildren=false)`; clear hidden state on the VR arms body after the game hides the diver at the first-person helm |
 | `USceneComponent::K2_GetComponentLocation` / `K2_GetComponentRotation` | SceneComponent.h:644 / 648 | BlueprintCallable | used in `ABP_VRArms` |
+| `USceneComponent::GetSocketLocation` / `GetSocketRotation` | SceneComponent.h:791 / 799 | BlueprintCallable | align the VR hand targets with the boat mesh's authored hand grip sockets |
 | `USkinnedMeshComponent::HideBoneByName` | Components/SkinnedMeshComponent.h:2034 | BlueprintCallable | `(FName BoneName, EPhysBodyOp)`; **PBO_None=0** (:85) |
 | `USkinnedMeshComponent::UnHideBoneByName` | SkinnedMeshComponent.h:2043 | BlueprintCallable | `(FName BoneName)` |
 | `AActor::SetActorHiddenInGame` | Actor.h:1912 | BlueprintCallable | `(bool bNewHidden)` |

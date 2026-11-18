@@ -119,6 +119,28 @@ local function raw_pose(index)
     uevr.params.vr.get_pose(index, p, q)
     return { X = p.x, Y = p.y, Z = p.z }, { x = q.x, y = q.y, z = q.z, w = q.w }
 end
+local function finite_number(v)
+    return type(v) == "number" and v == v and v > -math.huge and v < math.huge
+end
+local function boat_pose(index_getter)
+    local ok, p, q = pcall(function()
+        local index = index_getter()
+        local pos, rot = UEVR_Vector3f.new(), UEVR_Quaternionf.new()
+        uevr.params.vr.get_pose(index, pos, rot)
+        return { X = pos.x, Y = pos.y, Z = pos.z }, { x = rot.x, y = rot.y, z = rot.z, w = rot.w }
+    end)
+    if not ok or p == nil or q == nil then return nil, nil, "pose read failed" end
+    local qn = q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w
+    if not (finite_number(p.X) and finite_number(p.Y) and finite_number(p.Z)
+        and finite_number(q.x) and finite_number(q.y) and finite_number(q.z) and finite_number(q.w)
+        and finite_number(qn) and qn > 0.5 and qn < 1.5
+        and math.abs(p.X) < 10 and math.abs(p.Y) < 10 and math.abs(p.Z) < 10) then
+        return nil, nil, "pose values out of range"
+    end
+    local inv_qn = 1 / math.sqrt(qn)
+    q.x, q.y, q.z, q.w = q.x * inv_qn, q.y * inv_qn, q.z * inv_qn, q.w * inv_qn
+    return p, q
+end
 local function rotate(q, v)   -- v' = q v q*
     local x, y, z, w = q.x, q.y, q.z, q.w
     local tx, ty, tz = 2 * (y * v.Z - z * v.Y), 2 * (z * v.X - x * v.Z), 2 * (x * v.Y - y * v.X)
@@ -172,6 +194,14 @@ local boat_axis_x, boat_axis_y = 0, 0
 local boat_neutral_lx, boat_neutral_ry
 local boat_reference_inv, boat_camera_state
 local boat_throttle = nil
+local boat_calibration_started, boat_stable_since, boat_calibration_sample
+local boat_throttle_candidate, boat_throttle_candidate_since
+local boat_last_motion_sample
+local boat_pose_error_last_log = -math.huge
+local boat_anchor_retry_ticks, boat_anchor_attempt = 0, 0
+local boat_anchors_logged = false
+local boat_pose_sample_ticks = 0
+local boat_camera_look_suppressed = false
 local last_log = 0
 local function identity(obj)
     if obj == nil then return nil end
@@ -311,6 +341,9 @@ local function deactivate()
     boat_axis_x, boat_axis_y = 0, 0
     boat_neutral_lx, boat_neutral_ry, boat_throttle = nil, nil, nil
     boat_reference_inv, boat_camera_state = nil, nil
+    boat_calibration_started, boat_stable_since, boat_calibration_sample = nil, nil, nil
+    boat_throttle_candidate, boat_throttle_candidate_since = nil, nil
+    boat_last_motion_sample = nil
     if guarding then
         guard_release_until = clock + 0.1
         pcall(function() uevr.params.vr.set_mod_value("VR_AimMethod", string.format("%d", math.floor(cfg.aim_method))) end)
@@ -344,22 +377,50 @@ local function step_crafting()
     pc:SetMouseLocation(x, y)
 end
 
+local function boat_wheel_actor(pawn)
+    local component = pawn.BP_ShipSteeringWheel
+    if component == nil then return nil end
+    local child = component.ChildActor
+    if child == nil then child = component:GetChildActor() end
+    return child
+end
+
 local function log_boat_anchors(pawn)
+    if boat_anchors_logged then return end
+    boat_anchor_retry_ticks = boat_anchor_retry_ticks + 1
+    if boat_anchor_attempt > 0 and boat_anchor_retry_ticks < 120 then return end
+    boat_anchor_retry_ticks = 0
+    boat_anchor_attempt = boat_anchor_attempt + 1
     local ok, wheel, lever = pcall(function()
-        local child = pawn.BP_ShipSteeringWheel:GetChildActor()
-        return child.Small_Boat_Steerwheel:K2_GetComponentLocation(), pawn.Throttle_lever:K2_GetComponentLocation()
+        local child = boat_wheel_actor(pawn)
+        if child == nil then error("BP_ShipSteeringWheel child actor is not spawned yet") end
+        local wheel_component = child.Small_Boat_Steerwheel
+        if wheel_component == nil then error("wheel mesh component is nil") end
+        local lever_component = pawn.Throttle_lever
+        if lever_component == nil then error("Throttle_lever component is nil") end
+        return wheel_component:K2_GetComponentLocation(), lever_component:K2_GetComponentLocation()
     end)
-    if ok and wheel and lever then
-        log(string.format("boat mesh anchors: wheel=(%.1f,%.1f,%.1f) throttle=(%.1f,%.1f,%.1f)",
-            wheel.x, wheel.y, wheel.z, lever.x, lever.y, lever.z))
-    else
-        log("boat mesh anchors unavailable; using tracked hand poses")
+    local err
+    if not ok then err, wheel, lever = wheel, nil, nil end
+    if ok and wheel ~= nil and lever ~= nil then
+        -- FVector members exposed by UEVR use uppercase names; tolerate Vector3f lowercase too.
+        local wx, wy, wz = wheel.X or wheel.x, wheel.Y or wheel.y, wheel.Z or wheel.z
+        local lx, ly, lz = lever.X or lever.x, lever.Y or lever.y, lever.Z or lever.z
+        if wx ~= nil and wy ~= nil and wz ~= nil and lx ~= nil and ly ~= nil and lz ~= nil then
+            log(string.format("boat mesh anchors: wheel=(%.1f,%.1f,%.1f) throttle=(%.1f,%.1f,%.1f)",
+                wx, wy, wz, lx, ly, lz))
+            boat_anchors_logged = true
+            return
+        end
+        err = "component location returned an unreadable vector"
     end
+    log("boat mesh anchor lookup attempt " .. boat_anchor_attempt .. " failed: " .. tostring(err or "component location unavailable"))
 end
 
 local function sync_cosmetic_wheel(pawn)
     pcall(function()
-        local child = pawn.BP_ShipSteeringWheel:GetChildActor()
+        local child = boat_wheel_actor(pawn)
+        if child == nil then return end
         local cosmetic = child.CurrentActiveWheelCosmetic
         if cosmetic == nil then return end
         -- Match BP_ShipSteeringWheel.ReceiveTick: it copies the steering-wheel ACTOR's
@@ -389,17 +450,37 @@ local function step_boat(pawn)
             or "boat camera flag unavailable; native axes active")
     end
     if camera_state ~= "first_person" then
+        boat_camera_look_suppressed = false
         if boat_neutral_lx ~= nil then log("boat gestures paused; native axes restored") end
         boat_axis_x, boat_axis_y = 0, 0
         boat_neutral_lx, boat_neutral_ry, boat_throttle = nil, nil, nil
         boat_reference_inv = nil
+        boat_calibration_started, boat_stable_since, boat_calibration_sample = nil, nil, nil
+        boat_throttle_candidate, boat_throttle_candidate_since = nil, nil
+        boat_last_motion_sample = nil
+        boat_anchor_retry_ticks, boat_anchor_attempt, boat_anchors_logged = 0, 0, false
+        boat_pose_sample_ticks = 0
         return
     end
 
     local vr = uevr.params.vr
-    local l = raw_pose(vr.get_left_controller_index())
-    local r = raw_pose(vr.get_right_controller_index())
-    local h, hq = raw_pose(vr.get_hmd_index())
+    local ok_tracking, tracking = pcall(vr.is_using_controllers)
+    local l, _, left_error = boat_pose(vr.get_left_controller_index)
+    local r, _, right_error = boat_pose(vr.get_right_controller_index)
+    local h, hq, head_error = boat_pose(vr.get_hmd_index)
+    if not ok_tracking or tracking ~= true or l == nil or r == nil or h == nil then
+        boat_axis_x, boat_axis_y, boat_throttle = 0, 0, 0
+        boat_neutral_lx, boat_neutral_ry = nil, nil
+        boat_calibration_started, boat_stable_since, boat_calibration_sample = nil, nil, nil
+        boat_throttle_candidate, boat_throttle_candidate_since = nil, nil
+        boat_last_motion_sample = nil
+        if clock - boat_pose_error_last_log >= 1 then
+            boat_pose_error_last_log = clock
+            log("boat controls fail-safe: controller tracking=" .. tostring(ok_tracking and tracking)
+                .. " L=" .. tostring(left_error) .. " R=" .. tostring(right_error) .. " HMD=" .. tostring(head_error))
+        end
+        return
+    end
     -- Freeze the boat's horizontal frame when taking the helm. Recomputing this from the live
     -- HMD quaternion makes a head turn look like wheel input. Keep world-up for throttle.
     if boat_reference_inv == nil then
@@ -410,14 +491,50 @@ local function step_boat(pawn)
     local offset_r = { X = r.X - h.X, Y = r.Y - h.Y, Z = r.Z - h.Z }
     local lp = rotate(boat_reference_inv, offset_l)
     local rp = rotate(boat_reference_inv, offset_r)
+    local motion = boat_last_motion_sample
+    if motion ~= nil then
+        local dt = clock - motion.time
+        if dt > 0 then
+            local dl = math.sqrt((lp.X - motion.lx) ^ 2 + (lp.Y - motion.ly) ^ 2 + (lp.Z - motion.lz) ^ 2) / dt
+            local dr = math.sqrt((rp.X - motion.rx) ^ 2 + (rp.Y - motion.ry) ^ 2 + (rp.Z - motion.rz) ^ 2) / dt
+            if dl > 8 or dr > 8 then
+                boat_axis_x, boat_axis_y, boat_throttle = 0, 0, 0
+                boat_neutral_lx, boat_neutral_ry = nil, nil
+                boat_calibration_started, boat_stable_since, boat_calibration_sample = nil, nil, nil
+                boat_throttle_candidate, boat_throttle_candidate_since = nil, nil
+                boat_last_motion_sample = nil
+                if clock - boat_pose_error_last_log >= 1 then
+                    boat_pose_error_last_log = clock
+                    log(string.format("boat controls fail-safe: implausible pose jump (left %.1f m/s, right %.1f m/s)", dl, dr))
+                end
+                return
+            end
+        end
+    end
+    boat_last_motion_sample = { time = clock, lx = lp.X, ly = lp.Y, lz = lp.Z, rx = rp.X, ry = rp.Y, rz = rp.Z }
     local lx, ry = lp.X, rp.Y
     if boat_neutral_lx == nil then
-        boat_neutral_lx, boat_neutral_ry = lx, ry
-        boat_throttle = 0
-        log("boat gestures calibrated; left hand steers, right hand sets throttle")
-        log_boat_anchors(pawn)
+        boat_axis_x, boat_axis_y, boat_throttle = 0, 0, 0
+        boat_calibration_started = boat_calibration_started or clock
+        local prior = boat_calibration_sample
+        local stable = prior ~= nil and math.abs(lx - prior.lx) < 0.015 and math.abs(ry - prior.ry) < 0.015
+        boat_calibration_sample = { lx = lx, ry = ry }
+        if stable then boat_stable_since = boat_stable_since or clock else boat_stable_since = nil end
+        -- Let the player place hands on wheel and throttle; capture neutral only after they hold still.
+        if clock - boat_calibration_started >= 1.0 and boat_stable_since ~= nil and clock - boat_stable_since >= 0.4 then
+            boat_neutral_lx, boat_neutral_ry = lx, ry
+            boat_calibration_started, boat_stable_since, boat_calibration_sample = nil, nil, nil
+            boat_throttle_candidate, boat_throttle_candidate_since = 0, clock
+            log("boat gestures calibrated after stable hand placement; left=steering right=throttle")
+            log_boat_anchors(pawn)
+        elseif clock - boat_pose_error_last_log >= 1 then
+            boat_pose_error_last_log = clock
+            log("boat hand calibration polling: keep both hands still on controls")
+        end
+        return
     end
     sync_cosmetic_wheel(pawn)
+    log_boat_anchors(pawn)
     -- Horizontal left-hand travel maps to the boat's full steering input.
     local steer = lx - boat_neutral_lx
     boat_axis_x = math.max(-1, math.min(1, steer / cfg.boat_steer_range_m))
@@ -425,21 +542,42 @@ local function step_boat(pawn)
     -- Three physical detents. Hysteresis prevents chatter around neutral/full travel.
     local lift = ry - boat_neutral_ry
     local previous = boat_throttle or 0
-    local next_level = previous
-    if lift > (previous == 1 and cfg.boat_throttle_turnaround_m or cfg.boat_throttle_enter_m) then next_level = 1
-    elseif lift < -(previous == -1 and cfg.boat_throttle_turnaround_m or cfg.boat_throttle_enter_m) then next_level = -1
-    elseif math.abs(lift) < cfg.boat_throttle_release_m then next_level = 0 end
-    if next_level ~= previous then
-        boat_throttle = next_level
-        boat_axis_y = next_level
-        log("boat throttle detent: " .. (next_level == 1 and "forward" or next_level == -1 and "reverse" or "neutral"))
-        -- UEVR 2.39 exposes this wrapper; guard it for runtimes that omit haptics.
-        pcall(function()
-            local source = vr.get_right_joystick_source()
-            vr.trigger_haptic_vibration(0, 0.025, 150, 0.45, source)
-        end)
+    local candidate = previous
+    if previous == 0 then
+        if lift >= cfg.boat_throttle_enter_m then candidate = 1
+        elseif lift <= -cfg.boat_throttle_enter_m then candidate = -1 end
+    elseif previous == 1 and lift < cfg.boat_throttle_release_m then
+        candidate = 0
+    elseif previous == -1 and lift > -cfg.boat_throttle_release_m then
+        candidate = 0
+    end
+    if candidate ~= previous then
+        if boat_throttle_candidate ~= candidate then
+            boat_throttle_candidate, boat_throttle_candidate_since = candidate, clock
+        elseif clock - (boat_throttle_candidate_since or clock) >= 0.12 then
+            boat_throttle = candidate
+            boat_throttle_candidate, boat_throttle_candidate_since = candidate, clock
+            boat_axis_y = candidate
+            log("boat throttle detent: " .. (candidate == 1 and "forward" or candidate == -1 and "reverse" or "neutral"))
+            -- UEVR 2.39 exposes this wrapper; guard it for runtimes that omit haptics.
+            pcall(function()
+                local source = vr.get_right_joystick_source()
+                vr.trigger_haptic_vibration(0, 0.025, 150, 0.45, source)
+            end)
+        else
+            boat_axis_y = previous
+        end
     else
-        boat_axis_y = boat_throttle or 0
+        boat_throttle_candidate, boat_throttle_candidate_since = previous, clock
+        boat_axis_y = previous
+    end
+    -- Low-rate live telemetry makes helm alignment and room-scale drift diagnosable from an
+    -- ordinary playtest log without recording every VR frame.
+    boat_pose_sample_ticks = boat_pose_sample_ticks + 1
+    if boat_pose_sample_ticks >= 90 then
+        boat_pose_sample_ticks = 0
+        log(string.format("boat pose: L=(%.3f,%.3f,%.3f) R=(%.3f,%.3f,%.3f) head=(%.3f,%.3f,%.3f) steer=%.2f throttle=%d",
+            lp.X, lp.Y, lp.Z, rp.X, rp.Y, rp.Z, h.X, h.Y, h.Z, boat_axis_x, boat_throttle or 0))
     end
 end
 
@@ -781,6 +919,19 @@ end)
 -- player's own trigger passes through untouched.
 uevr.sdk.callbacks.on_xinput_get_state(function(retval, user_index, state)
     if user_index ~= 0 or state == nil then return end
+    -- BP_SmallBoat_V2 routes IA_BoatLook straight into AddControllerYawInput/PitchInput.
+    -- In the tracked first-person helm, right-stick camera rotation turns the boat-relative
+    -- controller frame underneath the hands. Keep HMD look active and suppress only this
+    -- gamepad look axis until the player returns to third-person.
+    if active_mode == "boat" and boat_camera_state == "first_person" then
+        state.Gamepad.sThumbRX, state.Gamepad.sThumbRY = 0, 0
+        if not boat_camera_look_suppressed then
+            boat_camera_look_suppressed = true
+            log("boat first-person right-stick look suppressed; use head tracking to look")
+        end
+    else
+        boat_camera_look_suppressed = false
+    end
     if fishing_fish_id ~= nil then
         local gamepad = state.Gamepad
         if fishing_axis_x ~= 0 then gamepad.sThumbLX = math.floor(fishing_axis_x * 32767) end

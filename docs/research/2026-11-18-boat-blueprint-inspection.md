@@ -35,6 +35,13 @@ dump. The tool reads the game containers and writes only its requested output fo
   steering roll `+65` or `-65` degrees (zero returns to the hull's calm-roll offset); the Y axis
   selects throttle lever roll `+25`, `-22`, or `0` degrees. Both are interpolated with `FInterpTo`
   at speed `2`.
+- The cooked `Small_Boat_Steerwheel` static mesh exports an `LHand_Socket`, and `Throttle_lever`
+  exports an `RHand` socket. These are the authored grip transforms for the two visible controls;
+  use them to position the rendered VR hands instead of estimating grip offsets from screenshots.
+- `IA_BoatLook` feeds its X/Y values directly to `AddControllerYawInput` and
+  `AddControllerPitchInput`. In the first-person tracked helm, that gamepad look rotates the
+  control frame under the tracked hands; the mod now suppresses right-stick look only in that
+  view, leaving head tracking active and third-person gamepad look unchanged.
 - `BP_ShipSteeringWheel` listens for the `CosmeticModulars.Ship.Wheel` slot change. With a
   cosmetic wheel installed, it hides the base `Small_Boat_Steerwheel`, enables actor ticking,
   resolves the active cosmetic module, and on each tick copies the steering-wheel actor's world

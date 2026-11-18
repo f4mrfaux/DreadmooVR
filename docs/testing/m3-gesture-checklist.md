@@ -21,19 +21,43 @@ be limited to a combination that passes this checklist.
    move the right hand horizontally and vertically. Record whether A is accepted and whether both
    directions move the QTE indicator. Other QTEs should keep their physical inputs.
 4. **First-person small boat:** enter the `BP_SmallBoat_V2` helm while on foot. Check the VR arms
-   remain visible even though the game hides the diver actor. Hold the left hand near the wheel at
-   entry, then move it horizontally left/right to steer. The neutral hand pose is captured on helm
-   entry; about 22 cm reaches full steering by default.
+   remain visible even though the game hides the diver actor. The left hand should sit on the
+   wheel's authored `LHand_Socket`; the right should sit on the throttle's `RHand` socket. Move the
+   left hand through a left/right arc to steer; about 22 cm of horizontal travel reaches full
+   steering by default. HMD movement should look around; first-person right-stick camera look is
+   suppressed because it rotates the game control frame underneath the tracked hands. Third-person
+   camera look remains native.
    Also watch the selected wheel cosmetic overlay while steering fully left and right: it should
    remain aligned with and rotate together with the base `Small_Boat_Steerwheel`, without lag or
    snapping back. This sync is implemented in M3 but has no live validation yet.
-5. **Throttle:** keep the right hand near its entry height for neutral. Raise it about 14 cm for
-   forward, return to neutral, then lower it about 14 cm for reverse. Confirm one right-controller
-   haptic click at each state change. Other boat types intentionally retain their native stick.
+5. **Throttle:** on entering first-person helm, keep both hands on their controls and still through
+   the brief calibration poll (at least 1.4 s, including 0.4 s of stable pose). No axes should be
+   sent during calibration. Keep the right hand near its captured height for neutral. Raise it
+   about 14 cm for forward, return through neutral, then lower it about 14 cm for reverse. Each
+   detent must remain requested for 120 ms before it is accepted and produces one right-controller
+   haptic click. Invalid/out-of-range poses must zero the axes and restart calibration. Other boat
+   types intentionally retain their native stick.
 
 After the run, send the visible behavior plus log lines containing `fishing`, `boat mesh anchors`,
 `boat throttle detent`, `boat arms visibility`, or `FAILED`. The boat anchor log gives the live
 world positions of the wheel mesh and throttle lever for alignment review.
+
+## 2026-11-18 first-person helm recording
+
+OBS captured `C:\Users\Bob\Videos\Mod Showcase\Mod Showcase 2026-11-18 14-02-13.mkv`
+(4m 50s). The player reported that steering no longer felt reversed on this pass. Frames around
+160s, 230s, and 270s show the tracked hands near the helm controls, but their alignment changes as
+the view/control frame turns; the right hand only appears near the throttle in some frames. The
+game Blueprint routes `IA_BoatLook` to controller yaw and pitch, so first-person right-stick look
+was identified as a source of that frame movement. The source now suppresses that look input in
+first person and uses the static mesh's authored grip sockets for the two rendered hands. These
+changes are not live validated until the updated Lua scripts are reloaded.
+
+The same recording's runtime log showed `boat controls FAILED: caught (...) exception` on helm
+entry. The profile currently contains `VR_MovementOrientation=1` and `VR_RoomscaleMovement=true`;
+we need a fresh run with per-setting failure logs to confirm whether the boat override disables
+room-scale movement. Do not attribute the reported forward camera push to room-scale until that
+check passes.
 
 ## Melee guard
 
@@ -100,7 +124,15 @@ timed out or accepted input.
   The game hides its diver actor at the helm, so M2 clears the arms mesh's inherited hidden state
   while keeping it attached to the diver skeletal-mesh pose source; shoulder solving uses boat pawn
   yaw and hand targets stay tied to the tracked controllers.
-  Expected logs: boat mesh anchors, boat throttle detent: forward|neutral|reverse.
+  Expected logs: `boat mesh anchors`, `boat pose`, and `boat throttle detent: forward|neutral|reverse`.
+  `boat pose` samples SteamVR head/hand positions and the resulting rudder/throttle values once a
+  second; use its timestamps alongside a screen recording when checking hand alignment or drift.
+  UEVR boat-setting failures now identify the specific setting key and operation (read, set, or
+  restore). Anchor discovery retries while the child actor is spawning and reports the failing
+  component lookup rather than silently falling back. Helm poses are checked for finite position,
+  plausible tracking-space bounds, a near-unit quaternion, and implausible per-frame hand jumps;
+  missing controller tracking fails to neutral and requires recalibration. The throttle uses a stable-hand polling delay on entry
+  and a 120 ms detent debounce to reduce accidental movement while the right hand is settling.
   Tune live in the gestures table: boat_steer_range_m controls the horizontal travel to full
   rudder, boat_throttle_enter_m chooses forward/reverse, boat_throttle_release_m defines neutral,
   and boat_throttle_turnaround_m sets the hysteresis when changing direction.
