@@ -56,12 +56,13 @@ cosmetic mesh should still be smoke-tested in game.
 ## Mod comparison and correction
 
 The mod's post-tick cosmetic sync had been copying the base mesh component's world rotation. The
-game Blueprint copies the `BP_ShipSteeringWheel` actor's world rotation instead. Since the mesh
-component can carry its own relative rotation, using the component can inject an unwanted offset
-into the cosmetic mesh. The mod now reads `K2_GetActorRotation()` from the wheel actor, matching
-the shipped Blueprint. The smoke-test fixture now gives the component a deliberately different
-rotation from its actor and asserts that only the actor rotation is copied. This verifies the
-space/transform source in the harness; a live in-game cosmetic-wheel check is still required.
+game Blueprint copies the steering-wheel actor's world rotation to
+`CurrentActiveWheelCosmetic.Actor`. Since the mesh component can carry its own relative rotation,
+using the component can inject an unwanted offset into the cosmetic mesh. The mod now reads
+`K2_GetActorRotation()` from the wheel actor and writes it to the nested cosmetic actor, matching
+the shipped Blueprint. The smoke fixture uses the same wrapper/Actor shape and gives the mesh a
+deliberately different rotation. This verifies the source and destination in the harness; a live
+in-game cosmetic-wheel check is still required.
 
 The current boat dump also confirms `bFirstPersonCameraEnabled` is updated by the boat's camera
 switch event. The gesture bridge now gates its XInput axis override on that flag: third-person

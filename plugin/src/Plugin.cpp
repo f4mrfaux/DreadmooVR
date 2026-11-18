@@ -302,6 +302,40 @@ private:
                         log("t=%lld dev=%u %s", (long long)t, m_device[i], line->c_str());
                         first_change_to_lua(*line, v);
                     }
+                    vr::InputSkeletalActionData_t action{};
+                    vr::VRSkeletalSummaryData_t summary{};
+                    auto data_err = m_input->GetSkeletalActionData(a.handle, &action, sizeof(action));
+                    auto summary_err = data_err == vr::VRInputError_None && action.bActive
+                        ? m_input->GetSkeletalSummaryData(a.handle, vr::VRSummaryType_FromDevice, &summary)
+                        : vr::VRInputError_NoData;
+                    const bool curls_valid = data_err == vr::VRInputError_None && action.bActive
+                        && summary_err == vr::VRInputError_None;
+                    if (curls_valid) {
+                        const dvr::FingerCurls curls{summary.flFingerCurl[vr::VRFinger_Thumb],
+                            summary.flFingerCurl[vr::VRFinger_Index], summary.flFingerCurl[vr::VRFinger_Middle],
+                            summary.flFingerCurl[vr::VRFinger_Ring], summary.flFingerCurl[vr::VRFinger_Pinky]};
+                        if (dvr::valid_finger_curls(curls)) {
+                            m_finger_curls[i] = curls;
+                            m_finger_valid[i] = true;
+                            static const char* names[] = {"thumb", "index", "middle", "ring", "pinky"};
+                            for (size_t finger = 0; finger < curls.size(); ++finger)
+                                analog(t, i, std::string("FingerCurl.") + names[finger] + "@" + hand_name(i), curls[finger]);
+                            if (t - m_last_finger_event_ms[i] >= 33) {
+                                m_last_finger_event_ms[i] = t;
+                                char sample[96];
+                                snprintf(sample, sizeof(sample), "%s|%.3f,%.3f,%.3f,%.3f,%.3f", hand_name(i),
+                                    curls[0], curls[1], curls[2], curls[3], curls[4]);
+                                API::get()->dispatch_lua_event("dreadmoorvr_finger_curls", sample);
+                            }
+                            continue;
+                        }
+                    }
+                    m_finger_valid[i] = false;
+                    if (t - m_last_finger_event_ms[i] >= 250) {
+                        m_last_finger_event_ms[i] = t;
+                        std::string sample = std::string(hand_name(i)) + "|inactive";
+                        API::get()->dispatch_lua_event("dreadmoorvr_finger_curls", sample);
+                    }
                 }
             }
         }
@@ -357,6 +391,13 @@ private:
             for (int i = 0; i < 2; ++i)
                 r << "hand " << hand_name(i) << ": device " << m_device[i] << " type " << m_type[i]
                   << " pose valid " << pct(m_pose_valid[i]) << "%\n";
+            r << "finger curls (0=open, 1=curled; FromDevice summary):\n";
+            for (int i = 0; i < 2; ++i) {
+                r << "  " << hand_name(i) << ": " << (m_finger_valid[i] ? "valid" : "unavailable")
+                  << " thumb=" << m_finger_curls[i][0] << " index=" << m_finger_curls[i][1]
+                  << " middle=" << m_finger_curls[i][2] << " ring=" << m_finger_curls[i][3]
+                  << " pinky=" << m_finger_curls[i][4] << "\n";
+            }
             r << "uevr: hmd_active " << pct(m_ticks_hmd) << "% of ticks, using_controllers " << pct(m_ticks_ctl) << "%\n";
             r << "presses (digital action -> count):\n";
             for (auto& [k, n] : m_presses) r << "  " << k << " " << n << "\n";
@@ -386,6 +427,9 @@ private:
     dvr::MapAggregator m_map;
     std::vector<std::string> m_down;
     std::map<std::string, size_t> m_presses;
+    dvr::FingerCurls m_finger_curls[2]{};
+    bool m_finger_valid[2]{};
+    int64_t m_last_finger_event_ms[2]{};
     uint16_t m_last_pad{0xFFFF};
     size_t m_ticks{0}, m_ticks_hmd{0}, m_ticks_ctl{0}, m_pose_valid[2]{0, 0};
     size_t m_dropped_digital_reported{0}, m_dropped_analog_reported{0};

@@ -174,5 +174,20 @@ deadzone, forward/neutral/reverse detents and haptics, and the post-game-tick co
 for left and right turns. Its fixture gives the wheel mesh a relative rotation offset to catch
 component-versus-actor rotation mismatches. The expected source is
 `BP_ShipSteeringWheel.ReceiveTick`, which copies the steering-wheel actor's world rotation to the
-cosmetic actor. It uses fake UEVR/game objects, so it verifies bridge logic only; the headset
+`CurrentActiveWheelCosmetic.Actor`. It uses fake UEVR/game objects, so it verifies bridge logic only; the headset
 checklist above is still needed for the live wheel model, tracking reach, and haptic feel.
+
+The visible hand targets are rebased every frame to the boat meshes' authored grip sockets in
+`m2_arms.lua`: left to `Small_Boat_Steerwheel.LHand_Socket`, right to `Throttle_lever.RHand`.
+Gesture input still reads the raw tracked controller poses, so hand anchoring does not move the
+steering or throttle neutral reference. The controller-to-socket alignment and cosmetic actor
+sync both still need confirmation with the selected in-game wheel cosmetic.
+
+## Finger tracking probe
+
+The native plugin reads OpenVR `FromDevice` finger-curl summaries for the two bound skeleton
+actions and streams five channels per hand to M2: thumb, index, middle, ring, and pinky (0=open,
+1=curled). In a safe area, move each finger through open/closed positions separately. Check that
+the corresponding channel changes in the UEVR log/report without another finger being mistaken
+for it. This validates the controller sensor-to-SteamVR-to-plugin path. The avatar rig is not yet
+applying these curl channels, so this pass is for sensor diagnosis rather than visual hand pose.

@@ -15,6 +15,10 @@ pending has not passed headset acceptance.
   first-person; switching views restores or recalibrates the gesture axes.
 - Matched cosmetic steering wheel updates to the game's steering-wheel actor rotation to avoid
   applying the mesh component's local offset twice.
+- Corrected the cosmetic wheel sync target to the modular cosmetic's nested `Actor`, matching the
+  shipped `BP_ShipSteeringWheel` Blueprint. Live headset confirmation is pending.
+- Added SteamVR five-finger curl telemetry for both controllers. It is diagnostic only; visible
+  avatar finger articulation still needs a rig implementation and headset validation.
 - Removed the automatic M1 debug-cube spawn from the production bridge.
 - Local Lua and native test suites pass. Headset acceptance for fishing, boat steering/throttle,
   arms/shoulders, crafting, and the target Steam Frame input setup is still pending. The reported

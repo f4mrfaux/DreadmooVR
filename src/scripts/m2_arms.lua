@@ -61,6 +61,7 @@ local last_tuning_check, applied = -1, {}
 local fit = { shoulder_widen = 0, shoulder_follow = 0.5, shoulder_follow_max = 12, grip_back = 0,
     items_follow_hands = false, level_torso = false, shoulder_swing = 1 }
 local hand_states = {}                               -- UEVR MotionControllerStates, set at spawn
+local finger_curls = { L = nil, R = nil }            -- SteamVR skeleton summary, 0=open, 1=curled
 local boat_hand_anchor_active, boat_hand_anchor_last_log = false, -math.huge
 local boat_hand_anchor_offsets = {}
 local function apply_tuning(now, mode)
@@ -558,9 +559,21 @@ local function spawn(pawn)
 end
 
 uevr.sdk.callbacks.on_lua_event(function(name, data)
-    if name ~= "dreadmoorvr_class_loaded" then return end
-    log("plugin reply: " .. tostring(data))
-    flow:on_reply(data)
+    if name == "dreadmoorvr_class_loaded" then
+        log("plugin reply: " .. tostring(data))
+        flow:on_reply(data)
+        return
+    end
+    if name ~= "dreadmoorvr_finger_curls" or type(data) ~= "string" then return end
+    local side, values = data:match("^([LR])|(.+)$")
+    if side == nil then return end
+    if values == "inactive" then finger_curls[side] = nil; return end
+    local a, b, c, d, e = values:match("^([%d%.%-]+),([%d%.%-]+),([%d%.%-]+),([%d%.%-]+),([%d%.%-]+)$")
+    a, b, c, d, e = tonumber(a), tonumber(b), tonumber(c), tonumber(d), tonumber(e)
+    if a and b and c and d and e and a >= 0 and a <= 1 and b >= 0 and b <= 1
+        and c >= 0 and c <= 1 and d >= 0 and d <= 1 and e >= 0 and e <= 1 then
+        finger_curls[side] = { thumb = a, index = b, middle = c, ring = d, pinky = e }
+    end
 end)
 
 local controls_err_logged = false

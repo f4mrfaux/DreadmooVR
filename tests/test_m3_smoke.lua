@@ -40,10 +40,11 @@ local function world(tool_socket, on_body)
     local wheel = { rotation = { Pitch = 0, Yaw = 0, Roll = 0 },
         K2_GetComponentLocation = function() return { x = 100, y = 20, z = 30 } end,
         K2_GetComponentRotation = function(self) return self.rotation end }
-    local cosmetic = { K2_SetActorRotation = function(_, rotation)
+    local cosmetic_actor = { K2_SetActorRotation = function(_, rotation)
         W.cosmetic_rotation = { Pitch = rotation.Pitch, Yaw = rotation.Yaw, Roll = rotation.Roll }
         W.cosmetic_updates = (W.cosmetic_updates or 0) + 1
     end }
+    local cosmetic = { Actor = cosmetic_actor }
     local wheel_child = { Small_Boat_Steerwheel = wheel, CurrentActiveWheelCosmetic = cosmetic,
         actor_rotation = { Pitch = 0, Yaw = 0, Roll = 0 },
         K2_GetActorRotation = function(self) return self.actor_rotation end }
@@ -51,7 +52,7 @@ local function world(tool_socket, on_body)
         Controller = { PlayerCameraManager = pcm }, GetTransform = function() return {} end,
         BP_ShipSteeringWheel = { GetChildActor = function() return wheel_child end },
         Throttle_lever = { K2_GetComponentLocation = function() return { x = 90, y = 10, z = 20 } end } }
-    W.wheel, W.wheel_cosmetic, W.wheel_child = wheel, cosmetic, wheel_child
+    W.wheel, W.wheel_cosmetic, W.wheel_cosmetic_actor, W.wheel_child = wheel, cosmetic, cosmetic_actor, wheel_child
     W.mouse = nil
     W.set_mode = function(mode, first_person)
         if mode == "fishing" then

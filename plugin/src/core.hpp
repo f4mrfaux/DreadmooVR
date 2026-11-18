@@ -1,8 +1,10 @@
 // Pure, UEVR-free logic for DreadmoorVR.dll. Desk-tested by tests/test_core.cpp.
 #pragma once
+#include <array>
 #include <cstddef>
 #include <cstdint>
 #include <cstdio>
+#include <cmath>
 #include <optional>
 #include <string>
 #include <string_view>
@@ -15,6 +17,13 @@ struct ActionDecl {
     std::string name;
     std::string type;
 };
+
+using FingerCurls = std::array<float, 5>; // OpenVR order: thumb, index, middle, ring, pinky.
+
+inline bool valid_finger_curls(const FingerCurls& curls) {
+    for (float curl : curls) if (!std::isfinite(curl) || curl < 0.0f || curl > 1.0f) return false;
+    return true;
+}
 
 namespace detail {
 // Reads a JSON string starting at s[i] == '"'. Returns end index past the closing quote, or npos.

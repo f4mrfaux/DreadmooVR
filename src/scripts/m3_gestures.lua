@@ -208,6 +208,7 @@ local boat_controls_active = false
 local boat_pose_error_last_log = -math.huge
 local boat_gesture_error_last_log = -math.huge
 local boat_calibration_log_last = -math.huge
+local boat_cosmetic_error_last_log = -math.huge
 local fishing_pose_error_last_log = -math.huge
 local fishing_gesture_error_last_log = -math.huge
 local boat_anchor_retry_ticks, boat_anchor_attempt = 0, 0
@@ -434,17 +435,26 @@ local function log_boat_anchors(pawn)
 end
 
 local function sync_cosmetic_wheel(pawn)
-    pcall(function()
+    local ok, err = pcall(function()
         local child = boat_wheel_actor(pawn)
         if child == nil then return end
-        local cosmetic = child.CurrentActiveWheelCosmetic
-        if cosmetic == nil then return end
+        local cosmetic_module = child.CurrentActiveWheelCosmetic
+        if cosmetic_module == nil then return end
+        -- The Blueprint property is a modular-object wrapper; its Actor member is the spawned
+        -- cosmetic actor that actually receives SetActorRotation (BP_ShipSteeringWheel L0D9E).
+        -- Some game versions may expose the actor directly, so retain that safe fallback.
+        local cosmetic = cosmetic_module.Actor
+        if cosmetic == nil then cosmetic = cosmetic_module end
         -- Match BP_ShipSteeringWheel.ReceiveTick: it copies the steering-wheel ACTOR's
         -- world rotation to the cosmetic module. The mesh component may have its own
         -- relative rotation, so using its world rotation adds that offset a second time.
         local wheel_rotation = child:K2_GetActorRotation()
         cosmetic:K2_SetActorRotation(wheel_rotation, false)
     end)
+    if not ok and clock - boat_cosmetic_error_last_log >= 2 then
+        boat_cosmetic_error_last_log = clock
+        log("boat cosmetic wheel sync FAILED: " .. tostring(err))
+    end
 end
 
 local function supports_wheel_boat(pawn)
