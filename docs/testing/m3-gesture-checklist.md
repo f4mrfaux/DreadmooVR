@@ -187,7 +187,10 @@ sync both still need confirmation with the selected in-game wheel cosmetic.
 
 The native plugin reads OpenVR `FromDevice` finger-curl summaries for the two bound skeleton
 actions and streams five channels per hand to M2: thumb, index, middle, ring, and pinky (0=open,
-1=curled). In a safe area, move each finger through open/closed positions separately. Check that
-the corresponding channel changes in the UEVR log/report without another finger being mistaken
-for it. This validates the controller sensor-to-SteamVR-to-plugin path. The avatar rig is not yet
-applying these curl channels, so this pass is for sensor diagnosis rather than visual hand pose.
+1=curled). The M2 listener eases these values into `ABP_VRArms`, whose AnimGraph bends all three
+joints of each digit. In a safe area, move each finger through open/closed positions separately.
+Check the corresponding avatar finger moves smoothly, opens fully, and does not pull neighboring
+digits along. Check thumb opposition and both hands from a relaxed open pose through a fist. The
+initial bend angles are a starting fit; report any finger bending backwards or clipping into the
+palm so we can correct its axis/sign and per-joint angles. The log/report curls remain available
+to distinguish sensor input from mesh articulation.

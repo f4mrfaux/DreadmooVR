@@ -62,6 +62,16 @@ local fit = { shoulder_widen = 0, shoulder_follow = 0.5, shoulder_follow_max = 1
     items_follow_hands = false, level_torso = false, shoulder_swing = 1 }
 local hand_states = {}                               -- UEVR MotionControllerStates, set at spawn
 local finger_curls = { L = nil, R = nil }            -- SteamVR skeleton summary, 0=open, 1=curled
+local finger_channel_names = {
+    { field = "thumb", name = "Thumb" }, { field = "index", name = "Index" },
+    { field = "middle", name = "Middle" }, { field = "ring", name = "Ring" },
+    { field = "pinky", name = "Pinky" },
+}
+local finger_smoothed = {
+    L = { thumb = 0, index = 0, middle = 0, ring = 0, pinky = 0 },
+    R = { thumb = 0, index = 0, middle = 0, ring = 0, pinky = 0 },
+}
+local finger_anim_error_logged = false
 local boat_hand_anchor_active, boat_hand_anchor_last_log = false, -math.huge
 local boat_hand_anchor_offsets = {}
 local function apply_tuning(now, mode)
@@ -576,6 +586,37 @@ uevr.sdk.callbacks.on_lua_event(function(name, data)
     end
 end)
 
+-- Stream each capacitive SteamVR finger curl to the matching AnimInstance property. The
+-- AnimGraph's three additive ModifyBone nodes per digit use this 0=open, 1=closed value as Alpha.
+-- Smooth the 30 Hz device samples to avoid visible stepping at the headset frame rate.
+local function update_finger_animation(delta)
+    if actor == nil or actor.Body == nil then return end
+    local ok, err = pcall(function()
+        local body = actor.Body
+        if type(body.GetAnimInstance) ~= "function" then return end
+        local anim = body:GetAnimInstance()
+        if anim == nil then return end
+        local blend = 1.0 - math.exp(-math.max(0, delta or 0) / 0.045)
+        for _, side in ipairs({ "L", "R" }) do
+            local sample = finger_curls[side]
+            for _, channel in ipairs(finger_channel_names) do
+                local field = channel.field
+                local current = finger_smoothed[side][field] or 0
+                local target = sample and sample[field] or 0
+                current = current + (target - current) * blend
+                finger_smoothed[side][field] = current
+                anim["FingerCurl" .. side .. channel.name] = current
+            end
+        end
+    end)
+    if ok then
+        finger_anim_error_logged = false
+    elseif not finger_anim_error_logged then
+        finger_anim_error_logged = true
+        log("finger animation update FAILED: " .. tostring(err))
+    end
+end
+
 local controls_err_logged = false
 uevr.sdk.callbacks.on_pre_engine_tick(function(_, delta)
     clock = clock + (delta or 0)
@@ -619,6 +660,7 @@ uevr.sdk.callbacks.on_pre_engine_tick(function(_, delta)
     elseif mode == "walking" then
         arms_body_visible_mode = "walking"
     end
+    if actor ~= nil then update_finger_animation(delta) end
     if flow.status == "active" and actor ~= nil then
         local okt, errt = pcall(apply_tuning, clock, mode)
         if mode == "walking" and fit.level_torso and not torso_hooked and pawn ~= nil then

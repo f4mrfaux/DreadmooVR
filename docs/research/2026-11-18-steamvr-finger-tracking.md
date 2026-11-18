@@ -17,10 +17,15 @@ the five channels to the M2 Lua listener at up to 30 Hz:
 - Values are reported for thumb, index, middle, ring, and pinky.
 - Skeleton loss marks the sample unavailable.
 
-This is sensor streaming, not a pose recognizer, and it does not yet animate the rendered VR hand.
-The Lua listener currently validates and retains the samples; it does not feed an animation
-property. The plugin build and existing Lua suite pass, but the Frame's live curl values still need
-to be confirmed by moving one finger at a time in game.
+This is sensor streaming, not a pose recognizer. M2 now sends each sample to the corresponding
+`ABP_VRArms` AnimInstance float and eases toward the latest value with a 45 ms time constant. The
+AnimGraph drives all 30 finger joints with additive `Modify Bone` nodes in parent-bone space: three
+segments per thumb, index, middle, ring, and pinky on both hands. Each finger channel controls its
+three joints together; proximal/middle/distal flex angles start at 25/35/25 degrees for the thumb
+and 35/55/35 degrees for the other digits. Those are initial articulation settings, not headset
+calibration. UE 5.6 compiled the AnimBlueprint after both graph batches, and graph inspection
+confirmed all 30 targets, curl Alpha links, and pose links. The Frame's live values, rotation axis
+direction, and visual fit still need an in-game finger-by-finger check.
 
 ## Fallout 4 VR Body / FRIK comparison
 
@@ -42,13 +47,11 @@ source and distribution terms that apply to derivative code. Keep such code isol
 license compatibility before shipping it. Our existing UBIK arm solver is separately attributed in
 `src/scripts/lib/ubik.lua` to UBIKSolver (MIT, Jonas Mølgaard, 2023); it is not FRIK code.
 
-The immediate blocker is the project arm asset: `ABP_VRArms` exposes hand targets/locations and
-rotations, but binary string inspection found no thumb or finger controls. The game's reflected
-`UPoseableMeshComponent` APIs (`CopyPoseFromSkeletalComponent`, `SetBoneRotationByName`, and
-related calls) are a possible runtime route, but the notes explicitly mark it untested. Before
-choosing that route, inspect the game's actual hand bone names and the arm mesh skeleton, then prove
-one finger can be rotated on a temporary poseable copy. If that works, add a small per-hand
-five-curl adapter and drive the corresponding finger chains; keep the UBIK arm solve untouched.
+The arm asset has no skeletal finger controls baked into its original AnimGraph, so the mod now
+adds its own per-digit layer after wrist IK. The game skeleton was inspected through EngineWire;
+the real finger bone names are `thumb_01..03`, `index_01..03`, `middle_01..03`, `ring_01..03`, and
+`pinky_01..03`, each with `_l` and `_r` suffixes. This keeps the existing UBIK arm solve untouched.
+`UPoseableMeshComponent` remains a fallback only; it is not used by the current implementation.
 
 References:
 
