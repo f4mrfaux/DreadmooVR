@@ -41,4 +41,4 @@ This is authorized game-mod work. I built the local parsers and used them to tra
 
 ## Developer note
 
-AI helped trace and cross-check game calls and Unreal APIs; I verified the findings and did the runtime tuning. I can read C++; I just can't read a whole game's worth of Blueprint bytecode by hand before breakfast.
+AI helped trace and cross-check shipped-game calls and Unreal APIs. I verified the findings against the project and runtime, then did the headset tuning. I can read C++; I just can’t read a whole game’s worth of Blueprint bytecode by hand before breakfast.
