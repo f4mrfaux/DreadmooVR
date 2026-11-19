@@ -78,3 +78,19 @@ through unchanged in third-person.
 - The updated Lua scripts were deployed to the UEVR profile with `tools/deploy.ps1 -NoPak`; the
   game pak was left untouched. Live headset validation of the camera switch and cosmetic wheel
   remains outstanding.
+
+## 2026-11-19 build 26786104 throttle follow-up
+
+Re-dumped `BP_SmallBoat_V2` from the newly installed `Dreadmoor-Windows.utoc` into
+`docs/research/bp-dumps/BP_SmallBoat_V2-build-26786104.txt`. The throttle graph is unchanged: positive
+`IA_BoatMove.Y` selects the `+25` lever target, negative selects `-22`. The 11:30 runtime trace
+also agrees: positive input (`+0.24` to `+0.64`) accompanies forward travel, while negative input
+(`-1.00`) accompanies reverse travel. The gamepad axis sign was therefore retained.
+
+M3 previously projected head-relative hand Z against the HMD yaw captured at helm entry. In the
+user's run, HMD orientation changed substantially after calibration, and a forward throttle
+attempt crossed the old frame's reverse threshold. M3 now stores the right-hand neutral point in
+tracking space and projects hand displacement onto the current HMD forward axis while neutral. It
+freezes that axis when a detent is being engaged or held, so head movement cannot flip an active
+throttle. This is a source correction; neutral/forward/reverse and head-turn hardware validation
+remain outstanding.

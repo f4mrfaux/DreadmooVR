@@ -3,6 +3,20 @@
 User-visible changes are recorded here. Dates are local development dates; an entry marked
 pending has not passed headset acceptance.
 
+## 1.0.0-beta.2 — 2026-11-19
+
+- Corrected the boat throttle gesture frame: neutral hand position is anchored in tracking space,
+  and the forward axis refreshes while neutral then stays fixed through each active detent. The
+  updated game's Blueprint and runtime movement confirm the existing positive-forward input sign;
+  this change addresses pose-frame misclassification rather than swapping gamepad polarity.
+- Locked fish-fight lean and directional-drag axes to a per-fish HMD reference, so looking around
+  and fishing-camera motion do not rotate hand gestures. HMD aim still controls the view.
+- Refined tracked-arm and hand-curl behavior, including mirrored left-hand digit articulation,
+  and added runtime diagnostics for boat grip reach, camera pose, and tracking state.
+- Expanded the headset checklist and recorded current cooked-Blueprint and live-log findings.
+- This is a private beta candidate. Boat throttle, fishing fight, hand anchoring, and camera behavior
+  still need headset acceptance; the release does not claim those paths are fully validated.
+
 ## 1.0.0-beta.1 candidate — 2026-11-18
 
 - Added gesture controls for fishing fight lean, reel cranking, DirectionalDrag QTE, small-boat

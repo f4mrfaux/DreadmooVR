@@ -12,7 +12,7 @@ return {
     shoulder_swing = 0.3,  -- 0..1 of the forward shoulder turn when reaching (1 = full UBIK)
     grip_back = 8,         -- cm from the controller grip back to your wrist
     camera_forward = -12,  -- cm, recent harness measured eye 2 cm behind shoulders; move 12 cm forward
-    boat_camera_forward = -30, -- cm, move helm view farther past the avatar torso; headset trial needed
+    boat_camera_forward = -30, -- cm, pull helm view back from the forward-mounted game camera to clear the dash/compass
     item_rot = { p = 0, y = 15, r = 0 },    -- Claude's final live sweep (2026-11-17); turns the barrel toward the observed hook-shot line
     level_torso = true,          -- the game's torso and head ignore look pitch (keeps the view out of the face)
     items_follow_hands = true,   -- held tools ride on the VR hands (false = game's own hand position)
@@ -25,7 +25,8 @@ return {
         enabled = true,
         crank_offset = { x = -0.06, y = 0.0, z = 0.04 },  -- crank point beside the gun
         crank_r_min = 0.04, crank_r_max = 0.25,           -- left hand distance from the crank axis
-        crank_min_deg_s = 180, crank_step_deg = 90,       -- one reel press per 90 degrees turned
+        crank_radius_hysteresis_m = 0.025,                -- tolerate small radial tracking jitter after crank acquisition
+        crank_min_deg_s = 110, crank_step_deg = 90,       -- slower natural turns; one reel press per 90 degrees
         swing_min_m_s = 2.0, swing_frames = 3, swing_cooldown_s = 0.4,
         guard_enabled = true,
         guard_enter_z = -0.65, guard_exit_z = -0.50,      -- thumb-down hysteresis; lower = more vertical
@@ -42,8 +43,9 @@ return {
         boat_steer_deadzone_m = 0.02,                      -- ignore small center noise (2 cm)
         boat_steer_curve = 1.25,                           -- softer center, still reaches full rudder
         boat_steer_smoothing_s = 0.08,                     -- light low-pass smoothing for tracking noise
-        boat_throttle_enter_m = 0.10,                       -- projected diagonal hand travel from hip-fire neutral
-        boat_throttle_release_m = 0.04,                     -- return to neutral inside this range
-        boat_throttle_turnaround_m = 0.06,                  -- cross through neutral to change direction
+        boat_throttle_enter_m = 0.05,                       -- small forward hand travel begins incremental acceleration
+        boat_throttle_release_m = 0.025,                    -- return to neutral inside this range
+        boat_throttle_turnaround_m = 0.08,                  -- cross through neutral to change direction
+        boat_throttle_reverse_enter_m = 0.22,               -- deliberate pull toward/behind the hip for reverse
     },
 }

@@ -4,7 +4,7 @@
 
 A VR mod for **Dreadmoor** (Unreal Engine 5.6) using UEVR and Steam Frame. It adds tracked arms and gesture controls for grappling, melee guard, fishing, crafting, and small-boat steering.
 
-**Status:** private beta candidate. Local checks are in place; final headset acceptance is still pending. See [v1 readiness](docs/testing/v1-readiness.md).
+**Status:** private beta `1.0.0-beta.2`. Boat, fishing, and tracked-arm headset acceptance is still pending. See [v1 readiness](docs/testing/v1-readiness.md).
 
 ## Features
 

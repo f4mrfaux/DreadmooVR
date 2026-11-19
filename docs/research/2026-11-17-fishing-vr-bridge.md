@@ -101,3 +101,37 @@ runtime defect.
   those contexts accept XInput A or need a mapping fix.
 - Confirm the held right-trigger crank continues reeling for the full drag and releases cleanly
   when movement stops or a QTE begins.
+
+## 2026-11-19 cast-camera and QTE follow-up
+
+Reviewed `C:\Users\Bob\Videos\Mod Showcase\Mod Showcase 2026-11-19 11-00-27.mp4` from the
+end backward (5m16s). The opening boat material is clean. The later fishing segment includes two
+cast gestures at 11:03:39–11:03:46 and a FishLand prompt at 11:04:24. The runtime log confirms the
+cast gesture pressed/released `IA_Fishing_Cast`; the M3 XInput callback writes fishing lean/QTE
+values to the left stick and the cast/reel action to the right trigger. It does not write camera
+look axes.
+
+The video exposed a control-frame mismatch: the configured UEVR `VR_AimMethod=2` makes aim follow
+the right controller, while the cast gesture deliberately moves that controller from beside the
+ear to forward reach. M2 now temporarily selects `VR_AimMethod=1` (HMD) in fishing mode and restores
+the configured aim method when fishing ends. This should keep the view with the headset while the
+right arm performs the cast. The runtime also logs M2 hiding the VR arms actor on fishing entry;
+this note records that behavior for the next review, without changing the visibility policy in this
+patch.
+
+The FishLand tag is observed at 11:04:24.130 and M3 releases the crank while leaving the QTE input
+physical. The desktop capture shows the prompt; headset visibility/readability still needs a fresh
+check after reloading M2. The fishing camera fix is code-reviewed but not yet headset-validated.
+
+## 2026-11-19 live follow-up after game build 26786104
+
+Reviewed the 11:23–11:29 runtime segment. Cast and hook-set gestures registered. During the fish
+fight, M3 repeatedly recalibrated after controller pose discontinuities, and the view aim switched
+to HMD (`VR_AimMethod=1`). The fish-fight gesture had been projecting hand-minus-current-HMD
+through the current HMD orientation every sample. That lets looking or a moving fishing camera
+rotate the gesture axes while the player is pulling the rod.
+
+M3 now captures a tracking-space origin and inverse HMD orientation once per struggling-fish
+instance. Fish-fight lean and directional-drag inputs use that fixed frame; the HMD still controls
+the view. Tracking-loss and fish-exit paths clear the captured frame so the next fish calibrates
+cleanly. This should separate rod motion from view rotation. A headset retest is still needed.

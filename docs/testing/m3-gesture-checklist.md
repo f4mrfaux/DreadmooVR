@@ -47,16 +47,23 @@ be limited to a combination that passes this checklist.
    low beside the hip for reverse; return to the hip-fire pose for neutral; then extend the right
    arm diagonally forward with a straight elbow for forward. The gesture projects hand motion onto
    an up-and-forward axis, so the diagonal reach counts even when the hand does not rise much. Each
-   detent must remain requested for 120 ms before it is accepted and produces one right-controller
+   detent must remain requested for 250 ms before it is accepted and produces one right-controller
    haptic click. Invalid/out-of-range pose reads must zero the axes and restart calibration. A
    false `is_using_controllers` hint alone must not suppress valid tracked poses; confirm steering
    still responds during that runtime state. Other boat types intentionally retain their native
    stick. First-person mode must keep gamepad LX/LY neutral during initial calibration, so a
    physical stick cannot leak through.
 
-After the run, send the visible behavior plus log lines containing `fishing`, `native SteamVR pose`,
-`boat mesh anchors`, `boat throttle detent`, `boat arms visibility`, or `FAILED`. The boat anchor log
-gives the live world positions of the wheel mesh and throttle lever for alignment review.
+After the run, record whether both hands visibly stay on the controls, the arms are visible, and
+the cosmetic wheel follows. Preserve log lines containing `fishing`, `native SteamVR pose`,
+`boat grip offsets cm`, `boat hand grip anchors`, `boat hand direct socket fallback`,
+`VR arms body visible at helm`, `arm L target=`, `arm R target=`, `boat throttle detent`, or
+`arms summary boat`, `torso ctrl_pitch=`, or `FAILED`. In particular, the
+`arm ... target=... hand=... elbow=... shoulder=...` samples compare
+each IK target with the protagonist mesh's evaluated joint positions; use their reach error to spot
+an unreachable grip or an elbow solve that remains stretched. The `arms summary boat` line reports
+the boat-only out-of-reach percentage and target error, separate from walking. The direct-fallback
+line distinguishes socket placement from the controller-local solver.
 
 ## 2026-11-18 first-person helm recording
 
@@ -110,10 +117,22 @@ the reel path. The Lua smoke fixture now supplies the same struct shape. Restart
 bridge before validating; check that `fishing crank: reel held` appears only while cranking and
 that normal fishing resumes after a QTE.
 
+**Tracking/reel follow-up (2026-11-19):** the boat log exposed a finite identity HMD pose at the
+tracking origin while controller samples remained stale. M3 now rejects that HMD pose for fishing
+cast, hook-set, and fight/reel as well as helm controls; active synthetic reel input releases and
+fishing neutral references clear. The crank keeps its 90-degree click cadence, but accepts turns
+down to 110 degrees/second and tolerates 2.5 cm of radial jitter after acquisition. This addresses
+the detector's hard reset at the 4 cm entry boundary. It is covered by smoke tests; it still needs a
+physical crank validation because the latest OBS/log segment contains no fish-fight crank attempt.
+
 - **Cast:** before a fish is hooked, hold the right hand beside the right ear briefly to charge,
   then extend the arm forward to release `IA_Fishing_Cast`. The gesture only overrides the cast
-  trigger; it leaves both camera-look axes untouched. Check that the landing power widget charges,
-  the float launches on extension, and the view does not flip. The left-hand crank remains the
+  trigger; it leaves both camera-look axes untouched. In fishing mode UEVR now uses HMD aim so the
+  camera stays with head movement while the right arm loads and releases the cast. Check that the
+  landing power widget charges, the float launches on extension, and the view does not flip. During
+  each QTE, turn the head left/right while keeping the hands still and confirm the prompt remains
+  visible and readable. Fish-fight lean now uses a frame locked at fish acquisition, so head turns
+  and fishing-camera motion should not rotate the rod gesture axes. The left-hand crank remains the
   separate reel gesture during a fish fight.
 - **Hook set:** when `QTE.Type.FishingBite` appears, give the right hand one quick upward twitch.
   The gesture sends a single short `IA_Fishing_Cast` press for that bite QTE; ordinary upward
@@ -162,9 +181,13 @@ timed out or accepted input.
   ring, and pinky should stay curled; verify the left and right hands separately.
 - **Fist:** curl all five controller fingers. Check that the fingertips tuck toward the palm without
   bending backward, crossing through the palm, or pulling neighboring fingers when you reopen.
-- **First-person boat camera:** the helm now uses a separate `boat_camera_forward` offset of -30 cm;
-  walking retains -12 cm. Check that the torso no longer fills the helm view and that walking view
-  returns after leaving the boat. This offset is an initial headset trial, not an asserted final fit.
+- **First-person boat camera:** walking uses `VR_CameraForwardOffset=-12 cm`; helm currently uses `-30 cm` after the `+30 cm` live trial moved the view farther forward. Recheck chest clearance, compass visibility, and side-window head turns after reloading Lua.
+  to move the rendered eye back from the forward-mounted game camera. M2 positions the copied head
+  10 cm behind the rendered eye, moves the body copy back with it, and allows up to 30 cm of bounded
+  shoulder reach toward the authored grips. This is based on the 09:23 OBS/log comparison: the prior
+  alignment put the chest into the dashboard and obscured the compass. Confirm the compass is
+  readable, the chest clears the dash, head turns still work, and walking view restores on exit.
+  This adjustment has not yet had a headset check.
 # Crafting and boat interactions
 
 - **Craft bench cursor:** in BP_CraftController_C, move the left controller around a 40 cm
@@ -204,7 +227,11 @@ timed out or accepted input.
   then extend forward for increasing positive throttle. Right-controller clicks mark reverse,
   neutral, and forward transitions. The game Blueprint itself selects fixed +25/-22 degree throttle
   lever targets from the sign of the input, so incremental positive magnitude may not change its
-  fixed forward gear target. Both gesture modes use stable entry polling and a 120 ms mode check.
+  fixed forward gear target. Both gesture modes use stable entry polling; throttle detents require
+  a stable 250 ms request. The throttle frame stores the right-hand neutral point in tracking space
+  and follows the HMD forward axis only while neutral; it freezes during a requested/held detent.
+  Verify that looking around at neutral does not trigger a gear, gradual arm extension is still
+  detected, and head turns while a gear is held do not change it.
   Tune live in the gestures table: boat_steer_range_m controls horizontal travel to full rudder,
   boat_steer_deadzone_m ignores center noise, boat_steer_curve shapes the center response, and
   boat_steer_smoothing_s controls low-pass filtering; boat_steer_drop_enter_m sets the downward arc
@@ -212,12 +239,25 @@ timed out or accepted input.
   boat_throttle_release_m for neutral, boat_throttle_turnaround_m to require a neutral crossing,
   and boat_throttle_full_m to scale forward reach to full positive input.
 
-  **Live anchor failure (2026-11-18):** during the evening playtest, both hand sockets failed the
-  old 150 cm offset cap as the boat moved away from UEVR's current view origin. M2 alternated anchor
-  activation and release every frame, which reset the visible hands to the walking pose. SteamVR
-  reported valid hand poses about 82% of the run, so this was a world-space anchor issue rather than
-  tracking loss. The solver now accepts finite boat-scale world offsets and retains its last valid
-  paired offsets through invalid samples. Recheck that hands stay on the helm while the boat moves.
+  **Live anchor failure (2026-11-18):** the playtest showed repeated corrections above 100,000 cm.
+  Source review found that UEVR's UObjectHook skips updating controller-bound components when its
+  `is_using_controllers()` hint is false. Steam Frame hand poses can still be valid in that state,
+  so reading the stale component transform produced invalid socket corrections. M2 now pins the
+  rendered hand targets directly to the authored wheel/throttle sockets during those false-hint
+  frames; gesture input still reads raw SteamVR poses. The ordinary offset solver remains active
+  when UEVR updates its targets. Adversarial review found that leaving the helm with the false hint
+  still active could strand both targets on the controls. M2 now restores the pre-anchor world
+  transforms as it releases the direct fallback, and the harness covers exit with the false hint
+  still active. This is source-level coverage; verify both grips remain on the controls during
+  actual boat motion and return to tracked hands after leaving the helm.
+
+  The same live run showed steering responding across a left-hand sweep (roughly 0 to 0.93), but
+  flickering back to zero near the shallow steering arc. Hysteresis now uses separate enter and
+  release heights. Throttle remained in reverse throughout the captured pose sequence; logged
+  reach values stayed on the backward side of the calibrated neutral. Confirm all three positions
+  in headset. The run also reported HMD tracking active on about 78% of ticks, but had no camera
+  rotation telemetry; new low-rate logs record HMD quaternion, live camera rotation, boat rotation,
+  pose validity, and steering/throttle deltas so the reported camera twist can be attributed.
 
   On the craft bench, craft_cursor_span_m changes how much hand movement spans the viewport.
 
@@ -239,19 +279,23 @@ checklist above is still needed for the live wheel model, tracking reach, and ha
 
 The visible hand targets are rebased every frame to the boat meshes' authored grip sockets in
 `m2_arms.lua`: left to `Small_Boat_Steerwheel.LHand_Socket`, right to `Throttle_lever.RHand`.
-Gesture input still reads the raw tracked controller poses, so hand anchoring does not move the
-steering or throttle neutral reference. The controller-to-socket alignment and cosmetic actor
-sync both still need confirmation with the selected in-game wheel cosmetic.
+When the UEVR controller-use hint is false, M2 sets the visual target world locations directly from
+those sockets because UObjectHook leaves its controller targets stale. The same direct fallback
+activates when UEVR claims controllers are active but their world coordinates produce an invalid
+relative offset; it stays active until helm exit to avoid snapping between coordinate frames.
+Gesture input still reads the raw tracked controller poses, so visual anchoring does not move the
+steering or throttle neutral reference. Controller-to-socket alignment and cosmetic actor sync still
+need headset confirmation.
 
-The socket solver replaces UEVR's absolute controller-local location offset. UEVR rebuilds each
-target's world position from the current view location each update, while the helm sockets follow
-the boat; a valid hand-to-helm offset can therefore exceed an arm's length as the ship moves. The
-solver removes the current-frame offset using the current controller basis and accepts finite
-corrections inside a 100,000 cm world-safety bound. If a socket sample is invalid, it keeps the last
-valid paired offsets instead of resetting both hands. `test_boat_socket_anchors_converge_without_compounding_and_restore`
-checks controller-basis rotation; the recovery test checks shared boat motion, a large view-to-boat
-separation, invalid samples, and recovery without anchor activation chatter. On headset, confirm
-both visible hands stay on their grips while the boat moves, the wrists rotate, and the wheel turns.
+When UEVR updates hand targets, the socket solver replaces its absolute controller-local location
+offset and retains the last valid paired offsets during bad samples. If UEVR reports
+`is_using_controllers() == false`, a separate direct-location fallback places the visible targets
+on the authored sockets instead of deriving an offset from stale transforms. The direct path saves
+the existing target transforms before anchoring and restores them on helm exit, even if the hint is
+still false. Tests cover the ordinary moving-socket solver, false-hint fallback, stale-world
+coordinates with the hint true, and both exit paths. On headset, confirm both visible hands stay on
+their grips while the boat moves, the wrists rotate, and the wheel turns, then follow the controllers
+again after leaving the helm.
 
 The current boat suite also verifies wheel-top neutral, signed lower-left/lower-right steering,
 left-hand detent clicks without continuous buzzing, right-hand forward-reach scaling, and right-hand
@@ -263,10 +307,62 @@ sign, confirm in-game whether its fixed forward lever position limits incrementa
 The native plugin reads OpenVR `FromDevice` finger-curl summaries for the two bound skeleton
 actions and streams five channels per hand to M2: thumb, index, middle, ring, and pinky (0=open,
 1=curled). The M2 listener eases these values into `ABP_VRArms`, whose AnimGraph bends all three
-joints of each digit. In a safe area, move each finger through open/closed positions separately.
+joints of each digit. Lua regression coverage checks independent index and middle extension and
+full-fist channel values, but it does not verify the rendered hand shape. Recent game screenshots
+show a two-finger extension, but the poses were not labeled and do not validate the full set. The
+EngineWire AnimBP preview was displaying the engine's `SKM_Quinn_Simple` preview mesh rather than
+the shipped protagonist; its screenshot is not evidence of the game's hand shape. In a safe area,
+move each finger through open/closed positions separately.
 Check the corresponding avatar finger moves smoothly, opens fully, and does not pull neighboring
 digits along. Check thumb opposition and both hands from a relaxed open pose through the three
 gestures above. The current bend axis matches the game's own hand animation; report curl depth,
 backward bends, or palm clipping so we can tune per-joint angles. If tracking stops, the hand should
 ease open within about 0.5 seconds. The log/report curls remain available to distinguish sensor
 input from mesh articulation.
+
+**Index curl-plane regression:** Keep the index extended while curling the other fingers, then close
+the index into a fist by itself. Its fingertip must fold into the palm, not sweep sideways across the
+knuckles or neighboring fingers. The open pointer pose should stay correct. Repeat on both hands and
+capture the hand from the palm side if any joint still crosses or bends backward.
+
+**Full-fist curl-plane regression:** Curl all four non-thumb digits on both hands. They should fold
+toward the palms without sweeping over the knuckles or crossing one another. Confirm the thumb still
+opposes the fingers as it did before the curl-axis change, and verify index-point and middle-finger
+extension remain available after the fist opens.
+
+**First-person helm grip regression:** With the boat held still, confirm the left hand sits on the
+wheel and the right palm/wrist sits on the throttle grip. Turn left and right, then move the throttle
+through reverse, neutral, and forward. The hands should remain attached to the grips without a wrist
+flip or camera-driven body sway. Check the runtime log for `boat hand post-stereo sockets pinned`;
+there should be no `post-stereo socket pin FAILED` message. Walk away from the helm and confirm both
+hands return to tracked controller placement.
+
+**2026-11-19 review status: prior headset test failed; transform correction awaits validation.** The socket-pin
+message confirms target-component placement, not rendered skeletal hand alignment. The latest run
+does have evaluated joints: the grip targets are 127–165 cm from the shoulders, far beyond the
+approximately 66 cm arm chain. This is a rig/body/camera coordinate mismatch, not a socket-placement
+success. The latest log showed controller targets tens of thousands of centimeters from the grips,
+a direct-fallback failure caused by a missing optional controller rotation, and a 1 m gap between
+the copied body's head socket and live boat camera. M2 now caps invalid offsets, feeds authored grip
+sockets to IK, and aligns/restores the copied body to the boat camera. These changes are based on
+measured transforms, but are not headset-validated. The helm camera offset is set to the walking
+baseline (`-12 cm`) in live tuning and saved profile config; this alone did not fix the view. The
+silent reflected-method solver gate is removed, and hand positions use a fixed head origin captured
+when the recognized home pose is held. Neutral
+calibration waits for the approximate home pose:
+left hand at the wheel's upper-left/120 o'clock position and right hand in hip-fire neutral; hold
+still for the recognition haptic and calibration settle. Reverse now requires a 22 cm deliberate
+pull back toward/behind the hip held for 250 ms; forward acceleration begins with a small forward
+extension. Every candidate detent must remain stable for 250 ms before input changes. An HMD pose
+within 5 cm of the tracking origin now fails closed to neutral, even if frozen hand samples still
+look valid. The 09:57 recording showed this zero-pose/frozen-hands case while forward input was
+latched. In the 10:27 recording, steering reached both ends of its range and reverse required a
+clear pullback; forward/neutral changes followed the hand crossing the calibrated neutral band, so
+the 5 cm entry, 2.5 cm release, and 250 ms confirmation remain unchanged. M2 now shows the copied
+headless body's hand goals within about 1 cm of the targets during the driving segment. Keep the
+head hidden and first-person perspective per user preference; the headless silhouette remains an
+open camera/seat alignment issue. Follow the
+evidence and validation sequence in
+[the helm camera and anchor review](../research/2026-11-19-helm-camera-anchor-root-cause.md).
+HMD look and suppressed right-stick look are separate; keep head rotation active and verify
+side-window visibility directly.

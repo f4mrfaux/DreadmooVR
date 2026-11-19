@@ -15,7 +15,8 @@ local function with_defaults(cfg, d) local o = {} for k, val in pairs(d) do o[k]
 
 -- Crank: the hand's angle around an axis through a pivot. One click per `step_deg` turned in one
 -- direction while turning faster than `min_deg_s`. Either direction counts; a reversal starts over.
-gestures.CRANK = { r_min = 0.04, r_max = 0.25, min_deg_s = 180, step_deg = 90, grace_s = 0.25 }
+gestures.CRANK = { r_min = 0.04, r_max = 0.25, radius_hysteresis_m = 0.025,
+    min_deg_s = 110, step_deg = 90, grace_s = 0.25 }
 local Crank = {}; Crank.__index = Crank
 function gestures.crank(cfg)
     return setmetatable({ cfg = with_defaults(cfg, gestures.CRANK), last = nil, t = nil, acc = 0, dir = 0, slow_since = nil, active_until = -math.huge }, Crank)
@@ -30,7 +31,10 @@ function Crank:update(t, hand, pivot, axis, up)
     local e2 = cross(ax, e1)
     local r = reject(sub(hand, pivot), ax)
     local rl = len(r)
-    if rl < c.r_min or rl > c.r_max then self:reset(); return 0, false end
+    local margin = self.last ~= nil and (c.radius_hysteresis_m or 0) or 0
+    local min_r = math.max(0, c.r_min - margin)
+    local max_r = c.r_max + margin
+    if rl < min_r or rl > max_r then self:reset(); return 0, false end
     local angle = math.atan(dot(r, e2), dot(r, e1))
     if self.last == nil or self.t == nil or t <= self.t then self.last, self.t = angle, t; return 0, false end
     local d = wrap(angle - self.last)

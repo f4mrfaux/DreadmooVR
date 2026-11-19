@@ -41,8 +41,11 @@ local function make_world()
         BONES[f .. "_l"] = v(5, -20, 86); BONES[f .. "_r"] = v(5, 20, 86)
     end
     local function mesh(name)
-        return obj({ name = name, hidden = {},
-            GetSocketLocation = function(_, b) return BONES[b] or v(0, 0, 0) end,
+        return obj({ name = name, hidden = {}, location = v(0, 0, 0), relative = { location = v(0, 0, 0) },
+            GetSocketLocation = function(self, b)
+                local p, root = BONES[b] or v(0, 0, 0), self.location or v(0, 0, 0)
+                return v(root.X + p.X, root.Y + p.Y, root.Z + p.Z)
+            end,
             GetSocketRotation = function() return { Pitch = 0, Yaw = 0, Roll = 0 } end,
             GetSocketTransform = function(self, s) return { socket = s, on = self.name } end,
             GetSocketBoneName = function(_, s) return fname(SOCKETS[s] or s) end,
@@ -50,7 +53,17 @@ local function make_world()
             DoesSocketExist = function(_, s) return PARENT[s] ~= nil or SOCKETS[s] ~= nil end,
             HideBoneByName = function(self, b) self.hidden[b] = true end,
             UnHideBoneByName = function(self, b) self.hidden[b] = nil end,
-            K2_AttachToComponent = function() return true end })
+            K2_AttachToComponent = function(self, parent)
+                self.parent = parent
+                return true
+            end,
+            K2_GetComponentLocation = function(self) return self.location end,
+            K2_SetWorldLocation = function(self, p) self.location = v(p.X, p.Y, p.Z) end,
+            GetRelativeTransform = function(self) return self.relative end,
+            K2_SetRelativeTransform = function(self, transform)
+                self.relative = transform
+                self.location = v(transform.location.X, transform.location.Y, transform.location.Z)
+            end })
     end
     local function attachable(name, parent, socket)
         local c = obj({ name = name, parent = parent, socket = socket })
@@ -74,7 +87,9 @@ local function make_world()
     local function target(loc)
         return obj({ location = loc, forward = v(1, 0, 0), right = v(0, 1, 0), up = v(0, 0, 1),
             K2_GetComponentLocation = function(self) return self.location end,
-            K2_GetComponentRotation = function() return { Pitch = 0, Yaw = 0, Roll = 0 } end,
+            K2_SetWorldLocation = function(self, p) self.location = v(p.X, p.Y, p.Z); W.direct_anchor_writes = (W.direct_anchor_writes or 0) + 1 end,
+            K2_GetComponentRotation = function(self) return self.rotation or { Pitch = 0, Yaw = 0, Roll = 0 } end,
+            K2_SetWorldRotation = function(self, r) self.rotation = r; W.direct_rotation_writes = (W.direct_rotation_writes or 0) + 1 end,
             GetForwardVector = function(self) return self.forward end,
             GetRightVector = function(self) return self.right end,
             GetUpVector = function(self) return self.up end })
@@ -101,6 +116,13 @@ local function make_world()
         return { get_fname = function() return fname(chain[i]) end, get_super_struct = function() return class_at(i + 1) end }
     end
     W.boat_socket_shift = v(0, 0, 0)
+    W.boat_camera = {
+        location = v(100, 0, 170),
+        forward = v(1, 0, 0), up = v(0, 0, 1),
+        K2_GetComponentLocation = function(self) return self.location end,
+        GetForwardVector = function(self) return self.forward end,
+        GetUpVector = function(self) return self.up end,
+    }
     local function shift_location(p)
         return v(p.X + W.boat_socket_shift.X, p.Y + W.boat_socket_shift.Y, p.Z + W.boat_socket_shift.Z)
     end
@@ -108,15 +130,26 @@ local function make_world()
     wheel_component.GetSocketLocation = function(_, socket)
         return shift_location(socket == "LHand_Socket" and v(10, -20, 100) or v(15, 20, 90))
     end
+    wheel_component.GetSocketRotation = function(_, socket)
+        return socket == "LHand_Socket" and { Pitch = 10, Yaw = 20, Roll = 30 } or { Pitch = 0, Yaw = 0, Roll = 0 }
+    end
     local throttle_component = mesh("Throttle")
     throttle_component.GetSocketLocation = function(_, socket)
         return shift_location(socket == "RHand" and v(15, 20, 90) or v(0, 0, 0))
+    end
+    throttle_component.GetSocketRotation = function(_, socket)
+        return socket == "RHand" and { Pitch = -5, Yaw = 45, Roll = 90 } or { Pitch = 0, Yaw = 0, Roll = 0 }
     end
     W.shift_boat_sockets = function(dx, dy, dz)
         W.boat_socket_shift = v(W.boat_socket_shift.X + dx, W.boat_socket_shift.Y + dy, W.boat_socket_shift.Z + dz)
     end
     W.translate_boat_frame = function(dx, dy, dz)
         W.shift_boat_sockets(dx, dy, dz)
+        W.boat_camera.location = v(W.boat_camera.location.X + dx, W.boat_camera.location.Y + dy,
+            W.boat_camera.location.Z + dz)
+        if W.body and W.body.location then
+            W.body.location = v(W.body.location.X + dx, W.body.location.Y + dy, W.body.location.Z + dz)
+        end
         for _, hand_target in ipairs({ W.arms.LeftHandTarget, W.arms.RightHandTarget }) do
             local p = hand_target.base_location or hand_target.location
             hand_target.base_location = v(p.X + dx, p.Y + dy, p.Z + dz)
@@ -126,6 +159,7 @@ local function make_world()
     W.pawn = obj({ name = "Pawn", Mesh = pawn_mesh,
         BP_ShipSteeringWheel = { ChildActor = { Small_Boat_Steerwheel = wheel_component } },
         Throttle_lever = throttle_component,
+        FirstPersonCamera_GEN_VARIABLE = W.boat_camera,
         get_class = function() return class_at(1) end,
         RootComponent = obj({ name = "BoatRoot", AttachChildren = {} }),
         GetTransform = function() return {} end, K2_GetActorRotation = function() return { Pitch = 0, Yaw = 0, Roll = 0 } end })
@@ -218,6 +252,7 @@ local function make_world()
         params = {
             functions = { log_info = function(s) W.logs[#W.logs + 1] = s end },
             vr = {
+                is_using_controllers = function() return W.is_using_controllers ~= false end,
                 set_mod_value = function(k, val) W.mods[k] = val end,
                 get_mod_value = function(k) return W.mods[k] end,
                 get_hmd_index = function() return 0 end,
@@ -266,14 +301,10 @@ end
 local function run(W, seconds)
     for _ = 1, math.floor(seconds / 0.05) do
         if W.pending_reply then local r = W.pending_reply; W.pending_reply = nil; W.callbacks.lua_event("dreadmoorvr_class_loaded", r) end
-        if W.callbacks.view then
-            W.callbacks.view(nil, 0, 100, { x = 10, y = 0, z = 170 }, { x = 0, y = 0, z = 0 }, true)
-            W.callbacks.view(nil, 1, 100, { x = 10, y = 0, z = 170 }, { x = 0, y = 0, z = 0 }, true)
-        end
         -- UObjectHook reapplies its saved controller-local offset through the *current* basis
-        -- before each script tick. Simulate that engine step so wrist rotations expose stale-frame
-        -- subtraction regressions in the real bridge math.
-        if W.apply_controller_offsets then W.apply_controller_offsets() end
+        -- before the post-stereo Lua callback. Simulate that engine step so direct socket anchors
+        -- must win after UObjectHook, matching the verified UEVR callback order.
+        if W.apply_controller_offsets and W.is_using_controllers ~= false then W.apply_controller_offsets() end
         W.t = (W.t or 0) + 0.05
         W.callbacks.tick(nil, 0.05)
         -- The game's anim update: ABP_V03 copies control rotation (pitch 35 = hand raised), then
@@ -281,6 +312,10 @@ local function run(W, seconds)
         W.anim.ControlRotaton.x = 35
         if W.anim_post then W.anim_post(nil, W.anim) end
         W.rig_pitch = W.anim.ControlRotaton.x
+        if W.callbacks.view then
+            W.callbacks.view(nil, 0, 100, { x = 10, y = 0, z = 170 }, { x = 0, y = 0, z = 0 }, true)
+            W.callbacks.view(nil, 1, 100, { x = 10, y = 0, z = 170 }, { x = 0, y = 0, z = 0 }, true)
+        end
         if W.callbacks.xinput then
             local st = { Gamepad = { bRightTrigger = 0 } }
             W.callbacks.xinput(nil, 0, st)
@@ -479,6 +514,173 @@ return {
             "right controller offset returns to its walking baseline")
     end,
 
+    test_boat_direct_socket_anchors_follow_live_frame_poses_when_uevr_skips_controller_targets = function()
+        local W = boot(nil, function(world) world.is_using_controllers = false end)
+        W.simulate_location_offsets = true
+        local stale_left = W.arms.LeftHandTarget.location
+        local stale_right = W.arms.RightHandTarget.location
+        W.set_mode("boat")
+        run(W, 0.5)
+        local left, right = W.arms.LeftHandTarget.location, W.arms.RightHandTarget.location
+        assert(left.X == 10 and left.Y == -20 and left.Z == 100,
+            "direct Frame fallback places left rendered target on authored wheel socket")
+        assert(right.X == 15 and right.Y == 20 and right.Z == 90,
+            "direct Frame fallback places right rendered target on authored throttle socket")
+        assert(W.direct_anchor_writes and W.direct_anchor_writes >= 2,
+            "fallback writes rendered target transforms despite stale UObjectHook locations")
+        assert(W.direct_rotation_writes and W.direct_rotation_writes >= 2,
+            "fallback writes rendered hand rotations from authored grip socket rotations")
+        assert(W.arms.LeftHandTarget.rotation.Pitch == 10 and W.arms.LeftHandTarget.rotation.Yaw == 20
+            and W.arms.LeftHandTarget.rotation.Roll == 30,
+            "left hand orientation matches authored wheel socket")
+        assert(W.arms.RightHandTarget.rotation.Pitch == -5 and W.arms.RightHandTarget.rotation.Yaw == 45
+            and W.arms.RightHandTarget.rotation.Roll == 90,
+            "right hand orientation matches authored throttle grip socket")
+        assert(stale_left.X ~= left.X and stale_right.X ~= right.X,
+            "stale tracked target transforms are not used as socket origins")
+        local offset_writes = #W.offsets
+
+        -- Simulate the boat moving and controller tracking continuing to change while UEVR's
+        -- `is_using_controllers=false` path skips its component update. The visible hands follow
+        -- the moving sockets, while gesture code remains free to read get_pose independently.
+        W.shift_boat_sockets(125, -40, 12)
+        W.pose = function(i, t) return v((i == 1 and -0.2 or 0.2) + t, i == 0 and 1.6 or 1.2, -0.3) end
+        run(W, 0.5)
+        left, right = W.arms.LeftHandTarget.location, W.arms.RightHandTarget.location
+        assert(left.X == 135 and left.Y == -60 and left.Z == 112,
+            "left hand continues to follow the wheel socket as boat/world position changes")
+        assert(right.X == 140 and right.Y == -20 and right.Z == 102,
+            "right hand continues to follow the throttle socket as boat/world position changes")
+        assert(#W.offsets == offset_writes,
+            "direct fallback does not keep rewriting controller offsets while UEVR skips target updates")
+        assert(has(W.logs, "boat hand grip anchors active"), "fallback mode is logged")
+
+        -- Steam Frame can keep returning the false UEVR hint after helm exit. The direct
+        -- fallback must restore the pre-helm targets itself instead of waiting for UObjectHook.
+        W.set_mode("walking"); run(W, 0.1)
+        assert(W.motion_states.L.offset.z == 8 and W.motion_states.R.offset.z == 8,
+            "leaving helm restores the configured walking controller offset")
+        left, right = W.arms.LeftHandTarget.location, W.arms.RightHandTarget.location
+        assert(left.X == 30 and left.Y == -25 and left.Z == 110,
+            "leaving direct-anchor helm mode restores the left target's pre-helm world position")
+        assert(right.X == 30 and right.Y == 25 and right.Z == 110,
+            "leaving direct-anchor helm mode restores the right target's pre-helm world position")
+        assert(W.arms.LeftHandTarget.rotation.Pitch == 0 and W.arms.LeftHandTarget.rotation.Yaw == 0
+            and W.arms.LeftHandTarget.rotation.Roll == 0
+            and W.arms.RightHandTarget.rotation.Pitch == 0 and W.arms.RightHandTarget.rotation.Yaw == 0
+            and W.arms.RightHandTarget.rotation.Roll == 0,
+            "leaving direct-anchor helm mode restores both pre-helm wrist rotations")
+    end,
+
+    test_boat_direct_socket_fallback_recovers_stale_controller_world_coordinates = function()
+        local W = boot()
+        W.simulate_location_offsets = true
+        -- Recreate the live log's key failure mode: the game boat and controller targets report
+        -- finite but incompatible world origins, producing an over-limit relative correction.
+        W.arms.LeftHandTarget.location = v(99900, -25, 110)
+        W.arms.LeftHandTarget.base_location = v(99900, -25, 110)
+        W.arms.RightHandTarget.location = v(99950, 25, 110)
+        W.arms.RightHandTarget.base_location = v(99950, 25, 110)
+        W.shift_boat_sockets(-99000, 0, 0)
+        W.set_mode("boat") -- UEVR still reports controllers active, as it did in the capture.
+        run(W, 0.5)
+
+        assert(W.body.parent == W.pawn.Mesh,
+            "the copied protagonist body stays attached to the diver mesh as its pose source")
+        assert(W.body.hidden_in_game == false and W.hidden == false,
+            "the arms mesh and its actor are explicitly visible in first-person helm mode")
+        assert(has(W.logs, "VR arms body visible in first%-person helm"),
+            "the helm visibility transition is reported")
+
+        local left, right = W.arms.LeftHandTarget.location, W.arms.RightHandTarget.location
+        assert(left.X == -98990 and left.Y == -20 and left.Z == 100,
+            "over-limit controller/world offset pins the left visual target to the wheel socket")
+        assert(right.X == -98985 and right.Y == 20 and right.Z == 90,
+            "over-limit controller/world offset pins the right visual target to the throttle socket")
+        assert(has(W.logs, "invalid controller/world offset fallback"),
+            "the active-controller stale-world fallback is recorded")
+        assert(not has(W.logs, "boat hand grip socket FAILED"),
+            "a valid authored socket is not treated as an unrecoverable anchor failure")
+
+        W.shift_boat_sockets(25, 0, 0)
+        run(W, 0.2)
+        assert(W.arms.LeftHandTarget.location.X == -98965 and W.arms.RightHandTarget.location.X == -98960,
+            "direct fallback remains stable and follows moving helm sockets for the session")
+
+        W.set_mode("walking")
+        run(W, 0.1)
+        left, right = W.arms.LeftHandTarget.location, W.arms.RightHandTarget.location
+        assert(left.X == 99892 and left.Y == -25 and left.Z == 110
+            and right.X == 99942 and right.Y == 25 and right.Z == 110,
+            "helm exit returns targets to the walking controller pose after the hook resumes")
+    end,
+
+    test_boat_body_copy_visibility_tracks_first_person_and_restores_on_exit = function()
+        local W = boot()
+        W.set_mode("boat")
+        W.pawn.bFirstPersonCameraEnabled = false
+        run(W, 0.5)
+        assert(W.hidden == true, "third-person helm hides the copied VR body")
+        assert(has(W.logs, "VR body copy hidden in third%-person helm"), "third-person visibility is logged")
+
+        W.pawn.bFirstPersonCameraEnabled = true
+        run(W, 0.1)
+        assert(W.hidden == false, "first-person helm shows the copied VR body")
+
+        W.pawn.bFirstPersonCameraEnabled = false
+        run(W, 0.1)
+        assert(W.hidden == true, "returning to third-person hides the copy again")
+
+        W.set_mode("walking")
+        run(W, 0.1)
+        assert(W.hidden == false, "walking explicitly restores the copied body after third-person helm")
+    end,
+
+    test_boat_direct_socket_fallback_handles_glm_controller_basis = function()
+        local W = boot()
+        W.arms.LeftHandTarget.forward = { x = 1, y = 0, z = 0 }
+        W.arms.LeftHandTarget.right = { x = 0, y = 1, z = 0 }
+        W.arms.LeftHandTarget.up = { x = 0, y = 0, z = 1 }
+        W.arms.RightHandTarget.forward = { x = 1, y = 0, z = 0 }
+        W.arms.RightHandTarget.right = { x = 0, y = 1, z = 0 }
+        W.arms.RightHandTarget.up = { x = 0, y = 0, z = 1 }
+        W.set_mode("boat") -- the current UEVR hint still says controllers are active
+        run(W, 0.5)
+
+        local left, right = W.arms.LeftHandTarget.location, W.arms.RightHandTarget.location
+        assert(left.X == 10 and left.Y == -20 and left.Z == 100
+            and right.X == 15 and right.Y == 20 and right.Z == 90,
+            "lowercase GLM basis vectors trigger direct placement at valid authored sockets")
+        assert(has(W.logs, "invalid controller/world offset fallback"),
+            "the component-basis mismatch uses the recoverable fallback")
+        W.shift_boat_sockets(20, -5, 10)
+        run(W, 0.2)
+        left, right = W.arms.LeftHandTarget.location, W.arms.RightHandTarget.location
+        assert(left.X == 30 and left.Y == -25 and left.Z == 110
+            and right.X == 35 and right.Y == 15 and right.Z == 100,
+            "direct placement continues following both moving sockets")
+    end,
+
+    test_boat_arm_telemetry_samples_evaluated_hand_and_elbow_joints = function()
+        local W = boot()
+        -- In boat mode the possessed pawn is the boat; the character mesh is retained by the
+        -- BP_VRArms.Body attachment, not exposed as pawn.Mesh.
+        W.pawn.Mesh = nil
+        W.pawn.Controller = { GetControlRotation = function() return { Pitch = 3 } end }
+        W.set_mode("boat")
+        run(W, 1.2)
+        assert(has(W.logs, "arm L target=") and has(W.logs, "hand=")
+            and has(W.logs, "elbow=") and has(W.logs, "shoulder="),
+            "helm telemetry compares the left IK target with the protagonist's evaluated joints")
+        assert(has(W.logs, "arm R target=") and has(W.logs, "boat grip offsets cm"),
+            "helm telemetry reports both hands alongside the active grip offsets")
+        assert(has(W.logs, "torso ctrl_pitch=3"),
+            "helm body-fit telemetry reads the protagonist's spine through the copied body mesh")
+        run(W, 9.0)
+        assert(has(W.logs, "arms summary boat"),
+            "the 10-second arm summary is labeled and accumulated separately for the boat mode")
+    end,
+
     test_boat_socket_anchor_failure_holds_last_pair_and_recovers_without_chatter = function()
         local W = boot()
         W.simulate_location_offsets = true
@@ -500,15 +702,13 @@ return {
             and math.abs(W.motion_states.R.offset.y - right_anchor.y) < 0.1,
             "common boat translation preserves controller-local grip offsets")
 
-        -- The ship can move far from the current UEVR view origin. A large but finite world
-        -- correction is valid and must keep the visual hands on the moving helm sockets.
+        -- A correction beyond 150 cm means controller and boat coordinates are not in the same
+        -- world frame. The solver switches to authored socket goals instead of storing the gap.
         W.shift_boat_sockets(20000, 0, 0)
-        run(W, 0.25)
-        assert(math.abs(W.motion_states.L.offset.z) > 15000,
-            "large finite camera-to-boat displacement is accepted instead of failing an arm-reach cap")
+        run(W, 2.25) -- allow the throttled fallback diagnostic to emit
         local left_on_socket = W.arms.LeftHandTarget.location
         assert(math.abs(left_on_socket.X - 40010) < 0.1 and math.abs(left_on_socket.Y + 15020) < 0.1,
-            "left visual target tracks the boat socket across a large world-origin separation")
+            "left visual target tracks the boat socket across a large world-origin separation (got " .. left_on_socket.X .. "," .. left_on_socket.Y .. ")")
         local writes_at_far_helm = #W.offsets
 
         -- A genuinely invalid world coordinate must not reset both hands to walking offsets on
@@ -517,8 +717,8 @@ return {
         run(W, 0.5)
         assert(#W.offsets == writes_at_far_helm,
             "invalid socket frames do not write offsets or reset to walking baseline")
-        assert(math.abs(W.motion_states.L.offset.z) > 15000 and math.abs(W.motion_states.R.offset.z) > 15000,
-            "last valid paired offsets are retained during the correction failure")
+        assert(W.arms.LeftHandTarget.location.X == left_on_socket.X,
+            "invalid socket frames retain the last valid visual grip target")
         local active_count, released_count = 0, 0
         for _, line in ipairs(W.logs) do
             if line:find("boat hand grip anchors active", 1, true) then active_count = active_count + 1 end
@@ -535,10 +735,10 @@ return {
         assert(has(W.logs, "boat hand grip anchors released"), "leaving the helm restores normal controller offsets")
     end,
 
-    test_boat_camera_moves_forward_and_restores_walking_view = function()
+    test_boat_camera_offset_changes_by_mode_and_restores_walking_view = function()
         local W = boot()
         W.set_mode("boat"); run(W, 1.2)
-        assert(tonumber(W.mods.VR_CameraForwardOffset) == -30, "boat view advances past the torso")
+        assert(tonumber(W.mods.VR_CameraForwardOffset) == -30, "helm view pulls back from the forward-mounted game camera")
         W.set_mode("walking"); run(W, 1.2)
         assert(tonumber(W.mods.VR_CameraForwardOffset) == -12, "walking camera offset is restored")
     end,
@@ -668,9 +868,7 @@ return {
     test_boat_controls_survive_tuning_reload_and_restore_on_exit = function()
         local W = boot()
         local walking = W.pawn
-        W.pawn = { get_class = function() return {
-            get_fname = function() return fname("DrdShipBase") end,
-            get_super_struct = function() return nil end } end }
+        W.set_mode("boat")
         run(W, 0.05)
         assert(W.mods.VR_MovementOrientation == "0", "raw throttle/rudder axes immediately on entry")
         assert(W.mods.VR_AimMethod == "0" and W.mods.VR_RoomscaleMovement == "false", "boat owns movement and aim")
@@ -678,8 +876,9 @@ return {
         run(W, 2)
         assert(W.mods.VR_AimMethod == "0" and W.mods.VR_MovementOrientation == "0", "live tuning cannot overwrite boat settings")
         W.pawn = walking
+        W.set_mode("walking")
         run(W, 0.05)
-        assert(W.mods.VR_AimMethod == "2" and W.mods.VR_MovementOrientation == "1", "restore exact entry settings on exit")
+        assert(W.mods.VR_AimMethod == "2" and W.mods.VR_MovementOrientation == "1", "restore exact entry settings on exit (aim=" .. tostring(W.mods.VR_AimMethod) .. ", movement=" .. tostring(W.mods.VR_MovementOrientation) .. ")")
         assert(W.mods.VR_RoomscaleMovement == "true")
         run(W, 2)
         assert(W.mods.VR_AimMethod == "3", "walking picks up tuning edited at helm")
@@ -694,8 +893,13 @@ return {
         assert(W.hidden == false, "VR arms are shown at the first-person helm")
         assert(W.body.parent == W.pawn.Mesh and W.body.hidden_in_game == false,
             "arms mesh stays on the diver pose source but clears hidden state at the helm")
+        local head = W.body:GetSocketLocation("head")
+        assert(math.abs(head.X - 60) < 0.1 and math.abs(head.Z - 175) < 0.1,
+            "copied visual body follows the rear-shifted eye with the anatomical head offset (got " .. head.X .. "," .. head.Z .. ")")
         W.set_mode("walking"); run(W, 0.1)
         assert(W.body.parent == W.pawn.Mesh, "arms retain the character pose source when leaving the helm")
+        assert(W.body.location.X == 0 and W.body.location.Z == 0,
+            "helm exit restores the body's original relative transform")
         assert(failures(W.logs) == "", failures(W.logs))
     end,
 

@@ -31,7 +31,24 @@ return {
     end,
 
     test_slow_turning_is_not_a_crank = function()
-        assert(circle(gestures.crank({}), 0.10, 90, 2.0) == 0, "90 deg/s is below the 180 deg/s gate")
+        assert(circle(gestures.crank({}), 0.10, 90, 2.0) == 0, "90 deg/s is below the 110 deg/s gate")
+    end,
+
+    test_natural_slow_cranking_registers = function()
+        local clicks = circle(gestures.crank({}), 0.10, 120, 2.25)
+        assert(clicks >= 2 and clicks <= 3, "120 deg/s natural crank should register distinct turns, got " .. clicks)
+    end,
+
+    test_crank_survives_small_radius_tracking_jitter = function()
+        local c, clicks, t = gestures.crank({}), 0, 0
+        for i = 0, 120 do
+            local a = math.rad(360 * t)
+            local r = (i % 2 == 0) and 0.045 or 0.035 -- oscillates across the 4 cm entry bound
+            local hand = v(PIVOT.X, PIVOT.Y + r * math.cos(a), PIVOT.Z + r * math.sin(a))
+            clicks = clicks + c:update(t, hand, PIVOT, AXIS, UP)
+            t = t + DT
+        end
+        assert(clicks >= 3, "small hand-radius noise must not continually restart a valid crank")
     end,
 
     test_hand_too_far_from_the_crank_point = function()

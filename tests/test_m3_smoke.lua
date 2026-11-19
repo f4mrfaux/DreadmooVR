@@ -52,8 +52,13 @@ local function world(tool_socket, on_body)
     local wheel_child = { Small_Boat_Steerwheel = wheel, CurrentActiveWheelCosmetic = cosmetic,
         actor_rotation = { Pitch = 0, Yaw = 0, Roll = 0 },
         K2_GetActorRotation = function(self) return self.actor_rotation end }
+    W.camera_rotation = { Pitch = 1, Yaw = 12, Roll = 3 }
+    W.boat_rotation = { Pitch = 0, Yaw = 30, Roll = 0 }
     W.pawn = { Mesh = mesh, get_class = function() return class_at(1) end,
         Controller = { PlayerCameraManager = pcm }, GetTransform = function() return {} end,
+        FirstPersonSpringArm_GEN_VARIABLE = { K2_GetComponentRotation = function() return W.camera_rotation end },
+        CameraComp = { K2_GetComponentRotation = function() return W.camera_rotation end },
+        K2_GetActorRotation = function() return W.boat_rotation end,
         BP_ShipSteeringWheel = { GetChildActor = function() return wheel_child end },
         Throttle_lever = { K2_GetComponentLocation = function() return { x = 90, y = 10, z = 20 } end } }
     W.wheel, W.wheel_cosmetic, W.wheel_cosmetic_actor, W.wheel_child = wheel, cosmetic, cosmetic_actor, wheel_child
@@ -135,7 +140,7 @@ local function world(tool_socket, on_body)
                 end,
                 get_pose = function(i, p, q)
                     if W.pose_read_fails then error("simulated invalid pose read") end
-                    local pos = i == 0 and v(0, 1.65, 0) or ((i == 1) and W.left(W.t) or W.right(W.t))
+                    local pos = i == 0 and (W.head_pose or v(0, 1.65, 0)) or ((i == 1) and W.left(W.t) or W.right(W.t))
                     p.x, p.y, p.z = pos.X, pos.Y, pos.Z
                     if i == 0 then
                         q.x, q.y, q.z, q.w = W.head_q.x, W.head_q.y, W.head_q.z, W.head_q.w
@@ -259,6 +264,39 @@ local function queued_crank()
 end
 
 return {
+    test_boat_home_calibration_accepts_measured_wheel_pose = function()
+        local W = world("None", false)
+        W.set_mode("boat")
+        -- Captured at 09:57:58: intended wheel hand was 2 cm below the old -0.75 m bound.
+        W.left = function() return v(-0.16, 0.88, -0.04) end
+        W.right = function() return v(0.17, 0.84, 0.09) end
+        run(W, 0.8)
+        assert(has(W, "boat control frame locked from home pose"),
+            "measured 120-o'clock / hip-fire home pose calibrates without edge-boundary flicker")
+        assert(not has(W, "boat home pose not recognized"),
+            "the measured home pose is recognized throughout the settle interval")
+        no_failures(W)
+    end,
+
+    test_boat_zero_hmd_tracking_fails_safe_to_neutral = function()
+        local W = world("None", false)
+        W.set_mode("boat")
+        run(W, 1.5)
+        local state = { Gamepad = { sThumbLX = 0, sThumbLY = 0 } }
+        move_right_pose(W, 1.15, -0.42)
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLY > 0, "fixture first enters forward throttle")
+
+        W.head_pose = v(0, 0, 0)
+        run(W, 0.1)
+        state.Gamepad.sThumbLX, state.Gamepad.sThumbLY = 1234, 5678
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLX == 0 and state.Gamepad.sThumbLY == 0,
+            "identity HMD pose at the tracking origin neutralizes both helm axes")
+        assert(has(W, "HMD pose at tracking origin"), "tracking-origin rejection is diagnosable")
+        no_failures(W)
+    end,
+
     test_fishing_bite_qte_sets_hook_on_quick_upward_twitch = function()
         local W = world("None", false)
         W.set_mode("fishing")
@@ -437,7 +475,7 @@ return {
         move_right_pose(W, 1.2, -0.3) -- return to hip-fire neutral
         W.callbacks.xinput(nil, 0, state)
         assert(state.Gamepad.sThumbLY == 0, "returning the hand to its calibrated height selects neutral")
-        move_right_pose(W, 1.2, -0.14) -- pull the right hand back behind the hip reference
+        move_right_pose(W, 1.2, -0.05) -- deliberate full pull behind the hip reference
         W.callbacks.xinput(nil, 0, state)
         assert(state.Gamepad.sThumbLY == -32767, "negative IA_BoatMove Y selects the Blueprint -22-degree reverse throttle target")
         assert(W.haptics == 3, "forward, neutral, and reverse each give one click")
@@ -448,13 +486,38 @@ return {
         no_failures(W)
     end,
 
+    test_boat_throttle_returns_from_reverse_through_neutral_to_forward = function()
+        local W = world("None", false)
+        W.set_mode("boat")
+        run(W, 1.5) -- hip-fire neutral reference
+        local state = { Gamepad = { sThumbLX = 0, sThumbLY = 0 } }
+
+        -- Vary hand height while translating along the SteamVR forward/back axis. Throttle
+        -- direction is reach (Z), so changing elbow/hand height alone cannot hold reverse.
+        move_right_pose(W, 1.05, -0.05, 2.0) -- deliberate pull back toward/behind the hip
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLY == -32767, "hand drawn back to hip selects reverse")
+
+        move_right_pose(W, 1.32, -0.30, 2.0) -- return to neutral at a different height
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLY == 0, "passing through calibrated reach releases reverse to neutral")
+
+        move_right_pose(W, 1.15, -0.42, 2.0) -- reach forward with the elbow still near the hip
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLY > 0, "hand extended forward from the elbow selects forward throttle")
+        assert(has(W, "boat throttle detent: reverse") and has(W, "boat throttle detent: neutral")
+            and has(W, "boat throttle detent: forward"), "all throttle detents are observed in order")
+        no_failures(W)
+    end,
+
     test_boat_gestures_only_override_axes_in_first_person = function()
         local W = world("None", false)
         W.set_mode("boat", false)
         run(W, 0.1)
-        local state = { Gamepad = { sThumbLX = 12345, sThumbLY = -23456 } }
+        local state = { Gamepad = { sThumbLX = 12345, sThumbLY = -23456, sThumbRX = 23456, sThumbRY = -12345 } }
         W.callbacks.xinput(nil, 0, state)
-        assert(state.Gamepad.sThumbLX == 12345 and state.Gamepad.sThumbLY == -23456,
+        assert(state.Gamepad.sThumbLX == 12345 and state.Gamepad.sThumbLY == -23456
+            and state.Gamepad.sThumbRX == 23456 and state.Gamepad.sThumbRY == -12345,
             "third-person native steering and throttle pass through unchanged")
         assert(has(W, "boat third"), table.concat(W.logs, " | "))
 
@@ -464,13 +527,17 @@ return {
         W.callbacks.xinput(nil, 0, state)
         assert(state.Gamepad.sThumbLX > 7500 and state.Gamepad.sThumbLX < 14000,
             "first-person left-hand steering takes over the existing X axis")
+        assert(state.Gamepad.sThumbRX == 0 and state.Gamepad.sThumbRY == 0,
+            "first-person helm suppresses gamepad look axes while head tracking remains active")
 
         W.pawn.bFirstPersonCameraEnabled = false
         run(W, 0.1)
         state.Gamepad.sThumbLX, state.Gamepad.sThumbLY = 12345, -23456
+        state.Gamepad.sThumbRX, state.Gamepad.sThumbRY = 23456, -12345
         W.callbacks.xinput(nil, 0, state)
-        assert(state.Gamepad.sThumbLX == 12345 and state.Gamepad.sThumbLY == -23456,
-            "returning to third-person immediately restores native stick input")
+        assert(state.Gamepad.sThumbLX == 12345 and state.Gamepad.sThumbLY == -23456
+            and state.Gamepad.sThumbRX == 23456 and state.Gamepad.sThumbRY == -12345,
+            "returning to third-person immediately restores native move and look axes")
         assert(has(W, "boat gestures paused; native axes restored"))
         no_failures(W)
     end,
@@ -534,10 +601,18 @@ return {
 
         -- Turn the HMD 90 degrees around world-up while leaving tracked hand positions fixed.
         W.head_q = { x = 0, y = math.sin(math.pi / 4), z = 0, w = math.cos(math.pi / 4) }
+        W.camera_rotation = { Pitch = 1, Yaw = 42, Roll = 3 }
+        W.boat_rotation = { Pitch = 0, Yaw = 60, Roll = 0 }
         run(W, 0.5)
         W.callbacks.xinput(nil, 0, state)
         assert(math.abs(state.Gamepad.sThumbLX - before) < 100,
             "head yaw after helm calibration does not rotate the frozen steering reference frame")
+        run(W, 1.2)
+        assert(has(W, "boat view: uevr_controllers=true poses_valid=Ltrue,Rtrue,Htrue native_valid=true hmd_q=")
+            and has(W, "camera_rot=%(1%.0,42%.0,3%.0%)")
+            and has(W, "boat_rot=%(0%.0,60%.0,0%.0%)"),
+            "low-rate helm view diagnostics distinguish head orientation, camera rotation, and boat yaw: " .. table.concat(W.logs, " | "))
+        assert(has(W, "boat gesture deltas: steer_x="), "helm telemetry includes steering and throttle deltas from calibration")
         no_failures(W)
     end,
 
@@ -801,6 +876,28 @@ return {
         state.Gamepad.bRightTrigger = 73
         W.callbacks.xinput(nil, 0, state)
         assert(state.Gamepad.bRightTrigger == 73, "stale validity heartbeat releases an active reel")
+        no_failures(W)
+    end,
+
+    test_fishing_zero_hmd_pose_releases_reel_and_fight_reference = function()
+        local W = world("None", false)
+        W.set_mode("fishing")
+        run(W, 0.6)
+        cranking(W)
+        run(W, 0.8)
+        local state = { Gamepad = { bRightTrigger = 0, sThumbLX = 1234, sThumbLY = -2345 } }
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.bRightTrigger == 255, "valid fish fight enters held reel input")
+
+        W.head_pose = v(0, 0, 0)
+        run(W, 0.05)
+        state.Gamepad.bRightTrigger = 73
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.bRightTrigger == 73,
+            "tracking-origin HMD releases synthetic reel and preserves the game's physical trigger")
+        assert(state.Gamepad.sThumbLX == 1234 and state.Gamepad.sThumbLY == -2345,
+            "tracking-origin HMD clears fishing pose references without overwriting physical sticks")
+        assert(has(W, "HMD pose at tracking origin"), "fishing logs the shared HMD tracking failure")
         no_failures(W)
     end,
 

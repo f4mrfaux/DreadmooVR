@@ -41,6 +41,22 @@ The server exposes one tool, `unreal`, with four operations: search, describe, e
 - Not yet verified: Claude Code's stdio proxy attachment and EngineWire Blueprint graph writes in UE 5.6.
 - The mod's cooking and pak packaging workflow is in `tools/cook.ps1`; this MCP setup note does not validate a fresh cook.
 
+### Editor input crash observed 2026-11-18
+
+Stock EngineWire 0.6.0 crashed after a `control_editor.simulate_input` key tap in the AnimBP
+preview viewport. The delayed `ScheduleKeyReleaseForMcp` lambda dereferenced a null PIE world at
+`Plugins/EngineWire/Source/EngineWire/Private/Domains/ControlEditor/McpEditorInput.cpp:63` and
+raised an access violation at `0x60`. The local ignored EngineWire source now null-checks the world
+settings pointer; UE 5.6 rebuilt the plugin successfully, and the same editor-viewport key tap
+survived its delayed release. This workaround is local to the ignored plugin copy and is not part
+of the mod or an upstream fix. Reapplying or replacing EngineWire with stock 0.6.0 restores the
+crash risk.
+
+The AnimBP preview screenshot showed `SKM_Quinn_Simple`, not the protagonist mesh referenced by
+`BP_VRArms.Body`. Do not use that preview as visual validation of finger or arm shapes. Source and
+Lua harness checks remain useful, but actual pose-shape validation needs the game mesh in a working
+preview or a pose-labeled in-game capture.
+
 ### Game Blueprints versus mod assets
 
 EngineWire reads editor assets registered in the `unreal/Dreadmoor` project. It does not mount

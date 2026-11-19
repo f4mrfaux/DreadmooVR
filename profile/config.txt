@@ -7,6 +7,7 @@ VR_RenderingMethod=0
 VR_SyncedSequentialMethod=1
 UI_FollowView=true
 VR_AimMethod=1
+VR_CameraForwardOffset=-12.000000
 VR_RoomscaleMovement=true
 VR_DPadShifting=false
 VR_AimModifyPlayerControlRotation=true
