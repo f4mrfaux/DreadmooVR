@@ -512,11 +512,15 @@ local function step_boat(pawn)
     -- tracking-error frames. Those paths must hold neutral, not leak physical stick input through.
     boat_controls_active = true
     local vr = uevr.params.vr
+    -- Some runtimes (including Steam Frame hand tracking through UEVR) report
+    -- is_using_controllers=false while get_pose still returns live hand poses.
+    -- Treat validated pose reads as the authority; the boolean is only a runtime
+    -- hint and must not disable the controls by itself.
     local ok_tracking, tracking = pcall(vr.is_using_controllers)
     local l, _, left_error = validated_pose(vr.get_left_controller_index)
     local r, _, right_error = validated_pose(vr.get_right_controller_index)
     local h, hq, head_error = validated_pose(vr.get_hmd_index)
-    if not ok_tracking or tracking ~= true or l == nil or r == nil or h == nil then
+    if l == nil or r == nil or h == nil then
         boat_axis_x, boat_axis_y, boat_throttle = 0, 0, 0
         boat_neutral_lx, boat_neutral_ry, boat_neutral_rz = nil, nil, nil
         boat_throttle_last_direction = 0

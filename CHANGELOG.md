@@ -9,6 +9,9 @@ pending has not passed headset acceptance.
   steering and throttle, sickle guard, hook-gun reeling, and craft-bench cursor movement.
 - Added first-person VR arms visibility handling at the small-boat helm while retaining the
   diver skeletal mesh as the arms pose source.
+- Stabilized helm hand socket anchoring by removing the exact previous world-space controller
+  offset before solving the replacement offset; guards now reject non-finite or implausible
+  corrections. Headset confirmation is still needed.
 - Added right-controller haptic feedback when small-boat throttle changes between reverse,
   neutral, and forward.
 - Preserved native stick steering in third-person boat view and enabled hand steering only in
@@ -27,6 +30,9 @@ pending has not passed headset acceptance.
 - Reworked first-person throttle around the intended hand poses: hip-fire neutral, hand low at
   the hip for reverse, and a straight-elbow diagonal reach for forward. Added projected-travel
   telemetry and a pose-sequence smoke test.
+- Fixed a first-person helm lockout where UEVR's `is_using_controllers` hint could be false even
+  while all hand and head pose reads validated. The bridge now gates on pose validation and still
+  neutralizes controls when a pose read fails; the smoke harness covers both cases.
 - Added a fishing cast gesture: hold the right hand at the ear to charge `IA_Fishing_Cast`, then
   extend forward to release it; the gesture does not write camera-look axes.
 - Added a bite-QTE-only upward twitch that sends one short `IA_Fishing_Cast` press to set the hook.

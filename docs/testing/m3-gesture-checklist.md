@@ -48,9 +48,11 @@ be limited to a combination that passes this checklist.
    arm diagonally forward with a straight elbow for forward. The gesture projects hand motion onto
    an up-and-forward axis, so the diagonal reach counts even when the hand does not rise much. Each
    detent must remain requested for 120 ms before it is accepted and produces one right-controller
-   haptic click. Invalid/out-of-range poses must zero the axes and restart calibration. Other boat
-   types intentionally retain their native stick. First-person mode must keep gamepad LX/LY at
-   neutral during initial calibration and tracking loss, so a physical stick cannot leak through.
+   haptic click. Invalid/out-of-range pose reads must zero the axes and restart calibration. A
+   false `is_using_controllers` hint alone must not suppress valid tracked poses; confirm steering
+   still responds during that runtime state. Other boat types intentionally retain their native
+   stick. First-person mode must keep gamepad LX/LY neutral during initial calibration, so a
+   physical stick cannot leak through.
 
 After the run, send the visible behavior plus log lines containing `fishing`, `boat mesh anchors`,
 `boat throttle detent`, `boat arms visibility`, or `FAILED`. The boat anchor log gives the live
@@ -183,12 +185,21 @@ timed out or accepted input.
   restore). Anchor discovery retries while the child actor is spawning and reports the failing
   component lookup rather than silently falling back. Helm poses are checked for finite position,
   plausible tracking-space bounds, a near-unit quaternion, and implausible per-frame hand jumps;
-  missing controller tracking fails to neutral and requires recalibration. The throttle uses a stable-hand polling delay on entry
+  failed or invalid pose reads fail to neutral and require recalibration. A live capture showed
+  `is_using_controllers=false` while hand and HMD pose reads still validated, so this hint no
+  longer gates helm controls by itself. The throttle uses a stable-hand polling delay on entry
   and a 120 ms detent debounce to reduce accidental movement while the right hand is settling.
   Tune live in the gestures table: boat_steer_range_m controls horizontal travel to full rudder,
   boat_steer_deadzone_m ignores center noise, boat_steer_curve shapes the center response, and
   boat_steer_smoothing_s controls low-pass filtering. The throttle uses boat_throttle_enter_m for
   forward/reverse, boat_throttle_release_m for neutral, and a 120 ms stable detent before changes.
+
+  **Live throttle pass (2026-11-18):** five-second pose holds showed reverse at negative projected
+  travel (about -0.18 to -0.45 m), neutral near center (about -0.06 to +0.05 m), and forward at
+  positive up-and-forward travel (about +0.09 to +0.13 m). Forward samples just under the +0.10 m
+  entry threshold are consistent with the 120 ms debounce and sparse telemetry sampling. Leave
+  thresholds unchanged pending a labeled, denser recording: the current `boat pose` log interval
+  did not mark the exact start/end of each repeated hold, so it cannot establish repeatability.
 
   On the craft bench, craft_cursor_span_m changes how much hand movement spans the viewport.
 
@@ -199,7 +210,8 @@ confirmation.
 ## Automated boat harness
 
 Run `lua tests/run.lua boat` from the repository root. The targeted harness exercises third-person
-third-person native-axis pass-through, camera-mode switching, first-person hand calibration, both rudder directions and center
+native-axis pass-through, camera-mode switching, first-person hand calibration, valid poses with a
+false runtime controller hint, invalid-pose neutral fallback, both rudder directions and center
 deadzone, forward/neutral/reverse detents and haptics, and the post-game-tick cosmetic wheel copy
 for left and right turns. Its fixture gives the wheel mesh a relative rotation offset to catch
 component-versus-actor rotation mismatches. The expected source is
@@ -212,6 +224,15 @@ The visible hand targets are rebased every frame to the boat meshes' authored gr
 Gesture input still reads the raw tracked controller poses, so hand anchoring does not move the
 steering or throttle neutral reference. The controller-to-socket alignment and cosmetic actor
 sync both still need confirmation with the selected in-game wheel cosmetic.
+
+The socket solver replaces UEVR's absolute controller-local location offset. UEVR reapplies that
+offset through the current controller rotation each frame, so the solver must remove it using the
+current basis before calculating the next offset. Non-finite values and corrections over 150 cm
+fail closed and restore the normal grip offset. `test_boat_socket_anchors_converge_without_compounding_and_restore`
+checks socket convergence through a 90-degree controller-basis turn and return to the walking
+grip offset. On headset, confirm both visible hands stay on their grips while rotating the wrists
+and turning the wheel; check logs for `boat grip offsets` and absence of `boat hand grip socket
+FAILED` or NaN values.
 
 ## Finger tracking probe
 

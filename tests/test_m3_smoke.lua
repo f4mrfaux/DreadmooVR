@@ -16,6 +16,7 @@ local function gameplay_tag(s) return { TagName = fname(s) } end
 
 local function world(tool_socket, on_body)
     local W = { logs = {}, callbacks = {}, hook_visible = true, t = 0, controllers_active = true,
+        pose_read_fails = false,
         mods = { VR_AimMethod = "2" } }
     os.execute('mkdir "build\\smoke3\\scripts\\lib" 2>nul')
     copy("src/scripts/m3_gestures.lua", STAGE .. "scripts/m3_gestures.lua")
@@ -129,6 +130,7 @@ local function world(tool_socket, on_body)
                     W.haptics = (W.haptics or 0) + 1
                 end,
                 get_pose = function(i, p, q)
+                    if W.pose_read_fails then error("simulated invalid pose read") end
                     local pos = i == 0 and v(0, 1.65, 0) or ((i == 1) and W.left(W.t) or W.right(W.t))
                     p.x, p.y, p.z = pos.X, pos.Y, pos.Z
                     if i == 2 then
@@ -340,22 +342,24 @@ return {
         no_failures(W)
     end,
 
-    test_boat_tracking_loss_holds_first_person_axes_at_neutral = function()
+    test_boat_valid_poses_override_false_runtime_controller_hint_but_invalid_poses_fail_safe = function()
         local W = world("None", false)
         W.set_mode("boat")
-        run(W, 0.1) -- calibration is active, but must not pass physical sticks through
+        run(W, 1.5) -- calibration succeeds from valid poses even if the runtime flag is false
         W.controllers_active = false
-        run(W, 0.1)
+        move_left_x(W, 0.11)
         local state = { Gamepad = { sThumbLX = 12345, sThumbLY = -23456 } }
         W.callbacks.xinput(nil, 0, state)
-        assert(state.Gamepad.sThumbLX == 0 and state.Gamepad.sThumbLY == 0,
-            "tracking loss holds first-person boat axes at neutral")
-        assert(has(W, "boat controls fail%-safe"), "tracking loss is logged: " .. table.concat(W.logs, " | "))
-        W.controllers_active = true
-        run(W, 1.5)
-        move_left_x(W, 0.11)
+        assert(state.Gamepad.sThumbLX > 7500,
+            "valid live controller poses still steer when is_using_controllers reports false")
+
+        W.pose_read_fails = true
+        run(W, 0.1)
+        state.Gamepad.sThumbLX, state.Gamepad.sThumbLY = 12345, -23456
         W.callbacks.xinput(nil, 0, state)
-        assert(state.Gamepad.sThumbLX > 7500, "tracking recovery recalibrates and restores left-hand steering")
+        assert(state.Gamepad.sThumbLX == 0 and state.Gamepad.sThumbLY == 0,
+            "actual pose read failures hold first-person boat axes neutral")
+        assert(has(W, "boat controls fail%-safe"), "invalid poses are logged: " .. table.concat(W.logs, " | "))
         no_failures(W)
     end,
 

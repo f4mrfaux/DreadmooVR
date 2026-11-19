@@ -72,10 +72,12 @@ local function make_world()
         return c
     end
     local function target(loc)
-        return obj({ K2_GetComponentLocation = function() return loc end,
+        return obj({ location = loc, forward = v(1, 0, 0), right = v(0, 1, 0), up = v(0, 0, 1),
+            K2_GetComponentLocation = function(self) return self.location end,
             K2_GetComponentRotation = function() return { Pitch = 0, Yaw = 0, Roll = 0 } end,
-            GetForwardVector = function() return v(1, 0, 0) end, GetRightVector = function() return v(0, 1, 0) end,
-            GetUpVector = function() return v(0, 0, 1) end })
+            GetForwardVector = function(self) return self.forward end,
+            GetRightVector = function(self) return self.right end,
+            GetUpVector = function(self) return self.up end })
     end
 
     local pawn_mesh = mesh("GameMesh")
@@ -98,13 +100,21 @@ local function make_world()
         if i > #chain then return nil end
         return { get_fname = function() return fname(chain[i]) end, get_super_struct = function() return class_at(i + 1) end }
     end
-    W.pawn = obj({ name = "Pawn", Mesh = pawn_mesh, get_class = function() return class_at(1) end,
+    local wheel_component = mesh("Wheel")
+    wheel_component.GetSocketLocation = function(_, socket) return socket == "LHand_Socket" and v(10, -20, 100) or v(15, 20, 90) end
+    local throttle_component = mesh("Throttle")
+    throttle_component.GetSocketLocation = function(_, socket) return socket == "RHand" and v(15, 20, 90) or v(0, 0, 0) end
+    W.pawn = obj({ name = "Pawn", Mesh = pawn_mesh,
+        BP_ShipSteeringWheel = { ChildActor = { Small_Boat_Steerwheel = wheel_component } },
+        Throttle_lever = throttle_component,
+        get_class = function() return class_at(1) end,
         RootComponent = obj({ name = "BoatRoot", AttachChildren = {} }),
         GetTransform = function() return {} end, K2_GetActorRotation = function() return { Pitch = 0, Yaw = 0, Roll = 0 } end })
     W.set_mode = function(mode)
         chain = mode == "boat" and { "BP_SmallBoat_V2_C", "DrdShipBase", "Pawn" }
             or mode == "fishing" and { "BP_FishingController_C", "DrdFishingControllerBase", "Pawn" }
             or { "BP_PlayerCharacter_C", "DrdPlayerCharacter", "Character", "Pawn", "Actor", "Object" }
+        W.pawn.bFirstPersonCameraEnabled = mode == "boat"
     end
     -- A replacement pawn (respawn, level load): a fresh mesh with nothing attached.
     W.new_pawn = function()
@@ -121,7 +131,10 @@ local function make_world()
         W.spawns = W.spawns + 1
         W.finger_anim = { get_class = function() return { get_fname = function() return fname("ABP_VRArms_C") end } end }
         local body = mesh("Body" .. W.spawns)
-        body.GetAnimInstance = function() return W.finger_anim end
+        body.GetAnimInstance = function()
+            if W.finger_anim_nil then return nil end
+            return W.finger_anim
+        end
         body.K2_AttachToComponent = function(self, p)
             if self.dead then error("arms actor is gone") end
             local old = self.parent and self.parent.AttachChildren
@@ -142,11 +155,34 @@ local function make_world()
     local gs = { BeginDeferredActorSpawnFromClass = function() return new_arms() end,
         FinishSpawningActor = function(_, a) return a end }
     local arms_class = { get_class_default_object = function() return {} end }
+    W.motion_states = {}
+    local function apply_controller_offset(state)
+        local hand_target, off = state.target, state.offset
+        if not W.simulate_location_offsets or off == nil or hand_target.base_location == nil then return end
+        local forward, right, up = hand_target:GetForwardVector(), hand_target:GetRightVector(), hand_target:GetUpVector()
+        local d = { X = right.X * off.x + up.X * off.y - forward.X * off.z,
+            Y = right.Y * off.x + up.Y * off.y - forward.Y * off.z,
+            Z = right.Z * off.x + up.Z * off.y - forward.Z * off.z }
+        local base = hand_target.base_location
+        hand_target.location = v(base.X + d.X, base.Y + d.Y, base.Z + d.Z)
+    end
+    W.apply_controller_offsets = function()
+        for _, motion_state in pairs(W.motion_states) do apply_controller_offset(motion_state) end
+    end
+    W.set_controller_basis = function(side, forward, right, up)
+        local hand_target = side == "L" and W.arms.LeftHandTarget or W.arms.RightHandTarget
+        hand_target.forward, hand_target.right, hand_target.up = forward, right, up
+    end
     local function state(hand)
-        local s = { hand = hand }
+        local s = { hand = hand, target = hand }
         s.set_hand = function(self, h) self.hand = h end
         s.set_permanent = function() end
-        s.set_location_offset = function(self, off) W.offsets[#W.offsets + 1] = off end
+        s.set_location_offset = function(self, off)
+            W.offsets[#W.offsets + 1] = off
+            self.offset = { x = off.x, y = off.y, z = off.z }
+            apply_controller_offset(self)
+        end
+        W.motion_states[hand == W.arms.LeftHandTarget and "L" or "R"] = s
         return s
     end
 
@@ -215,6 +251,10 @@ local function run(W, seconds)
             W.callbacks.view(nil, 0, 100, { x = 10, y = 0, z = 170 }, { x = 0, y = 0, z = 0 }, true)
             W.callbacks.view(nil, 1, 100, { x = 10, y = 0, z = 170 }, { x = 0, y = 0, z = 0 }, true)
         end
+        -- UObjectHook reapplies its saved controller-local offset through the *current* basis
+        -- before each script tick. Simulate that engine step so wrist rotations expose stale-frame
+        -- subtraction regressions in the real bridge math.
+        if W.apply_controller_offsets then W.apply_controller_offsets() end
         W.t = (W.t or 0) + 0.05
         W.callbacks.tick(nil, 0.05)
         -- The game's anim update: ABP_V03 copies control rotation (pitch 35 = hand raised), then
@@ -257,9 +297,10 @@ local function load_scripts(W, scripts)
     assert(ok, "load failed: " .. tostring(err))
 end
 
-local function boot(scripts)
+local function boot(scripts, before_run)
     stage(TUNING_ON)
     local W = make_world()
+    if before_run then before_run(W) end
     load_scripts(W, scripts or { "m2_arms" })
     run(W, 15)
     return W
@@ -320,7 +361,72 @@ return {
         run(W, 0.8) -- No further sensor events: stale curls must fail open if the plugin disappears.
         assert(W.finger_anim.FingerCurlRIndex < 0.01, "stale tracking sample returns the hand to open")
         assert(has(W.logs, "finger AnimInstance=ABP_VRArms_C property probe PASS"), "AnimBP finger property is writable and readable")
+        assert(has(W.logs, "finger animation readback: ABP_VRArms_C Lindex="), "AnimInstance index properties are read back after writes")
         assert(failures(W.logs) == "", failures(W.logs))
+    end,
+
+    test_finger_anim_nil_is_reported_then_live_index_readbacks_follow_input = function()
+        local W = boot(nil, function(world) world.finger_anim_nil = true end)
+        assert(has(W.logs, "finger AnimInstance unavailable: Body:GetAnimInstance returned nil"),
+            "nil AnimInstance has a visible diagnostic")
+        assert(not has(W.logs, "finger AnimInstance=ABP_VRArms_C property probe PASS"),
+            "probe waits until an AnimInstance exists")
+
+        W.finger_anim_nil = false
+        W.callbacks.lua_event("dreadmoorvr_finger_curls", "L|1.000,1.000,0.000,0.000,0.000")
+        W.callbacks.lua_event("dreadmoorvr_finger_curls", "R|0.000,0.250,1.000,0.000,0.000")
+        run(W, 0.25)
+        assert(W.finger_anim.FingerCurlLIndex > 0.5 and W.finger_anim.FingerCurlRIndex > 0.1,
+            "left and right index inputs independently reach AnimInstance properties")
+        assert(W.finger_anim.FingerCurlLIndex > W.finger_anim.FingerCurlRIndex,
+            "different per-hand curl values remain distinct")
+        assert(has(W.logs, "finger animation readback: ABP_VRArms_C Lindex="),
+            "logged AnimInstance class and post-write index readbacks")
+        assert(failures(W.logs) == "", failures(W.logs))
+    end,
+
+    test_boat_socket_anchors_converge_without_compounding_and_restore = function()
+        local W = boot()
+        W.simulate_location_offsets = true -- UObjectHook replaces the controller's absolute location offset.
+        W.arms.LeftHandTarget.location = v(W.arms.LeftHandTarget.location.X - 8,
+            W.arms.LeftHandTarget.location.Y, W.arms.LeftHandTarget.location.Z)
+        W.arms.RightHandTarget.location = v(W.arms.RightHandTarget.location.X - 8,
+            W.arms.RightHandTarget.location.Y, W.arms.RightHandTarget.location.Z)
+        W.arms.LeftHandTarget.base_location = v(W.arms.LeftHandTarget.location.X + 8,
+            W.arms.LeftHandTarget.location.Y, W.arms.LeftHandTarget.location.Z)
+        W.arms.RightHandTarget.base_location = v(W.arms.RightHandTarget.location.X + 8,
+            W.arms.RightHandTarget.location.Y, W.arms.RightHandTarget.location.Z)
+        local before_l = W.arms.LeftHandTarget.location
+        local before_r = W.arms.RightHandTarget.location
+        W.set_mode("boat"); run(W, 1.5)
+        local left = W.arms.LeftHandTarget.location
+        local right = W.arms.RightHandTarget.location
+        assert(math.abs(left.X - 10) < 0.1 and math.abs(left.Y + 20) < 0.1 and math.abs(left.Z - 100) < 0.1,
+            "left target converges to the authored wheel grip socket: " .. left.X .. "," .. left.Y .. "," .. left.Z .. " logs=" .. table.concat(W.logs, " | "))
+        assert(math.abs(right.X - 15) < 0.1 and math.abs(right.Y - 20) < 0.1 and math.abs(right.Z - 90) < 0.1,
+            "right target converges to the authored throttle grip socket")
+        assert(not has(W.logs, "boat hand grip socket FAILED"), "stable finite socket offsets")
+        local yaw_forward, yaw_right, yaw_up = v(0, 1, 0), v(-1, 0, 0), v(0, 0, 1)
+        W.set_controller_basis("L", yaw_forward, yaw_right, yaw_up)
+        W.set_controller_basis("R", yaw_forward, yaw_right, yaw_up)
+        run(W, 0.5)
+        left, right = W.arms.LeftHandTarget.location, W.arms.RightHandTarget.location
+        assert(math.abs(left.X - 10) < 0.1 and math.abs(left.Y + 20) < 0.1 and math.abs(left.Z - 100) < 0.1,
+            "left target stays at wheel socket when controller basis rotates")
+        assert(math.abs(right.X - 15) < 0.1 and math.abs(right.Y - 20) < 0.1 and math.abs(right.Z - 90) < 0.1,
+            "right target stays at throttle socket when controller basis rotates")
+        W.set_controller_basis("L", v(1, 0, 0), v(0, 1, 0), v(0, 0, 1))
+        W.set_controller_basis("R", v(1, 0, 0), v(0, 1, 0), v(0, 0, 1))
+        run(W, 0.5)
+        left, right = W.arms.LeftHandTarget.location, W.arms.RightHandTarget.location
+        assert(math.abs(left.X - 10) < 0.1 and math.abs(right.X - 15) < 0.1,
+            "anchors reconverge after controller basis returns")
+        W.set_mode("walking"); run(W, 0.1)
+        left, right = W.arms.LeftHandTarget.location, W.arms.RightHandTarget.location
+        assert(math.abs(left.X - before_l.X) < 0.1 and math.abs(left.Y - before_l.Y) < 0.1 and math.abs(left.Z - before_l.Z) < 0.1,
+            "left controller offset returns to its walking baseline")
+        assert(math.abs(right.X - before_r.X) < 0.1 and math.abs(right.Y - before_r.Y) < 0.1 and math.abs(right.Z - before_r.Z) < 0.1,
+            "right controller offset returns to its walking baseline")
     end,
 
     test_boat_camera_moves_forward_and_restores_walking_view = function()

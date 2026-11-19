@@ -73,7 +73,8 @@ local finger_smoothed = {
     L = { thumb = 0, index = 0, middle = 0, ring = 0, pinky = 0 },
     R = { thumb = 0, index = 0, middle = 0, ring = 0, pinky = 0 },
 }
-local finger_anim_error_logged, finger_anim_probe_logged = false, false
+local finger_anim_error_logged, finger_anim_probe_logged, finger_anim_nil_logged = false, false, false
+local finger_anim_class, last_finger_anim_log = "unknown", -math.huge
 local boat_hand_anchor_active, boat_hand_anchor_last_log = false, -math.huge
 local boat_hand_anchor_offsets = {}
 local function apply_tuning(now, mode)
@@ -475,16 +476,27 @@ local function boat_hand_anchor_components(pawn)
     return wheel, throttle
 end
 
+local function anchor_finite(v)
+    return v ~= nil and type(v.X) == "number" and v.X == v.X and math.abs(v.X) < 100000
+        and type(v.Y) == "number" and v.Y == v.Y and math.abs(v.Y) < 100000
+        and type(v.Z) == "number" and v.Z == v.Z and math.abs(v.Z) < 100000
+end
+
 local function anchor_hand_to_socket(side, target, component, socket)
     local state = hand_states[side]
     if state == nil then error("motion controller state " .. side .. " is nil") end
     local anchor = component:GetSocketLocation(socket)
     local hand = target:K2_GetComponentLocation()
     local forward, right, up = target:GetForwardVector(), target:GetRightVector(), target:GetUpVector()
-    -- UEVR's controller offset uses OpenVR local X=right, Y=up, Z=back; the UE hand target's
-    -- forward axis is the inverse of OpenVR local Z. Remove last frame's known offset to recover
-    -- the unmodified tracked target before calculating this frame's offset. Without this step,
-    -- reading the already-offset target would alternate the offset between zero and full distance.
+    if not anchor_finite(anchor) or not anchor_finite(hand) or not anchor_finite(forward)
+        or not anchor_finite(right) or not anchor_finite(up) then
+        error("non-finite socket, target, or controller basis")
+    end
+    -- UObjectHook replaces MotionControllerState.location_offset, then reapplies that saved
+    -- controller-local vector through this frame's adjusted controller rotation before our Lua
+    -- tick. Remove that current-frame displacement to recover the raw tracked target. Using the
+    -- previous frame's world displacement here is wrong when the wrist rotates: UEVR has already
+    -- rotated the local offset into the new basis, leaving a residual that makes the hand drift.
     local previous = boat_hand_anchor_offsets[side] or { x = 0, y = 0, z = fit.grip_back }
     local applied_world = vadd(vadd(
         { X = right.X * previous.x, Y = right.Y * previous.x, Z = right.Z * previous.x },
@@ -493,6 +505,11 @@ local function anchor_hand_to_socket(side, target, component, socket)
     local raw_hand = vsub(hand, applied_world)
     local delta = vsub(anchor, raw_hand)
     local offset = Vector3f.new(vdot(delta, right), vdot(delta, up), -vdot(delta, forward))
+    if offset.x ~= offset.x or offset.y ~= offset.y or offset.z ~= offset.z
+        or math.abs(offset.x) > 150 or math.abs(offset.y) > 150 or math.abs(offset.z) > 150 then
+        error(string.format("socket correction out of range (%.1f,%.1f,%.1f) cm; hand=(%.1f,%.1f,%.1f) socket=(%.1f,%.1f,%.1f)",
+            offset.x, offset.y, offset.z, hand.X, hand.Y, hand.Z, anchor.X, anchor.Y, anchor.Z))
+    end
     state:set_location_offset(offset)
     boat_hand_anchor_offsets[side] = { x = offset.x, y = offset.y, z = offset.z }
     return offset
@@ -511,12 +528,6 @@ local function update_boat_hand_anchors(pawn, now)
         end
         return
     end
-    if not boat_hand_anchor_active then
-        boat_hand_anchor_offsets = {
-            L = { x = 0, y = 0, z = fit.grip_back },
-            R = { x = 0, y = 0, z = fit.grip_back },
-        }
-    end
     local ok_left, left_offset = pcall(anchor_hand_to_socket, "L", actor.LeftHandTarget, wheel, "LHand_Socket")
     local ok_right, right_offset = pcall(anchor_hand_to_socket, "R", actor.RightHandTarget, throttle, "RHand")
     if not ok_left or not ok_right then
@@ -533,8 +544,10 @@ local function update_boat_hand_anchors(pawn, now)
     end
     if now - boat_hand_anchor_last_log >= 1 then
         boat_hand_anchor_last_log = now
+        local applied_l = boat_hand_anchor_offsets.L or left_offset
+        local applied_r = boat_hand_anchor_offsets.R or right_offset
         log(string.format("boat grip offsets cm: L=(%.1f,%.1f,%.1f) R=(%.1f,%.1f,%.1f)",
-            left_offset.x, left_offset.y, left_offset.z, right_offset.x, right_offset.y, right_offset.z))
+            applied_l.x, applied_l.y, applied_l.z, applied_r.x, applied_r.y, applied_r.z))
     end
 end
 
@@ -597,12 +610,22 @@ end)
 -- AnimGraph's three additive ModifyBone nodes per digit use this 0=open, 1=closed value as Alpha.
 -- Smooth the 30 Hz device samples to avoid visible stepping at the headset frame rate.
 local function update_finger_animation(delta)
-    if actor == nil or actor.Body == nil then return end
+    if actor == nil then return end
     local ok, err = pcall(function()
         local body = actor.Body
-        if type(body.GetAnimInstance) ~= "function" then return end
+        if body == nil then error("BP_VRArms.Body is nil") end
+        -- Call through the UObject binding directly. `type(body.GetAnimInstance)` can report a
+        -- non-function for reflected methods, and silently skipping here prevented all runtime
+        -- AnimInstance diagnostics despite valid SteamVR curl events.
         local anim = body:GetAnimInstance()
-        if anim == nil then return end
+        if anim == nil then
+            if not finger_anim_nil_logged then
+                finger_anim_nil_logged = true
+                log("finger AnimInstance unavailable: Body:GetAnimInstance returned nil")
+            end
+            return
+        end
+        finger_anim_nil_logged = false
         if not finger_anim_probe_logged then
             finger_anim_probe_logged = true
             local cls_name_ok, cls_name = pcall(function()
@@ -610,6 +633,7 @@ local function update_finger_animation(delta)
                 return cls and name_str(cls:get_fname()) or "unknown"
             end)
             if not cls_name_ok then cls_name = "unavailable: " .. tostring(cls_name) end
+            finger_anim_class = tostring(cls_name)
             local probe_ok, probe_err = pcall(function()
                 local key = "FingerCurlLThumb"
                 local before = anim[key]
@@ -635,6 +659,11 @@ local function update_finger_animation(delta)
                 finger_smoothed[side][field] = current
                 anim["FingerCurl" .. side .. channel.name] = current
             end
+        end
+        if clock - last_finger_anim_log >= 1.0 then
+            last_finger_anim_log = clock
+            log(string.format("finger animation readback: %s Lindex=%s Rindex=%s",
+                finger_anim_class, tostring(anim.FingerCurlLIndex), tostring(anim.FingerCurlRIndex)))
         end
     end)
     if ok then
