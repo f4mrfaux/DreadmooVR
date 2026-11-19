@@ -348,6 +348,17 @@ private:
                 auto err = m_input->GetPoseActionDataRelativeToNow(m_pose, vr::TrackingUniverseStanding, 0.0f, &pd, sizeof(pd), m_source[i]);
                 bool valid = err == vr::VRInputError_None && pd.bActive && pd.pose.bPoseIsValid;
                 if (valid) ++m_pose_valid[i];
+                // Lua uses this independent SteamVR validity signal to reject stale UEVR
+                // controller coordinates. Send changes immediately and a 10 Hz heartbeat so
+                // a stopped plugin/input poll cannot leave a valid state latched indefinitely.
+                if (!m_pose_event_initialized[i] || valid != m_pose_event_valid[i]
+                    || t - m_pose_event_ms[i] >= 100) {
+                    m_pose_event_initialized[i] = true;
+                    m_pose_event_valid[i] = valid;
+                    m_pose_event_ms[i] = t;
+                    const std::string sample = std::string(hand_name(i)) + (valid ? "|1" : "|0");
+                    API::get()->dispatch_lua_event("dreadmoorvr_pose_validity", sample);
+                }
                 std::string v = err != vr::VRInputError_None ? "err" + std::to_string((int)err)
                                 : valid ? "valid" : "invalid(result=" + std::to_string((int)pd.pose.eTrackingResult) + ")";
                 if (auto line = m_digital.change(std::string("Pose@") + hand_name(i), v)) log("t=%lld dev=%u %s", (long long)t, m_device[i], line->c_str());
@@ -430,6 +441,9 @@ private:
     dvr::FingerCurls m_finger_curls[2]{};
     bool m_finger_valid[2]{};
     int64_t m_last_finger_event_ms[2]{};
+    bool m_pose_event_initialized[2]{};
+    bool m_pose_event_valid[2]{};
+    int64_t m_pose_event_ms[2]{};
     uint16_t m_last_pad{0xFFFF};
     size_t m_ticks{0}, m_ticks_hmd{0}, m_ticks_ctl{0}, m_pose_valid[2]{0, 0};
     size_t m_dropped_digital_reported{0}, m_dropped_analog_reported{0};

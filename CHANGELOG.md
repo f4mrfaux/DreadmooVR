@@ -33,11 +33,19 @@ pending has not passed headset acceptance.
 - Fixed a first-person helm lockout where UEVR's `is_using_controllers` hint could be false even
   while all hand and head pose reads validated. The bridge now gates on pose validation and still
   neutralizes controls when a pose read fails; the smoke harness covers both cases.
+- Added per-hand SteamVR pose-validity events with a 100 ms heartbeat. Boat and fishing gestures
+  now ignore a false UEVR controller-use hint when the required hand poses are valid, and release
+  synthetic input when native tracking is invalid or its heartbeat goes stale.
 - Added a fishing cast gesture: hold the right hand at the ear to charge `IA_Fishing_Cast`, then
   extend forward to release it; the gesture does not write camera-look axes.
 - Added a bite-QTE-only upward twitch that sends one short `IA_Fishing_Cast` press to set the hook.
+- Kept the one-hook-set-per-bite latch through brief hand-tracking loss, preventing a second
+  hook-set pulse after reacquisition during the same QTE.
 - Removed the automatic M1 debug-cube spawn from the production bridge.
-- Local Lua and native test suites pass. Headset acceptance for fishing, boat steering/throttle,
+- Expanded smoke coverage for boat heartbeat expiry/recovery, head-turn-stable steering, active
+  fishing input release on tracking loss, bite-pulse duration and one-shot behavior after tracking
+  recovery, DirectionalDrag button pass-through, and normal crank-stop release. Local Lua and native
+  test suites pass. Headset acceptance for fishing, boat steering/throttle,
   arms/shoulders, crafting, and the target Steam Frame input setup is still pending. The reported
   fish landing animation restart is tracked as a base-game issue; this mod does not claim to fix it.
 

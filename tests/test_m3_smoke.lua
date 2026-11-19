@@ -17,6 +17,8 @@ local function gameplay_tag(s) return { TagName = fname(s) } end
 local function world(tool_socket, on_body)
     local W = { logs = {}, callbacks = {}, hook_visible = true, t = 0, controllers_active = true,
         pose_read_fails = false,
+        native_pose_enabled = false, native_pose_valid = { L = true, R = true },
+        native_pose_paused = false, native_pose_last = {}, native_pose_order = { "L", "R" },
         mods = { VR_AimMethod = "2" } }
     os.execute('mkdir "build\\smoke3\\scripts\\lib" 2>nul')
     copy("src/scripts/m3_gestures.lua", STAGE .. "scripts/m3_gestures.lua")
@@ -112,6 +114,7 @@ local function world(tool_socket, on_body)
     -- Poses: W.left / W.right are functions of time returning a position (m); right faces -Z.
     W.left = function() return v(0, 1.2, -0.3) end
     W.right = function() return v(0.2, 1.2, -0.3) end
+    W.head_q = { x = 0, y = 0, z = 0, w = 1 }
     W.right_q = { x = 0, y = 0, z = 0, w = 1 }
     _G.UEVR_Vector3f = { new = function() return { x = 0, y = 0, z = 0 } end }
     _G.UEVR_Quaternionf = { new = function() return { x = 0, y = 0, z = 0, w = 1 } end }
@@ -133,7 +136,9 @@ local function world(tool_socket, on_body)
                     if W.pose_read_fails then error("simulated invalid pose read") end
                     local pos = i == 0 and v(0, 1.65, 0) or ((i == 1) and W.left(W.t) or W.right(W.t))
                     p.x, p.y, p.z = pos.X, pos.Y, pos.Z
-                    if i == 2 then
+                    if i == 0 then
+                        q.x, q.y, q.z, q.w = W.head_q.x, W.head_q.y, W.head_q.z, W.head_q.w
+                    elseif i == 2 then
                         q.x, q.y, q.z, q.w = W.right_q.x, W.right_q.y, W.right_q.z, W.right_q.w
                     else
                         q.x, q.y, q.z, q.w = 0, 0, 0, 1
@@ -142,6 +147,7 @@ local function world(tool_socket, on_body)
             },
         },
         sdk = { callbacks = { on_pre_engine_tick = reg("tick"), on_xinput_get_state = reg("xinput"),
+            on_lua_event = reg("lua_event"),
             on_script_reset = reg("reset"), on_post_calculate_stereo_view_offset = reg("post_view") } },
         api = { get_local_pawn = function() return W.pawn end,
                 get_player_controller = function() return { SetMouseLocation = function(_, x, y) W.mouse = { x = x, y = y } end } end,
@@ -162,6 +168,16 @@ local function run(W, seconds)
     local presses, was = 0, false
     for _ = 1, math.floor(seconds / DT) do
         W.t = W.t + DT
+        if W.native_pose_enabled and not W.native_pose_paused then
+            for _, side in ipairs(W.native_pose_order) do
+                local value = W.native_pose_valid[side]
+                local prior = W.native_pose_last[side]
+                if prior == nil or prior.value ~= value or W.t - prior.time >= 0.1 then
+                    W.callbacks.lua_event("dreadmoorvr_pose_validity", side .. "|" .. (value and "1" or "0"))
+                    W.native_pose_last[side] = { value = value, time = W.t }
+                end
+            end
+        end
         W.callbacks.tick(nil, DT)
         local state = { Gamepad = { bRightTrigger = 0 } }
         W.callbacks.xinput(nil, 0, state)
@@ -200,9 +216,10 @@ end
 -- Left hand circling the crank point: right hand at the origin facing -Z, crank axis = X,
 -- crank point offset (-0.06, 0, 0.04); circle of 10 cm in the Y/Z plane at 360 deg/s.
 local function cranking(W)
-    W.right = function() return v(0, 1.2, -0.3) end
+    local started_at = W.t
+    W.right = function() return v(0.2, 1.2, -0.3) end
     W.left = function(t)
-        local a = math.rad(360 * t)
+        local a = math.rad(360 * (t - started_at))
         return v(-0.06, 1.2 + 0.10 * math.cos(a), -0.3 + 0.04 + 0.10 * math.sin(a))
     end
 end
@@ -231,6 +248,8 @@ return {
     test_fishing_bite_qte_sets_hook_on_quick_upward_twitch = function()
         local W = world("None", false)
         W.set_mode("fishing")
+        W.native_pose_enabled = true
+        W.controllers_active = false
         W.pawn.CurrentQTE = gameplay_tag("QTE.Type.FishingBite")
         run(W, 0.08) -- capture the hand's bite-QTE baseline
         local start_time = W.t
@@ -238,17 +257,22 @@ return {
             local a = math.min(1, math.max(0, (t - start_time) / 0.16))
             return v(0.2, 1.2 + 0.20 * a, -0.3)
         end
-        local saw_press = false
+        local saw_press, pulse_frames = false, 0
         for _ = 1, 10 do
             W.t = W.t + DT
             W.callbacks.tick(nil, DT)
             local state = { Gamepad = { bRightTrigger = 0, sThumbRX = 1234, sThumbRY = -2345 } }
             W.callbacks.xinput(nil, 0, state)
-            if state.Gamepad.bRightTrigger == 255 then saw_press = true end
+            if state.Gamepad.bRightTrigger == 255 then
+                saw_press = true
+                pulse_frames = pulse_frames + 1
+            end
             assert(state.Gamepad.sThumbRX == 1234 and state.Gamepad.sThumbRY == -2345,
                 "hook-set gesture does not alter camera-look axes")
         end
         assert(saw_press, "upward twitch sends a short hook-set press")
+        assert(pulse_frames >= 1 and pulse_frames <= 7,
+            "hook-set press stays a brief pulse (observed " .. pulse_frames .. " frames)")
         run(W, 0.1)
         local released = { Gamepad = { bRightTrigger = 0, sThumbRX = 1234, sThumbRY = -2345 } }
         W.callbacks.xinput(nil, 0, released)
@@ -257,12 +281,30 @@ return {
         local hits = 0
         for _, line in ipairs(W.logs) do if line:find("fishing hook%-set gesture: upward twitch") then hits = hits + 1 end end
         assert(hits == 1, "one hook set per bite QTE")
+        W.right = function() return v(0.2, 1.2, -0.3) end
+        run(W, 0.1)
+        local second_start = W.t
+        W.right = function(t)
+            local a = math.min(1, math.max(0, (t - second_start) / 0.16))
+            return v(0.2, 1.2 + 0.20 * a, -0.3)
+        end
+        local second_twitch = false
+        for _ = 1, 12 do
+            W.t = W.t + DT
+            W.callbacks.tick(nil, DT)
+            local s = { Gamepad = { bRightTrigger = 0 } }
+            W.callbacks.xinput(nil, 0, s)
+            if s.Gamepad.bRightTrigger == 255 then second_twitch = true end
+        end
+        assert(not second_twitch, "one bite QTE accepts only one upward twitch")
         no_failures(W)
     end,
 
     test_fishing_cast_right_ear_load_then_forward_extension_presses_and_releases_cast = function()
         local W = world("None", false)
         W.set_mode("fishing")
+        W.native_pose_enabled = true
+        W.controllers_active = false
         W.pawn.StrugglingFish = nil
         W.right = function() return v(0.2, 1.65, 0.10) end -- right ear, slightly behind head
         run(W, 0.2)
@@ -284,6 +326,75 @@ return {
         no_failures(W)
     end,
 
+    test_fishing_native_invalidity_releases_a_held_cast = function()
+        local W = world("None", false)
+        W.set_mode("fishing")
+        W.pawn.StrugglingFish = nil
+        W.native_pose_enabled = true
+        W.controllers_active = false
+        W.right = function() return v(0.2, 1.65, 0.10) end -- right ear load
+        run(W, 0.25)
+        local state = { Gamepad = { bRightTrigger = 0 } }
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.bRightTrigger == 255, "native-valid cast pose holds the cast trigger despite false UEVR hint")
+
+        W.native_pose_valid.R = false
+        run(W, 0.05)
+        state.Gamepad.bRightTrigger = 73
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.bRightTrigger == 73, "invalid native right pose releases cast and preserves physical trigger")
+        assert(has(W, "fishing cast fail%-safe"), "cast invalidity is reported: " .. table.concat(W.logs, " | "))
+        no_failures(W)
+    end,
+
+    test_fishing_native_invalidity_releases_hook_set_pulse = function()
+        local W = world("None", false)
+        W.set_mode("fishing")
+        W.native_pose_enabled = true
+        W.controllers_active = false
+        W.pawn.CurrentQTE = gameplay_tag("QTE.Type.FishingBite")
+        run(W, 0.08) -- hook-set baseline
+        local start_time = W.t
+        W.right = function(t)
+            local a = math.min(1, math.max(0, (t - start_time) / 0.16))
+            return v(0.2, 1.2 + 0.20 * a, -0.3)
+        end
+        local pulsed = false
+        for _ = 1, 12 do
+            W.t = W.t + DT
+            W.callbacks.tick(nil, DT)
+            local state = { Gamepad = { bRightTrigger = 0 } }
+            W.callbacks.xinput(nil, 0, state)
+            if state.Gamepad.bRightTrigger == 255 then pulsed = true; break end
+        end
+        assert(pulsed, "valid native right pose sets the hook despite false UEVR hint")
+
+        W.native_pose_valid.R = false
+        run(W, 0.03)
+        local released = { Gamepad = { bRightTrigger = 73 } }
+        W.callbacks.xinput(nil, 0, released)
+        assert(released.Gamepad.bRightTrigger == 73, "invalid native pose immediately cancels the hook-set pulse")
+        assert(has(W, "fishing hook%-set fail%-safe"), "hook-set invalidity is reported: " .. table.concat(W.logs, " | "))
+        W.native_pose_valid.R = true
+        W.right = function() return v(0.2, 1.2, -0.3) end
+        run(W, 0.08) -- reacquire a fresh baseline within the same bite QTE
+        local recovery_start = W.t
+        W.right = function(t)
+            local a = math.min(1, math.max(0, (t - recovery_start) / 0.16))
+            return v(0.2, 1.2 + 0.20 * a, -0.3)
+        end
+        local second_pulse = false
+        for _ = 1, 12 do
+            W.t = W.t + DT
+            W.callbacks.tick(nil, DT)
+            local state = { Gamepad = { bRightTrigger = 0 } }
+            W.callbacks.xinput(nil, 0, state)
+            if state.Gamepad.bRightTrigger == 255 then second_pulse = true end
+        end
+        assert(not second_pulse, "tracking recovery cannot fire a second hook set in the same bite QTE")
+        no_failures(W)
+    end,
+
     test_boat_hands_drive_existing_axes_and_throttle_detents_haptically = function()
         local W = world("None", false)
         W.set_mode("boat")
@@ -296,8 +407,8 @@ return {
         move_right_pose(W, 1.32, -0.42) -- up and forward: straight-elbow diagonal reach
         W.callbacks.xinput(nil, 0, state)
         assert(state.Gamepad.sThumbLX > 7500 and state.Gamepad.sThumbLX < 14000,
-            "curved, smoothed left-hand travel steers through IA_BoatMove X (got " .. tostring(state.Gamepad.sThumbLX) .. ")")
-        assert(state.Gamepad.sThumbLY == 32767, "right-hand lift selects forward detent")
+            "positive left-hand travel writes positive IA_BoatMove X, which selects the Blueprint +65-degree wheel target (got " .. tostring(state.Gamepad.sThumbLX) .. ")")
+        assert(state.Gamepad.sThumbLY == 32767, "positive IA_BoatMove Y selects the Blueprint +25-degree forward throttle target")
         assert(W.haptic and W.haptic[2] == 0.025 and W.haptic[3] == 150 and W.haptic[4] == 0.45,
             "right controller gets a short haptic click on throttle transition")
         assert(has(W, "boat throttle detent: forward"))
@@ -306,7 +417,7 @@ return {
         assert(state.Gamepad.sThumbLY == 0, "returning the hand to its calibrated height selects neutral")
         move_right_pose(W, 1.02, -0.26) -- hand low by hip, slightly back
         W.callbacks.xinput(nil, 0, state)
-        assert(state.Gamepad.sThumbLY == -32767, "lowering the right hand selects full reverse")
+        assert(state.Gamepad.sThumbLY == -32767, "negative IA_BoatMove Y selects the Blueprint -22-degree reverse throttle target")
         assert(W.haptics == 3, "forward, neutral, and reverse each give one click")
         config("return { gestures = { enabled = true, boat_steer_range_m = 0.11 } }")
         run(W, 1.2)
@@ -342,24 +453,69 @@ return {
         no_failures(W)
     end,
 
-    test_boat_valid_poses_override_false_runtime_controller_hint_but_invalid_poses_fail_safe = function()
+    test_boat_requires_native_pose_validity_and_recovers_with_recalibration = function()
         local W = world("None", false)
         W.set_mode("boat")
-        run(W, 1.5) -- calibration succeeds from valid poses even if the runtime flag is false
+        W.native_pose_enabled = true
+        W.native_pose_order = { "R", "L" } -- either event may arrive first
         W.controllers_active = false
+        run(W, 1.5) -- calibration succeeds from valid poses even if the runtime flag is false
         move_left_x(W, 0.11)
         local state = { Gamepad = { sThumbLX = 12345, sThumbLY = -23456 } }
         W.callbacks.xinput(nil, 0, state)
         assert(state.Gamepad.sThumbLX > 7500,
-            "valid live controller poses still steer when is_using_controllers reports false")
+            "native-valid hand poses steer when is_using_controllers reports false")
+
+        W.native_pose_valid.R = false -- one invalid hand is enough to stop both axes
+        run(W, 0.1) -- UEVR continues returning finite, unchanged pose coordinates
+        state.Gamepad.sThumbLX, state.Gamepad.sThumbLY = 12345, -23456
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLX == 0 and state.Gamepad.sThumbLY == 0,
+            "native-invalid hand pose holds axes neutral despite stale finite UEVR coordinates")
+        assert(has(W, "native_pose_valid=false"), "native invalidity is logged: " .. table.concat(W.logs, " | "))
+
+        W.native_pose_valid.R = true
+        W.native_pose_paused = true
+        run(W, 0.6) -- no validity event for >500 ms makes cached validity stale
+        state.Gamepad.sThumbLX, state.Gamepad.sThumbLY = 12345, -23456
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLX == 0 and state.Gamepad.sThumbLY == 0,
+            "missing native heartbeat expires and holds axes neutral")
+
+        W.native_pose_paused = false
+        W.left = function() return v(0, 1.2, -0.3) end
+        run(W, 1.5) -- return to neutral and allow a fresh stable calibration
+        move_left_x(W, 0.22)
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLX > 32000,
+            "restored native validity recalibrates and resumes full steering")
 
         W.pose_read_fails = true
         run(W, 0.1)
         state.Gamepad.sThumbLX, state.Gamepad.sThumbLY = 12345, -23456
         W.callbacks.xinput(nil, 0, state)
         assert(state.Gamepad.sThumbLX == 0 and state.Gamepad.sThumbLY == 0,
-            "actual pose read failures hold first-person boat axes neutral")
-        assert(has(W, "boat controls fail%-safe"), "invalid poses are logged: " .. table.concat(W.logs, " | "))
+            "UEVR pose read errors also hold first-person axes neutral")
+        no_failures(W)
+    end,
+
+    test_boat_head_turn_after_calibration_does_not_change_steering = function()
+        local W = world("None", false)
+        W.set_mode("boat")
+        run(W, 1.5)
+        move_left_x(W, 0.11)
+        run(W, 0.5) -- let steering smoothing settle before comparing frames
+        local state = { Gamepad = { sThumbLX = 0, sThumbLY = 0 } }
+        W.callbacks.xinput(nil, 0, state)
+        local before = state.Gamepad.sThumbLX
+        assert(before > 0, "rightward left-hand travel produces positive wheel input")
+
+        -- Turn the HMD 90 degrees around world-up while leaving tracked hand positions fixed.
+        W.head_q = { x = 0, y = math.sin(math.pi / 4), z = 0, w = math.cos(math.pi / 4) }
+        run(W, 0.5)
+        W.callbacks.xinput(nil, 0, state)
+        assert(math.abs(state.Gamepad.sThumbLX - before) < 100,
+            "head yaw after helm calibration does not rotate the frozen steering reference frame")
         no_failures(W)
     end,
 
@@ -485,12 +641,13 @@ return {
             if state.Gamepad.bRightTrigger == 255 then held = held + 1 end
         end
         assert(held > 50, "crank should hold the game's fishing reel action")
-        W.left = function() return v(0, 0, 0) end
-        W.t = W.t + DT
-        W.callbacks.tick(nil, DT)
+        local parked = W.left(W.t)
+        W.left = function() return parked end -- stop without teleporting through jump fail-safe
+        run(W, 0.4) -- exceed the crank detector's 0.25 s active grace
         local state = { Gamepad = { bRightTrigger = 0 } }
         W.callbacks.xinput(nil, 0, state)
         assert(state.Gamepad.bRightTrigger == 0, "reel trigger releases after crank stops")
+        assert(not has(W, "implausible pose jump"), "normal crank stop does not use the pose-spike fail-safe")
         no_failures(W)
     end,
 
@@ -511,6 +668,28 @@ return {
         no_failures(W)
     end,
 
+    test_fishing_fight_axis_has_signed_lean_and_deadzone = function()
+        local W = world("None", false)
+        W.set_mode("fishing")
+        run(W, 0.6)
+        W.right = function() return v(0.26, 1.2, -0.3) end -- +6 cm, inside 8 cm deadzone
+        run(W, 0.1)
+        local state = { Gamepad = { bRightTrigger = 0, sThumbLX = 4321, sThumbLY = 0 } }
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLX == 4321, "fight deadzone preserves physical X input")
+
+        local start_time = W.t
+        W.right = function(t)
+            local a = math.min(1, math.max(0, (t - start_time) / 0.4))
+            return v(0.2 - 0.4 * a, 1.2, -0.3)
+        end
+        run(W, 0.5)
+        state.Gamepad.sThumbLX = 0
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLX < -15000, "leftward rod lean writes a negative fight X axis")
+        no_failures(W)
+    end,
+
     test_directional_drag_writes_two_stick_axes = function()
         local W = world("None", false)
         W.set_mode("fishing")
@@ -524,31 +703,53 @@ return {
             return v(0.2 + 0.2 * a, 1.2 + 0.2 * a, -0.3)
         end
         run(W, 0.5)
-        local state = { Gamepad = { bRightTrigger = 0, sThumbLX = 0, sThumbLY = 0 } }
+        local state = { Gamepad = { bRightTrigger = 0, wButtons = 0x1000, sThumbLX = 0, sThumbLY = 0 } }
         W.callbacks.xinput(nil, 0, state)
         assert(state.Gamepad.sThumbLX > 15000 and state.Gamepad.sThumbLY > 15000,
             "directional drag should write right-hand X/Y movement to left stick")
         assert(state.Gamepad.bRightTrigger == 0, "fishing crank is suppressed during QTE")
+        assert(state.Gamepad.wButtons == 0x1000,
+            "DirectionalDrag preserves the physical A button while supplying drag axes")
         no_failures(W)
     end,
 
     test_fishing_tracking_loss_releases_gestures_and_recalibrates = function()
         local W = world("None", false)
         W.set_mode("fishing")
-        run(W, 0.3)
+        W.native_pose_enabled = true
         W.controllers_active = false
-        W.t = W.t + DT
-        W.callbacks.tick(nil, DT)
+        run(W, 0.3)
+        cranking(W)
+        run(W, 0.8)
         local state = { Gamepad = { bRightTrigger = 73, sThumbLX = 1234, sThumbLY = -2345 } }
         W.callbacks.xinput(nil, 0, state)
-        assert(state.Gamepad.bRightTrigger == 73, "tracking loss releases synthetic reel and preserves physical trigger")
-        assert(state.Gamepad.sThumbLX == 1234 and state.Gamepad.sThumbLY == -2345,
-            "tracking loss clears gesture axes and leaves physical stick input alone")
-        assert(has(W, "fishing controls fail%-safe"), "tracking loss is reported: " .. table.concat(W.logs, " | "))
+        assert(state.Gamepad.bRightTrigger == 255, "valid native poses reel despite false UEVR controller hint")
 
-        W.controllers_active = true
-        run(W, 0.1)
+        W.native_pose_valid.R = false -- one invalid hand fails the L+R fight gate
+        run(W, 0.05)
+        state.Gamepad.bRightTrigger = 73
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.bRightTrigger == 73, "invalid native hand releases synthetic reel and preserves physical trigger")
+        assert(state.Gamepad.sThumbLX == 1234 and state.Gamepad.sThumbLY == -2345,
+            "native invalidity clears gesture axes and leaves physical stick input alone")
+        assert(has(W, "native_pose_valid=false"), "native invalidity is reported: " .. table.concat(W.logs, " | "))
+
+        W.native_pose_valid.R = true
+        local parked = W.left(W.t)
+        W.left = function() return parked end
+        run(W, 0.6)
         assert(has(W, "fishing fight gesture: calibrated"), "valid tracking reacquires a fresh fish neutral pose")
+        cranking(W)
+        run(W, 0.8)
+        state.Gamepad.bRightTrigger = 73
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.bRightTrigger == 255, "recovered validity allows reel after recalibration")
+
+        W.native_pose_paused = true
+        run(W, 0.6)
+        state.Gamepad.bRightTrigger = 73
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.bRightTrigger == 73, "stale validity heartbeat releases an active reel")
         no_failures(W)
     end,
 

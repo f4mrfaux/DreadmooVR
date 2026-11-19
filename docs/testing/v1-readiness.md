@@ -8,10 +8,10 @@ desk harness is not mistaken for headset acceptance.
 | Area | State | Evidence / remaining check |
 |---|---|---|
 | UEVR runtime and pak loading | Passed | M0/M1 headset evidence in `docs/research/2026-11-16-m1-passed.md`. |
-| Native input plugin | Built and smoke-tested | `build/plugin/Release/DreadmoorVR.dll`; 9 native core tests pass. All 16 Frame binding outputs resolve to installed UEVR actions across 20 physical sources. The latest runtime report still shows only 4.98% HMD-active ticks and 36% valid hand-pose ticks; retest with passthrough off on the release setup. |
+| Native input plugin | Built and smoke-tested | `build/plugin/Release/DreadmoorVR.dll`; 9 native core tests pass. All 16 Frame binding outputs resolve to installed UEVR actions across 20 physical sources. The latest captured report showed 25.4% HMD-active ticks, 59.8% valid Frame Pose-action ticks, and 15.5% UEVR `using_controllers` ticks. The bridge now consumes a native per-hand validity heartbeat; retest end-to-end with passthrough off on the release setup. |
 | Arms and shoulder fit | Implemented; on-foot headset tuning recorded | Retest first-person helm visibility after the latest hidden-state handling. |
-| Fishing gestures | Implemented and smoke-tested | This morning's lean/reel/DQTE headset run is still required. Confirm A for DQTE and record the separate base-game FishLand failure. |
-| Boat steering and throttle | Implemented and smoke-tested | Harness covers native third-person stick pass-through, first-person gesture takeover/release, rudder, throttle detents and cosmetic actor rotation. A helm playtest is still needed for steering sign/range, haptics, arms visibility, and cosmetic alignment in both directions. |
+| Fishing gestures | Implemented and smoke-tested | Harness covers right-hand cast/hook-set and both-hand fight/reel/DQTE validity, active-input release on tracking loss, recovery, signed lean/deadzone, and one hook-set pulse per bite. Headset acceptance remains required; confirm A for DQTE and record the separate base-game FishLand failure. |
+| Boat steering and throttle | Implemented and smoke-tested | 12 boat harness checks cover native third-person pass-through, false UEVR controller hint with valid native poses, heartbeat expiry/recovery, head-yaw stability, both rudder directions, throttle detents, and cosmetic rotation. A helm playtest is still needed for actual steering sign/range, haptics, arms visibility, and cosmetic alignment. |
 | Craft bench cursor | Implemented and smoke-tested | Headset check required for viewport reach and mapped face-button actions. |
 | Cooked pak | Present and content-allowlist checked | `list_container.py` reports only the three `/Game/DreadmoorVR` assets. Recook if any Unreal assets change. |
 | Install / release package | Beta tester candidate assembled | `dist/DreadmoorVR-1.0.0-beta.1.zip` contains 28 payload files, including the M0 and M3 checklists. The clean archive manifest records its source commit; every payload SHA-256 was verified. Headset acceptance is pending. |
@@ -19,7 +19,7 @@ desk harness is not mistaken for headset acceptance.
 The production bridge no longer spawns the historical M1 debug cube. The cooked probe asset stays
 available for explicit diagnostics through `src/probes/m1_probe.lua`.
 
-Latest local verification on 2026-11-18: 132 Lua tests and 9 native tests pass; the Release plugin
+Latest local verification on 2026-11-18: 145 Lua tests and 9 native tests pass; the Release plugin
 build succeeds; the pak allowlist contains only the three `/Game/DreadmoorVR` assets. The current
 pak was cooked after the latest `ABP_VRArms.uasset` edit. The clean `1.0.0-beta.1` tester archive
 contains 28 payload files; all manifest hashes match and both referenced smoke checklists are

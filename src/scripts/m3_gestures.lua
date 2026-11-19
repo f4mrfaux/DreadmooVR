@@ -62,6 +62,31 @@ local DEFAULTS = {
 }
 local cfg = DEFAULTS
 local clock, last_cfg = 0, -1
+local native_pose_valid = { L = nil, R = nil }
+local native_pose_received_at = { L = nil, R = nil }
+local native_pose_source_seen = false
+uevr.sdk.callbacks.on_lua_event(function(name, data)
+    if name ~= "dreadmoorvr_pose_validity" or type(data) ~= "string" then return end
+    local side, valid = data:match("^([LR])|([01])$")
+    if side == nil then return end
+    local was_seen, previous, current = native_pose_source_seen, native_pose_valid[side], valid == "1"
+    native_pose_source_seen = true
+    native_pose_valid[side] = current
+    native_pose_received_at[side] = clock
+    if not was_seen then log("native SteamVR pose-validity stream connected") end
+    if previous == nil or previous ~= current then
+        log("native SteamVR pose " .. side .. "=" .. (current and "valid" or "invalid"))
+    end
+end)
+local function native_poses_valid(required_sides)
+    if not native_pose_source_seen then return true end -- plugin unavailable; use UEVR's validated positions
+    for _, side in ipairs(required_sides) do
+        local received = native_pose_received_at[side]
+        if native_pose_valid[side] ~= true or received == nil or clock - received > 0.5 then return false end
+    end
+    return true
+end
+local function native_boat_poses_valid() return native_poses_valid({ "L", "R" }) end
 local function num(v, lo, hi, d) return (type(v) == "number" and v == v and v >= lo and v <= hi) and v or d end
 local function read_cfg()
     local chunk = loadfile(TUNING_FILE, "t", {})
@@ -520,7 +545,8 @@ local function step_boat(pawn)
     local l, _, left_error = validated_pose(vr.get_left_controller_index)
     local r, _, right_error = validated_pose(vr.get_right_controller_index)
     local h, hq, head_error = validated_pose(vr.get_hmd_index)
-    if l == nil or r == nil or h == nil then
+    local native_valid = native_boat_poses_valid()
+    if l == nil or r == nil or h == nil or not native_valid then
         boat_axis_x, boat_axis_y, boat_throttle = 0, 0, 0
         boat_neutral_lx, boat_neutral_ry, boat_neutral_rz = nil, nil, nil
         boat_throttle_last_direction = 0
@@ -531,7 +557,8 @@ local function step_boat(pawn)
         if clock - boat_pose_error_last_log >= 1 then
             boat_pose_error_last_log = clock
             log("boat controls fail-safe: controller tracking=" .. tostring(ok_tracking and tracking)
-                .. " L=" .. tostring(left_error) .. " R=" .. tostring(right_error) .. " HMD=" .. tostring(head_error))
+                .. " L=" .. tostring(left_error) .. " R=" .. tostring(right_error) .. " HMD=" .. tostring(head_error)
+                .. " native_pose_valid=" .. tostring(native_valid))
         end
         return
     end
@@ -702,6 +729,7 @@ local function clear_fishing_gestures(reason)
     fishing_qte_tag, fishing_qte_neutral_x, fishing_qte_neutral_y = nil, nil, nil
     fishing_axis_x, fishing_axis_y = 0, 0
     fishing_last_pose_sample = nil
+    fishing_hook_set_until = 0
     crank:reset()
 end
 
@@ -716,13 +744,15 @@ local function step_fishing_cast(pawn)
     local ok_tracking, tracking = pcall(vr.is_using_controllers)
     local hand, _, hand_error = validated_pose(vr.get_right_controller_index)
     local head, head_q, head_error = validated_pose(vr.get_hmd_index)
-    if not ok_tracking or tracking ~= true or hand == nil or head == nil then
+    local native_valid = native_poses_valid({ "R" })
+    if hand == nil or head == nil or not native_valid then
         if fishing_cast_held then log("fishing cast gesture: released (tracking unavailable)") end
         fishing_cast_held, fishing_cast_armed, fishing_cast_load_since = false, false, nil
         if clock - fishing_pose_error_last_log >= 1 then
             fishing_pose_error_last_log = clock
             log("fishing cast fail-safe: tracking=" .. tostring(ok_tracking and tracking)
-                .. " R=" .. tostring(hand_error) .. " HMD=" .. tostring(head_error))
+                .. " R=" .. tostring(hand_error) .. " HMD=" .. tostring(head_error)
+                .. " native_pose_valid=" .. tostring(native_valid))
         end
         return
     end
@@ -765,12 +795,17 @@ local function step_fishing_hook_set(pawn, qte)
     local ok_tracking, tracking = pcall(vr.is_using_controllers)
     local hand, _, hand_error = validated_pose(vr.get_right_controller_index)
     local head, head_q, head_error = validated_pose(vr.get_hmd_index)
-    if not ok_tracking or tracking ~= true or hand == nil or head == nil then
+    local native_valid = native_poses_valid({ "R" })
+    if hand == nil or head == nil or not native_valid then
         fishing_bite_qte_active, fishing_bite_start_y, fishing_bite_start_time = true, nil, nil
+        -- Keep the one-hook-set-per-QTE latch through brief tracking loss. It is reset only
+        -- when the bite QTE tag exits above, so reacquisition cannot submit a second hook set.
+        fishing_hook_set_until = 0
         if clock - fishing_pose_error_last_log >= 1 then
             fishing_pose_error_last_log = clock
             log("fishing hook-set fail-safe: tracking=" .. tostring(ok_tracking and tracking)
-                .. " R=" .. tostring(hand_error) .. " HMD=" .. tostring(head_error))
+                .. " R=" .. tostring(hand_error) .. " HMD=" .. tostring(head_error)
+                .. " native_pose_valid=" .. tostring(native_valid))
         end
         return
     end
@@ -857,9 +892,11 @@ local function step_fishing(pawn)
     local lpos, _, left_error = validated_pose(vr.get_left_controller_index)
     local rpos, rq, right_error = validated_pose(vr.get_right_controller_index)
     local hmd, hmd_q, head_error = validated_pose(vr.get_hmd_index)
-    if not ok_tracking or tracking ~= true or lpos == nil or rpos == nil or hmd == nil then
+    local native_valid = native_poses_valid({ "L", "R" })
+    if lpos == nil or rpos == nil or hmd == nil or not native_valid then
         local errors = "controller tracking=" .. tostring(ok_tracking and tracking)
             .. " L=" .. tostring(left_error) .. " R=" .. tostring(right_error) .. " HMD=" .. tostring(head_error)
+            .. " native_pose_valid=" .. tostring(native_valid)
         clear_fishing_gestures("pose unavailable")
         if clock - fishing_pose_error_last_log >= 1 then
             fishing_pose_error_last_log = clock

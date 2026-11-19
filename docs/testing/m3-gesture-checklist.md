@@ -54,9 +54,9 @@ be limited to a combination that passes this checklist.
    stick. First-person mode must keep gamepad LX/LY neutral during initial calibration, so a
    physical stick cannot leak through.
 
-After the run, send the visible behavior plus log lines containing `fishing`, `boat mesh anchors`,
-`boat throttle detent`, `boat arms visibility`, or `FAILED`. The boat anchor log gives the live
-world positions of the wheel mesh and throttle lever for alignment review.
+After the run, send the visible behavior plus log lines containing `fishing`, `native SteamVR pose`,
+`boat mesh anchors`, `boat throttle detent`, `boat arms visibility`, or `FAILED`. The boat anchor log
+gives the live world positions of the wheel mesh and throttle lever for alignment review.
 
 ## 2026-11-18 first-person helm recording
 
@@ -134,12 +134,14 @@ that normal fishing resumes after a QTE.
   gesture axes stop. When tracking returns, confirm the right-hand lean recalibrates for that fish
   and the next DirectionalDrag QTE captures a fresh neutral pose.
 
-Fishing uses the helm's shared pose validator: controller tracking must be active, all three poses
-must have finite positions inside plausible SteamVR bounds, and each quaternion must be near unit
-length before lean, QTE or crank gestures run. A bad pose clears the fish/QTE reference, resets the
-crank detector, zeros gesture axes, releases synthetic reel input, and logs a rate-limited
-`fishing controls fail-safe` line. Physical inputs continue to pass through while gesture state is
-cleared.
+Fishing uses finite, in-range UEVR pose reads and per-hand SteamVR Pose-action validity when that
+native stream is available. Cast and hook-set require the right-hand pose; fish-fight, reel, and
+DirectionalDrag require both hands. The UEVR `is_using_controllers` hint alone does not suppress
+valid poses. Native validity is refreshed on state changes and a 100 ms heartbeat; an invalid hand
+or a heartbeat older than 500 ms clears the fish/QTE reference, resets the crank detector, zeros
+gesture axes, releases synthetic reel/cast/hook-set input, and logs a rate-limited fail-safe line.
+If no native validity events arrive, the bridge falls back to validated UEVR poses. Physical inputs
+continue to pass through while gesture state is cleared.
 
 ## What to send back
 
@@ -178,16 +180,19 @@ timed out or accepted input.
   The game hides its diver actor at the helm, so M2 clears the arms mesh's inherited hidden state
   while keeping it attached to the diver skeletal-mesh pose source; shoulder solving uses boat pawn
   yaw and hand targets stay tied to the tracked controllers.
-  Expected logs: `boat mesh anchors`, `boat pose`, and `boat throttle detent: forward|neutral|reverse`.
+  Expected logs: `native SteamVR pose-validity stream connected`, `native SteamVR pose L=valid` or
+  `native SteamVR pose R=valid`,
+  `boat mesh anchors`, `boat pose`, and `boat throttle detent: forward|neutral|reverse`.
   `boat pose` samples SteamVR head/hand positions and the resulting rudder/throttle values once a
   second; use its timestamps alongside a screen recording when checking hand alignment or drift.
   UEVR boat-setting failures now identify the specific setting key and operation (read, set, or
   restore). Anchor discovery retries while the child actor is spawning and reports the failing
   component lookup rather than silently falling back. Helm poses are checked for finite position,
   plausible tracking-space bounds, a near-unit quaternion, and implausible per-frame hand jumps;
-  failed or invalid pose reads fail to neutral and require recalibration. A live capture showed
-  `is_using_controllers=false` while hand and HMD pose reads still validated, so this hint no
-  longer gates helm controls by itself. The throttle uses a stable-hand polling delay on entry
+  failed or invalid pose reads fail to neutral and require recalibration. Native per-hand SteamVR
+  Pose-action validity is sent on state changes and a 100 ms heartbeat; either invalid hand or a
+  heartbeat older than 500 ms fails to neutral, while a false `is_using_controllers` hint alone
+  does not block valid poses. The throttle uses a stable-hand polling delay on entry
   and a 120 ms detent debounce to reduce accidental movement while the right hand is settling.
   Tune live in the gestures table: boat_steer_range_m controls horizontal travel to full rudder,
   boat_steer_deadzone_m ignores center noise, boat_steer_curve shapes the center response, and
