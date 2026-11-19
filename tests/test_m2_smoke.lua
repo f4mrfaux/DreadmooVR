@@ -384,6 +384,37 @@ return {
         assert(failures(W.logs) == "", failures(W.logs))
     end,
 
+    test_finger_tracking_can_form_point_middle_and_fist_without_pose_triggers = function()
+        local W = boot()
+
+        -- These are raw independent capacitive curl values, not named pose events.
+        -- A point keeps index open while the remaining fingers curl.
+        W.callbacks.lua_event("dreadmoorvr_finger_curls", "L|0.250,0.000,0.900,0.900,0.900")
+        run(W, 0.25)
+        assert(W.finger_anim.FingerCurlLIndex < 0.01, "index remains extended for a point")
+        assert(W.finger_anim.FingerCurlLMiddle > 0.89 and W.finger_anim.FingerCurlLRing > 0.89,
+            "other fingers curl independently around the point")
+
+        -- Extend middle while index and the outer fingers remain curled.
+        W.callbacks.lua_event("dreadmoorvr_finger_curls", "R|0.250,0.900,0.000,0.900,0.900")
+        run(W, 0.25)
+        assert(W.finger_anim.FingerCurlRMiddle < 0.01, "middle remains extended for the middle-finger gesture")
+        assert(W.finger_anim.FingerCurlRIndex > 0.89 and W.finger_anim.FingerCurlRPinky > 0.89,
+            "other fingers stay curled independently")
+
+        -- Closing all five channels naturally yields a fist on each hand.
+        W.callbacks.lua_event("dreadmoorvr_finger_curls", "L|1.000,1.000,1.000,1.000,1.000")
+        W.callbacks.lua_event("dreadmoorvr_finger_curls", "R|1.000,1.000,1.000,1.000,1.000")
+        run(W, 0.25)
+        for _, side in ipairs({ "L", "R" }) do
+            for _, digit in ipairs({ "Thumb", "Index", "Middle", "Ring", "Pinky" }) do
+                assert(W.finger_anim["FingerCurl" .. side .. digit] > 0.99,
+                    side .. " " .. digit .. " follows the full-fist sensor value")
+            end
+        end
+        assert(failures(W.logs) == "", failures(W.logs))
+    end,
+
     test_finger_anim_nil_is_reported_then_live_index_readbacks_follow_input = function()
         local W = boot(nil, function(world) world.finger_anim_nil = true end)
         assert(has(W.logs, "finger AnimInstance unavailable: Body:GetAnimInstance returned nil"),
