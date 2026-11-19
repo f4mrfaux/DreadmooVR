@@ -79,3 +79,34 @@ offsets. The cosmetic wheel Blueprint accesses
 `CurrentActiveWheelCosmetic.Actor.K2_SetActorRotation`; M3 now resolves that nested `Actor` before
 copying the wheel actor's rotation. The Lua harness covers both wheel directions and the wrapper
 shape. Both hand fit and cosmetic follow still need live in-game confirmation.
+
+## Live axis and fist-range follow-up — 2026-11-18
+
+The running UE 5.6 project was inspected through EngineWire. `ABP_VRArms` has 30 finger
+`ModifyBone` nodes. Each node uses additive rotation in parent-bone space and receives the matching
+digit's curl channel as Alpha. The configured rotation is Pitch (local Y flexion); the game's own
+`MM_Attack_01` hand pose also flexes the finger chains around that axis. The earlier report that the
+fingers looked off-axis was not enough to justify switching axes, so the graph axis stayed intact.
+
+The old full-curl range (35/55/35 degrees for index through pinky, with a similar shallow thumb
+range) did not close the fingers far enough for a clear fist. The AnimGraph now uses these full-curl
+joint rotations, in degrees, from base to tip:
+
+| Digit | Base | Middle | Tip |
+|---|---:|---:|---:|
+| Index | 65 | 85 | 65 |
+| Middle | 65 | 80 | 60 |
+| Ring | 65 | 80 | 60 |
+| Pinky | 60 | 75 | 60 |
+| Thumb | 25 | 40 | 35 |
+
+The sensor channels remain independent and continuous: index at zero with the other channels
+curled produces a point, middle at zero with the other channels curled produces a raised middle
+finger, and all channels curled produces a fist. No gesture classifier or button-triggered poses
+were added. UE compiled and saved the AnimBlueprint after the 30-node edit. This needs headset
+validation for curl depth and the two single-finger gestures before calling the hand result final.
+
+EngineWire also read the game's reference skeleton and `MM_Attack_01` animation track data. The
+rotation-axis comparison supports Pitch as the bend axis; the edit changes the bend range, not the
+sensor ordering or rotation space. The exported game animation is a reference for the hand shape,
+not copied code or a redistributed asset.

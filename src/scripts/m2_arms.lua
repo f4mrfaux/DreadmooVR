@@ -76,6 +76,7 @@ local finger_smoothed = {
 local finger_anim_error_logged, finger_anim_probe_logged, finger_anim_nil_logged = false, false, false
 local finger_anim_class, last_finger_anim_log = "unknown", -math.huge
 local boat_hand_anchor_active, boat_hand_anchor_last_log = false, -math.huge
+local boat_hand_anchor_degraded = false
 local boat_hand_anchor_offsets = {}
 local function apply_tuning(now, mode)
     if now - last_tuning_check < 1.0 then return end
@@ -460,6 +461,7 @@ local function restore_boat_hand_anchors()
     end
     boat_hand_anchor_offsets = {}
     boat_hand_anchor_active = false
+    boat_hand_anchor_degraded = false
     log("boat hand grip anchors released")
 end
 
@@ -482,9 +484,27 @@ local function anchor_finite(v)
         and type(v.Z) == "number" and v.Z == v.Z and math.abs(v.Z) < 100000
 end
 
-local function anchor_hand_to_socket(side, target, component, socket)
-    local state = hand_states[side]
-    if state == nil then error("motion controller state " .. side .. " is nil") end
+local function anchor_world_pos_string(obj, getter)
+    local ok, p = pcall(function() return obj[getter](obj) end)
+    if ok and anchor_finite(p) then return string.format("(%.1f,%.1f,%.1f)", p.X, p.Y, p.Z) end
+    return "unavailable"
+end
+
+local function boat_anchor_origins(pawn)
+    local pawn_pos = anchor_world_pos_string(pawn, "K2_GetActorLocation")
+    local camera_pos = "unavailable"
+    local ok, p = pcall(function()
+        local camera = pawn.CameraComp
+        if camera == nil then camera = pawn.FirstPersonSpringArm end
+        if camera == nil then error("boat camera component unavailable") end
+        return camera:K2_GetComponentLocation()
+    end)
+    if ok and anchor_finite(p) then camera_pos = string.format("(%.1f,%.1f,%.1f)", p.X, p.Y, p.Z) end
+    return " pawn=" .. pawn_pos .. " camera=" .. camera_pos
+end
+
+local function calculate_hand_socket_offset(side, target, component, socket)
+    if hand_states[side] == nil then error("motion controller state " .. side .. " is nil") end
     local anchor = component:GetSocketLocation(socket)
     local hand = target:K2_GetComponentLocation()
     local forward, right, up = target:GetForwardVector(), target:GetRightVector(), target:GetUpVector()
@@ -505,13 +525,15 @@ local function anchor_hand_to_socket(side, target, component, socket)
     local raw_hand = vsub(hand, applied_world)
     local delta = vsub(anchor, raw_hand)
     local offset = Vector3f.new(vdot(delta, right), vdot(delta, up), -vdot(delta, forward))
+    -- These offsets are in the controller's local OpenVR frame, but the socket and hand target
+    -- are world-space. In first-person boat mode the view origin can stay behind while the boat
+    -- travels, so a valid socket correction can grow well beyond an arm's length. Bound it by
+    -- the validated tracking/world range, not an arbitrary 150 cm reach limit.
     if offset.x ~= offset.x or offset.y ~= offset.y or offset.z ~= offset.z
-        or math.abs(offset.x) > 150 or math.abs(offset.y) > 150 or math.abs(offset.z) > 150 then
-        error(string.format("socket correction out of range (%.1f,%.1f,%.1f) cm; hand=(%.1f,%.1f,%.1f) socket=(%.1f,%.1f,%.1f)",
+        or math.abs(offset.x) > 100000 or math.abs(offset.y) > 100000 or math.abs(offset.z) > 100000 then
+        error(string.format("socket correction outside world safety bound (%.1f,%.1f,%.1f) cm; hand=(%.1f,%.1f,%.1f) socket=(%.1f,%.1f,%.1f)",
             offset.x, offset.y, offset.z, hand.X, hand.Y, hand.Z, anchor.X, anchor.Y, anchor.Z))
     end
-    state:set_location_offset(offset)
-    boat_hand_anchor_offsets[side] = { x = offset.x, y = offset.y, z = offset.z }
     return offset
 end
 
@@ -528,19 +550,34 @@ local function update_boat_hand_anchors(pawn, now)
         end
         return
     end
-    local ok_left, left_offset = pcall(anchor_hand_to_socket, "L", actor.LeftHandTarget, wheel, "LHand_Socket")
-    local ok_right, right_offset = pcall(anchor_hand_to_socket, "R", actor.RightHandTarget, throttle, "RHand")
+    -- Calculate the pair before applying either controller offset. A transient bad socket or a
+    -- controller target outside the shared world frame must not reset one/both hands to the
+    -- walking offset and then retry from scratch on the next frame (the live failure mode).
+    local ok_left, left_offset = pcall(calculate_hand_socket_offset, "L", actor.LeftHandTarget, wheel, "LHand_Socket")
+    local ok_right, right_offset = pcall(calculate_hand_socket_offset, "R", actor.RightHandTarget, throttle, "RHand")
     if not ok_left or not ok_right then
-        restore_boat_hand_anchors()
+        if not boat_hand_anchor_degraded and boat_hand_anchor_last_log < now then
+            log("boat hand grip anchors degraded; retaining last valid pair")
+        end
+        boat_hand_anchor_degraded = true
         if now - boat_hand_anchor_last_log >= 2 then
             boat_hand_anchor_last_log = now
-            log("boat hand grip socket FAILED: L=" .. tostring(left_offset) .. " R=" .. tostring(right_offset))
+            log("boat hand grip socket FAILED: L=" .. tostring(left_offset) .. " R=" .. tostring(right_offset)
+                .. boat_anchor_origins(pawn))
         end
         return
     end
+    hand_states.L:set_location_offset(left_offset)
+    hand_states.R:set_location_offset(right_offset)
+    boat_hand_anchor_offsets.L = { x = left_offset.x, y = left_offset.y, z = left_offset.z }
+    boat_hand_anchor_offsets.R = { x = right_offset.x, y = right_offset.y, z = right_offset.z }
     if not boat_hand_anchor_active then
         boat_hand_anchor_active = true
         log("boat hand grip anchors active: left=Small_Boat_Steerwheel.LHand_Socket right=Throttle_lever.RHand")
+    end
+    if boat_hand_anchor_degraded then
+        boat_hand_anchor_degraded = false
+        log("boat hand grip anchors recovered")
     end
     if now - boat_hand_anchor_last_log >= 1 then
         boat_hand_anchor_last_log = now
@@ -562,6 +599,7 @@ local function spawn(pawn)
         shift = { L = { X = 0, Y = 0, Z = 0 }, R = { X = 0, Y = 0, Z = 0 } }
         calib, last_calib_logged = ubik.calibration.new(), nil
         boat_hand_anchor_active, boat_hand_anchor_last_log = false, -math.huge
+        boat_hand_anchor_degraded, boat_hand_anchor_offsets = false, {}
         attach_and_hide(pawn)
         -- UEVR exposes the hook as the global usertype UEVR_UObjectHook (ScriptContext.cpp:990);
         -- activate() (:991) turns the system on, get_or_add_motion_controller_state (:1028).

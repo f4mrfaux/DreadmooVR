@@ -100,10 +100,29 @@ local function make_world()
         if i > #chain then return nil end
         return { get_fname = function() return fname(chain[i]) end, get_super_struct = function() return class_at(i + 1) end }
     end
+    W.boat_socket_shift = v(0, 0, 0)
+    local function shift_location(p)
+        return v(p.X + W.boat_socket_shift.X, p.Y + W.boat_socket_shift.Y, p.Z + W.boat_socket_shift.Z)
+    end
     local wheel_component = mesh("Wheel")
-    wheel_component.GetSocketLocation = function(_, socket) return socket == "LHand_Socket" and v(10, -20, 100) or v(15, 20, 90) end
+    wheel_component.GetSocketLocation = function(_, socket)
+        return shift_location(socket == "LHand_Socket" and v(10, -20, 100) or v(15, 20, 90))
+    end
     local throttle_component = mesh("Throttle")
-    throttle_component.GetSocketLocation = function(_, socket) return socket == "RHand" and v(15, 20, 90) or v(0, 0, 0) end
+    throttle_component.GetSocketLocation = function(_, socket)
+        return shift_location(socket == "RHand" and v(15, 20, 90) or v(0, 0, 0))
+    end
+    W.shift_boat_sockets = function(dx, dy, dz)
+        W.boat_socket_shift = v(W.boat_socket_shift.X + dx, W.boat_socket_shift.Y + dy, W.boat_socket_shift.Z + dz)
+    end
+    W.translate_boat_frame = function(dx, dy, dz)
+        W.shift_boat_sockets(dx, dy, dz)
+        for _, hand_target in ipairs({ W.arms.LeftHandTarget, W.arms.RightHandTarget }) do
+            local p = hand_target.base_location or hand_target.location
+            hand_target.base_location = v(p.X + dx, p.Y + dy, p.Z + dz)
+            hand_target.location = hand_target.base_location
+        end
+    end
     W.pawn = obj({ name = "Pawn", Mesh = pawn_mesh,
         BP_ShipSteeringWheel = { ChildActor = { Small_Boat_Steerwheel = wheel_component } },
         Throttle_lever = throttle_component,
@@ -427,6 +446,62 @@ return {
             "left controller offset returns to its walking baseline")
         assert(math.abs(right.X - before_r.X) < 0.1 and math.abs(right.Y - before_r.Y) < 0.1 and math.abs(right.Z - before_r.Z) < 0.1,
             "right controller offset returns to its walking baseline")
+    end,
+
+    test_boat_socket_anchor_failure_holds_last_pair_and_recovers_without_chatter = function()
+        local W = boot()
+        W.simulate_location_offsets = true
+        W.arms.LeftHandTarget.base_location = v(30, -25, 110)
+        W.arms.RightHandTarget.base_location = v(30, 25, 110)
+        W.set_mode("boat")
+        run(W, 0.5)
+        local left_anchor, right_anchor = W.motion_states.L.offset, W.motion_states.R.offset
+        assert(left_anchor and right_anchor, "initial valid socket pair is applied")
+        local writes_before_common_translation = #W.offsets
+
+        -- Boat motion moves both socket and controller world transforms together. The relative
+        -- correction should remain stable in a shared frame.
+        W.translate_boat_frame(20000, -15000, 300)
+        run(W, 0.25)
+        assert(#W.offsets == writes_before_common_translation + 10,
+            "a shared world translation keeps both hand offsets active frame to frame")
+        assert(math.abs(W.motion_states.L.offset.x - left_anchor.x) < 0.1
+            and math.abs(W.motion_states.R.offset.y - right_anchor.y) < 0.1,
+            "common boat translation preserves controller-local grip offsets")
+
+        -- The ship can move far from the current UEVR view origin. A large but finite world
+        -- correction is valid and must keep the visual hands on the moving helm sockets.
+        W.shift_boat_sockets(20000, 0, 0)
+        run(W, 0.25)
+        assert(math.abs(W.motion_states.L.offset.z) > 15000,
+            "large finite camera-to-boat displacement is accepted instead of failing an arm-reach cap")
+        local left_on_socket = W.arms.LeftHandTarget.location
+        assert(math.abs(left_on_socket.X - 40010) < 0.1 and math.abs(left_on_socket.Y + 15020) < 0.1,
+            "left visual target tracks the boat socket across a large world-origin separation")
+        local writes_at_far_helm = #W.offsets
+
+        -- A genuinely invalid world coordinate must not reset both hands to walking offsets on
+        -- every frame. Keep the last accepted pair until valid socket data returns.
+        W.shift_boat_sockets(150000, 0, 0)
+        run(W, 0.5)
+        assert(#W.offsets == writes_at_far_helm,
+            "invalid socket frames do not write offsets or reset to walking baseline")
+        assert(math.abs(W.motion_states.L.offset.z) > 15000 and math.abs(W.motion_states.R.offset.z) > 15000,
+            "last valid paired offsets are retained during the correction failure")
+        local active_count, released_count = 0, 0
+        for _, line in ipairs(W.logs) do
+            if line:find("boat hand grip anchors active", 1, true) then active_count = active_count + 1 end
+            if line:find("boat hand grip anchors released", 1, true) then released_count = released_count + 1 end
+        end
+        assert(active_count == 1 and released_count == 0,
+            "socket failures do not flap anchor activation or release while still at the helm")
+
+        W.shift_boat_sockets(-150000, 0, 0)
+        run(W, 0.25)
+        assert(has(W.logs, "boat hand grip anchors recovered"), "valid sockets recover the retained anchor pair")
+        W.set_mode("walking")
+        run(W, 0.1)
+        assert(has(W.logs, "boat hand grip anchors released"), "leaving the helm restores normal controller offsets")
     end,
 
     test_boat_camera_moves_forward_and_restores_walking_view = function()

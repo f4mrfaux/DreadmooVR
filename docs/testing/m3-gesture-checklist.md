@@ -156,6 +156,12 @@ timed out or accepted input.
   class and whether `FingerCurlLThumb` can be written and read back. A `property probe FAILED` line
   means the Unreal AnimBP property path/name is the remaining blocker; include that line and the
   next `finger animation update FAILED` line if present.
+- **Index point:** close the hand while keeping the index extended. The four curled fingers should
+  close without pulling the index down; then release and curl the index by itself.
+- **Middle-finger gesture:** close the hand while keeping the middle finger extended. The index,
+  ring, and pinky should stay curled; verify the left and right hands separately.
+- **Fist:** curl all five controller fingers. Check that the fingertips tuck toward the palm without
+  bending backward, crossing through the palm, or pulling neighboring fingers when you reopen.
 - **First-person boat camera:** the helm now uses a separate `boat_camera_forward` offset of -30 cm;
   walking retains -12 cm. Check that the torso no longer fills the helm view and that walking view
   returns after leaving the boat. This offset is an initial headset trial, not an asserted final fit.
@@ -192,19 +198,26 @@ timed out or accepted input.
   failed or invalid pose reads fail to neutral and require recalibration. Native per-hand SteamVR
   Pose-action validity is sent on state changes and a 100 ms heartbeat; either invalid hand or a
   heartbeat older than 500 ms fails to neutral, while a false `is_using_controllers` hint alone
-  does not block valid poses. The throttle uses a stable-hand polling delay on entry
-  and a 120 ms detent debounce to reduce accidental movement while the right hand is settling.
+  does not block valid poses. The left hand calibrates at wheel-top neutral; lateral movement only
+  steers after a small downward arc, with four soft left-controller clicks per rudder direction.
+  The right hand calibrates at neutral reach: pull behind the hip for reverse, return for neutral,
+  then extend forward for increasing positive throttle. Right-controller clicks mark reverse,
+  neutral, and forward transitions. The game Blueprint itself selects fixed +25/-22 degree throttle
+  lever targets from the sign of the input, so incremental positive magnitude may not change its
+  fixed forward gear target. Both gesture modes use stable entry polling and a 120 ms mode check.
   Tune live in the gestures table: boat_steer_range_m controls horizontal travel to full rudder,
   boat_steer_deadzone_m ignores center noise, boat_steer_curve shapes the center response, and
-  boat_steer_smoothing_s controls low-pass filtering. The throttle uses boat_throttle_enter_m for
-  forward/reverse, boat_throttle_release_m for neutral, and a 120 ms stable detent before changes.
+  boat_steer_smoothing_s controls low-pass filtering; boat_steer_drop_enter_m sets the downward arc
+  required to leave wheel-top neutral. The throttle uses boat_throttle_enter_m for direction entry,
+  boat_throttle_release_m for neutral, boat_throttle_turnaround_m to require a neutral crossing,
+  and boat_throttle_full_m to scale forward reach to full positive input.
 
-  **Live throttle pass (2026-11-18):** five-second pose holds showed reverse at negative projected
-  travel (about -0.18 to -0.45 m), neutral near center (about -0.06 to +0.05 m), and forward at
-  positive up-and-forward travel (about +0.09 to +0.13 m). Forward samples just under the +0.10 m
-  entry threshold are consistent with the 120 ms debounce and sparse telemetry sampling. Leave
-  thresholds unchanged pending a labeled, denser recording: the current `boat pose` log interval
-  did not mark the exact start/end of each repeated hold, so it cannot establish repeatability.
+  **Live anchor failure (2026-11-18):** during the evening playtest, both hand sockets failed the
+  old 150 cm offset cap as the boat moved away from UEVR's current view origin. M2 alternated anchor
+  activation and release every frame, which reset the visible hands to the walking pose. SteamVR
+  reported valid hand poses about 82% of the run, so this was a world-space anchor issue rather than
+  tracking loss. The solver now accepts finite boat-scale world offsets and retains its last valid
+  paired offsets through invalid samples. Recheck that hands stay on the helm while the boat moves.
 
   On the craft bench, craft_cursor_span_m changes how much hand movement spans the viewport.
 
@@ -230,14 +243,20 @@ Gesture input still reads the raw tracked controller poses, so hand anchoring do
 steering or throttle neutral reference. The controller-to-socket alignment and cosmetic actor
 sync both still need confirmation with the selected in-game wheel cosmetic.
 
-The socket solver replaces UEVR's absolute controller-local location offset. UEVR reapplies that
-offset through the current controller rotation each frame, so the solver must remove it using the
-current basis before calculating the next offset. Non-finite values and corrections over 150 cm
-fail closed and restore the normal grip offset. `test_boat_socket_anchors_converge_without_compounding_and_restore`
-checks socket convergence through a 90-degree controller-basis turn and return to the walking
-grip offset. On headset, confirm both visible hands stay on their grips while rotating the wrists
-and turning the wheel; check logs for `boat grip offsets` and absence of `boat hand grip socket
-FAILED` or NaN values.
+The socket solver replaces UEVR's absolute controller-local location offset. UEVR rebuilds each
+target's world position from the current view location each update, while the helm sockets follow
+the boat; a valid hand-to-helm offset can therefore exceed an arm's length as the ship moves. The
+solver removes the current-frame offset using the current controller basis and accepts finite
+corrections inside a 100,000 cm world-safety bound. If a socket sample is invalid, it keeps the last
+valid paired offsets instead of resetting both hands. `test_boat_socket_anchors_converge_without_compounding_and_restore`
+checks controller-basis rotation; the recovery test checks shared boat motion, a large view-to-boat
+separation, invalid samples, and recovery without anchor activation chatter. On headset, confirm
+both visible hands stay on their grips while the boat moves, the wrists rotate, and the wheel turns.
+
+The current boat suite also verifies wheel-top neutral, signed lower-left/lower-right steering,
+left-hand detent clicks without continuous buzzing, right-hand forward-reach scaling, and right-hand
+clicks on reverse/neutral/forward transitions. Because the shipped Blueprint branches on throttle
+sign, confirm in-game whether its fixed forward lever position limits incremental speed control.
 
 ## Finger tracking probe
 
@@ -246,8 +265,8 @@ actions and streams five channels per hand to M2: thumb, index, middle, ring, an
 1=curled). The M2 listener eases these values into `ABP_VRArms`, whose AnimGraph bends all three
 joints of each digit. In a safe area, move each finger through open/closed positions separately.
 Check the corresponding avatar finger moves smoothly, opens fully, and does not pull neighboring
-digits along. Check thumb opposition and both hands from a relaxed open pose through a fist. The
-initial bend angles are a starting fit; report any finger bending backwards or clipping into the
-palm so we can correct its axis/sign and per-joint angles. If tracking stops, the hand should ease
-open within about 0.5 seconds. The log/report curls remain available to distinguish sensor input
-from mesh articulation.
+digits along. Check thumb opposition and both hands from a relaxed open pose through the three
+gestures above. The current bend axis matches the game's own hand animation; report curl depth,
+backward bends, or palm clipping so we can tune per-joint angles. If tracking stops, the hand should
+ease open within about 0.5 seconds. The log/report curls remain available to distinguish sensor
+input from mesh articulation.

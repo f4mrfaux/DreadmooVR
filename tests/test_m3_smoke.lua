@@ -127,6 +127,7 @@ local function world(tool_socket, on_body)
                 set_mod_value = function(key, value) W.mods[key] = value end,
                 get_left_controller_index = function() return 1 end, get_right_controller_index = function() return 2 end,
                 get_hmd_index = function() return 0 end,
+                get_left_joystick_source = function() return 1 end,
                 get_right_joystick_source = function() return 2 end,
                 trigger_haptic_vibration = function(delay, duration, frequency, amplitude, source)
                     W.haptic = { delay, duration, frequency, amplitude, source }
@@ -195,7 +196,20 @@ local function move_left_x(W, target, speed)
     local duration = math.abs(target - start) / speed
     W.left = function(t)
         local a = duration > 0 and math.min(1, math.max(0, (t - start_time) / duration)) or 1
-        return v(start + (target - start) * a, 1.2, -0.3)
+        return v(start + (target - start) * a, 1.14, -0.3) -- shallow lower arc on the wheel
+    end
+    run(W, duration + 0.25)
+end
+
+local function move_left_pose(W, target_x, target_y, speed)
+    speed = speed or 1.0
+    local start = W.left(W.t)
+    local distance = math.sqrt((target_x - start.X) ^ 2 + (target_y - start.Y) ^ 2)
+    local start_time = W.t
+    local duration = distance / speed
+    W.left = function(t)
+        local a = duration > 0 and math.min(1, math.max(0, (t - start_time) / duration)) or 1
+        return v(start.X + (target_x - start.X) * a, start.Y + (target_y - start.Y) * a, start.Z)
     end
     run(W, duration + 0.25)
 end
@@ -404,18 +418,26 @@ return {
         assert(state.Gamepad.sThumbLX == 0 and state.Gamepad.sThumbLY == 0,
             "first-person calibration holds both axes neutral instead of leaking physical sticks")
         move_left_x(W, 0.11)
-        move_right_pose(W, 1.32, -0.42) -- up and forward: straight-elbow diagonal reach
+        assert(W.haptics and W.haptic[5] == 1, "steering detents click the left controller")
+        W.haptics = 0
+        move_right_pose(W, 1.32, -0.42) -- extend the right hand forward from the hip/elbow reference
         W.callbacks.xinput(nil, 0, state)
         assert(state.Gamepad.sThumbLX > 7500 and state.Gamepad.sThumbLX < 14000,
             "positive left-hand travel writes positive IA_BoatMove X, which selects the Blueprint +65-degree wheel target (got " .. tostring(state.Gamepad.sThumbLX) .. ")")
-        assert(state.Gamepad.sThumbLY == 32767, "positive IA_BoatMove Y selects the Blueprint +25-degree forward throttle target")
-        assert(W.haptic and W.haptic[2] == 0.025 and W.haptic[3] == 150 and W.haptic[4] == 0.45,
+        local initial_forward = state.Gamepad.sThumbLY
+        assert(initial_forward > 0 and initial_forward < 32767,
+            "initial forward reach gives a proportional positive throttle value")
+        move_right_pose(W, 1.32, -0.70) -- farther forward increases throttle continuously
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLY > initial_forward and state.Gamepad.sThumbLY <= 32767,
+            "farther forward reach increases throttle input")
+        assert(W.haptic and W.haptic[2] == 0.025 and W.haptic[3] == 150 and W.haptic[4] == 0.45 and W.haptic[5] == 2,
             "right controller gets a short haptic click on throttle transition")
         assert(has(W, "boat throttle detent: forward"))
         move_right_pose(W, 1.2, -0.3) -- return to hip-fire neutral
         W.callbacks.xinput(nil, 0, state)
         assert(state.Gamepad.sThumbLY == 0, "returning the hand to its calibrated height selects neutral")
-        move_right_pose(W, 1.02, -0.26) -- hand low by hip, slightly back
+        move_right_pose(W, 1.2, -0.14) -- pull the right hand back behind the hip reference
         W.callbacks.xinput(nil, 0, state)
         assert(state.Gamepad.sThumbLY == -32767, "negative IA_BoatMove Y selects the Blueprint -22-degree reverse throttle target")
         assert(W.haptics == 3, "forward, neutral, and reverse each give one click")
@@ -530,6 +552,35 @@ return {
         assert(state.Gamepad.sThumbLX < -32000, "22 cm left hand travel reaches near-full left rudder")
         move_left_x(W, 0.01, 1.2); W.callbacks.xinput(nil, 0, state)
         assert(state.Gamepad.sThumbLX == 0, "small hand drift stays in the steering center deadzone")
+        no_failures(W)
+    end,
+
+    test_boat_wheel_arc_keeps_top_straight_and_clicks_left_hand_detents = function()
+        local W = world("None", false)
+        W.set_mode("boat")
+        run(W, 1.5)
+        local state = { Gamepad = { sThumbLX = 0, sThumbLY = 0 } }
+        W.left = function() return v(0.10, 1.2, -0.3) end -- rightward, but still at wheel top
+        run(W, 0.4)
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLX == 0, "top-of-wheel hand motion stays straight until it drops into the arc")
+
+        move_left_pose(W, -0.31, 1.14) -- left and slightly down
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLX < -8000, "left-and-down wheel arc selects left rudder")
+        assert(W.haptics and W.haptic[2] == 0.012 and W.haptic[4] == 0.20 and W.haptic[5] == 1,
+            "small left-hand clicks provide steering-step feedback")
+        local clicks_at_hold = W.haptics
+        run(W, 0.5)
+        assert(W.haptics == clicks_at_hold, "holding a steering step does not buzz continuously")
+
+        move_left_pose(W, 0.21, 1.14) -- right and slightly down
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLX > 8000, "right-and-down wheel arc selects right rudder")
+
+        move_left_pose(W, -0.2, 1.2) -- hand back at the top
+        W.callbacks.xinput(nil, 0, state)
+        assert(state.Gamepad.sThumbLX == 0, "returning the hand to the top centers the wheel")
         no_failures(W)
     end,
 
